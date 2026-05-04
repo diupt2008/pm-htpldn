@@ -1,0 +1,71 @@
+{
+  "ts": "2026-04-15T16:16:17.667Z",
+  "module": "Quản trị Hệ thống",
+  "summary": {
+    "pass": 6,
+    "fail": 2,
+    "warn": 0,
+    "info": 1,
+    "total": 9,
+    "bugs": 0,
+    "jsErrors": 0
+  },
+  "testResults": [
+    {
+      "id": "QT-001",
+      "name": "Đăng nhập username/password",
+      "status": "PASS",
+      "detail": "Credentials accepted"
+    },
+    {
+      "id": "QT-002",
+      "name": "OTP qua email",
+      "status": "PASS",
+      "detail": "OTP received and verified via MailHog"
+    },
+    {
+      "id": "QT-MENU",
+      "name": "Quản trị HT menu expand",
+      "status": "PASS",
+      "detail": "Sub-items: Chương trình đào tạo, Khóa học, Ngân hàng câu hỏi, Giảng viên, Tư vấn chuyên sâu, Tư vấn nhanh, Hợp đồng tư vấn, Báo cáo hỏi đáp pháp lý, Báo cáo vụ việc, Báo cáo đào tạo, tập huấn, Báo cáo chuyên gia/TVV, Báo cáo chi phí hỗ trợ, Báo cáo chương trình hỗ trợ, Danh mục dùng chung, Cấu hình SLA, Cấu hình phân công, Ngày lễ, Tiêu chí đánh giá hiệu quả, Tiêu chí đánh giá chi phí, Tài khoản & phân quyền"
+    },
+    {
+      "id": "QT-DANHMUC",
+      "name": "Danh mục",
+      "status": "FAIL",
+      "detail": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button.nav-subitem').first()\n    - locator resolved to <button type=\"button\" class=\"nav-subitem\" title=\"Chương trình đào tạo"
+    },
+    {
+      "id": "QT-TAIKHOAN",
+      "name": "Tài khoản",
+      "status": "FAIL",
+      "detail": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button.nav-subitem').nth(19)\n    - locator resolved to <button type=\"button\" class=\"nav-subitem\" title=\"Tài khoản & phân quy"
+    },
+    {
+      "id": "QT-027",
+      "name": "Cấu hình hệ thống page",
+      "status": "PASS",
+      "detail": "URL: http://103.172.236.130:3000/quan-tri/cau-hinh-sla"
+    },
+    {
+      "id": "QT-027a",
+      "name": "Cấu hình SLA",
+      "status": "PASS",
+      "detail": "SLA config found"
+    },
+    {
+      "id": "QT-025",
+      "name": "Nhật ký",
+      "status": "INFO",
+      "detail": "Sub-item not found"
+    },
+    {
+      "id": "QT-005",
+      "name": "Đăng xuất → redirect login",
+      "status": "PASS",
+      "detail": "URL: http://103.172.236.130:3000/login"
+    }
+  ],
+  "issues": [],
+  "jsErrors": []
+}

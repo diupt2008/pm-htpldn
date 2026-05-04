@@ -1,0 +1,44 @@
+{
+  "date": "2026-04-19",
+  "url": "http://103.172.236.130:3000/",
+  "section": "6 — Nhóm Doanh nghiệp",
+  "entity": "DOANH_NGHIEP",
+  "route": "/doanh-nghiep/danh-sach",
+  "totalCells": 11,
+  "passedCells": 6,
+  "failedCells": 5,
+  "passRate": 0.545,
+  "verdict": "FAIL",
+  "cellsResult": [
+    {"role": "QTHT", "account": "qtht_tw", "expected": "👁️ R", "actual": "CRUD (over-perm)", "verdict": "FAIL", "bug": "BUG-PERM-M6-001"},
+    {"role": "CB_NV_TW", "account": "canbo_tw", "expected": "✅ CRUD*", "actual": "Full CRUD OK, 9 records", "verdict": "PASS"},
+    {"role": "CB_NV_BN", "account": "canbo_bn", "expected": "✅ CRUD* scope BN", "actual": "Full CRUD OK, 9 records (scope leak)", "verdict": "FAIL", "bug": "BUG-PERM-M6-002"},
+    {"role": "CB_NV_DP", "account": "canbo_tinh", "expected": "✅ CRUD* scope DP", "actual": "Full CRUD OK, 9 records (scope leak)", "verdict": "FAIL", "bug": "BUG-PERM-M6-002"},
+    {"role": "CB_PD_TW", "account": "lanhdao_tw", "expected": "👁️ R*", "actual": "View-only OK, 9 records (TW)", "verdict": "PASS"},
+    {"role": "CB_PD_BN", "account": "lanhdao_bn", "expected": "👁️ R* scope BN", "actual": "View-only OK, 9 records (scope leak)", "verdict": "FAIL", "bug": "BUG-PERM-M6-002"},
+    {"role": "CB_PD_DP", "account": "lanhdao_dp", "expected": "👁️ R* scope DP", "actual": "View-only OK, 9 records (scope leak)", "verdict": "FAIL", "bug": "BUG-PERM-M6-002"},
+    {"role": "DN", "account": "dn_user", "expected": "📝 RU* OWN (via API only)", "actual": "Landing /403, menu click /403 (CMS blocked correctly)", "verdict": "PASS", "note": "UI sidebar shows full CMS menu — BUG-PERM-M6-003 minor"},
+    {"role": "NHT", "account": "nht_user", "expected": "❌", "actual": "/403 landing + menu", "verdict": "PASS", "note": "UI sidebar leak BUG-PERM-M6-003"},
+    {"role": "TVV", "account": "tvv_user", "expected": "❌", "actual": "/403 landing + menu", "verdict": "PASS"},
+    {"role": "CG", "account": "chuyengia_user", "expected": "❌", "actual": "/403 landing + menu", "verdict": "PASS"}
+  ],
+  "bugs": [
+    {"id": "BUG-PERM-M6-001", "severity": "Major", "title": "QTHT có nút Thêm mới + Sửa + Xóa trên DOANH_NGHIEP (vi phạm 👁️ R)"},
+    {"id": "BUG-PERM-M6-002", "severity": "Critical", "title": "Data isolation fail — CB_NV_BN/DP + CB_PD_BN/DP thấy data ngoài đơn vị (recurring pattern M3/M4/M5)"},
+    {"id": "BUG-PERM-M6-003", "severity": "Minor", "title": "UI sidebar hiển thị full CMS menu cho Portal roles (DN, NHT) không có quyền"}
+  ],
+  "dataContext": {
+    "totalDnRecords": 9,
+    "samplePrefix": "DN-HGI-",
+    "sampleRange": "DN-HGI-0001 → DN-HGI-0009",
+    "prefixMeaning": "HGI = mã tỉnh DN (Hà Giang) theo BR-DN auto-gen format DN-{TỈNH}-{SEQ} — KHÔNG phải đơn vị quản lý",
+    "donViQuanLyVisible": false,
+    "donViQuanLyNote": "Field don_vi_quan_ly_id không hiển thị trong list UI, detail route /doanh-nghiep/{uuid} trả 404 Không tìm thấy doanh nghiệp → không verify được qua UI đợt này",
+    "dataIsolationVerdictRationale": "Dù don_vi thực là gì, việc TW/BN/DP đều thấy count 9 records là bug ở mọi kịch bản seed (xem phân tích bảng A/B/C/D trong bug-report-section-6.md BUG-PERM-M6-002)"
+  },
+  "limitations": [
+    "DN (📝 RU* OWN) không test qua CMS — theo §9.1 ghi chú DN qua API only, không trong scope đợt này",
+    "Guard xóa (DN có VV liên kết) test ở functional round2/doanh-nghiep/, không trong permission matrix",
+    "Không verify được don_vi_quan_ly của 9 records (list thiếu cột, detail route 404, browse crash khi mở form) — nhưng data isolation verdict vẫn đúng ở mọi kịch bản seed"
+  ]
+}

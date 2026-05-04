@@ -1,0 +1,106 @@
+{
+  "ts": "2026-04-15T14:32:57.150Z",
+  "module": "Chi trả Chi phí",
+  "summary": {
+    "pass": 10,
+    "fail": 0,
+    "info": 3,
+    "total": 13,
+    "bugs": 0
+  },
+  "testResults": [
+    {
+      "id": "CT-001",
+      "name": "Xem danh sách HS chi trả",
+      "status": "PASS",
+      "detail": "URL: http://103.172.236.130:3000/chi-tra/danh-sach",
+      "sev": ""
+    },
+    {
+      "id": "CT-001a",
+      "name": "Tabs trạng thái SM-CHITRA",
+      "status": "PASS",
+      "detail": "Tất cả, Tất cả, Chờ xử lý, Chờ xử lý, Đang đánh giá, Đang đánh giá, Chờ phê duyệt, Chờ phê duyệt, Đã xử lý, Đã xử lý",
+      "sev": ""
+    },
+    {
+      "id": "CT-001b",
+      "name": "Pagination",
+      "status": "INFO",
+      "detail": "No pagination (few records)",
+      "sev": ""
+    },
+    {
+      "id": "CT-001c",
+      "name": "Search/Filter",
+      "status": "PASS",
+      "detail": "Inputs:true Selects:true",
+      "sev": ""
+    },
+    {
+      "id": "CT-002",
+      "name": "Tìm kiếm HS",
+      "status": "PASS",
+      "detail": "Search field functional",
+      "sev": ""
+    },
+    {
+      "id": "CT-003a",
+      "name": "Form tạo HS hiển thị",
+      "status": "PASS",
+      "detail": "8 fields at http://103.172.236.130:3000/chi-tra/danh-sach?page=1",
+      "sev": ""
+    },
+    {
+      "id": "CT-003",
+      "name": "Tạo mới HS chi trả",
+      "status": "PASS",
+      "detail": "Created successfully",
+      "sev": ""
+    },
+    {
+      "id": "CT-007",
+      "name": "Hiển thị mức hỗ trợ trên list",
+      "status": "PASS",
+      "detail": "Calculation fields visible",
+      "sev": ""
+    },
+    {
+      "id": "CT-008",
+      "name": "Cột số tiền trên bảng",
+      "status": "PASS",
+      "detail": "Mã HS, Tên DN, Quy mô DN, Số tiền đề nghị, Số tiền được duyệt, Trạng thái, SLA, Ngày nộp, Hành động",
+      "sev": ""
+    },
+    {
+      "id": "CT-022",
+      "name": "Xuất Excel",
+      "status": "PASS",
+      "detail": "Export button found",
+      "sev": ""
+    },
+    {
+      "id": "CT-020",
+      "name": "Immutability",
+      "status": "INFO",
+      "detail": "No action button on approved rows",
+      "sev": ""
+    },
+    {
+      "id": "CT-021",
+      "name": "SLA tracking",
+      "status": "PASS",
+      "detail": "SLA column found in table",
+      "sev": ""
+    },
+    {
+      "id": "CT-DETAIL",
+      "name": "Detail page",
+      "status": "INFO",
+      "detail": "No rows to click",
+      "sev": ""
+    }
+  ],
+  "issues": [],
+  "jsErrors": []
+}

@@ -1,0 +1,1 @@
+{"success":false,"error":{"code":"ERR-VAL-SYS-00-01","field":"checklist","message":"Phải có đủ 6 hạng mục kiểm tra","details":[{"field":"checklist","message":"Phải có đủ 6 hạng mục kiểm tra"},{"field":"checklist.0.hangMucId","message":"hangMucId must be a UUID"}],"timestamp":"2026-04-18T07:23:50.084Z","requestId":"1a7713f4-8521-4ab0-8da3-36fe986dc92a"}}

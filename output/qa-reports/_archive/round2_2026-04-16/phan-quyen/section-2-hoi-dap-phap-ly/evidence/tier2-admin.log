@@ -1,0 +1,7 @@
+=== TIER-2 admin @ 14:14:29 ===
+Landing: http://103.172.236.130:3000/dashboard
+Menu state: {"exists":true,"disabled":false}
+Selector matched multiple elements. Be more specific or use @refs from 'snapshot'.
+URL after wait: http://103.172.236.130:3000/hoi-dap
+{"url":"/hoi-dap","is403":false,"rowCount":0,"headers":[],"mainButtons":["Làm mới"],"firstRowClickables":[],"firstRowText":null,"filtersVisible":[],"hasCreate":false,"hasExport":false,"hasApproveBtn":false,"hasImport":false}
+--- done ---

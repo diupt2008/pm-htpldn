@@ -1,0 +1,80 @@
+{
+  "ts": "2026-04-15T17:12:46.108Z",
+  "module": "Quản trị Hệ thống v2",
+  "summary": {
+    "pass": 3,
+    "fail": 3,
+    "warn": 0,
+    "info": 1,
+    "total": 7,
+    "bugs": 2,
+    "jsErrors": 0
+  },
+  "testResults": [
+    {
+      "id": "QT-001",
+      "name": "Đăng nhập username/password",
+      "status": "ĐẠT",
+      "detail": "Thông tin đăng nhập được chấp nhận"
+    },
+    {
+      "id": "QT-002",
+      "name": "Xác thực OTP qua email",
+      "status": "ĐẠT",
+      "detail": "OTP 6 số nhận qua MailHog, xác thực thành công"
+    },
+    {
+      "id": "QT-009",
+      "name": "Trang danh mục",
+      "status": "KHÔNG ĐẠT",
+      "detail": "Không truy cập được qua URL trực tiếp"
+    },
+    {
+      "id": "QT-018",
+      "name": "Trang tài khoản",
+      "status": "KHÔNG ĐẠT",
+      "detail": "Không truy cập được qua URL trực tiếp"
+    },
+    {
+      "id": "QT-027",
+      "name": "Cấu hình SLA",
+      "status": "KHÔNG ĐẠT",
+      "detail": "Trang không tải được"
+    },
+    {
+      "id": "QT-025",
+      "name": "Nhật ký hệ thống",
+      "status": "THÔNG TIN",
+      "detail": "Không tìm thấy URL trực tiếp. Chức năng có thể chưa triển khai hoặc URL khác"
+    },
+    {
+      "id": "QT-005",
+      "name": "Đăng xuất → chuyển về trang đăng nhập",
+      "status": "ĐẠT",
+      "detail": "URL: http://103.172.236.130:3000/login"
+    }
+  ],
+  "issues": [
+    {
+      "id": "QT-BUG-001",
+      "title": "Không truy cập được trang Danh mục dùng chung",
+      "sev": "Trung bình",
+      "cat": "Chức năng",
+      "repro": "Đã thử: /quan-tri/danh-muc, /quan-tri/danh-muc-dung-chung, /admin/danh-muc, /danh-muc\nTất cả đều redirect về dashboard hoặc 404",
+      "shots": [
+        "qt2-danhmuc.png"
+      ]
+    },
+    {
+      "id": "QT-BUG-002",
+      "title": "Không truy cập được trang Tài khoản & Phân quyền",
+      "sev": "Trung bình",
+      "cat": "Chức năng",
+      "repro": "Đã thử: /quan-tri/tai-khoan, /admin/tai-khoan, /tai-khoan\nTất cả redirect về dashboard",
+      "shots": [
+        "qt2-taikhoan.png"
+      ]
+    }
+  ],
+  "jsErrors": []
+}

@@ -1,0 +1,76 @@
+{
+  "ts": "2026-04-15T15:57:03.486Z",
+  "module": "Chuyên gia/TVV",
+  "summary": {
+    "pass": 9,
+    "fail": 1,
+    "info": 0,
+    "total": 10,
+    "bugs": 0,
+    "jsErrors": 0
+  },
+  "testResults": [
+    {
+      "id": "TVV-001",
+      "name": "Danh sách TVV",
+      "status": "PASS",
+      "detail": "URL: http://103.172.236.130:3000/chuyen-gia-tvv/danh-sach"
+    },
+    {
+      "id": "TVV-001a",
+      "name": "Tabs SM-TVV",
+      "status": "PASS",
+      "detail": "Đang hoạt động, Tạm dừng, Mới đăng ký10, Chờ thẩm định, Chờ phê duyệt"
+    },
+    {
+      "id": "TVV-001b",
+      "name": "Data",
+      "status": "PASS",
+      "detail": "2 rows"
+    },
+    {
+      "id": "TVV-001c",
+      "name": "Pagination",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "TVV-001d",
+      "name": "Search/Filter",
+      "status": "PASS",
+      "detail": "In:4 Sel:3"
+    },
+    {
+      "id": "TVV-002",
+      "name": "Tìm kiếm",
+      "status": "PASS",
+      "detail": "Search \"Trần\" → 2 rows"
+    },
+    {
+      "id": "TVV-003a",
+      "name": "Form thêm TVV",
+      "status": "PASS",
+      "detail": "13 fields"
+    },
+    {
+      "id": "TVV-003",
+      "name": "Thêm TVV",
+      "status": "PASS",
+      "detail": "Created"
+    },
+    {
+      "id": "TVV-007",
+      "name": "Chi tiết",
+      "status": "FAIL",
+      "detail": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('tbody tr').first()\n    - locator resolved to <tr aria-hidden=\"true\" class="
+    },
+    {
+      "id": "TVV-EXPORT",
+      "name": "Xuất Excel",
+      "status": "PASS",
+      "detail": "Button found"
+    }
+  ],
+  "issues": [],
+  "jsErrors": []
+}

@@ -1,0 +1,178 @@
+{
+  "ts": "2026-04-15T17:59:37.713Z",
+  "portal": [
+    {
+      "user": "tvv_user",
+      "name": "TVV Portal",
+      "level": "Portal",
+      "login": false,
+      "error": "no_otp"
+    },
+    {
+      "user": "nht_user",
+      "name": "NHT Portal",
+      "level": "Portal",
+      "login": false,
+      "error": "no_otp"
+    },
+    {
+      "user": "chuyengia_user",
+      "name": "CG Portal",
+      "level": "Portal",
+      "login": false,
+      "error": "no_otp"
+    },
+    {
+      "user": "dn_user",
+      "name": "DN Portal",
+      "level": "Portal",
+      "login": false,
+      "error": "no_otp"
+    },
+    {
+      "user": "giangvien_user",
+      "name": "GV Portal",
+      "level": "Portal",
+      "login": false,
+      "error": "no_otp"
+    }
+  ],
+  "roleDetail": [
+    {
+      "user": "lanhdao_tw",
+      "name": "Lãnh đạo TW",
+      "level": "TW",
+      "login": true,
+      "menuCount": 13,
+      "menus": [
+        "Tổng quan",
+        "Quản lý hỏi đáp pháp lý",
+        "Quản lý đào tạo, tập huấn",
+        "Quản lý chuyên gia / tư vấn viên",
+        "Quản lý vụ việc hỗ trợ pháp lý",
+        "Quản lý chi trả chi phí",
+        "Quản lý doanh nghiệp được hỗ trợ",
+        "Đánh giá hiệu quả hỗ trợ pháp lý",
+        "Quản lý thư viện biểu mẫu",
+        "Quản lý tư vấn",
+        "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+        "Báo cáo thống kê",
+        "Quản trị hệ thống"
+      ],
+      "modules": {
+        "hoidap": {
+          "vis": true,
+          "rows": 21,
+          "add": true,
+          "appr": false,
+          "url": "http://103.172.236.130:3000/hoi-dap"
+        },
+        "tvv": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false,
+          "url": "http://103.172.236.130:3000/chuyen-gia-tvv/danh-sach"
+        },
+        "vuviec": {
+          "vis": true,
+          "rows": 5,
+          "add": true,
+          "appr": false,
+          "url": "http://103.172.236.130:3000/vu-viec/danh-sach"
+        },
+        "chitra": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false,
+          "url": "http://103.172.236.130:3000/chi-tra/danh-sach"
+        },
+        "dn": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false,
+          "url": "http://103.172.236.130:3000/doanh-nghiep/danh-sach"
+        },
+        "quantri": {
+          "vis": true
+        }
+      },
+      "hasQTHT": true,
+      "detailCheck": {
+        "url": "http://103.172.236.130:3000/hoi-dap/568eae3e-fcb0-459f-a1cd-5f7f0326afe5",
+        "wfButtons": []
+      }
+    },
+    {
+      "user": "canbo_tw",
+      "name": "Cán bộ TW",
+      "level": "TW",
+      "login": true,
+      "menuCount": 13,
+      "menus": [
+        "Tổng quan",
+        "Quản lý hỏi đáp pháp lý",
+        "Quản lý đào tạo, tập huấn",
+        "Quản lý chuyên gia / tư vấn viên",
+        "Quản lý vụ việc hỗ trợ pháp lý",
+        "Quản lý chi trả chi phí",
+        "Quản lý doanh nghiệp được hỗ trợ",
+        "Đánh giá hiệu quả hỗ trợ pháp lý",
+        "Quản lý thư viện biểu mẫu",
+        "Quản lý tư vấn",
+        "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+        "Báo cáo thống kê",
+        "Quản trị hệ thống"
+      ],
+      "modules": {
+        "hoidap": {
+          "vis": true,
+          "rows": 21,
+          "add": true,
+          "appr": false,
+          "url": "http://103.172.236.130:3000/hoi-dap"
+        },
+        "tvv": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false,
+          "url": "http://103.172.236.130:3000/chuyen-gia-tvv/danh-sach"
+        },
+        "vuviec": {
+          "vis": true,
+          "rows": 5,
+          "add": true,
+          "appr": false,
+          "url": "http://103.172.236.130:3000/vu-viec/danh-sach"
+        },
+        "chitra": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false,
+          "url": "http://103.172.236.130:3000/chi-tra/danh-sach"
+        },
+        "dn": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false,
+          "url": "http://103.172.236.130:3000/doanh-nghiep/danh-sach"
+        },
+        "quantri": {
+          "vis": true
+        }
+      },
+      "hasQTHT": true,
+      "detailCheck": {
+        "url": "http://103.172.236.130:3000/hoi-dap/568eae3e-fcb0-459f-a1cd-5f7f0326afe5",
+        "wfButtons": [
+          "Tiếp nhận"
+        ]
+      }
+    }
+  ]
+}

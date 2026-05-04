@@ -1,0 +1,1668 @@
+STT,Tên chức năng,Tác nhân,Transaction,Mô tả,Phân loại BMT,Độ phức tạp,Đã update 3 phụ lục
+I,Dashboard,,,,,,
+1,"Tổng hợp hỏi đáp, vướng mắc được gửi về","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Cung cấp chức năng tổng hợp số liệu và hiển thị chỉ số chính về số lượng yêu cầu hỏi đáp/vướng mắc mới đã tiếp nhận.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem tổng hợp hỏi đáp, vướng mắc được gửi về;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp hỏi đáp, vướng mắc được gửi về.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc điều kiện để xem tổng hợp hỏi đáp, vướng mắc được gửi về;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp hỏi đáp, vướng mắc được gửi về theo điều kiện lọc.",,,,
+2,Tổng hợp các vụ việc đã tiếp nhận,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Cung cấp chỉ số tổng số vụ việc đã được ghi nhận vào hệ thống (bao gồm cả đang chờ xử lý).,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem tổng hợp các vụ việc đã tiếp nhận;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp các vụ việc đã tiếp nhận.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc điều kiện để xem tổng hợp các vụ việc đã tiếp nhận;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp các vụ việc đã tiếp nhận theo điều kiện lọc.",,,,
+3,Tổng hợp các vụ việc đang hỗ trợ,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Cung cấp chỉ số về số lượng vụ việc đang trong quá trình phân công hoặc đang được chuyên gia thực hiện hỗ trợ.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem tổng hợp các vụ việc đang hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp các vụ việc đang hỗ trợ.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc điều kiện để xem tổng hợp các vụ việc đang hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp các vụ việc đang hỗ trợ theo điều kiện lọc.",,,,
+4,Tổng hợp các vụ việc đã hoàn thành hỗ trợ,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Cung cấp chỉ số tổng số vụ việc đã được xử lý xong và đóng hồ sơ.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem tổng hợp các vụ việc đã hoàn thành hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp các vụ việc đã hoàn thành hỗ trợ.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc điều kiện để xem tổng hợp các vụ việc đã hoàn thành hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp các vụ việc đã hoàn thành hỗ trợ theo điều kiện lọc.",,,,
+5,Tổng hợp các lớp đào tạo/tập huấn bồi dưỡng đang diễn ra,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Hiển thị số lượng và danh sách các khóa đào tạo/tập huấn đang mở và đang diễn ra.
+",B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem tổng hợp các lớp đào tạo/tập huấn bồi dưỡng đang diễn ra;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp các lớp đào tạo/tập huấn bồi dưỡng đang diễn ra.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc điều kiện để xem tổng hợp các lớp đào tạo/tập huấn bồi dưỡng đang diễn ra;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp các lớp đào tạo/tập huấn bồi dưỡng đang diễn ra theo điều kiện lọc.",,,,
+6,Tổng hợp các lớp đào tạo bồi dưỡng đã diễn ra,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Hiển thị số lượng và danh sách các khóa đào tạo/tập huấn đã hoàn thành và có kết quả.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem tổng hợp các lớp đào tạo bồi dưỡng đã diễn ra;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp các lớp đào tạo bồi dưỡng đã diễn ra.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc điều kiện để xem tổng hợp các lớp đào tạo bồi dưỡng đã diễn ra;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp các lớp đào tạo bồi dưỡng đã diễn ra theo điều kiện lọc.",,,,
+7,Tổng số chuyên gia tư vấn pháp luật,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Hiển thị tổng số lượng chuyên gia, tư vấn viên đã được thẩm định và công nhận trong mạng lưới.",B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem Tổng số chuyên gia tư vấn pháp luật;
+Hệ thống kiểm tra điều kiện và hiển thị Tổng số chuyên gia tư vấn pháp luật.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc điều kiện để xem Tổng số chuyên gia tư vấn pháp luật;
+Hệ thống kiểm tra điều kiện và hiển thị Tổng số chuyên gia tư vấn pháp luật theo điều kiện lọc.",,,,
+8,Biểu đồ thống kê đánh giá hiệu quả hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Trực quan hóa dữ liệu đánh giá chất lượng hỗ trợ, bao gồm điểm hài lòng và tỷ lệ tuân thủ (thời hạn xử lý).",B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem biểu đồ thống kê đánh giá hiệu quả hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị biểu đồ thống kê đánh giá hiệu quả hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc điều kiện để xem biểu đồ thống kê đánh giá hiệu quả hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị biểu đồ thống kê đánh giá hiệu quả hỗ trợ pháp lý theo điều kiện lọc.",,,,
+9,Biểu đồ thống kê chất lượng đào tạo bồi dưỡng pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Trực quan hóa dữ liệu về hiệu quả đào tạo (ví dụ: Tỷ lệ đạt chứng nhận, điểm trung bình kiểm tra).",B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem biểu đồ thống kê chất lượng đào tạo bồi dưỡng pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị biểu đồ thống kê chất lượng đào tạo bồi dưỡng pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc điều kiện để xem biểu đồ thống kê chất lượng đào tạo bồi dưỡng pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị biểu đồ thống kê chất lượng đào tạo bồi dưỡng pháp lý theo điều kiện lọc.",,,,
+II,"Quản lý tiếp nhận hỏi đáp, vướng mắc pháp lý",,,,,,
+II.1,"Quản lý tổng hợp hỏi đáp, vướng mắc pháp lý",,,,,,
+10,"Quản lý thông tin hỏi đáp, vướng mắc pháp lý","Cán bộ nghiệp vụ TW,BN,ĐP",,"Quản lý các trường dữ liệu chi tiết của từng yêu cầu (nội dung, người gửi, lĩnh vực, thời gian gửi...).",B,Phức tạp,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hỏi đáp, vướng mắc pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn phân trang để xem danh sách thông tin hỏi đáp, vướng mắc pháp lý;
+Hệ thống hiển thị danh sách thông tin hỏi đáp, vướng mắc pháp lý theo phân trang đã chọn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết thông tin hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hỏi đáp, vướng mắc pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thêm mới thông tin hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới hỏi đáp, vướng mắc pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa thông tin hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa hỏi đáp, vướng mắc pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa thông tin hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa hỏi đáp, vướng mắc pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xuất danh sách thông tin hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và thực hiện xuất dưới dạng excel thông tin hỏi đáp, vướng mắc pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP làm mới dữ liệu danh sách thông tin hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và cập nhật dữ liệu danh sách thông tin hỏi đáp, vướng mắc pháp lý mới nhất.",,,,
+11,"Tìm kiếm hỏi đáp, vướng mắc được tổng hợp","Cán bộ nghiệp vụ TW,BN,ĐP",,"Cung cấp công cụ tìm kiếm toàn văn, nâng cao theo lĩnh vực, thời gian đối với các yêu cầu hỏi đáp đã tổng hợp.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập từ khóa tìm kiếm thông tin hỏi đáp, vướng mắc được tổng hợp;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lọc theo thời gian để tìm kiếm thông tin hỏi đáp, vướng mắc được tổng hợp;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lọc theo lĩnh vực để tìm kiếm thông tin hỏi đáp, vướng mắc được tổng hợp;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm hỏi đáp, vướng mắc được tổng hợp;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+II.2,"Quản lý tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý",,,,,,
+12,"Tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý","Cán bộ nghiệp vụ TW,BN,ĐP",,Thực hiện thao tác tiếp nhận và chuyển yêu cầu vào quy trình phân công xử lý.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống hiển thị danh sách tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lọc điều kiện để xem danh sách hỏi đáp, vướng mắc pháp lý;
+Hệ thống hiển thị danh sách hỏi đáp, vướng mắc pháp lý theo điều kiện đã lọc.",Lọc điều kiện để xem danh sách,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết nội dung hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị chi tiết nội dung hỏi đáp, vướng mắc pháp lý.","Xem chi tiết nội dung hỏi đáp, vướng mắc pháp lý",,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xác nhận tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý để chuyển phân công;
+Hệ thống kiểm tra điều kiện và xác nhận tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý thành công.",Xác nhận tiếp nhận hỏi đáp để chuyển phân công xử lý,,,xxx
+13,"Quản lý thông tin tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý","Cán bộ nghiệp vụ TW,BN,ĐP",,"Quản lý các thông tin liên quan đến quá trình xử lý (người phân công, thời hạn xử lý, trạng thái luân chuyển).",B,Phức tạp,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách đã tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách đã tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý.",,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn phân trang để xem danh sách đã tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống hiển thị danh sách đã tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý theo phân trang đã chọn.",,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lọc điều kiện để xem danh sách đã tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống hiển thị danh sách đã tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý theo điều kiện đã lọc.","Lọc điều kiện để xem danh sách đã tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý",,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết thông tin đã tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị chi tiết thông tin đã tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý.","Xem chi tiết thông tin đã tiếp nhận về xử lý hỏi đáp, vướng mắc pháp lý",,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem thông tin đã phân công xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin đã phân công xử lý hỏi đáp, vướng mắc pháp lý.","Xem thông tin đã phân công xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống hiển thị thông tin đã phân công xử lý hỏi đáp, vướng mắc pháp lý.",,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP cập nhật thời hạn xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và ghi nhận thời hạn xử lý hỏi đáp, vướng mắc pháp lý theo quy định.","Cập nhật thời hạn xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và ghi nhận thời hạn xử lý theo quy định",,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem lịch sử phân công, thay đổi thời hạn và trạng thái xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị lịch sử phân công, thay đổi thời hạn và trạng thái luân chuyển của hồ sơ.","Xem lịch sử phân công, thay đổi trạng thái, thời hạn xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống hiển thị lịch sử phân công, thay đổi thời hạn và trạng thái luân chuyển của hồ sơ.",,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem kết quả cập nhật thông tin xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin phân công, thời hạn xử lý và trạng thái luân chuyển của hồ sơ sau khi được cập nhật.","xem kết quả cập nhật thông tin xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống hiển thị thông tin phân công, thời hạn xử lý và trạng thái luân chuyển sau khi được cập nhật.",,,xxx
+14,"Tìm kiếm thông tin hỏi đáp, vướng mắc pháp lý đã tiếp nhận xử lý","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Tìm kiếm các yêu cầu đang nằm trong hàng đợi chờ xử lý hoặc đã được phân công xử lý.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập từ khóa tìm kiếm thông tin hỏi đáp, vướng mắc pháp lý đã tiếp nhận xử lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo thời gian để tìm kiếm thông tin hỏi đáp, vướng mắc pháp lý đã tiếp nhận xử lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo lĩnh vực để tìm kiếm thông tin hỏi đáp, vướng mắc pháp lý đã tiếp nhận xử lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm thông tin hỏi đáp, vướng mắc pháp lý đã tiếp nhận xử lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+15,"Phân công xử lý câu hỏi, vướng mắc","Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp công cụ cho CB Nghiệp vụ gán/chuyển yêu cầu hỏi đáp đến Người hỗ trợ/Tổ chức tư vấn phù hợp.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn phân công xử lý câu hỏi, vướng mắc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chọn Người hỗ trợ/Tổ chức tư vấn phù hợp.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lọc điều kiện để tìm kiếm người hỗ trợ xử lý câu hỏi, vướng mắc;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả người hỗ trợ tương ứng với điều kiện tìm kiếm.",Thêm tìm kiếm người người hỗ trợ ,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn Người hỗ trợ/Tổ chức tư vấn phù hợp để phân công xử lý câu hỏi, vướng mắc;
+Hệ thống kiểm tra điều kiện và chuyển yêu cầu hỏi đáp đến Người hỗ trợ/Tổ chức tư vấn đã chọn nếu hợp lệ.",,,,
+16,"Phản hồi câu hỏi, vướng mắc","Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp công cụ cho Người hỗ trợ/CB Nghiệp vụ soạn thảo và gửi nội dung phản hồi chính thức cho người gửi.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn phản hồi câu hỏi, vướng mắc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thông tin về câu hỏi, vướng mắc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập phản hồi câu hỏi, vướng mắc rồi nhấn Lưu;
+Hệ thống kiểm tra điều kiện và lưu lại phản hồi câu hỏi, vướng mắc đã nhập.",,,,
+17,"Quản lý công khai phản hồi câu hỏi, vướng mắc","Cán bộ phê duyệt TW,BN,ĐP",,Quản lý quy trình kiểm duyệt và xuất bản công khai các câu trả lời.,B,Trung bình,
+,,,"Cán bộ phê duyệt TW,BN,ĐP phê duyệt phản hồi câu hỏi, vướng mắc;
+Hệ thống hiển thị màn hình xác nhận phê duyệt phản hồi câu hỏi, vướng mắc.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP chọn xác nhận phê duyệt phản hồi câu hỏi, vướng mắc;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận phê duyệt phản hồi câu hỏi, vướng mắc.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP công khai phản hồi câu hỏi, vướng mắc;
+Hệ thống kiểm tra điều kiện và thực hiện công khai phản hồi câu hỏi, vướng mắc lên Cổng.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP hủy công khai phản hồi câu hỏi, vướng mắc;
+Hệ thống kiểm tra điều kiện và thực hiện hủy công khai phản hồi câu hỏi, vướng mắc khỏi Cổng.",,,,
+II.3,"Quản lý danh sách câu hỏi, vướng mắc đã xử lý",,,,,,
+18,"Quản lý câu hỏi, vướng mắc đã xử lý","Cán bộ nghiệp vụ TW,BN,ĐP",,Quản lý các trường dữ liệu chi tiết của từng yêu cầu đã hoàn thành xử lý.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách câu hỏi, vướng mắc đã xử lý;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách câu hỏi, vướng mắc đã xử lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn phân trang để xem danh sách câu hỏi, vướng mắc đã xử lý;
+Hệ thống hiển thị danh sách câu hỏi, vướng mắc đã xử lý theo phân trang đã chọn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết câu hỏi, vướng mắc đã xử lý;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết câu hỏi, vướng mắc đã xử lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP làm mới dữ liệu danh sách câu hỏi, vướng mắc đã xử lý;
+Hệ thống kiểm tra điều kiện và cập nhật dữ liệu danh sách câu hỏi, vướng mắc đã xử lý mới nhất.",,,,
+19,"Tìm kiếm thông tin câu hỏi, vướng mắc đã xử lý","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Tìm kiếm trong kho dữ liệu các câu hỏi và câu trả lời đã được xử lý xong.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập từ khóa tìm kiếm thông tin câu hỏi, vướng mắc đã xử lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo thời gian để tìm kiếm thông tin câu hỏi, vướng mắc đã xử lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo lĩnh vực để tìm kiếm thông tin câu hỏi, vướng mắc đã xử lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm thông tin câu hỏi, vướng mắc đã xử lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+III,"Quản lý thông tin chương trình đào tạo, tập huấn",,,,,,
+20,"Quản lý chương trình đào tạo, tập huấn","Cán bộ nghiệp vụ TW,BN,ĐP",,"Tổng hợp và quản lý danh sách các chương trình đào tạo/tập huấn đã, đang và sẽ diễn ra.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách chương trình đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách chương trình đào tạo, tập huấn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết chương trình đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết chương trình đào tạo, tập huấn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thêm mới chương trình đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới chương trình đào tạo, tập huấn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa chương trình đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa chương trình đào tạo, tập huấn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa chương trình đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa chương trình đào tạo, tập huấn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xuất danh sách chương trình đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và thực hiện xuất dưới dạng excel chương trình đào tạo, tập huấn.",,,,
+21,"Tìm kiếm chương trình đào tạo, tập huấn","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ",,"Cung cấp công cụ tìm kiếm khóa học theo tên, thời gian, lĩnh vực.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ nhập từ khóa tìm kiếm thông tin chương trình đào tạo, tập huấn;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ lọc theo thời gian để tìm kiếm thông tin chương trình đào tạo, tập huấn;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ lọc theo lĩnh vực để tìm kiếm thông tin chương trình đào tạo, tập huấn;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ kết hợp nhiều điều kiện tìm kiếm chương trình đào tạo, tập huấn;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+22,"Quản lý đăng ký đào tạo, tập huấn","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Quản lý danh sách người đăng ký tham gia các khóa đào tạo và trạng thái phê duyệt đăng ký.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem danh sách người đăng ký đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách người đăng ký đào tạo, tập huấn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem chi tiết thông tin người đăng ký đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết người đăng ký đào tạo, tập huấn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP phê duyệt người đăng ký đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và cập nhật trạng thái phê duyệt người đăng ký đào tạo, tập huấn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP từ chối phê duyệt người đăng ký đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị popup nhập lý do từ chối phê duyệt người đăng ký đào tạo, tập huấn.",,,,
+23,Đăng ký tham gia học tập,Doanh nghiệp/Người hỗ trợ,,Đăng ký tham gia các khóa học.,B,Trung bình,
+,,,"Doanh nghiệp/Người hỗ trợ xem danh sách các khóa học đang mở đăng ký;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách khóa học kèm thông tin cơ bản về khóa học.",,,,
+,,,"Doanh nghiệp/Người hỗ trợ chọn một khóa học để xem chi tiết trước khi đăng ký;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết của khóa học đã chọn.",,,,
+,,,"Doanh nghiệp/Người hỗ trợ nhập thông tin đăng ký và gửi yêu cầu tham gia khóa học;
+Hệ thống ghi nhận thông tin đăng ký và thông báo đăng ký thành công.",,,,
+,,,"Doanh nghiệp/Người hỗ trợ hủy đăng ký tham gia khóa học;
+Hệ thống ghi nhận hủy đăng ký và thông báo hủy đăng ký thành công.",,,,
+24,"Quản lý kiểm tra, đánh giá kết quả học tập","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Quản lý điểm danh, điểm kiểm tra/đánh giá cuối khóa của học viên.",B,Trung bình,Nhập điểm danh kết quả học tập
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem danh sách kết quả điểm danh học viên;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách kết quả điểm danh học viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem danh sách kết quả điểm kiểm tra của học viên;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách kết quả điểm kiểm tra của học viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập kết quả điểm danh của học viên;
+Hệ thống kiểm tra điều kiện và lưu lại kết quả điểm danh của học viên.",Nhập kết quả điểm danh,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập kết quả học tập của học viên;
+Hệ thống kiểm tra điều kiện và lưu lại kết quả học tập của học viên.",Nhập kết quả điểm học tập,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xuất danh sách kết quả điểm danh học viên;
+Hệ thống kiểm tra điều kiện và thực hiện xuất dưới dạng excel kết quả điểm danh học viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xuất danh sách điểm kết quả học tập của học viên;
+Hệ thống kiểm tra điều kiện và thực hiện xuất dưới dạng excel điểm kết quả học tập của học viên.",,,,
+25,"Tìm kiếm thông tin kiểm tra, đánh giá kết quả học tập","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Tìm kiếm kết quả học tập theo tên học viên, mã khóa học.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập từ khóa tìm kiếm thông tin kiểm tra, đánh giá kết quả học tập;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo học viên để tìm kiếm thông tin kiểm tra, đánh giá kết quả học tập;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo khóa học để tìm kiếm thông tin kiểm tra, đánh giá kết quả học tập;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm thông tin kiểm tra, đánh giá kết quả học tập;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả tương ứng theo các điều kiện lọc.",,,,
+26,"Quản lý kho tài liệu, bài giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Quản lý việc lưu trữ, phân loại và truy cập các tài liệu, bài giảng liên quan đến khóa học.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem danh sách kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách kho tài liệu, bài giảng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem chi tiết kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết kho tài liệu, bài giảng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP thêm mới kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới kho tài liệu, bài giảng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chỉnh sửa kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa kho tài liệu, bài giảng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xóa kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa kho tài liệu, bài giảng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem file kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xem file kho tài liệu, bài giảng.",,,,
+27,"Tìm kiếm thông tin kho tài liệu, bài giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Tìm kiếm tài liệu, bài giảng theo từ khóa, tên khóa học.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập từ khóa tìm kiếm thông tin kho tài liệu, bài giảng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo thời gian để tìm kiếm thông tin kho tài liệu, bài giảng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo loại bài giảng để tìm kiếm thông tin kho tài liệu, bài giảng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm thông tin kho tài liệu, bài giảng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+28,Quản lý ngân hàng câu hỏi,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Quản lý việc tạo, chỉnh sửa, phân loại các câu hỏi được sử dụng trong bài kiểm tra/đánh giá.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem danh sách ngân hàng câu hỏi;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách ngân hàng câu hỏi.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem chi tiết ngân hàng câu hỏi;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết ngân hàng câu hỏi.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP thêm mới ngân hàng câu hỏi;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới ngân hàng câu hỏi.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chỉnh sửa ngân hàng câu hỏi;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa ngân hàng câu hỏi.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xóa ngân hàng câu hỏi;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa ngân hàng câu hỏi.",,,,
+29,Tìm kiếm ngân hàng câu hỏi,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Tìm kiếm câu hỏi kiểm tra theo lĩnh vực, mức độ khó.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập từ khóa tìm kiếm ngân hàng câu hỏi;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo lĩnh vực để tìm kiếm ngân hàng câu hỏi;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo mức độ câu hỏi để tìm kiếm ngân hàng câu hỏi;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm ngân hàng câu hỏi;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+30,"Quản lý giảng viên, trợ giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Quản lý hồ sơ, năng lực chuyên môn và lịch sử tham gia giảng dạy của giảng viên/trợ giảng.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem danh sách giảng viên, trợ giảng;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách giảng viên, trợ giảng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem chi tiết giảng viên, trợ giảng;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết giảng viên, trợ giảng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP thêm mới giảng viên, trợ giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới giảng viên, trợ giảng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chỉnh sửa giảng viên, trợ giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa giảng viên, trợ giảng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xóa giảng viên, trợ giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa giảng viên, trợ giảng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem lịch sử giảng dạy của giảng viên, trợ giảng;
+Hệ thống kiểm tra điều kiện và hiển thị lịch sử giảng dạy của giảng viên, trợ giảng.",,,,
+31,"Tìm kiếm giảng viên, trợ giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Tìm kiếm giảng viên/trợ giảng theo tên, lĩnh vực chuyên môn.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập từ khóa tìm kiếm giảng viên, trợ giảng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo thời gian để tìm kiếm giảng viên, trợ giảng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo lĩnh vực chuyên môn để tìm kiếm giảng viên, trợ giảng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm giảng viên, trợ giảng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+32,"Quản lý đề xuất đào tạo, tập huấn",Doanh nghiệp/Người hỗ trợ,,Quản lý các đề xuất tổ chức đào tạo/tập huấn từ các đơn vị/cá nhân khác nhau.,B,Trung bình,
+,,,"Doanh nghiệp/Người hỗ trợ xem danh sách đề xuất đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách đề xuất đào tạo, tập huấn.",,,,
+,,,"Doanh nghiệp/Người hỗ trợ xem chi tiết đề xuất đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết đề xuất đào tạo, tập huấn.",,,,
+,,,"Doanh nghiệp/Người hỗ trợ thêm mới đề xuất đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới đề xuất đào tạo, tập huấn.",,,,
+,,,"Doanh nghiệp/Người hỗ trợ chỉnh sửa đề xuất đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa đề xuất đào tạo, tập huấn.",,,,
+,,,"Doanh nghiệp/Người hỗ trợ xóa đề xuất đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa đề xuất đào tạo, tập huấn.",,,,
+33,Quản lý lập kế hoạch đào tạo bồi dưỡng,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Cung cấp công cụ để CB Nghiệp vụ xây dựng kế hoạch chi tiết (ngân sách, thời gian, nguồn lực) cho các khóa đào tạo.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem danh sách lập kế hoạch đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách lập kế hoạch đào tạo bồi dưỡng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem chi tiết lập kế hoạch đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết lập kế hoạch đào tạo bồi dưỡng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP thêm mới lập kế hoạch đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới lập kế hoạch đào tạo bồi dưỡng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chỉnh sửa lập kế hoạch đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa lập kế hoạch đào tạo bồi dưỡng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xóa lập kế hoạch đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa lập kế hoạch đào tạo bồi dưỡng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xuất danh sách lập kế hoạch đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và thực hiện xuất dưới dạng excel lập kế hoạch đào tạo bồi dưỡng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP trình phê duyệt kế hoạch đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trình phê duyệt kế hoạch đào tạo bồi dưỡng.",Gửi phê duyệt kế hoạch đào tạo bồi dưỡng,,,xxx
+34,Phê duyệt kế hoạch đào tạo bồi dưỡng,"Cán bộ phê duyệt TW,BN,ĐP",,Cung cấp quy trình để CB Phê duyệt xem xét và phê duyệt kế hoạch đào tạo đã lập.,B,Đơn giản,
+,,,"Cán bộ phê duyệt TW,BN,ĐP phê duyệt kế hoạch đào tạo bồi dưỡng;
+Hệ thống hiển thị màn hình xác nhận phê duyệt kế hoạch đào tạo bồi dưỡng.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP chọn xác nhận phê duyệt kế hoạch đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận phê duyệt kế hoạch đào tạo bồi dưỡng thành công.",,,,
+35,Công khai kế hoạch đào tạo bồi dưỡng,"Cán bộ nghiệp vụ TW,BN,ĐP",,Đăng tải kế hoạch đào tạo đã được phê duyệt lên Cổng để các đối tượng theo dõi.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP công khai kế hoạch đào tạo bồi dưỡng lên chuyên trang;
+Hệ thống kiểm tra điều kiện và thực hiện công khai kế hoạch đào tạo bồi dưỡng lên chuyên trang.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP hủy công khai kế hoạch đào tạo bồi dưỡng trên chuyên trang;
+Hệ thống kiểm tra điều kiện và thực hiện hủy công khai kế hoạch đào tạo bồi dưỡng khỏi chuyên trang.",,,,
+36,Ghi nhận kết quả đào tạo bồi dưỡng,"Cán bộ nghiệp vụ TW,BN,ĐP",,Thực hiện thao tác cập nhật kết quả kiểm tra/đánh giá sau khi khóa học kết thúc.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP ghi nhận kết quả điểm danh khóa học;
+Hệ thống kiểm tra điều kiện và ghi nhận kết quả điểm danh khóa học.",Ghi nhận kết quả điểm danh khóa học,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP ghi nhận điểm kiểm tra đánh giá;
+Hệ thống kiểm tra điều kiện và ghi nhận điểm kiểm tra đánh giá.",Ghi nhận điểm kiểm tra đánh giá,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP trình phê duyệt kết quả đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trình phê duyệt kết quả đào tạo bồi dưỡng.",Gửi phê duyệt kết quả đào tạo bồi dưỡng,,,xxx
+37,Phê duyệt kết quả đào tạo bồi dưỡng,"Cán bộ phê duyệt TW,BN,ĐP",,CB Phê duyệt xem xét và phê duyệt kết quả đào tạo bồi dưỡng.,B,Đơn giản,
+,,,"Cán bộ phê duyệt TW,BN,ĐP phê duyệt kết quả đào tạo bồi dưỡng;
+Hệ thống hiển thị màn hình xác nhận phê duyệt kết quả đào tạo bồi dưỡng.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP chọn xác nhận phê duyệt kết quả đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận phê duyệt kết quả đào tạo bồi dưỡng.",,,,
+38,Công bố kết quả đào tạo bồi dưỡng,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Cung cấp chức năng công bố kết quả, cập nhật kết quả vào tài khoản của học viên.",B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP công bố kết quả đào tạo bồi dưỡng ở tài khoản của học viên;
+Hệ thống kiểm tra điều kiện và hiển thị kết quả đào tạo bồi dưỡng ở tài khoản của học viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP hủy công bố kết quả đào tạo bồi dưỡng ở tài khoản của học viên;
+Hệ thống kiểm tra điều kiện và không hiển thị kết quả đào tạo bồi dưỡng ở tài khoản của học viên.",,,,
+IV,"Quản lý thông tin chuyên gia, tư vấn viên pháp lý",,,,,,
+39,Quản lý tư vấn viên,"Cán bộ nghiệp vụ TW,BN,ĐP",,Tổng hợp và quản lý danh sách các tư vấn viên đã được công nhận hoặc đang chờ thẩm định.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa thông tin tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa thông tin tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xuất danh sách tư vấn viên;
+Hệ thống kiểm tra điều kiện và thực hiện xuất file định dạng excel danh sách tư vấn viên.",,,,
+40,Tìm kiếm thông tin tư vấn viên,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Cung cấp công cụ tìm kiếm Tư vấn viên theo tên, lĩnh vực, địa bàn.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập từ khóa tìm kiếm thông tin tư vấn viên;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo lĩnh vực để tìm kiếm thông tin tư vấn viên;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo địa bàn để tìm kiếm thông tin tư vấn viên;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm thông tin tư vấn viên;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+41,Quản lý đăng ký tham gia mạng lưới tư vấn viên,Người hỗ trợ,,Quản lý các hồ sơ đăng ký tham gia mạng lưới tư vấn viên từ các ứng viên.,B,Trung bình,
+,,,"Người hỗ trợ xem danh sách đăng ký tham gia mạng lưới tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách đăng ký tham gia mạng lưới tư vấn viên.",,,,
+,,,"Người hỗ trợ xem chi tiết đăng ký tham gia mạng lưới tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết đăng ký tham gia mạng lưới tư vấn viên.",,,,
+,,,"Người hỗ trợ nhập từ khóa tìm kiếm thông tin đăng ký tham gia mạng lưới tư vấn viên;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Người hỗ trợ kết hợp nhiều điều kiện tìm kiếm đăng ký tham gia mạng lưới tư vấn viên;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+42,Quản lý cập nhật hồ sơ năng lực của tư vấn viên,Người hỗ trợ,,"Cung cấp công cụ cho Tư vấn viên tự cập nhật thông tin cá nhân, kinh nghiệm và chứng chỉ của mình.",B,Trung bình,
+,,,"Người hỗ trợ xem hồ sơ năng lực của mình;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin hồ sơ (cá nhân, kinh nghiệm, chứng chỉ).",,,,
+,,,"Người hỗ trợ chọn cập nhật hồ sơ năng lực của mình;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình cập nhật hồ sơ năng lực.",,,,
+,,,"Người hỗ trợ cập nhật thông tin cá nhân/kinh nghiệm chuyên môn;
+Hệ thống kiểm tra điều kiện, ghi nhận và lưu lại dữ liệu đã cập nhật.",,,,
+,,,"Người hỗ trợ cập nhật thông tin chứng chỉ, tải lên file minh chứng nếu có;
+Hệ thống kiểm tra điều kiện, ghi nhận và lưu lại dữ liệu đã cập nhật.",,,,
+43,Quản lý hồ sơ tư vấn viên,"Cán bộ nghiệp vụ TW,BN,ĐP",,Quản lý các trường dữ liệu chi tiết của từng hồ sơ tư vấn viên.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập từ khóa tìm kiếm thông tin hồ sơ tư vấn viên;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xuất file hồ sơ tư vấn viên;
+Hệ thống kiểm tra điều kiện và thực hiện xuất file hồ sơ tư vấn viên.",,,,
+44,Thẩm định hồ sơ tư vấn viên,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Cung cấp quy trình để CB Nghiệp vụ xem xét, xác minh tính hợp lệ và năng lực của hồ sơ đăng ký.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ tư vấn viên chờ thẩm định;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ tư vấn viên chờ thẩm định.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ tư vấn viên để thẩm định;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP gửi yêu cầu bổ sung thông tin đối với hồ sơ chưa đầy đủ;
+Hệ thống kiểm tra điều kiện, cập nhật trạng thái hồ sơ và thông báo yêu cầu bổ sung đến người đăng ký.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập nhận xét và kết quả thẩm định hồ sơ;
+Hệ thống lưu trữ kết quả thẩm định và cập nhật trạng thái hồ sơ.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP trình phê duyệt hồ sơ tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trình phê duyệt hồ sơ tư vấn viên.",Trình phê duyệt hồ sơ tư vấn viên,,,xxx
+45,Phê duyệt hồ sơ tư vấn viên,"Cán bộ phê duyệt TW,BN,ĐP",,CB Phê duyệt xem xét và phê duyệt hồ sơ đã thẩm định để công nhận Tư vấn viên.,B,Đơn giản,
+,,,"Cán bộ phê duyệt TW,BN,ĐP phê duyệt hồ sơ tư vấn viên;
+Hệ thống hiển thị màn hình xác nhận phê duyệt hồ sơ tư vấn viên.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP chọn xác nhận phê duyệt hồ sơ tư vấn viên;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận phê duyệt hồ sơ tư vấn viên thành công.",,,,
+46,Cập nhật danh sách mạng lưới tư vấn viên,"Cán bộ nghiệp vụ TW,BN,ĐP",,Thực hiện cập nhật danh sách các tư vấn viên đã được phê duyệt lên Cổng công khai.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP cập nhật danh sách mạng lưới tư vấn viên công khai lên chuyên trang;
+Hệ thống ghi nhận và hiển thị tư vấn viên đó vào danh sách mạng lưới tư vấn viên trên chuyên trang.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP hủy bỏ tư vấn viên khỏi danh sách công khai;
+Hệ thống cập nhật danh sách hiển thị và ngừng công khai thông tin tư vấn viên đó trên chuyên trang.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách mạng lưới tư vấn viên đã công khai;
+Hệ thống hiển thị danh sách mạng lưới tư vấn viên đã công khai.",Xem danh sách mạng lưới tư vấn viên đã công khai,,,xxx
+47,Đánh giá tư vấn viên,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp",,"Cung cấp công cụ để CB Nghiệp vụ, Lãnh đạo, hoặc DNNVV đánh giá chất lượng và hiệu quả hỗ trợ của từng Tư vấn viên.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp xem danh sách tư vấn viên cần đánh giá chất lượng và hiệu quả hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách tư vấn viên cần đánh giá chất lượng và hiệu quả hỗ trợ.",Xem danh sách tư vấn viên cần đánh giá chất lượng và hiệu quả hỗ trợ,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp chọn đánh giá tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình nhập đánh giá của tư vấn viên đã chọn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp cập nhật đánh giá tư vấn viên;
+Hệ thống kiểm tra điều kiện và lưu lại đánh giá tư vấn viên đã cập nhật.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp xem tổng hợp đánh giá tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị các đánh giá của tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp xuất kết quả tổng hợp đánh giá tư vấn viên;
+Hệ thống kiểm tra điều kiện và thực hiện xuất kết quả tổng hợp đánh giá tư vấn viên.",,,,
+48,Quản lý lịch sử hỗ trợ của tư vấn viên,"Cán bộ nghiệp vụ TW,BN,ĐP",,Ghi nhận và theo dõi lịch sử tham gia hỗ trợ vụ việc của từng Tư vấn viên.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách lịch sử hỗ trợ của tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách lịch sử hỗ trợ của tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết lịch sử hỗ trợ của tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết lịch sử hỗ trợ của tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập từ khóa tìm kiếm thông tin lịch sử hỗ trợ của tư vấn viên;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm lịch sử hỗ trợ của tư vấn viên;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+49,Cập nhật thông tin tư vấn viên,Người hỗ trợ,,"Thực hiện chỉnh sửa thông tin chi tiết của Tư vấn viên (địa chỉ, số điện thoại, lĩnh vực chuyên môn).",B,Đơn giản,
+,,,"Người hỗ trợ lựa chọn cập nhật thông tin của mình;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình cập nhật thông tin tư vấn viên.",,,,
+,,,"Người hỗ trợ cập nhật thông tin của mình;
+Hệ thống kiểm tra điều kiện và lưu lại dữ liệu đã cập nhật thông tin tư vấn viên.",,,,
+,,,"Người hỗ trợ xem lại thông tin đã cập nhật;
+Hệ thống hiển thị thông tin của tư vấn viên sau khi đã cập nhật.",Xem lại thông tin đã cập nhật của tư vấn viên,,,xxx
+50,Cập nhật trạng thái hoạt động của tư vấn viên,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Thay đổi trạng thái hoạt động (Đang hoạt động, Tạm dừng, Vô hiệu hóa) của Tư vấn viên.",B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn tư vấn viên cần cập nhật trạng thái hoạt động;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình cập nhật trạng thái hoạt động của tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP cập nhật trạng thái hoạt động của tư vấn viên;
+Hệ thống kiểm tra điều kiện và lưu lại dữ liệu trạng thái hoạt động của tư vấn viên.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem lại trạng thái hoạt động của tư vấn viên đã cập nhật;
+Hệ thống hiển thị trạng thái hoạt động của tư vấn viên sau khi đã cập nhật.",Xem lại trạng thái hoạt động của tư vấn viên sau khi đã cập nhật,,,xxx
+V,Quản lý vụ việc trợ giúp pháp lý,,,,,,
+V.I,Quản lý tiếp nhận vụ việc,,,,,,
+51,Quản lý hồ sơ yêu cầu hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP",,Quản lý các trường dữ liệu và tài liệu đính kèm của hồ sơ yêu cầu hỗ trợ pháp lý từ DNNVV.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ yêu cầu hỗ trợ pháp lý từ DNNVVV;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ yêu cầu hỗ trợ pháp lý từ DNNVVV.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ yêu cầu hỗ trợ pháp lý từ DNNVVV;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ yêu cầu hỗ trợ pháp lý từ DNNVVV.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập từ khóa tìm kiếm thông tin hồ sơ yêu cầu hỗ trợ pháp lý từ DNNVVV;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem tài liệu đính kèm nếu có trong hồ sơ yêu cầu hỗ trợ pháp lý từ DNNVVV;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xem tài liệu đính kèm trong hồ sơ yêu cầu hỗ trợ pháp lý từ DNNVVV.",,,,
+52,Gửi hồ sơ yêu cầu hỗ trợ pháp lý,Doanh nghiệp,,Cung cấp giao diện cho DNNVV gửi hồ sơ yêu cầu hỗ trợ pháp lý trực tuyến.,B,Đơn giản,
+,,,"Doanh nghiệp nhập thông tin cần hỗ trợ, tải lên tài liệu đính kèm nếu có và gửi hồ sơ yêu cầu hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị xác nhận gửi hồ sơ yêu cầu hỗ trợ pháp lý.",(cập nhật lại trans),,,xxx
+,,,"Doanh nghiệp xác nhận gửi hồ sơ yêu cầu hỗ trợ pháp lý;
+Hệ thống lưu lại dữ liệu hồ sơ yêu cầu hỗ trợ pháp lý.",(cập nhật lại trans),,,xxx
+,,,"Doanh nghiệp xem lại thông tin hồ sơ yêu cầu hỗ trợ pháp lý;
+Hệ thống hiển thị thông tin chi tiết hồ sơ yêu cầu hỗ trợ pháp lý.",(cập nhật lại trans),,,xxx
+53,Tiếp nhận hồ sơ qua dịch vụ công,Hệ thống giải quyết thủ tục hành chính BTP,,Quản lý quy trình và giao diện tiếp nhận hồ sơ yêu cầu hỗ trợ pháp lý thông qua hệ thống Dịch vụ công trực tuyến.,M,Trung bình,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP gửi hồ sơ qua dịch vụ công sang hệ thống;
+Hệ thống tiếp nhận dữ liệu hồ sơ, kiểm tra cấu trúc dữ liệu, định dạng và tính đầy đủ của thông tin.",,,,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP hoàn tất việc truyền dữ liệu hồ sơ hợp lệ sang hệ thống;
+Hệ thống tiếp nhận đầy đủ dữ liệu, tạo mới hồ sơ yêu cầu hỗ trợ pháp lý doanh nghiệp, sinh mã hồ sơ.",,,,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP yêu cầu cập nhật trạng thái hồ sơ;
+Hệ thống phản hồi trạng thái tiếp nhận (thành công/thất bại) về Hệ thống giải quyết thủ tục hành chính BTP.",,,,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP nhận thông tin kết thúc xử lý tiếp nhận hồ sơ;
+Hệ thống lưu trữ hồ sơ và đưa hồ sơ vào danh sách chờ xử lý cho cán bộ nghiệp vụ.",,,,
+54,Nhập hồ sơ yêu cầu,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Cung cấp giao diện cho CB Nghiệp vụ nhập hồ sơ yêu cầu hỗ trợ pháp lý thủ công (từ văn bản giấy, điện thoại...).",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ yêu cầu từ văn bản giấy, điện thoại...;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ yêu cầu từ văn bản giấy, điện thoại....",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ yêu cầu từ văn bản giấy, điện thoại...;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ yêu cầu.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thêm mới hồ sơ yêu cầu từ văn bản giấy, điện thoại...;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới hồ sơ yêu cầu.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa hồ sơ yêu cầu từ văn bản giấy, điện thoại...;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa hồ sơ yêu cầu.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa hồ sơ yêu cầu từ văn bản giấy, điện thoại...;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa hồ sơ yêu cầu.",,,,
+55,Tiếp nhận hồ sơ từ hệ thống khác,"Cán bộ nghiệp vụ TW,BN,ĐP",,Quản lý quy trình tiếp nhận hồ sơ yêu cầu hỗ trợ pháp lý từ hệ thống khác,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ từ hệ thống khác;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ từ hệ thống khác.",,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ từ hệ thống khác;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ từ hệ thống khác.",,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập từ khóa tìm kiếm thông tin hồ sơ từ hệ thống khác;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa hồ sơ từ hệ thống khác;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa hồ sơ từ hệ thống khác.",,,,xxx
+56,Kiểm tra hồ sơ yêu cầu hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Cung cấp công cụ để CB Nghiệp vụ kiểm tra tính đầy đủ, hợp lệ của hồ sơ yêu cầu.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ yêu cầu hỗ trợ pháp lý chờ kiểm tra;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ yêu cầu hỗ trợ pháp lý chờ kiểm tra.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ yêu cầu hỗ trợ pháp lý để kiểm tra;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ yêu cầu hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP gửi yêu cầu bổ sung thông tin đối với hồ sơ chưa đầy đủ;
+Hệ thống kiểm tra điều kiện, cập nhật trạng thái hồ sơ và thông báo yêu cầu bổ sung đến người đăng ký.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập nhận xét và kết quả kiểm tra hồ sơ;
+Hệ thống lưu trữ kết quả kiểm tra và cập nhật trạng thái hồ sơ (Đạt/Không đạt).",,,,
+57,Quản lý hồ sơ vụ việc,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Quản lý toàn bộ hồ sơ vụ việc, bao gồm hồ sơ yêu cầu, tài liệu bổ sung và kết quả xử lý.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ vụ việc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ vụ việc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa thông tin hồ sơ vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa thông tin hồ sơ vụ việc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP tải lên tài liệu bổ sung hoặc cập nhật tài liệu hiện có trong hồ sơ vụ việc;
+Hệ thống kiểm tra điều kiện và lưu lại tài liệu đã cập nhật trong hồ sơ vụ việc.",,,,
+58,Tìm kiếm hồ sơ yêu cầu hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Tìm kiếm hồ sơ yêu cầu hỗ trợ pháp lý theo mã hồ sơ, tên doanh nghiệp, lĩnh vực.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập từ khóa tìm kiếm thông tin hồ sơ yêu cầu hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo doanh nghiệp để tìm kiếm thông tin hồ sơ yêu cầu hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo lĩnh vực để tìm kiếm thông tin hồ sơ yêu cầu hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm hồ sơ yêu cầu hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+59,Lựa chọn người hỗ trợ cho vụ việc,"Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp công cụ cho CB Nghiệp vụ để chọn Tư vấn viên hoặc Tổ chức tư vấn phù hợp cho vụ việc.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn phân công người hỗ trợ cho vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chọn Tư vấn viên hoặc Tổ chức tư vấn phù hợp.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP tìm kiếm Tư vấn viên hoặc Tổ chức tư vấn phù hợp để hỗ trợ cho vụ việc;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị các Tư vấn viên hoặc Tổ chức tư vấn theo điều kiện đã tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn Tư vấn viên hoặc Tổ chức tư vấn phù hợp để hỗ trợ cho vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận lựa chọn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn xác nhận lựa chọn Tư vấn viên hoặc Tổ chức tư để hỗ trợ cho vụ việc;
+Hệ thống kiểm tra điều kiện và chuyển vụ việc đến Tư vấn viên hoặc Tổ chức tư vấn đã chọn nếu hợp lệ.",,,,
+60,Xác nhận tham gia hỗ trợ vụ việc,Người hỗ trợ,,Cung cấp chức năng để Người hỗ trợ xác nhận tiếp nhận và tham gia hỗ trợ vụ việc được phân công.,B,Đơn giản,
+,,,"Người hỗ trợ xem thông tin yêu cầu hỗ trợ vụ việc;
+Hệ thống hiển thị thông tin yêu cầu hỗ trợ vụ việc đã được gửi đến Người hỗ trợ.",(Cập nhật trans này),,,xxx
+,,,"Người hỗ trợ chọn xác nhận tham gia hỗ trợ vụ việc;
+Hệ thống ghi nhận lựa chọn và hiển thị thông báo đã xác nhận tham gia hỗ trợ vụ việc.",,,,
+,,,"Người hỗ trợ chọn từ chối tham gia hỗ trợ vụ việc;
+Hệ thống ghi nhận lựa chọn, hiển thị thông báo đã từ chối tham gia hỗ trợ vụ việc và điều hướng về màn hình chọn người hỗ trợ khác.",,,,
+61,Trình phê duyệt hồ sơ vụ việc,"Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp quy trình để CB Nghiệp vụ trình Lãnh đạo CQQLNN phê duyệt vụ việc.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn trình phê duyệt hồ sơ vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trình phê duyệt hồ sơ vụ việc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn xác nhận trình phê duyệt hồ sơ vụ việc;
+Hệ thống kiểm tra điều kiện và thực hiện trình phê duyệt hồ sơ vụ việc tới cán bộ phê duyệt.",,,,
+62,Thông báo kết quả tiếp nhận hồ sơ,"Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp chức năng gửi thông báo kết quả kiểm tra hồ sơ (Đạt/Không đạt) cho DNNVV.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn vụ việc cần gửi thông báo kết quả tiếp nhận hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình gửi thông báo kết quả tiếp nhận hồ sơ.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập nội dung thông báo kết quả tiếp nhận hồ sơ (Đạt/Không đạt) cho DNNVVV;
+Hệ thống kiểm tra điều kiện và gửi thông báo kết quả tiếp nhận hồ sơ trên hệ thống tới DNNVVV.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP trình phê duyệt hồ sơ vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trình phê duyệt hồ sơ vụ việc.",Thêm trans gửi phê duyệt hồ sơ vụ việc,,,xxx
+63,Phê duyệt hồ sơ vụ việc,"Cán bộ phê duyệt TW,BN,ĐP",,Cung cấp chức năng để Lãnh đạo CQQLNN xem xét và phê duyệt hồ sơ vụ việc.,B,Đơn giản,
+,,,"Cán bộ phê duyệt TW,BN,ĐP phê duyệt hồ sơ vụ việc;
+Hệ thống hiển thị màn hình xác nhận phê duyệt hồ sơ vụ việc.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP chọn xác nhận phê duyệt hồ sơ vụ việc;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận phê duyệt hồ sơ vụ việc thành công.",,,,
+64,Nhận thông báo kết quả tiếp nhận hồ sơ,Doanh nghiệp,,Cung cấp giao diện cho DNNVV nhận thông báo kết quả kiểm tra/tiếp nhận hồ sơ.,B,Đơn giản,
+,,,"Doanh nghiệp truy cập chức năng thông báo kết quả tiếp nhận hồ sơ;
+Hệ thống hiển thị danh sách thông báo liên quan đến hồ sơ yêu cầu hỗ trợ pháp lý.",,,,
+,,,"Doanh nghiệp chọn một thông báo kết quả tiếp nhận hồ sơ để xem chi tiết;
+Hệ thống hiển thị nội dung chi tiết kết quả tiếp nhận hồ sơ.",,,,
+65,Cập nhật kết quả hỗ trợ vụ việc,Người hỗ trợ,,"Cung cấp công cụ cho Người hỗ trợ cập nhật kết quả, tài liệu, và báo cáo cuối cùng của quá trình hỗ trợ.",B,Đơn giản,
+,,,"Người hỗ trợ lựa chọn vụ việc cần cập nhật kết quả hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình cập nhật kết quả hỗ trợ vụ việc.",,,,
+,,,"Người hỗ trợ cập nhật kết quả hỗ trợ vụ việc;
+Hệ thống kiểm tra điều kiện và lưu lại dữ liệu kết quả hỗ trợ vụ việc.",,,,
+66,Cập nhật kết quả vụ việc,"Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp chức năng để CB Nghiệp vụ cập nhật trạng thái kết thúc và kết quả cuối cùng của vụ việc.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách vụ việc chờ xác nhận kết quả;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách vụ việc chờ xác nhận kết quả.",Xem danh sách vụ việc chờ xác nhận kết quả;,,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thực hiện cập nhật kết quả vụ việc;
+Hệ thống kiểm tra điều kiện và lưu lại dữ liệu kết quả vụ việc đã nhập.",,,,
+67,Đánh giá kết quả hỗ trợ vụ việc,"Cán bộ nghiệp vụ TW,BN,ĐP/Doanh nghiệp",,Cung cấp chức năng để CB Nghiệp vụ hoặc DNNVV đánh giá chất lượng của quá trình hỗ trợ và kết quả vụ việc.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Doanh nghiệp chọn đánh giá kết quả hỗ trợ vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin đánh giá kết quả hỗ trợ vụ việc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Doanh nghiệp thực hiện nhập đánh giá kết quả hỗ trợ vụ việc;
+Hệ thống kiểm tra điều kiện và lưu lại dữ liệu đánh giá kết quả hỗ trợ vụ việc đã nhập.",,,,
+V.II,Quản lý chi trả chi phí tư vấn pháp luật,,,,,,
+68,Tiếp nhận hồ sơ đề nghị hỗ trợ chi phí từ DVC trực tuyến,Hệ thống giải quyết thủ tục hành chính BTP,,Quản lý quy trình tiếp nhận hồ sơ đề nghị hỗ trợ chi phí qua hệ thống Dịch vụ công.,M,Trung bình,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP gửi hồ sơ đề nghị hỗ trợ chi phí từ DVC trực tuyến sang hệ thống;
+Hệ thống tiếp nhận dữ liệu hồ sơ, kiểm tra cấu trúc dữ liệu, định dạng và tính đầy đủ của thông tin.",,,,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP hoàn tất việc truyền dữ liệu hồ sơ hợp lệ sang hệ thống;
+Hệ thống tiếp nhận đầy đủ dữ liệu, tạo mới hồ sơ đề nghị hỗ trợ chi phí, sinh mã hồ sơ.",,,,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP yêu cầu cập nhật trạng thái hồ sơ đề nghị hỗ trợ chi phí;
+Hệ thống phản hồi trạng thái tiếp nhận (thành công/thất bại) về Hệ thống giải quyết thủ tục hành chính BTP.",,,,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP nhận thông tin kết thúc xử lý tiếp nhận hồ sơ;
+Hệ thống lưu trữ hồ sơ và đưa hồ sơ vào danh sách chờ xử lý cho cán bộ nghiệp vụ.",,,,
+69,Quản lý hồ sơ đề nghị hỗ trợ chi phí,"Cán bộ nghiệp vụ TW,BN,ĐP",,Quản lý toàn bộ hồ sơ đề nghị hỗ trợ chi phí từ các Tư vấn viên/Tổ chức tư vấn.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ đề nghị hỗ trợ chi phí;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ đề nghị hỗ trợ chi phí.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ đề nghị hỗ trợ chi phí;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ đề nghị hỗ trợ chi phí.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập từ khóa tìm kiếm thông tin hồ sơ đề nghị hỗ trợ chi phí;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm hồ sơ đề nghị hỗ trợ chi phí;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+70,Kiểm tra hồ sơ đề nghị hỗ trợ chi phí,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Cung cấp công cụ để CB Nghiệp vụ kiểm tra tính hợp lệ, đầy đủ của hồ sơ đề nghị hỗ trợ chi phí.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ yêu cầu hỗ trợ chi phí chờ kiểm tra;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ yêu cầu hỗ trợ chi phí chờ kiểm tra.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ đề nghị hỗ trợ chi phí để kiểm tra;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ đề nghị hỗ trợ chi phí.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP gửi yêu cầu bổ sung thông tin đối với hồ sơ đề nghị hỗ trợ chi phí chưa đầy đủ;
+Hệ thống kiểm tra điều kiện, cập nhật trạng thái hồ sơ và thông báo yêu cầu bổ sung đến người đăng ký.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập nhận xét và kết quả kiểm tra hồ sơ đề nghị hỗ trợ chi phí;
+Hệ thống lưu trữ kết quả kiểm tra và cập nhật trạng thái hồ sơ (Đạt/Không đạt).",,,,
+71,Thông báo kết quả kiểm tra hồ sơ qua DVC trực tuyến,Hệ thống giải quyết thủ tục hành chính BTP,,Cung cấp chức năng gửi thông báo kết quả kiểm tra hồ sơ đề nghị hỗ trợ chi phí cho người đề nghị qua hệ thống Dịch vụ công.,M,Trung bình,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP gửi yêu cầu nhận kết quả kiểm tra hồ sơ qua DVC trực tuyến;
+Hệ thống tiếp nhận yêu cầu và chuẩn bị dữ liệu kết quả kiểm tra.",,,,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP chờ nhận dữ liệu kết quả kiểm tra hồ sơ qua DVC trực tuyến;
+Hệ thống tổng hợp nội dung thông báo (trạng thái hồ sơ, lý do, hướng dẫn bổ sung nếu có).",,,,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP nhận dữ liệu thông báo kết quả kiểm tra hồ sơ qua DVC trực tuyến;
+Hệ thống gửi thông báo kết quả kiểm tra hồ sơ (Đạt/Không đạt) sang hệ thống DVC.",,,,
+,,,"Hệ thống giải quyết thủ tục hành chính BTP phản hồi trạng thái tiếp nhận thông báo kết quả kiểm tra hồ sơ qua DVC trực tuyến;
+Hệ thống ghi nhận kết quả gửi thành công/thất bại.",,,,
+72,Đánh giá hồ sơ theo các tiêu chí,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Cung cấp công cụ để CB Nghiệp vụ đánh giá hồ sơ theo các tiêu chí định mức, định lượng chi phí hỗ trợ.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn đánh giá hồ sơ theo các tiêu chí;
+Hệ thống hiển thị màn hình đánh giá theo các tiêu chí đánh giá (định mức, định lượng chi phí).",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ cần đánh giá;
+Hệ thống hiển thị màn hình chi tiết thông tin hồ sơ cần đánh giá.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập đánh giá hồ sơ theo các tiêu chí;
+Hệ thống ghi nhận đánh giá hồ sơ theo các tiêu chí.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xác nhận hoàn tất đánh giá hồ sơ theo các tiêu chí;
+Hệ thống ghi nhận và lưu lại đánh giá hồ sơ theo các tiêu chí.",,,,
+73,Quản lý hồ sơ đề nghị thanh toán,"Cán bộ nghiệp vụ TW,BN,ĐP",,Quản lý hồ sơ đề nghị thanh toán chính thức sau khi hồ sơ hỗ trợ chi phí đã được đánh giá.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ đề nghị thanh toán.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ đề nghị thanh toán.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập từ khóa tìm kiếm thông tin hồ sơ đề nghị thanh toán;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm hồ sơ đề nghị thanh toán;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+74,Gửi hồ sơ đề nghị thanh toán,Doanh nghiệp,,Cung cấp chức năng gửi hồ sơ đề nghị thanh toán cho bộ phận Kế toán/Tài chính.,B,Trung bình,
+,,,"Doanh nghiệp chọn gửi hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình gửi hồ sơ đề nghị thanh toán.",,,,
+,,,"Doanh nghiệp nhập nội dung đề nghị thanh toán;
+Hệ thống ghi nhận các thông tin được nhập.",,,,
+,,,"Doanh nghiệp tải lên các file tài liệu chứng minh chi phí trong hồ sơ đề nghị thanh toán;
+Hệ thống thực hiện tải lên file tài liệu.",,,,
+,,,"Doanh nghiệp xác nhận gửi hồ sơ đề nghị thanh toán;
+Hệ thống ghi nhận hồ sơ và chuyển đến bộ phận Kế toán/Tài chính.",,,,
+75,Nhận thông báo kết quả xử lý hồ sơ đề nghị thanh toán,Tư vấn viên,,Cung cấp giao diện cho Tư vấn viên nhận thông báo về kết quả xử lý hồ sơ đề nghị thanh toán.,B,Trung bình,Đổi sang tác nhân TVV
+,,,"Tư vấn viên truy cập chức năng thông báo kết quả xử lý hồ sơ đề nghị thanh toán;
+Hệ thống hiển thị danh sách thông báo liên quan đến hồ sơ yêu cầu hỗ trợ pháp lý.",,,,
+,,,"Tư vấn viên nhập từ khóa tìm kiếm thông báo kết quả xử lý hồ sơ đề nghị thanh toán;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Tư vấn viên chọn thông báo kết quả xử lý hồ sơ đề nghị thanh toán để xem chi tiết;
+Hệ thống hiển thị nội dung thông báo kết quả xử lý hồ sơ đề nghị thanh toán.",,,,
+,,,"Tư vấn viên xem file đính kèm trong thông báo kết quả xử lý hồ sơ đề nghị thanh toán;
+Hệ thống hiển thị màn hình xem file đính kèm trong thông báo kết quả xử lý hồ sơ đề nghị thanh toán.",,,,
+76,Thẩm định hồ sơ đề nghị thanh toán,"Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp quy trình để CB Nghiệp vụ/Bộ phận Kế toán thẩm định tính hợp lệ của hồ sơ đề nghị thanh toán.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ đề nghị thanh toán chờ thẩm định;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ đề nghị thanh toán chờ thẩm định.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hồ sơ đề nghị thanh toán để thẩm định;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ đề nghị thanh toán.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP gửi yêu cầu bổ sung thông tin đối với hồ sơ đề nghị thanh toán chưa đầy đủ;
+Hệ thống kiểm tra điều kiện, cập nhật trạng thái hồ sơ và thông báo yêu cầu bổ sung đến người đăng ký.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập nhận xét và kết quả thẩm định hồ sơ đề nghị thanh toán;
+Hệ thống lưu trữ kết quả thẩm định và cập nhật trạng thái hồ sơ.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem kết quả thẩm định hồ sơ đề nghị thanh toán;
+Hệ thống hiển thị kết quả thẩm định hồ sơ đề nghị thanh toán.",,,,
+77,Thông báo kết quả thẩm định hồ sơ đề nghị thanh toán,"Cán bộ nghiệp vụ TW,BN,ĐP",,Gửi thông báo kết quả thẩm định hồ sơ đề nghị thanh toán cho Tư vấn viên.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn hồ sơ cần gửi thông báo kết quả thẩm định hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình gửi thông báo kết quả thẩm định hồ sơ đề nghị thanh toán.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập nội dung thông báo kết quả thẩm định hồ sơ đề nghị thanh toán (Đạt/Không đạt) cho Tư vấn viên;
+Hệ thống kiểm tra điều kiện và gửi thông báo kết quả thẩm định hồ sơ đề nghị thanh toán trên hệ thống tới Tư vấn viên.",,,,
+78,Trình phê duyệt hồ sơ đề nghị thanh toán,"Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp quy trình để CB Nghiệp vụ trình Lãnh đạo CQQLNN phê duyệt hồ sơ đề nghị thanh toán.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn trình phê duyệt hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trình phê duyệt hồ sơ đề nghị thanh toán.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn xác nhận trình phê duyệt hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và thực hiện trình phê duyệt hồ sơ đề nghị thanh toán tới cán bộ phê duyệt.",,,,
+79,Phê duyệt hồ sơ đề nghị thanh toán,"Cán bộ phê duyệt TW,BN,ĐP",,Cung cấp chức năng cho Lãnh đạo CQQLNN xem xét và phê duyệt hồ sơ đề nghị thanh toán.,B,Trung bình,
+,,,"Cán bộ phê duyệt TW,BN,ĐP phê duyệt hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và cập nhật trạng thái đã duyệt hồ sơ đề nghị thanh toán.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP chọn xác nhận phê duyệt hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận phê duyệt hồ sơ đề nghị thanh toán thành công.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP từ chối phê duyệt hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị popup nhập lý do từ chối đã duyệt hồ sơ đề nghị thanh toán.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP nhập lý do từ chối phê duyệt hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận từ chối phê duyệt hồ sơ đề nghị thanh toán thành công.",,,,
+80,Cập nhật kết quả xử lý hồ sơ đề nghị thanh toán,"Cán bộ nghiệp vụ TW,BN,ĐP",,Cập nhật trạng thái cuối cùng của hồ sơ (Đã thanh toán/Từ chối thanh toán).,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn cập nhật kết quả xử lý hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình cập nhật kết quả xử lý hồ sơ đề nghị thanh toán.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP cập nhật kết quả xử lý hồ sơ đề nghị thanh toán và cập nhật trạng thái cuối cùng của hồ sơ (Đã thanh toán/Từ chối thanh toán);
+Hệ thống kiểm tra điều kiện và lưu lại dữ liệu đã cập nhật kết quả xử lý hồ sơ đề nghị thanh toán.",,,,
+V.III,Quản lý doanh nghiệp được hỗ trợ pháp lý,,,,,,
+81,Quản lý doanh nghiệp được hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP",,Quản lý thông tin hồ sơ của các DNNVV đã từng nhận hỗ trợ pháp lý.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách doanh nghiệp được hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách doanh nghiệp được hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết doanh nghiệp được hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết doanh nghiệp được hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thêm mới doanh nghiệp được hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới doanh nghiệp được hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa doanh nghiệp được hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa doanh nghiệp được hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa doanh nghiệp được hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa doanh nghiệp được hỗ trợ pháp lý.",,,,
+82,Tìm kiếm doanh nghiệp được hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Tìm kiếm hồ sơ doanh nghiệp theo tên, mã số thuế, lĩnh vực kinh doanh.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập từ khóa tìm kiếm doanh nghiệp được hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo thời gian để tìm kiếm doanh nghiệp được hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo lĩnh vực kinh doanh để tìm kiếm doanh nghiệp được hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm doanh nghiệp được hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+VI,"Quản lý kiểm tra, đánh giá hiệu quả hỗ trợ",,,,,,
+83,Lập kế hoạch đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Cung cấp công cụ để CB Nghiệp vụ lập kế hoạch chi tiết (mục tiêu, thời gian, đối tượng) cho các đợt đánh giá chất lượng.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách kế hoạch đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách kế hoạch đánh giá.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết kế hoạch đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết kế hoạch đánh giá.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lập kế hoạch đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới kế hoạch đánh giá.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa kế hoạch đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa kế hoạch đánh giá.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa kế hoạch đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa kế hoạch đánh giá.",,,,
+84,Thiết lập các tiêu chí đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Quản lý việc định nghĩa, chỉnh sửa các tiêu chí được sử dụng để đánh giá chất lượng hỗ trợ.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn thiết lập các tiêu chí đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thiết lập các tiêu chí đánh giá.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thiết lập các tiêu chí đánh giá;
+Hệ thống ghi nhận dữ liệu thiết lập các tiêu chí đánh giá đã nhập.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa thiết lập các tiêu chí đánh giá;
+Hệ thống ghi nhận dữ liệu thiết lập các tiêu chí đánh giá đã chỉnh sửa.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xác nhận thiết lập các tiêu chí đánh giá;
+Hệ thống lưu các tiêu chí đánh giá đã thiết lập.",,,,
+85,Phân công người thực hiện đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP",,Phân công CB Nghiệp vụ hoặc chuyên gia độc lập thực hiện nhiệm vụ đánh giá.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn phân công người thực hiện đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chọn CB nghiệp vụ hoặc chuyên gia đọc lập thực hiện nhiệm vụ đánh giá.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn CB Nghiệp vụ hoặc chuyên gia độc lập để thực hiện đánh giá;
+Hệ thống kiểm tra điều kiện và chuyển đến CB Nghiệp vụ hoặc chuyên gia độc lập đã chọn nếu hợp lệ.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP trình phê duyệt phân công đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trình phê duyệt phân công đánh giá.",Thêm Trans gửi phê duyệt phân công đánh giá,,,xxx
+86,Phê duyệt phân công đánh giá,"Cán bộ phê duyệt TW,BN,ĐP",,Lãnh đạo CQQLNN phê duyệt danh sách người thực hiện đánh giá.,B,Đơn giản,
+,,,"Cán bộ phê duyệt TW,BN,ĐP phê duyệt phân công đánh giá;
+Hệ thống kiểm tra điều kiện và cập nhật trạng thái đã duyệt phân công đánh giá.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP chọn xác nhận phê duyệt phân công đánh giá;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận phê duyệt phân công đánh giá thành công.",,,,
+87,Chọn vụ việc đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Lựa chọn các vụ việc cụ thể để tiến hành kiểm tra, đánh giá chất lượng.",B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn vụ việc cần đưa vào đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách vụ việc đánh giá để chọn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn các vụ việc;
+Hệ thống kiểm tra điều kiện và lưu lại dữ liệu các vụ việc đánh giá đã chọn.",,,,
+88,Thực hiện đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Cung cấp giao diện để nhập kết quả đánh giá (điểm số, nhận xét) theo các tiêu chí đã thiết lập.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn đánh giá theo vụ việc;
+Hệ thống hiển thị thông tin vụ việc và các tiêu chí đánh giá đã được thiết lập.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập điểm số cho từng tiêu chí;
+Hệ thống kiểm tra điều kiện và ghi nhận dữ liệu điểm số đánh giá.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập nhận xét cho từng tiêu chí;
+Hệ thống kiểm tra điều kiện và ghi nhận dữ liệu nhận xét.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lưu kết quả đánh giá;
+Hệ thống lưu dữ liệu và hiển thị thông báo đánh giá thành công.",,,,
+89,Lập báo cáo đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp công cụ để tổng hợp kết quả và lập báo cáo đánh giá chất lượng/hiệu quả hỗ trợ.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thực hiện thao tác tổng hợp dữ liệu đánh giá theo đợt;
+Hệ thống tự động tổng hợp điểm số, nhận xét theo từng tiêu chí, từng vụ việc trong đợt.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP khởi tạo báo cáo đánh giá;
+Hệ thống sinh báo cáo với các nội dung: thông tin chung, kết quả tổng hợp,...",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa, bổ sung nội dung;
+Hệ thống lưu lại dữ liệu nội dung báo cáo đã cập nhật.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xuất báo cáo đánh giá;
+Hệ thống sinh file báo cáo theo nội dung đã tổng hợp.",,,,
+90,Trình phê duyệt báo cáo đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp quy trình để CB Nghiệp vụ trình Lãnh đạo CQQLNN phê duyệt báo cáo đánh giá.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn trình phê duyệt báo cáo đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trình phê duyệt báo cáo đánh giá.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn xác nhận trình phê duyệt báo cáo đánh giá;
+Hệ thống kiểm tra điều kiện và thực hiện trình phê duyệt báo cáo đánh giá tới cán bộ phê duyệt.",,,,
+91,Phê duyệt báo cáo đánh giá,"Cán bộ phê duyệt TW,BN,ĐP",,Lãnh đạo CQQLNN xem xét và phê duyệt báo cáo đánh giá.,B,Đơn giản,
+,,,"Cán bộ phê duyệt TW,BN,ĐP phê duyệt báo cáo đánh giá;
+Hệ thống kiểm tra điều kiện và cập nhật trạng thái đã duyệt báo cáo đánh giá.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP chọn xác nhận phê duyệt báo cáo đánh giá;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận phê duyệt báo cáo đánh giá thành công.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP xem lại kết quả phê duyệt báo cáo đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị kết quả phê duyệt báo cáo đánh giá.",Xem kết quả phê duyệt báo cáo đánh giá,,,xxx
+VII,"Quản lý Thư viện biểu mẫu, hợp đồng",,,,,,
+VII.1,Quản lý thư mục biểu mẫu,,,,,,
+92,"Quản lý thư mục biểu mẫu, hợp đồng","Cán bộ nghiệp vụ TW,BN,ĐP",,"Quản lý việc tạo, chỉnh sửa, phân loại các thư mục chứa biểu mẫu/hợp đồng.",B,Phức tạp,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách thư mục biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách thư mục biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết thư mục biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết thư mục biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thêm mới thư mục biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới thư mục biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa thư mục biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa thư mục biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa một thư mục biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa thư mục biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn các thư mục biểu mẫu, hợp đồng cần xóa;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa các thư mục biểu mẫu, hợp đồng đã chọn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xuất danh sách thư mục biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và thực hiện xuất dưới dạng excel thư mục biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP làm mới dữ liệu danh sách thư mục biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và cập nhật dữ liệu danh sách thư mục biểu mẫu, hợp đồng mới nhất.",,,,
+93,"Tìm kiếm thư mục biểu mẫu, hợp đồng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Tìm kiếm thư mục theo tên, lĩnh vực.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập từ khóa tìm kiếm thư mục biểu mẫu, hợp đồng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo thời gian để tìm kiếm thư mục biểu mẫu, hợp đồng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo lĩnh vực để tìm kiếm thư mục biểu mẫu, hợp đồng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm thư mục biểu mẫu, hợp đồng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+94,"Công khai thư mục biểu mẫu, hợp đồng lên cổng thông tin","Cán bộ nghiệp vụ TW,BN,ĐP",,Đăng tải các thư mục đã được phê duyệt lên Cổng để DNNVV truy cập.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP công khai thư mục biểu mẫu, hợp đồng lên cổng thông tin;
+Hệ thống kiểm tra điều kiện và thực hiện công khai thư mục biểu mẫu, hợp đồng lên cổng thông tin.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP huỷ bỏ công khai thư mục biểu mẫu, hợp đồng lên cổng thông tin;
+Hệ thống kiểm tra điều kiện và thực hiện hủy bỏ công khai thư mục biểu mẫu, hợp đồng lên cổng thông tin.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách thư mục biểu mẫu, hợp đồng đã công khai lên cổng thông tin;
+Hệ thống hiển thị danh sách thư mục biểu mẫu, hợp đồng đã công khai lên cổng thông tin.","Xem danh sách thư mục biểu mẫu, hợp đồng đã công khai lên cổng thông tin",,,xxx
+VII.2,Quản lý danh sách biểu mẫu,,,,,,
+95,"Quản lý biểu mẫu, hợp đồng","Cán bộ nghiệp vụ TW,BN,ĐP",,"Quản lý việc tải lên, chỉnh sửa, phân loại chi tiết từng biểu mẫu/hợp đồng.",B,Phức tạp,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thêm mới biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP tải lên file biểu mẫu, hợp đồng;
+Hệ thống ghi nhận tải file lên thành công.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem file biểu mẫu, hợp đồng trực tuyến;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xem file biểu mẫu, hợp đồng trực tuyến.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa file biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa file biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận xóa biểu mẫu, hợp đồng.",,,,
+96,"Tìm kiếm biểu mẫu, hợp đồng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Tìm kiếm biểu mẫu, hợp đồng theo từ khóa, lĩnh vực, loại hình.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP nhập từ khóa tìm kiếm biểu mẫu, hợp đồng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo lĩnh vực để tìm kiếm biểu mẫu, hợp đồng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP lọc theo loại hình để tìm kiếm biểu mẫu, hợp đồng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm biểu mẫu, hợp đồng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+97,"Công khai biểu mẫu, hợp đồng lên cổng thông tin","Cán bộ nghiệp vụ TW,BN,ĐP",,Đăng tải các biểu mẫu/hợp đồng đã được phê duyệt lên Cổng.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP công khai biểu mẫu, hợp đồng lên cổng thông tin;
+Hệ thống kiểm tra điều kiện và thực hiện công khai biểu mẫu, hợp đồng lên cổng thông tin.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP hủy bỏ công khai biểu mẫu, hợp đồng lên cổng thông tin;
+Hệ thống kiểm tra điều kiện và thực hiện hủy bỏ công khai biểu mẫu, hợp đồng lên cổng thông tin.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách biểu mẫu, hợp đồng đã công khai lên cổng thông tin;
+Hệ thống hiển thị danh sách biểu mẫu, hợp đồng đã công khai lên cổng thông tin.","Xem danh sách biểu mẫu, hợp đồng đã công khai lên cổng thông tin",,,xxx
+98,"Import biểu mẫu, hợp đồng","Cán bộ nghiệp vụ TW,BN,ĐP",,"Cung cấp chức năng tải lên và nhập hàng loạt biểu mẫu, hợp đồng vào hệ thống.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP tải xuống file mẫu import biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và thực hiện tải xuống file mẫu import biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thực hiện import biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận import biểu mẫu, hợp đồng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn xác nhận import biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và thực hiện import biểu mẫu, hợp đồng vào hệ thống.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem lại danh sách biểu mẫu, hợp đồng vừa import thành công;
+Hệ thống hiển thị danh sách biểu mẫu, hợp đồng vừa import thành công lên đầu.",,,,
+VIII,Quản trị hệ thống,,,,,,
+99,Quản lý danh mục lĩnh vực pháp lý,Quan trị hệ thống,,"Quản lý danh sách các lĩnh vực pháp lý (Ví dụ: Thuế, Lao động) được sử dụng thống nhất trong toàn hệ thống.",B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục lĩnh vực pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục lĩnh vực pháp lý.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục lĩnh vực pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục lĩnh vực pháp lý.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục lĩnh vực pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục lĩnh vực pháp lý.",,,,
+,,,"Quan trị hệ thống xóa danh mục lĩnh vực pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục lĩnh vực pháp lý.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục lĩnh vực pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+100,Quản lý danh mục loại hình hỗ trợ,Quan trị hệ thống,,"Quản lý các loại hình hỗ trợ (Tư vấn, Tố tụng, Đào tạo...)",B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục loại hình hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục loại hình hỗ trợ.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục loại hình hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục loại hình hỗ trợ.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục loại hình hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục loại hình hỗ trợ.",,,,
+,,,"Quan trị hệ thống xóa danh mục loại hình hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục loại hình hỗ trợ.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục loại hình hỗ trợ;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+101,Quản lý danh mục chương trình hỗ trợ,Quan trị hệ thống,,Quản lý danh sách các Chương trình hỗ trợ đang được triển khai.,B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục chương trình hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục chương trình hỗ trợ.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục chương trình hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục chương trình hỗ trợ.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục chương trình hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục chương trình hỗ trợ.",,,,
+,,,"Quan trị hệ thống xóa danh mục chương trình hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục chương trình hỗ trợ.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục chương trình hỗ trợ;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+102,Quản lý danh mục tình trạng vụ việc,Quan trị hệ thống,,"Quản lý các trạng thái xử lý vụ việc (Mới tiếp nhận, Đang xử lý, Đã hoàn thành...).",B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục tình trạng vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục tình trạng vụ việc.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục tình trạng vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục tình trạng vụ việc.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục tình trạng vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục tình trạng vụ việc.",,,,
+,,,"Quan trị hệ thống xóa danh mục tình trạng vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục tình trạng vụ việc.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục tình trạng vụ việc;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+103,Quản lý danh mục cơ quan đơn vị quản lý,Quan trị hệ thống,,"Quản lý danh sách các Cơ quan/Đơn vị tham gia hệ thống (Sở Tư pháp, Bộ ngành...).",B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục cơ quan đơn vị quản lý;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục cơ quan đơn vị quản lý.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục cơ quan đơn vị quản lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục cơ quan đơn vị quản lý.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục cơ quan đơn vị quản lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục cơ quan đơn vị quản lý.",,,,
+,,,"Quan trị hệ thống xóa danh mục cơ quan đơn vị quản lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục cơ quan đơn vị quản lý.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục cơ quan đơn vị quản lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+104,Quản lý danh mục Tổ chức tư vấn,Quan trị hệ thống,,Quản lý danh sách các Tổ chức tư vấn tham gia mạng lưới.,B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục Tổ chức tư vấn;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục Tổ chức tư vấn.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục Tổ chức tư vấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục Tổ chức tư vấn.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục Tổ chức tư vấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục Tổ chức tư vấn.",,,,
+,,,"Quan trị hệ thống xóa danh mục Tổ chức tư vấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục Tổ chức tư vấn.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục Tổ chức tư vấn;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+105,Quản lý danh mục loại doanh nghiệp,Quan trị hệ thống,,"Quản lý các loại hình doanh nghiệp (DNNVV, DN lớn, Hộ kinh doanh...).",B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục loại doanh nghiệp;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục loại doanh nghiệp.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục loại doanh nghiệp;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục loại doanh nghiệp.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục loại doanh nghiệp;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục loại doanh nghiệp.",,,,
+,,,"Quan trị hệ thống xóa danh mục loại doanh nghiệp;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục loại doanh nghiệp.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục loại doanh nghiệp;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+106,Quản lý danh mục hồ sơ đề nghị hỗ trợ,Quan trị hệ thống,,Quản lý các loại hồ sơ/biểu mẫu đề nghị hỗ trợ.,B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục hồ sơ đề nghị hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục hồ sơ đề nghị hỗ trợ.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục hồ sơ đề nghị hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục hồ sơ đề nghị hỗ trợ.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục hồ sơ đề nghị hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục hồ sơ đề nghị hỗ trợ.",,,,
+,,,"Quan trị hệ thống xóa danh mục hồ sơ đề nghị hỗ trợ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục hồ sơ đề nghị hỗ trợ.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục hồ sơ đề nghị hỗ trợ;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+107,Quản lý danh mục hồ sơ đề nghị thanh toán,Quan trị hệ thống,,Quản lý các loại hồ sơ/biểu mẫu đề nghị thanh toán chi phí.,B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục hồ sơ đề nghị thanh toán.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục hồ sơ đề nghị thanh toán.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục hồ sơ đề nghị thanh toán.",,,,
+,,,"Quan trị hệ thống xóa danh mục hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục hồ sơ đề nghị thanh toán.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục hồ sơ đề nghị thanh toán;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+108,Quản lý cấu hình thời hạn xử lý hồ sơ,Quan trị hệ thống,,Cho phép thiết lập thời hạn xử lý mặc định cho từng loại vụ việc hoặc từng trạng thái hồ sơ.,B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách cấu hình thời hạn xử lý hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách cấu hình thời hạn xử lý hồ sơ.",,,,
+,,,"Quan trị hệ thống thêm mới cấu hình thời hạn xử lý hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới cấu hình thời hạn xử lý hồ sơ.",,,,
+,,,"Quan trị hệ thống chỉnh sửa cấu hình thời hạn xử lý hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa cấu hình thời hạn xử lý hồ sơ.",,,,
+,,,"Quan trị hệ thống xóa cấu hình thời hạn xử lý hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa cấu hình thời hạn xử lý hồ sơ.",,,,
+,,,"Quan trị hệ thống tìm kiếm cấu hình thời hạn xử lý hồ sơ;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+109,Quản lý danh mục tiêu chí đánh giá hiệu quả,Quan trị hệ thống,,Quản lý các tiêu chí được sử dụng để đánh giá hiệu quả hỗ trợ.,B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục tiêu chí đánh giá hiệu quả;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục tiêu chí đánh giá hiệu quả.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục tiêu chí đánh giá hiệu quả;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục tiêu chí đánh giá hiệu quả.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục tiêu chí đánh giá hiệu quả;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục tiêu chí đánh giá hiệu quả.",,,,
+,,,"Quan trị hệ thống xóa danh mục tiêu chí đánh giá hiệu quả;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục tiêu chí đánh giá hiệu quả.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục tiêu chí đánh giá hiệu quả;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+110,Quản lý danh mục tiêu chí đánh giá hỗ trợ chi phí,Quan trị hệ thống,,Quản lý các tiêu chí định mức để đánh giá hồ sơ đề nghị hỗ trợ chi phí.,B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục tiêu chí đánh giá hỗ trợ chi phí;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục tiêu chí đánh giá hỗ trợ chi phí.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục tiêu chí đánh giá hỗ trợ chi phí;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục tiêu chí đánh giá hỗ trợ chi phí.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục tiêu chí đánh giá hỗ trợ chi phí;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục tiêu chí đánh giá hỗ trợ chi phí.",,,,
+,,,"Quan trị hệ thống xóa danh mục tiêu chí đánh giá hỗ trợ chi phí;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục tiêu chí đánh giá hỗ trợ chi phí.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục tiêu chí đánh giá hỗ trợ chi phí;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+111,Quản lý danh mục loại tài khoản,Quan trị hệ thống,,"Quản lý các loại tài khoản người dùng (CB Nghiệp vụ, Lãnh đạo, Tư vấn viên...).",B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục loại tài khoản;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục loại tài khoản.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục loại tài khoản;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục loại tài khoản.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục loại tài khoản;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục loại tài khoản.",,,,
+,,,"Quan trị hệ thống xóa danh mục loại tài khoản;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục loại tài khoản.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục loại tài khoản;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+112,Quản lý vai trò,Quan trị hệ thống,,Quản lý các nhóm quyền (Vai trò) trong hệ thống.,B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách vai trò;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách vai trò.",,,,
+,,,"Quan trị hệ thống thêm mới vai trò;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới vai trò.",,,,
+,,,"Quan trị hệ thống chỉnh sửa vai trò;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa vai trò.",,,,
+,,,"Quan trị hệ thống xóa vai trò;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa vai trò.",,,,
+,,,"Quan trị hệ thống tìm kiếm vai trò;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+113,Quản lý tài khoản người dùng,Quan trị hệ thống,,"Tạo, chỉnh sửa, vô hiệu hóa tài khoản người dùng.",B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách tài khoản người dùng;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách tài khoản người dùng.",,,,
+,,,"Quan trị hệ thống thêm mới tài khoản người dùng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới tài khoản người dùng.",,,,
+,,,"Quan trị hệ thống chỉnh sửa tài khoản người dùng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa tài khoản người dùng.",,,,
+,,,"Quan trị hệ thống xóa tài khoản người dùng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa tài khoản người dùng.",,,,
+,,,"Quan trị hệ thống tìm kiếm tài khoản người dùng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Quan trị hệ thống khóa/mở khóa tài khoản người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện khóa/mở khóa tài khoản người dùng.",,,,
+,,,"Quan trị hệ thống đổi mật khẩu tài khoản người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện đổi mật khẩu tài khoản người dùng.",,,,
+114,Quản lý phân quyền truy cập dữ liệu,Quan trị hệ thống,,Thiết lập quyền truy cập dữ liệu theo cấp độ (Ví dụ: chỉ xem vụ việc của đơn vị mình).,B,Trung bình,
+,,,"Quan trị hệ thống tìm kiếm quyền để gán quyền sử dụng dữ liệu cho vai trò người dùng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả theo điều kiện tìm kiếm.",,,,
+,,,"Quan trị hệ thống gán một quyền sử dụng dữ liệu cho vai trò người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện gán quyền đã chọn cho vai trò người dùng.",,,,
+,,,"Quan trị hệ thống gán nhiều quyền sử dụng dữ liệu cho vai trò người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện gán các quyền đã chọn cho vai trò người dùng.",,,,
+,,,"Quan trị hệ thống hủy gán một quyền sử dụng dữ liệu cho vai trò người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện hủy gán quyền đã chọn cho vai trò người dùng.",,,,
+,,,"Quan trị hệ thống hủy gán nhiều quyền sử dụng dữ liệu cho vai trò người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện hủy gán các quyền đã chọn cho vai trò người dùng.",,,,
+115,Quản lý phân quyền chức năng,Quan trị hệ thống,,Gán/hủy quyền sử dụng chức năng (menu) cho từng vai trò người dùng.,B,Trung bình,
+,,,"Quan trị hệ thống tìm kiếm quyền để gán quyền sử dụng chức năng cho vai trò người dùng;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả theo điều kiện tìm kiếm.",,,,
+,,,"Quan trị hệ thống gán một quyền sử dụng chức năng cho vai trò người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện gán quyền đã chọn cho vai trò người dùng.",,,,
+,,,"Quan trị hệ thống gán nhiều quyền sử dụng chức năng cho vai trò người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện gán các quyền đã chọn cho vai trò người dùng.",,,,
+,,,"Quan trị hệ thống hủy gán một quyền sử dụng chức năng cho vai trò người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện hủy gán quyền đã chọn cho vai trò người dùng.",,,,
+,,,"Quan trị hệ thống hủy gán nhiều quyền sử dụng chức năng cho vai trò người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện hủy gán các quyền đã chọn cho vai trò người dùng.",,,,
+116,Quản lý loại hình tiếp nhận hồ sơ,Quan trị hệ thống,,"Quản lý các phương thức tiếp nhận hồ sơ (Trực tuyến, Trực tiếp, Email...).",B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách loại hình tiếp nhận hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách loại hình tiếp nhận hồ sơ.",,,,
+,,,"Quan trị hệ thống thêm mới loại hình tiếp nhận hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới loại hình tiếp nhận hồ sơ.",,,,
+,,,"Quan trị hệ thống chỉnh sửa loại hình tiếp nhận hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa loại hình tiếp nhận hồ sơ.",,,,
+,,,"Quan trị hệ thống xóa loại hình tiếp nhận hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa loại hình tiếp nhận hồ sơ.",,,,
+,,,"Quan trị hệ thống tìm kiếm loại hình tiếp nhận hồ sơ;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+117,Quản lý danh mục kênh tiếp nhận hồ sơ,Quan trị hệ thống,,Quản lý các kênh tiếp nhận hồ sơ.,B,Trung bình,
+,,,"Quan trị hệ thống xem danh sách danh mục kênh tiếp nhận hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách danh mục kênh tiếp nhận hồ sơ.",,,,
+,,,"Quan trị hệ thống thêm mới danh mục kênh tiếp nhận hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục kênh tiếp nhận hồ sơ.",,,,
+,,,"Quan trị hệ thống chỉnh sửa danh mục kênh tiếp nhận hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa danh mục kênh tiếp nhận hồ sơ.",,,,
+,,,"Quan trị hệ thống xóa danh mục kênh tiếp nhận hồ sơ;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục kênh tiếp nhận hồ sơ.",,,,
+,,,"Quan trị hệ thống tìm kiếm danh mục kênh tiếp nhận hồ sơ;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+118,Quản lý đăng nhập,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ/Quản trị hệ thống",,Quản lý quy trình xác thực và đăng nhập người dùng.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ/Quản trị hệ thống nhập tên đăng nhập và mật khẩu để đăng nhập hệ thống;
+Hệ thống kiểm tra thông tin xác thực và cho phép người dùng truy cập vào hệ thống nếu hợp lệ.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ/Quản trị hệ thống nhập tên đăng nhập và mật khẩu không chính xác để đăng nhập hệ thống;
+Hệ thống thông báo đăng nhập không thành công và yêu cầu người dùng nhập lại thông tin đăng nhập.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ/Quản trị hệ thống truy cập hệ thống khi phiên đăng nhập đã hết hạn;
+Hệ thống yêu cầu người dùng đăng nhập lại để tiếp tục sử dụng hệ thống.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ/Quản trị hệ thống thực hiện đăng nhập sai thông tin nhiều lần vượt quá số lần quy định;
+Hệ thống tạm khóa tài khoản và thông báo cho người dùng.",,,,
+119,Quản lý đăng xuất,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ/Quản trị hệ thống",,Quản lý quy trình kết thúc phiên làm việc của người dùng.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ/Quản trị hệ thống chọn chức năng đăng xuất khỏi hệ thống;
+Hệ thống kết thúc phiên làm việc của người dùng và chuyển về màn hình đăng nhập.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ/Quản trị hệ thống không thực hiện thao tác trên hệ thống trong một khoảng thời gian theo quy định;
+Hệ thống tự động kết thúc phiên làm việc và chuyển người dùng về màn hình đăng nhập.",,,,
+120,Quản lý đăng ký tài khoản,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ",,Quản lý đăng ký tài khoản trên hệ thống,B,Đơn giản,"Tác nhân chỉ nên để cho DN đăng ký tài khoản
+Các tác nhân khác => nên để được cấp"
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ chọn đăng ký tài khoản;
+Hệ thống hiển thị màn hình nhập thông tin đăng ký tài khoản.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ nhập thông tin đăng ký tài khoản;
+Hệ thống kiểm tra tính hợp lệ của thông tin và ghi nhận yêu cầu đăng ký tài khoản.",,,,
+121,Quản lý đăng nhập bằng VneID,Hệ thống Vneid,,Đăng nhập bằng tài khoản Vneid,M,Đơn giản,
+,,,"Người dùng chọn đăng nhập bằng VneID và hệ thống chuyển yêu cầu xác thực đến hệ thống VNeID;
+Hệ thống Vneid thực hiện xác thực thông tin đăng nhập của người dùng và gửi kết quả xác thực về hệ thống.",,,,
+,,,"Hệ thống Vneid gửi thông tin xác thực người dùng hợp lệ đến hệ thống;
+Hệ thống kiểm tra thông tin người dùng và cho phép đăng nhập vào hệ thống.",,,,
+122,Quản lý đăng xuất bằng VneID,Hệ thống Vneid,,Đăng xuất bằng tài khoản Vneid,M,Đơn giản,
+,,,"Hệ thống Vneid gửi yêu cầu đăng xuất tới hệ thống khi người dùng thực hiện đăng xuất từ phía VNeID;
+Hệ thống tiếp nhận yêu cầu và xác định phiên đăng nhập tương ứng của người dùng.",,,,
+,,,"Hệ thống Vneid tiếp nhận phản hồi kết quả đăng xuất từ hệ thống;
+Hệ thống thực hiện hủy session/token đăng nhập của người dùng và hoàn tất quá trình đăng xuất.",,,,
+123,Quản lý đồng bộ tài khoản VNeID,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ/Quản trị hệ thống",,Cấu hình đồng bộ giữa tài khoản đăng ký và tài khoản Vneid,,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ/Quản trị hệ thống truy cập chức năng đồng bộ tài khoản VNeID và thực hiện yêu cầu liên kết;
+Hệ thống chuyển hướng đến hệ thống VNeID để xác thực thông tin định danh.",,,,
+,,,"Hệ thống VNeID thực hiện xác thực người dùng và gửi thông tin định danh về hệ thống;
+Hệ thống tiếp nhận thông tin và kiểm tra trạng thái liên kết với tài khoản nội bộ.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ/Quản trị hệ thống xác nhận thực hiện đồng bộ tài khoản;
+Hệ thống thiết lập liên kết giữa tài khoản nội bộ và tài khoản VNeID, cập nhật trạng thái đồng bộ thành công.",,,,
+IX,Báo cáo thống kê,,,,,,
+124,"Báo cáo thống kê số lượng hỏi đáp, vướng mắc","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Thống kê số lượng yêu cầu hỏi đáp/vướng mắc theo thời gian, lĩnh vực.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê số lượng hỏi đáp, vướng mắc;
+Hệ thống thực hiện thống kê số lượng hỏi đáp, vướng mắc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê số lượng hỏi đáp, vướng mắc;
+Hệ thống thực hiện thống kê số lượng hỏi đáp, vướng mắc theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo lĩnh vực để xem thống kê số lượng hỏi đáp, vướng mắc;
+Hệ thống thực hiện thống kê số lượng hỏi đáp, vướng mắc theo lĩnh vực đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê số lượng hỏi đáp, vướng mắc;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+125,Báo cáo thống kê vụ việc đã tiếp nhận,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Thống kê số lượng vụ việc đã tiếp nhận theo thời gian, đơn vị quản lý.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê vụ việc đã tiếp nhận;
+Hệ thống thực hiện thống kê vụ việc đã tiếp nhận.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê vụ việc đã tiếp nhận;
+Hệ thống thực hiện thống kê vụ việc đã tiếp nhận theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo đơn vị để xem thống kê vụ việc đã tiếp nhận;
+Hệ thống thực hiện thống kê vụ việc đã tiếp nhận theo đơn vị đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê vụ việc đã tiếp nhận;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+126,Báo cáo thống kê vụ việc đang hỗ trợ,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Thống kê số lượng vụ việc đang được xử lý theo đơn vị, chuyên gia.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê vụ việc đang hỗ trợ;
+Hệ thống thực hiện thống kê vụ việc đang hỗ trợ.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê vụ việc đang hỗ trợ;
+Hệ thống thực hiện thống kê vụ việc đang hỗ trợ theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo chuyên gia để xem thống kê vụ việc đang hỗ trợ;
+Hệ thống thực hiện thống kê vụ việc đang hỗ trợ theo chuyên gia đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê vụ việc đang hỗ trợ;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+127,Báo cáo thống kê vụ việc đã hoàn thành hỗ trợ,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Thống kê số lượng vụ việc đã hoàn thành theo đơn vị, thời gian.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê vụ việc đã hoàn thành hỗ trợ;
+Hệ thống thực hiện thống kê vụ việc đã hoàn thành hỗ trợ.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê vụ việc đã hoàn thành hỗ trợ;
+Hệ thống thực hiện thống kê vụ việc đã hoàn thành hỗ trợ theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo đơn vị để xem thống kê vụ việc đã hoàn thành hỗ trợ;
+Hệ thống thực hiện thống kê vụ việc đã hoàn thành hỗ trợ theo đơn vị đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê vụ việc đã hoàn thành hỗ trợ;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+128,Báo cáo thống kê vụ việc theo thời gian,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Thống kê diễn biến số lượng vụ việc theo các mốc thời gian (ngày, tuần, tháng, quý).",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê vụ việc theo thời gian;
+Hệ thống thực hiện thống kê vụ việc theo thời gian.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian tuần để xem thống kê vụ việc theo thời gian;
+Hệ thống thực hiện thống kê vụ việc theo thời gian theo điều kiện thời gian tuần đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian tháng để xem thống kê vụ việc theo thời gian;
+Hệ thống thực hiện thống kê vụ việc theo thời gian theo điều kiện thời gian tháng đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian quý để xem thống kê vụ việc theo thời gian;
+Hệ thống thực hiện thống kê vụ việc theo thời gian theo điều kiện thời gian quý đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê vụ việc theo thời gian;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+129,Báo cáo thống kê các lớp đào tạo bồi dưỡng đang diễn ra,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê chi tiết các lớp đào tạo đang được triển khai.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê các lớp đào tạo bồi dưỡng đang diễn ra;
+Hệ thống thực hiện thống kê các lớp đào tạo bồi dưỡng đang diễn ra.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê các lớp đào tạo bồi dưỡng đang diễn ra;
+Hệ thống thực hiện thống kê các lớp đào tạo bồi dưỡng đang diễn ra theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo khóa học để xem thống kê các lớp đào tạo bồi dưỡng đang diễn ra;
+Hệ thống thực hiện thống kê các lớp đào tạo bồi dưỡng đang diễn ra theo khóa học đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê các lớp đào tạo bồi dưỡng đang diễn ra;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+130,Báo cáo thống kê các lớp đào tạo bồi dưỡng đã diễn ra,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê chi tiết các lớp đào tạo đã kết thúc và kết quả.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê các lớp đào tạo bồi dưỡng đã diễn ra;
+Hệ thống thực hiện thống kê các lớp đào tạo bồi dưỡng đã diễn ra.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê các lớp đào tạo bồi dưỡng đã diễn ra;
+Hệ thống thực hiện thống kê các lớp đào tạo bồi dưỡng đã diễn ra theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo khóa học để xem thống kê các lớp đào tạo bồi dưỡng đã diễn ra;
+Hệ thống thực hiện thống kê các lớp đào tạo bồi dưỡng đã diễn ra theo khóa học đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê các lớp đào tạo bồi dưỡng đã diễn ra;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+131,Báo cáo thống kê số lượng chuyên gia tư vấn pháp luật,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Thống kê số lượng chuyên gia/tư vấn viên theo lĩnh vực chuyên môn, địa bàn.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê số lượng chuyên gia tư vấn pháp luật;
+Hệ thống thực hiện thống kê số lượng chuyên gia tư vấn pháp luật.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê số lượng chuyên gia tư vấn pháp luật;
+Hệ thống thực hiện thống kê số lượng chuyên gia tư vấn pháp luật theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo lĩnh vực chuyên môn để xem thống kê số lượng chuyên gia tư vấn pháp luật;
+Hệ thống thực hiện thống kê số lượng chuyên gia tư vấn pháp luật theo lĩnh vực chuyên môn đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê số lượng chuyên gia tư vấn pháp luật;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+132,Báo cáo thống kê đánh giá hiệu quả hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Thống kê kết quả đánh giá chất lượng hỗ trợ (điểm số, tỷ lệ hài lòng).",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê đánh giá hiệu quả hỗ trợ pháp lý;
+Hệ thống thực hiện thống kê đánh giá hiệu quả hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê đánh giá hiệu quả hỗ trợ pháp lý;
+Hệ thống thực hiện thống kê đánh giá hiệu quả hỗ trợ pháp lý theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo tỷ lệ hài lòng để xem thống kê đánh giá hiệu quả hỗ trợ pháp lý;
+Hệ thống thực hiện thống kê đánh giá hiệu quả hỗ trợ pháp lý theo tỷ lệ hài lòng đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê đánh giá hiệu quả hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+133,Báo cáo thống kê chất lượng đào tạo bồi dưỡng pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Thống kê kết quả kiểm tra, tỷ lệ học viên đạt yêu cầu của các khóa bồi dưỡng.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê chất lượng đào tạo bồi dưỡng pháp lý;
+Hệ thống thực hiện thống kê chất lượng đào tạo bồi dưỡng pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chất lượng đào tạo bồi dưỡng pháp lý;
+Hệ thống thực hiện thống kê chất lượng đào tạo bồi dưỡng pháp lý theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo tỷ lệ học viên đạt yêu cầu để xem thống kê chất lượng đào tạo bồi dưỡng pháp lý;
+Hệ thống thực hiện thống kê chất lượng đào tạo bồi dưỡng pháp lý theo tỷ lệ học viên đạt yêu cầu đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê chất lượng đào tạo bồi dưỡng pháp lý;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+134,Báo cáo thông kê vụ việc theo đơn vị quản lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Thống kê số lượng vụ việc theo từng đơn vị quản lý (Sở Tư pháp, Bộ ngành...).",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thông kê vụ việc theo đơn vị quản lý;
+Hệ thống thực hiện thông kê vụ việc theo đơn vị quản lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thông kê vụ việc theo đơn vị quản lý;
+Hệ thống thực hiện thông kê vụ việc theo đơn vị quản lý theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo trạng thái để xem thông kê vụ việc theo đơn vị quản lý;
+Hệ thống thực hiện thông kê vụ việc theo đơn vị quản lý theo trạng thái đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thông kê vụ việc theo đơn vị quản lý;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+135,Báo cáo thông kê vụ việc theo lĩnh vực,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,"Thống kê số lượng vụ việc theo từng lĩnh vực pháp lý (Lao động, Thuế, Đất đai...).",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thông kê vụ việc theo lĩnh vực;
+Hệ thống thực hiện thông kê vụ việc theo lĩnh vực.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thông kê vụ việc theo lĩnh vực;
+Hệ thống thực hiện thông kê vụ việc theo lĩnh vực theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo trạng thái để xem thông kê vụ việc theo lĩnh vực;
+Hệ thống thực hiện thông kê vụ việc theo lĩnh vực theo trạng thái đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thông kê vụ việc theo lĩnh vực;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+136,Báo cáo thống kê vụ việc theo loại hình doanh nghiệp,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê số lượng vụ việc được hỗ trợ theo loại hình doanh nghiệp.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê vụ việc theo loại hình doanh nghiệp;
+Hệ thống thực hiện thống kê vụ việc theo loại hình doanh nghiệp.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê vụ việc theo loại hình doanh nghiệp;
+Hệ thống thực hiện thống kê vụ việc theo loại hình doanh nghiệp theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo trạng thái để xem thống kê vụ việc theo loại hình doanh nghiệp;
+Hệ thống thực hiện thống kê vụ việc theo loại hình doanh nghiệp theo trạng thái đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê vụ việc theo loại hình doanh nghiệp;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+137,Báo cáo thống kê vụ việc theo thời gian,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê chi tiết diễn biến số lượng vụ việc theo các khoảng thời gian cụ thể.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê vụ việc theo thời gian;
+Hệ thống thực hiện thống kê vụ việc theo thời gian.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo khoảng thời gian cụ thể để xem thống kê vụ việc theo thời gian;
+Hệ thống thực hiện thống kê vụ việc theo thời gian theo khoảng thời gian cụ thể đã chọn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo lĩnh vực để xem thống kê vụ việc theo thời gian;
+Hệ thống thực hiện thống kê vụ việc theo thời gian theo lĩnh vực đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê vụ việc theo thời gian;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+138,Báo cáo thống kê chi chi phí chi trả hỗ trợ ,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Tổng hợp chi phí chi trả hỗ trợ pháp lý đã được thanh toán.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê chi chi phí chi trả hỗ trợ ;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ .",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chi chi phí chi trả hỗ trợ ;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo lĩnh vực để xem thống kê chi chi phí chi trả hỗ trợ ;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ  theo trạng thái đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê chi chi phí chi trả hỗ trợ ;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+139,Báo cáo thống kê chi chi phí chi trả hỗ trợ theo đơn vị quản lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê chi phí chi trả hỗ trợ pháp lý theo từng đơn vị quản lý.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê chi chi phí chi trả hỗ trợ theo đơn vị quản lý;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo đơn vị quản lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chi chi phí chi trả hỗ trợ theo đơn vị quản lý;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo đơn vị quản lý theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo lĩnh vực để xem thống kê chi chi phí chi trả hỗ trợ theo đơn vị quản lý;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo đơn vị quản lý theo lĩnh vực đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê chi chi phí chi trả hỗ trợ theo đơn vị quản lý;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+140,Báo cáo thống kê chi chi phí chi trả hỗ trợ theo lĩnh vực,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê chi phí chi trả hỗ trợ pháp lý theo từng lĩnh vực pháp lý.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê chi chi phí chi trả hỗ trợ theo lĩnh vực;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo lĩnh vực.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chi chi phí chi trả hỗ trợ theo lĩnh vực;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo lĩnh vực theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo loại hình doanh nghiệp để xem thống kê chi chi phí chi trả hỗ trợ theo lĩnh vực;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo lĩnh vực theo loại hình doanh nghiệp đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê chi chi phí chi trả hỗ trợ theo lĩnh vực;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+141,Báo cáo thống kê chi chi phí chi trả hỗ trợ theo loại hình doanh nghiệp,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê chi phí chi trả hỗ trợ pháp lý theo loại hình doanh nghiệp.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê chi chi phí chi trả hỗ trợ theo loại hình doanh nghiệp;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo loại hình doanh nghiệp.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chi chi phí chi trả hỗ trợ theo loại hình doanh nghiệp;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo loại hình doanh nghiệp theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo lĩnh vực để xem thống kê chi chi phí chi trả hỗ trợ theo loại hình doanh nghiệp;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo loại hình doanh nghiệp theo lĩnh vực đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê chi chi phí chi trả hỗ trợ theo loại hình doanh nghiệp;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+142,Báo cáo thống kê chi chi phí chi trả hỗ trợ theo thời gian,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê chi phí chi trả hỗ trợ pháp lý theo thời gian.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê chi chi phí chi trả hỗ trợ theo thời gian;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo thời gian.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo loại hình doanh nghiệp để xem thống kê chi chi phí chi trả hỗ trợ theo thời gian;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo thời gian theo loại hình doanh nghiệp đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo lĩnh vực để xem thống kê chi chi phí chi trả hỗ trợ theo thời gian;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo thời gian theo lĩnh vực đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê chi chi phí chi trả hỗ trợ theo thời gian;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+143,Báo cáo thống kê số lượng chương trình hỗ trợ,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê số lượng các chương trình hỗ trợ pháp lý đã và đang triển khai.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê số lượng chương trình hỗ trợ;
+Hệ thống thực hiện thống kê số lượng chương trình hỗ trợ.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê số lượng chương trình hỗ trợ;
+Hệ thống thực hiện thống kê số lượng chương trình hỗ trợ theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo lĩnh vực để xem thống kê số lượng chương trình hỗ trợ;
+Hệ thống thực hiện thống kê số lượng chương trình hỗ trợ theo lĩnh vực đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê số lượng chương trình hỗ trợ;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+144,Báo cáo thống kê chương trình theo đơn vị quản lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê số lượng chương trình hỗ trợ theo đơn vị quản lý.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê chương trình theo đơn vị quản lý;
+Hệ thống thực hiện thống kê chương trình theo đơn vị quản lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chương trình theo đơn vị quản lý;
+Hệ thống thực hiện thống kê chương trình theo đơn vị quản lý theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo lĩnh vực để xem thống kê chương trình theo đơn vị quản lý;
+Hệ thống thực hiện thống kê chương trình theo đơn vị quản lý theo lĩnh vực đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê chương trình theo đơn vị quản lý;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+145,Báo cáo thống kê chương trình theo lĩnh vực,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê số lượng chương trình hỗ trợ theo lĩnh vực pháp lý.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê chương trình theo lĩnh vực;
+Hệ thống thực hiện thống kê chương trình theo lĩnh vực.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chương trình theo lĩnh vực;
+Hệ thống thực hiện thống kê chương trình theo lĩnh vực theo điều kiện thời gian đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo đơn vị quản lý để xem thống kê chương trình theo lĩnh vực;
+Hệ thống thực hiện thống kê chương trình theo lĩnh vực theo đơn vị quản lý đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê chương trình theo lĩnh vực;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+146,Báo cáo thống kê chương trình theo thời gian,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP",,Thống kê số lượng chương trình hỗ trợ theo thời gian.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn tính năng báo cáo thống kê chương trình theo thời gian;
+Hệ thống thực hiện thống kê chương trình theo thời gian.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo thời gian tuần/tháng/quý/năm để xem thống kê chương trình theo thời gian;
+Hệ thống thực hiện thống kê chương trình theo thời gian theo thời gian tuần/tháng/quý/năm đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo lĩnh vực để xem thống kê chương trình theo thời gian;
+Hệ thống thực hiện thống kê chương trình theo thời gian theo lĩnh vực đã lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê chương trình theo thời gian;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.",,,,
+X,Quản lý tư vấn chuyên sâu với chuyên gia,,,,,,
+X.1,Quản lý nội dung tư vấn chuyên sâu,,,,,,
+147,Quản lý nội dung tư vấn với chuyên gia,"Cán bộ nghiệp vụ TW,BN,ĐP",,Tổng hợp và quản lý các nội dung tư vấn chuyên sâu từ DNNVV với cho chuyên gia.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách nội dung tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách nội dung tư vấn với chuyên gia.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP ghi nhận hoặc cập nhật nội dung tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và ghi nhận nội dung tư vấn theo quy định.","ghi nhận hoặc cập nhật nội dung tư vấn giữa DNNVV và chuyên gia;
+Hệ thống kiểm tra điều kiện và ghi nhận nội dung tư vấn theo quy định.",,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết nội dung tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết nội dung tư vấn với chuyên gia.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP cập nhật trạng thái xử lý nội dung tư vấn với chuyên gia;
+Hệ thống ghi nhận trạng thái xử lý và cập nhật tiến trình tư vấn.","cập nhật trạng thái xử lý nội dung tư vấn;
+Hệ thống ghi nhận trạng thái xử lý và cập nhật tiến trình tư vấn.",,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem tổng hợp nội dung tư vấn chuyên sâu;
+Hệ thống hiển thị tổng hợp nội dung tư vấn chuyên sâu từ DNNVV của chuyên gia.","Xem tổng hợp nội dung tư vấn chuyên sâu;
+Hệ thống hiển thị tổng hợp nội dung tư vấn chuyên sâu từ DNNVV của chuyên gia/",,,xxx
+148,Tìm kiếm nội dung tư vấn với chuyên gia,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ",,Tìm kiếm các nội dung tư vấn đang được xử lý bởi chuyên gia.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ nhập từ khóa tìm kiếm nội dung tư vấn với chuyên gia;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ lọc theo thời gian để tìm kiếm nội dung tư vấn với chuyên gia;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ lọc theo chuyên gia để tìm kiếm nội dung tư vấn với chuyên gia;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ kết hợp nhiều điều kiện tìm kiếm nội dung tư vấn với chuyên gia;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+149,Tiếp nhận nội dung tư vấn với chuyên gia,Cổng Pháp luật quốc gia,,Ghi nhận nội dung tư vấn chuyên sâu và đưa vào cơ sở dữ liệu,M,Trung bình,
+,,,"Cổng Pháp luật quốc gia gửi nội dung tư vấn với chuyên gia;
+Hệ thống tiếp nhận dữ liệu và kiểm tra định dạng, cấu trúc thông tin.",,,,
+,,,"Cổng Pháp luật quốc gia gửi kèm các thông tin liên quan (thông tin doanh nghiệp, lĩnh vực, tài liệu đính kèm);
+Hệ thống kiểm tra tính đầy đủ, hợp lệ của nội dung tư vấn và dữ liệu liên quan.",,,,
+,,,"Cổng Pháp luật quốc gia hoàn tất gửi dữ liệu nội dung tư vấn;
+Hệ thống tạo mới hồ sơ tư vấn chuyên sâu và lưu vào cơ sở dữ liệu.",,,,
+,,,"Cổng Pháp luật quốc gia nhận phản hồi từ hệ thống;
+Hệ thống gửi kết quả tiếp nhận (thành công/thất bại) kèm mã hồ sơ tư vấn.",,,,
+150,Quản lý hồ sơ pháp lý doanh nghiệp,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ",,"Quản lý các tài liệu, hồ sơ pháp lý liên quan của DNNVV trong quá trình tư vấn.",B,Phức tạp,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ xem danh sách hồ sơ pháp lý doanh nghiệp;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ pháp lý doanh nghiệp.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ xem chi tiết hồ sơ pháp lý doanh nghiệp;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hồ sơ pháp lý doanh nghiệp.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ thêm mới hồ sơ pháp lý doanh nghiệp;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới hồ sơ pháp lý doanh nghiệp.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ chỉnh sửa hồ sơ pháp lý doanh nghiệp;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa hồ sơ pháp lý doanh nghiệp.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ xóa hồ sơ pháp lý doanh nghiệp;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa hồ sơ pháp lý doanh nghiệp.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ nhập từ khóa tìm kiếm thông tin hồ sơ pháp lý doanh nghiệp;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ kết hợp nhiều điều kiện tìm kiếm hồ sơ pháp lý doanh nghiệp;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Người hỗ trợ làm mới dữ liệu danh sách hồ sơ pháp lý doanh nghiệp;
+Hệ thống kiểm tra điều kiện và cập nhật dữ liệu danh sách hồ sơ pháp lý doanh nghiệp mới nhất.",,,,
+151,Tiếp nhận hồ sơ pháp lý doanh nghiệp,Cổng Pháp luật quốc gia,,Tiếp nhận hồ sơ pháp lý của doanh nghiệp được gửi từ Cổng Pháp luật quốc gia,M,Trung bình,
+,,,"Cổng Pháp luật quốc gia gửi hồ sơ pháp lý doanh nghiệp sang hệ thống;
+Hệ thống tiếp nhận dữ liệu hồ sơ, kiểm tra cấu trúc dữ liệu, định dạng và tính đầy đủ của thông tin.",,,,
+,,,"Cổng Pháp luật quốc gia hoàn tất việc truyền dữ liệu hồ sơ hợp lệ sang hệ thống;
+Hệ thống tiếp nhận đầy đủ dữ liệu, tạo mới hồ sơ pháp lý doanh nghiệp, sinh mã hồ sơ.",,,,
+,,,"Cổng Pháp luật quốc gia yêu cầu cập nhật trạng thái hồ sơ;
+Hệ thống phản hồi trạng thái tiếp nhận (thành công/thất bại) về Cổng Pháp luật quốc gia.",,,,
+,,,"Cổng Pháp luật quốc gia nhận thông tin kết thúc xử lý tiếp nhận hồ sơ;
+Hệ thống lưu trữ hồ sơ và đưa hồ sơ vào danh sách chờ xử lý cho cán bộ nghiệp vụ.",,,,
+152,Quản lý tư liệu pháp lý của vụ việc,"Cán bộ nghiệp vụ TW,BN,ĐP",,"Quản lý các văn bản, tài liệu, nghiên cứu được chuyên gia sử dụng để tư vấn cho vụ việc.",B,Phức tạp,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách tư liệu pháp lý của vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách tư liệu pháp lý của vụ việc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết tư liệu pháp lý của vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết tư liệu pháp lý của vụ việc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thêm mới tư liệu pháp lý của vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới tư liệu pháp lý của vụ việc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa tư liệu pháp lý của vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa tư liệu pháp lý của vụ việc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa tư liệu pháp lý của vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa tư liệu pháp lý của vụ việc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP tải lên file tư liệu pháp lý của vụ việc;
+Hệ thống ghi nhận tải file lên thành công.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem file tư liệu pháp lý của vụ việc trực tuyến;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xem file tư liệu pháp lý của vụ việc trực tuyến.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa file tư liệu pháp lý của vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa file tư liệu pháp lý của vụ việc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP công khai tư liệu pháp lý của vụ việc;
+Hệ thống kiểm tra điều kiện và thực hiện công khai tư liệu pháp lý của vụ việc lên Cổng.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP hủy công khai tư liệu pháp lý của vụ việc;
+Hệ thống kiểm tra điều kiện và thực hiện hủy công khai tư liệu pháp lý của vụ việc khỏi Cổng.",,,,
+153,Tiếp nhận đánh giá chất lượng tư vấn với chuyên gia,Cổng Pháp luật quốc gia,,Quản lý việc thiết lập và thu thập phản hồi khảo sát về chất lượng tư vấn.,M,Trung bình,
+,,,"Cổng Pháp luật quốc gia gửi đánh giá chất lượng tư vấn với chuyên gia sang hệ thống;
+Hệ thống tiếp nhận dữ liệu phản hồi (điểm số, nhận xét,..) và ghi nhận vào cơ sở dữ liệu.",,,,
+,,,"Cổng Pháp luật quốc gia gửi cập nhật/chỉnh sửa nội dung đánh giá;
+Hệ thống kiểm tra trạng thái hợp lệ và cập nhật thông tin đánh giá theo dữ liệu mới.",,,,
+,,,"Cổng Pháp luật quốc gia gửi lại dữ liệu đánh giá trong trường hợp đồng bộ thất bại;
+Hệ thống thực hiện tiếp nhận lại, kiểm tra trùng lặp và cập nhật dữ liệu đánh giá theo nguyên tắc không ghi đè sai lệch.",,,,
+,,,"Cổng Pháp luật quốc gia truyền thông tin đánh giá gắn với vụ việc cụ thể;
+Hệ thống xác định vụ việc tương ứng và liên kết dữ liệu đánh giá với hồ sơ vụ việc và chuyên gia liên quan.",,,,
+X.2,Quản lý tư vấn nhanh,,,,,,
+154,"Quản lý kho câu hỏi, tư vấn","Cán bộ nghiệp vụ TW,BN,ĐP",,Quản lý ngân hàng dữ liệu câu hỏi và câu trả lời đã được xử lý.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách kho câu hỏi, tư vấn;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách kho câu hỏi, tư vấn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết kho câu hỏi, tư vấn;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết kho câu hỏi, tư vấn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP cập nhật trạng thái sử dụng câu hỏi, tư vấn;
+Hệ thống ghi nhận trạng thái và cập nhật khả năng khai thác của nội dung trong kho dữ liệu.","cập nhật trạng thái sử dụng của câu hỏi và nội dung tư vấn;
+Hệ thống ghi nhận trạng thái và cập nhật khả năng khai thác của nội dung trong kho dữ liệu.",,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xuất danh sách kho câu hỏi, tư vấn;
+Hệ thống kiểm tra điều kiện và thực hiện xuất file định dạng excel danh sách kho câu hỏi, tư vấn.",,,,
+155,"Phê duyệt nội dung câu hỏi, tư vấn","Cán bộ phê duyệt TW,BN,ĐP",,Quản lý phê duyệt câu hỏi.,B,Trung bình,
+,,,"Cán bộ phê duyệt TW,BN,ĐP phê duyệt nội dung câu hỏi, tư vấn;
+Hệ thống hiển thị màn hình xác nhận phê duyệt nội dung câu hỏi, tư vấn.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP chọn xác nhận phê duyệt nội dung câu hỏi, tư vấn;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận phê duyệt nội dung câu hỏi, tư vấn thành công.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP từ chối phê duyệt nội dung câu hỏi, tư vấn;
+Hệ thống kiểm tra điều kiện và hiển thị popup nhập lý do từ chối đã duyệt nội dung câu hỏi, tư vấn.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP nhập lý do từ chối phê duyệt nội dung câu hỏi, tư vấn;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận từ chối phê duyệt nội dung câu hỏi, tư vấn thành công.",,,,
+156,"Quản lý công khai câu hỏi, tư vấn","Cán bộ nghiệp vụ TW,BN,ĐP",,"Quản lý công khai câu hỏi, tư vấn",B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP công khai câu hỏi, tư vấn;
+Hệ thống kiểm tra điều kiện và thực hiện công khai câu hỏi, tư vấn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP hủy công khai công khai câu hỏi, tư vấn;
+Hệ thống kiểm tra điều kiện và thực hiện hủy công khai công khai câu hỏi, tư vấn.",,,,
+157,"Tìm kiếm câu hỏi, tư vấn","Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp công cụ tìm kiếm phản hồi trong kho câu hỏi/tư vấn nhanh.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập từ khóa tìm kiếm câu hỏi, tư vấn;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lọc theo thời gian để tìm kiếm câu hỏi, tư vấn;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP lọc theo lĩnh vực để tìm kiếm câu hỏi, tư vấn;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP kết hợp nhiều điều kiện tìm kiếm câu hỏi, tư vấn;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+158,Tiếp nhận đánh giá chất lượng tư vấn nhanh,Cổng Pháp luật quốc gia,,Tiếp nhận đánh giá mức độ hữu ích của câu trả lời từ hệ thống tư vấn nhanh của DNNVV từ Cổng Pháp luật quốc gia,B,Đơn giản,
+,,,"Cổng Pháp luật quốc gia gửi đánh giá chất lượng tư vấn nhanh sang hệ thống;
+Hệ thống tiếp nhận dữ liệu phản hồi (điểm số, nhận xét,..) và ghi nhận vào cơ sở dữ liệu.",,,,
+,,,"Cổng Pháp luật quốc gia gửi lại dữ liệu đánh giá trong trường hợp đồng bộ thất bại;
+Hệ thống thực hiện tiếp nhận lại, kiểm tra trùng lặp và cập nhật dữ liệu đánh giá theo nguyên tắc không ghi đè sai lệch.",,,,
+X.3,Quản lý hợp đồng tư vấn,,,,,,
+159,Quản lý hợp đồng tư vấn với chuyên gia,"Cán bộ nghiệp vụ TW,BN,ĐP",,Quản lý các hợp đồng dịch vụ tư vấn chuyên sâu giữa DNNVV và chuyên gia.,B,Phức tạp,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hợp đồng tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hợp đồng tư vấn với chuyên gia.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn phân trang để xem danh sách hợp đồng tư vấn với chuyên gia;
+Hệ thống hiển thị danh sách hợp đồng tư vấn với chuyên gia theo phân trang đã chọn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết hợp đồng tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết hợp đồng tư vấn với chuyên gia.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thêm mới hợp đồng tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới hợp đồng tư vấn với chuyên gia.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa hợp đồng tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa hợp đồng tư vấn với chuyên gia.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa hợp đồng tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóaQuản lý hợp đồng tư vấn với chuyên gia.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xuất danh sách hợp đồng tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và thực hiện xuất dưới dạng excel hợp đồng tư vấn với chuyên gia.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP làm mới dữ liệu danh sách hợp đồng tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và cập nhật dữ liệu danh sách hợp đồng tư vấn với chuyên gia mới nhất.",,,,
+XI,Quản lý kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp,,,,,,
+160,Quản lý kế hoạch thực hiện chương trình hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP",,Tổng hợp và quản lý các kế hoạch thực hiện chương trình hỗ trợ pháp lý (cấp TW và địa phương).,B,Phức tạp,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách kế hoạch thực hiện chương trình hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn phân trang để xem danh sách kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống hiển thị danh sách kế hoạch thực hiện chương trình hỗ trợ pháp lý theo phân trang đã chọn.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết kế hoạch thực hiện chương trình hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thêm mới kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới kế hoạch thực hiện chương trình hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa kế hoạch thực hiện chương trình hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa kế hoạch thực hiện chương trình hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xuất danh sách kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và thực hiện xuất dưới dạng excel kế hoạch thực hiện chương trình hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xuất file chi tiết kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và thực hiện xuất file chi tiết kế hoạch thực hiện chương trình hỗ trợ pháp lý.",Xuất file chi tiết kế hoạch thực hiện chương trình hỗ trợ pháp lý;,,,xxx
+161,Tìm kiếm kế hoạch thực hiện chương trình hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ",,"Tìm kiếm kế hoạch thực hiện chương trình hỗ trợ theo tên, đơn vị quản lý, thời gian, lĩnh vực.",B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ nhập từ khóa tìm kiếm thông tin kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ lọc theo thời gian để tìm kiếm thông tin kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ lọc theo lĩnh vực để tìm kiếm thông tin kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo điều kiện lọc.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP/Doanh nghiệp/Người hỗ trợ kết hợp nhiều điều kiện tìm kiếm kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng theo các điều kiện lọc.",,,,
+162,Trình phê duyệt kế hoạch thực hiện chương trình hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp quy trình để trình Lãnh đạo CQQLNN phê duyệt kế hoạch thực hiện chương trình hỗ trợ.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn trình phê duyệt kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trình phê duyệt kế hoạch thực hiện chương trình hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn xác nhận trình phê duyệt kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và thực hiện trình phê duyệt kế hoạch thực hiện chương trình hỗ trợ pháp lý tới cán bộ phê duyệt.",,,,
+163,Phê duyệt kế hoạch thực hiện chương trình hỗ trợ pháp lý,"Cán bộ phê duyệt TW,BN,ĐP",,Lãnh đạo CQQLNN xem xét và phê duyệt kế hoạch thực hiện chương trình hỗ trợ.,B,Đơn giản,
+,,,"Cán bộ phê duyệt TW,BN,ĐP phê duyệt kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống hiển thị màn hình xác nhận phê duyệt kế hoạch thực hiện chương trình hỗ trợ pháp lý.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP chọn xác nhận phê duyệt kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận phê duyệt kế hoạch thực hiện chương trình hỗ trợ pháp lý thành công.",,,,
+164,Công bố kế hoạch thực hiện chương trình hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP",,Đăng tải kế hoạch chi tiết của chương trình đã phê duyệt lên Cổng TTĐT.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP công bố kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và thực hiện công bố kế hoạch thực hiện chương trình hỗ trợ pháp lý đã phê duyệt lên Cổng TTĐT.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP hủy bỏ công bố kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và thực hiện hủy bỏ công bố kế hoạch thực hiện chương trình hỗ trợ pháp lý khỏi Cổng TTĐT.",,,,
+165,Quản lý đợt báo cáo,"Cán bộ nghiệp vụ TW,BN,ĐP",,Quản lý thông tin về đợt báo cáo (Theo thông tư 17/2025/TT-BTP) về báo cáo hoạt động Hỗ trợ PLDN,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách đợt báo cáo;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách đợt báo cáo.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết đợt báo cáo;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết đợt báo cáo.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP thêm mới đợt báo cáo;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới đợt báo cáo.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa đợt báo cáo;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa đợt báo cáo.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xóa đợt báo cáo;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa đợt báo cáo.",,,,
+166,Lập báo cáo kết quả thực hiện chương trình,"Cán bộ nghiệp vụ TW,BN,ĐP",,Cung cấp công cụ để CB Nghiệp vụ lập báo cáo kết quả thực hiện chương trình.,B,Trung bình,"Thiếu UC: QL đợt báo cáo
+=> Lập báo cáo"
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách báo cáo kết quả thực hiện chương trình;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách báo cáo kết quả thực hiện chương trình.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết báo cáo kết quả thực hiện chương trình;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết báo cáo kết quả thực hiện chương trình.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP nhập dữ liệu báo cáo kết quả thực hiện chương trình;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình nhập dữ liệu báo cáo kết quả thực hiện chương trình theo biểu mẫu đã quy định.",(Update trans này),,,xxx
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa báo cáo kết quả thực hiện chương trình;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa báo cáo kết quả thực hiện chương trình.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP tải lên file báo cáo kết quả thực hiện chương trình đã ký số;
+Hệ thống ghi nhận file báo cáo kết quả thực hiện chương trình đã ký số.","Báo cáo này ko xóa được => chỉ có cập nhật/sửa theo biểu mẫu
+=> Chuyển in báo cáo và tải lên file báo cáo đã ký số",,,xxx
+167,Trình phê duyệt báo cáo kết quả thực hiện chương trình,"Cán bộ nghiệp vụ TW,BN,ĐP",,Trình Lãnh đạo CQQLNN phê duyệt báo cáo kết quả thực hiện chương trình.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn trình phê duyệt báo cáo kết quả thực hiện chương trình;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trình phê duyệt báo cáo kết quả thực hiện chương trình.",,,,
+,,,"Cán bộ nghiệp vụ TW,BN,ĐP chọn xác nhận trình phê duyệt báo cáo kết quả thực hiện chương trình;
+Hệ thống kiểm tra điều kiện và thực hiện trình phê duyệt báo cáo kết quả thực hiện chương trình tới cán bộ phê duyệt.",,,,Thiếu UC phê duyệt
+168,Phê duyệt báo cáo kết quả thực hiện chương trình,"Cán bộ phê duyệt TW,BN,ĐP",,Lãnh đạo phê duyệt báo cáo kết quả thực hiện chương trình.,B,Đơn giản,
+,,,"Cán bộ phê duyệt TW,BN,ĐP phê duyệt báo cáo kết quả thực hiện chương trình;
+Hệ thống hiển thị màn hình xác nhận phê duyệt báo cáo kết quả thực hiện chương trình.",,,,
+,,,"Cán bộ phê duyệt TW,BN,ĐP chọn xác nhận phê duyệt báo cáo kết quả thực hiện chương trình;
+Hệ thống kiểm tra điều kiện và thực hiện xác nhận phê duyệt báo cáo kết quả thực hiện chương trình thành công.",,,,
+169,Gửi kết quả thực hiện chương trình hỗ trợ pháp lý,"Cán bộ nghiệp vụ BN,ĐP",,Gửi báo cáo kết quả thực hiện chương trình cho các bên liên quan.,B,Đơn giản,
+,,,"Cán bộ nghiệp vụ BN,ĐP lựa chọn chương trình cần gửi kết quả thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình gửi kết quả thực hiện chương trình hỗ trợ pháp lý.",,,,
+,,,"Cán bộ nghiệp vụ BN,ĐP nhập nội dung để gửi kết quả thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và gửi kết quả thực hiện chương trình hỗ trợ pháp lý cho các bên liên quan.",,,,
+170,Tổng hợp báo cáo thực hiện chương trình hỗ trợ pháp lý,Cán bộ nghiệp vụ TW,,Tổng hợp báo cáo thực hiện chương trình từ nhiều đơn vị.,B,Trung bình,
+,,,"Cán bộ nghiệp vụ TW tổng hợp báo cáo thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình tổng hợp báo cáo thực hiện chương trình hỗ trợ pháp lý.",(Update trans này),,,xxx
+,,,"Cán bộ nghiệp vụ TW xem tổng hợp báo cáo thực hiện chương trình hỗ trợ pháp lý của từng đơn vị;
+Hệ thống kiểm tra điều kiện và hiển thị tổng hợp báo cáo thực hiện chương trình hỗ trợ pháp lý của đơn vị.",(Update trans này),,,xxx
+,,,"Cán bộ nghiệp vụ TW xác nhận dữ liệu tổng hợp báo cáo thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống ghi nhận các dữ liệu báo cáo thực hiện chương trình hỗ trợ pháp lý đã nhập.",(Update trans này),,,xxx
+,,,"Cán bộ nghiệp vụ TW xuất file báo cáo thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và xuất dữ liệu báo cáo thực hiện chương trình hỗ trợ pháp lý ra định dạng file excel về máy tính người dùng thao tác.",(Update trans này),,,xxx
+XII,API kết nối chia sẻ dữ liệu,,,,,,
+171,"API chia sẻ thông tin hỏi đáp, vướng mắc pháp lý",Hệ thống khác,,Cung cấp API để các hệ thống bên ngoài truy vấn/nhận thông tin hỏi đáp đã công khai.,M,Trung bình,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thông tin hỏi đáp, vướng mắc pháp lý kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về thông tin hỏi đáp, vướng mắc pháp lý.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thông tin hỏi đáp, vướng mắc pháp lý kèm tham số phân trang đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện phân trang dữ liệu, ghi log truy vấn và trả về thông tin hỏi đáp, vướng mắc pháp lý.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thông tin hỏi đáp, vướng mắc pháp lý kèm tham số sắp xếp đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện sắp xếp dữ liệu, ghi log truy vấn và trả về thông tin hỏi đáp, vướng mắc pháp lý.",,,,
+,,,"Hệ thống khác gửi yêu cầu xác thực API chia sẻ thông tin hỏi đáp, vướng mắc pháp lý với thông tin xác thực hoặc tham số truy vấn không hợp lệ đến hệ thống;
+Hệ thống kiểm tra yêu cầu và phản hồi thông báo lỗi API cho hệ thống khác.",,,,
+172,"API tìm kiếm thông tin hỏi đáp, vướng mắc pháp lý",Hệ thống khác,,Cung cấp API để các hệ thống bên ngoài tìm kiếm trong kho dữ liệu hỏi đáp.,M,Đơn giản,2 Trans
+,,,"Hệ thống khác thực hiện gọi API tìm kiếm thông tin hỏi đáp, vướng mắc pháp lý kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về kết quả tìm kiếm thông tin hỏi đáp, vướng mắc pháp lý.",,,,
+,,,"Hệ thống khác gửi đến thông báo đã nhận API tìm kiếm thông tin hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và lưu log chia sẻ dữ liệu.",,,,
+173,"API chia sẻ thông tin đào tạo, bồi dưỡng cán bộ",Hệ thống khác,,Cung cấp API để chia sẻ thông tin về các khóa đào tạo/bồi dưỡng.,M,Trung bình,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thông tin đào tạo, bồi dưỡng cán bộ kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về thông tin đào tạo, bồi dưỡng cán bộ.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thông tin đào tạo, bồi dưỡng cán bộ kèm tham số phân trang đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện phân trang dữ liệu, ghi log truy vấn và trả về thông tin đào tạo, bồi dưỡng cán bộ.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thông tin đào tạo, bồi dưỡng cán bộ kèm tham số sắp xếp đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện sắp xếp dữ liệu, ghi log truy vấn và trả về thông tin đào tạo, bồi dưỡng cán bộ.",,,,
+,,,"Hệ thống khác gửi yêu cầu xác thực API chia sẻ thông tin đào tạo, bồi dưỡng cán bộ với thông tin xác thực hoặc tham số truy vấn không hợp lệ đến hệ thống;
+Hệ thống kiểm tra yêu cầu và phản hồi thông báo lỗi API cho hệ thống khác.",,,,
+174,"API tìm kiếm thông tin đào tạo, bồi dưỡng cán bộ",Hệ thống khác,,Cung cấp API để tìm kiếm thông tin về các khóa đào tạo.,M,Đơn giản,
+,,,"Hệ thống khác thực hiện gọi API tìm kiếm thông tin đào tạo, bồi dưỡng cán bộ kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về kết quả tìm kiếm thông tin đào tạo, bồi dưỡng cán bộ.",,,,
+,,,"Hệ thống khác gửi đến thông báo đã nhận API tìm kiếm thông tin đào tạo, bồi dưỡng cán bộ;
+Hệ thống kiểm tra điều kiện và lưu log chia sẻ dữ liệu.",,,,
+175,"API chia sẻ thông tin chuyên gia, tư vấn viên pháp lý",Hệ thống khác,,Cung cấp API để chia sẻ thông tin về mạng lưới tư vấn viên (hồ sơ công khai).,M,Trung bình,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thông tin chuyên gia, tư vấn viên pháp lý kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về thông tin chuyên gia, tư vấn viên pháp lý.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thông tin chuyên gia, tư vấn viên pháp lý kèm tham số phân trang đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện phân trang dữ liệu, ghi log truy vấn và trả về thông tin chuyên gia, tư vấn viên pháp lý.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thông tin chuyên gia, tư vấn viên pháp lý kèm tham số sắp xếp đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện sắp xếp dữ liệu, ghi log truy vấn và trả về thông tin chuyên gia, tư vấn viên pháp lý.",,,,
+,,,"Hệ thống khác gửi yêu cầu xác thực API chia sẻ thông tin chuyên gia, tư vấn viên pháp lý với thông tin xác thực hoặc tham số truy vấn không hợp lệ đến hệ thống;
+Hệ thống kiểm tra yêu cầu và phản hồi thông báo lỗi API cho hệ thống khác.",,,,
+176,"API tìm kiếm thông tin chuyên gia, tư vấn viên pháp lý",Hệ thống khác,,Cung cấp API để các hệ thống ngoài tìm kiếm chuyên gia theo lĩnh vực/địa bàn.,M,Đơn giản,
+,,,"Hệ thống khác thực hiện gọi API tìm kiếm thông tin chuyên gia, tư vấn viên pháp lý kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về kết quả tìm kiếm thông tin chuyên gia, tư vấn viên pháp lý.",,,,
+,,,"Hệ thống khác gửi đến thông báo đã nhận API tìm kiếm thông tin chuyên gia, tư vấn viên pháp lý;
+Hệ thống kiểm tra điều kiện và lưu log chia sẻ dữ liệu.",,,,
+177,API chia sẻ vụ việc hỗ trợ pháp lý cho doanh nghiệp,Hệ thống khác,,Cung cấp API để chia sẻ thông tin vụ việc hỗ trợ pháp lý cho doanh nghiệp (ví dụ: cho các hệ thống giám sát).,M,Trung bình,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ vụ việc hỗ trợ pháp lý cho doanh nghiệp kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về vụ việc hỗ trợ pháp lý cho doanh nghiệp.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ vụ việc hỗ trợ pháp lý cho doanh nghiệp kèm tham số phân trang đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện phân trang dữ liệu, ghi log truy vấn và trả về vụ việc hỗ trợ pháp lý cho doanh nghiệp.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ vụ việc hỗ trợ pháp lý cho doanh nghiệp kèm tham số sắp xếp đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện sắp xếp dữ liệu, ghi log truy vấn và trả về vụ việc hỗ trợ pháp lý cho doanh nghiệp.",,,,
+,,,"Hệ thống khác gửi yêu cầu xác thực API chia sẻ vụ việc hỗ trợ pháp lý cho doanh nghiệp với thông tin xác thực hoặc tham số truy vấn không hợp lệ đến hệ thống;
+Hệ thống kiểm tra yêu cầu và phản hồi thông báo lỗi API cho hệ thống khác.",,,,
+178,API tìm kiếm vụ việc hỗ trợ pháp lý cho doanh nghiệp,Hệ thống khác,,Cung cấp API để tìm kiếm vụ việc hỗ trợ pháp lý cho doanh nghiệp theo các tiêu chí.,M,Đơn giản,
+,,,"Hệ thống khác thực hiện gọi API tìm kiếm vụ việc hỗ trợ pháp lý cho doanh nghiệp kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về kết quả tìm kiếm vụ việc hỗ trợ pháp lý cho doanh nghiệp.",,,,
+,,,"Hệ thống khác gửi đến thông báo đã nhận API tìm kiếm vụ việc hỗ trợ pháp lý cho doanh nghiệp;
+Hệ thống kiểm tra điều kiện và lưu log chia sẻ dữ liệu.",,,,
+179,"API chia sẻ kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý",Hệ thống khác,,"Cung cấp API để chia sẻ kết quả kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý cho doanh nghiệp.",M,Trung bình,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý kèm tham số phân trang đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện phân trang dữ liệu, ghi log truy vấn và trả về kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý kèm tham số sắp xếp đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện sắp xếp dữ liệu, ghi log truy vấn và trả về kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý.",,,,
+,,,"Hệ thống khác gửi yêu cầu xác thực API chia sẻ kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý với thông tin xác thực hoặc tham số truy vấn không hợp lệ đến hệ thống;
+Hệ thống kiểm tra yêu cầu và phản hồi thông báo lỗi API cho hệ thống khác.",,,,
+180,"API tìm kiếm kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý",Hệ thống khác,,Cung cấp API để tìm kiếm kết quả đánh giá hỗ trợ pháp lý cho doanh nghiệp.,M,Đơn giản,
+,,,"Hệ thống khác thực hiện gọi API tìm kiếm kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về kết quả tìm kiếm kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý.",,,,
+,,,"Hệ thống khác gửi đến thông báo đã nhận API tìm kiếm kiểm tra, đánh giá hiệu quả hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và lưu log chia sẻ dữ liệu.",,,,
+181,"API chia sẻ thư viện biểu mẫu, hợp đồng",Hệ thống khác,,"Cung cấp API để chia sẻ dữ liệu từ kho thư viện biểu mẫu, hợp đồng.",M,Trung bình,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thư viện biểu mẫu, hợp đồng kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về thư viện biểu mẫu, hợp đồng.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thư viện biểu mẫu, hợp đồng kèm tham số phân trang đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện phân trang dữ liệu, ghi log truy vấn và trả về thư viện biểu mẫu, hợp đồng.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ thư viện biểu mẫu, hợp đồng kèm tham số sắp xếp đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện sắp xếp dữ liệu, ghi log truy vấn và trả về thư viện biểu mẫu, hợp đồng.",,,,
+,,,"Hệ thống khác gửi yêu cầu xác thực API chia sẻ thư viện biểu mẫu, hợp đồng với thông tin xác thực hoặc tham số truy vấn không hợp lệ đến hệ thống;
+Hệ thống kiểm tra yêu cầu và phản hồi thông báo lỗi API cho hệ thống khác.",,,,
+182,"API tìm kiếm thư viện biểu mẫu, hợp đồng",Hệ thống khác,,Cung cấp API để tìm kiếm trong kho thư viện.,M,Đơn giản,
+,,,"Hệ thống khác thực hiện gọi API tìm kiếm thư viện biểu mẫu, hợp đồng kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về kết quả tìm kiếm thư viện biểu mẫu, hợp đồng.",,,,
+,,,"Hệ thống khác gửi đến thông báo đã nhận API tìm kiếm thư viện biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và lưu log chia sẻ dữ liệu.",,,,
+183,API chia sẻ tư vấn chuyên sâu với chuyên gia,Hệ thống khác,,Cung cấp API để chia sẻ thông tin liên quan đến các phiên tư vấn chuyên sâu.,M,Trung bình,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ tư vấn chuyên sâu với chuyên gia kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về tư vấn chuyên sâu với chuyên gia.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ tư vấn chuyên sâu với chuyên gia kèm tham số phân trang đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện phân trang dữ liệu, ghi log truy vấn và trả về tư vấn chuyên sâu với chuyên gia.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ tư vấn chuyên sâu với chuyên gia kèm tham số sắp xếp đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện sắp xếp dữ liệu, ghi log truy vấn và trả về tư vấn chuyên sâu với chuyên gia.",,,,
+,,,"Hệ thống khác gửi yêu cầu xác thực API chia sẻ tư vấn chuyên sâu với chuyên gia với thông tin xác thực hoặc tham số truy vấn không hợp lệ đến hệ thống;
+Hệ thống kiểm tra yêu cầu và phản hồi thông báo lỗi API cho hệ thống khác.",,,,
+184,API tìm kiếm tư vấn chuyên sâu với chuyên gia,Hệ thống khác,,Cung cấp API để tìm kiếm thông tin tư vấn chuyên sâu.,M,Đơn giản,
+,,,"Hệ thống khác thực hiện gọi API tìm kiếm tư vấn chuyên sâu với chuyên gia kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về kết quả tìm kiếm tư vấn chuyên sâu với chuyên gia.",,,,
+,,,"Hệ thống khác gửi đến thông báo đã nhận API tìm kiếm tư vấn chuyên sâu với chuyên gia;
+Hệ thống kiểm tra điều kiện và lưu log chia sẻ dữ liệu.",,,,
+185,API chia sẻ kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp,Hệ thống khác,,Cung cấp API để chia sẻ thông tin các kế hoạch thực hiện chương trình hỗ trợ pháp lý cho doanh nghiệp.,M,Trung bình,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp kèm tham số phân trang đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện phân trang dữ liệu, ghi log truy vấn và trả về kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp kèm tham số sắp xếp đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện sắp xếp dữ liệu, ghi log truy vấn và trả về kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp.",,,,
+,,,"Hệ thống khác gửi yêu cầu xác thực API chia sẻ kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp với thông tin xác thực hoặc tham số truy vấn không hợp lệ đến hệ thống;
+Hệ thống kiểm tra yêu cầu và phản hồi thông báo lỗi API cho hệ thống khác.",,,,
+186,API tìm kiếm kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp,Hệ thống khác,,Cung cấp API để tìm kiếm thông tin các kế hoạch thực hiện chương trình hỗ trợ pháp lý cho doanh nghiệp.,M,Đơn giản,
+,,,"Hệ thống khác thực hiện gọi API tìm kiếm kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về kết quả tìm kiếm kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp.",,,,
+,,,"Hệ thống khác gửi đến thông báo đã nhận API tìm kiếm kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp;
+Hệ thống kiểm tra điều kiện và lưu log chia sẻ dữ liệu.",,,,
+187,API chia sẻ hồ sơ pháp lý doanh nghiệp,Hệ thống khác,,Cung cấp API để chia sẻ thông tin các hồ sơ pháp lý doanh nghiệp.,M,Trung bình,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ hồ sơ pháp lý doanh nghiệp kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về hồ sơ pháp lý doanh nghiệp.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ hồ sơ pháp lý doanh nghiệp kèm tham số phân trang đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện phân trang dữ liệu, ghi log truy vấn và trả về hồ sơ pháp lý doanh nghiệp.",,,,
+,,,"Hệ thống khác thực hiện gọi API chia sẻ hồ sơ pháp lý doanh nghiệp kèm tham số sắp xếp đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện sắp xếp dữ liệu, ghi log truy vấn và trả về hồ sơ pháp lý doanh nghiệp.",,,,
+,,,"Hệ thống khác gửi yêu cầu xác thực API chia sẻ hồ sơ pháp lý doanh nghiệp với thông tin xác thực hoặc tham số truy vấn không hợp lệ đến hệ thống;
+Hệ thống kiểm tra yêu cầu và phản hồi thông báo lỗi API cho hệ thống khác.",,,,
+188,API tìm kiếm hồ sơ pháp lý doanh nghiệp,Hệ thống khác,,Cung cấp API để tìm kiếm thông tin các hồ sơ pháp lý doanh nghiệp.,M,Đơn giản,
+,,,"Hệ thống khác thực hiện gọi API tìm kiếm hồ sơ pháp lý doanh nghiệp kèm thông tin xác thực đến hệ thống;
+Hệ thống tiếp nhận yêu cầu, thực hiện xác thực, truy vấn dữ liệu, ghi log truy vấn và trả về kết quả tìm kiếm hồ sơ pháp lý doanh nghiệp.",,,,
+,,,"Hệ thống khác gửi đến thông báo đã nhận API tìm kiếm hồ sơ pháp lý doanh nghiệp;
+Hệ thống kiểm tra điều kiện và lưu log chia sẻ dữ liệu.",,,,

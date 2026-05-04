@@ -1,0 +1,121 @@
+{
+  "ts": "2026-04-15T16:07:31.036Z",
+  "module": "Hỏi đáp Pháp lý",
+  "summary": {
+    "pass": 15,
+    "fail": 0,
+    "info": 2,
+    "total": 17,
+    "bugs": 0,
+    "jsErrors": 2
+  },
+  "testResults": [
+    {
+      "id": "HD-001",
+      "name": "Danh sách hỏi đáp",
+      "status": "PASS",
+      "detail": "URL: http://103.172.236.130:3000/hoi-dap"
+    },
+    {
+      "id": "HD-021",
+      "name": "Tabs trạng thái SM-HOIDAP",
+      "status": "PASS",
+      "detail": "Tất cả, Mới, Đang xử lý, Chờ phê duyệt, Đã duyệt, Công khai, Hoàn thành"
+    },
+    {
+      "id": "HD-001b",
+      "name": "Data present",
+      "status": "PASS",
+      "detail": "21 rows"
+    },
+    {
+      "id": "HD-001c",
+      "name": "Pagination",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "HD-001d",
+      "name": "Search/Filter",
+      "status": "PASS",
+      "detail": "In:3 Sel:4"
+    },
+    {
+      "id": "HD-022",
+      "name": "SLA indicators on list",
+      "status": "PASS",
+      "detail": "SLA column found"
+    },
+    {
+      "id": "HD-002",
+      "name": "Tìm kiếm full-text",
+      "status": "PASS",
+      "detail": "\"pháp lý\" → 2 rows"
+    },
+    {
+      "id": "HD-003a",
+      "name": "Form tạo câu hỏi",
+      "status": "PASS",
+      "detail": "33 fields"
+    },
+    {
+      "id": "HD-003",
+      "name": "Tạo câu hỏi",
+      "status": "PASS",
+      "detail": "Created"
+    },
+    {
+      "id": "HD-006",
+      "name": "Chi tiết câu hỏi",
+      "status": "PASS",
+      "detail": "URL: http://103.172.236.130:3000/hoi-dap/310fb12e-a5b8-4c34-989c-bc76c0b61860"
+    },
+    {
+      "id": "HD-WF",
+      "name": "Workflow buttons on detail",
+      "status": "PASS",
+      "detail": "Tiếp nhận"
+    },
+    {
+      "id": "HD-008",
+      "name": "SLA deadline on detail",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "HD-009",
+      "name": "Khu vực trả lời",
+      "status": "PASS",
+      "detail": "Reply area found"
+    },
+    {
+      "id": "HD-019",
+      "name": "Immutability",
+      "status": "INFO",
+      "detail": "Record not in approved state"
+    },
+    {
+      "id": "HD-023",
+      "name": "Upload file đính kèm",
+      "status": "INFO",
+      "detail": ""
+    },
+    {
+      "id": "HD-020",
+      "name": "Xuất Excel",
+      "status": "PASS",
+      "detail": "Button found"
+    },
+    {
+      "id": "HD-FILTERS",
+      "name": "Filter dropdowns",
+      "status": "PASS",
+      "detail": "4 filters"
+    }
+  ],
+  "issues": [],
+  "jsErrors": [
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ]
+}

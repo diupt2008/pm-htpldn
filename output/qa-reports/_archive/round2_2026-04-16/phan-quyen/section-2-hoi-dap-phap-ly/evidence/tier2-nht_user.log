@@ -1,0 +1,7 @@
+=== TIER-2 nht_user @ 14:16:20 ===
+Landing: http://103.172.236.130:3000/login
+Menu state: {"exists":false,"disabled":null}
+
+URL after wait: about:blank
+{"url":"blank","is403":false,"rowCount":0,"headers":[],"mainButtons":[],"firstRowClickables":[],"firstRowText":null,"filtersVisible":[],"hasCreate":false,"hasExport":false,"hasApproveBtn":false,"hasImport":false}
+--- done ---

@@ -1,0 +1,217 @@
+{
+  "admin": {
+    "landing": "http://103.172.236.130:3000/dashboard",
+    "hoidap_enabled": true,
+    "user_display": "QT | Quản trị hệ thống | QTHT_TW",
+    "disabled_menus": []
+  },
+  "qtht_tw": {
+    "landing": "http://103.172.236.130:3000/dashboard",
+    "hoidap_enabled": true,
+    "user_display": "QT | QT Hệ thống TW | QTHT_TW",
+    "disabled_menus": []
+  },
+  "canbo_tw": {
+    "landing": "http://103.172.236.130:3000/403",
+    "hoidap_enabled": true,
+    "user_display": "CT | Cán bộ TW | CB_TW",
+    "disabled_menus": [
+      "Tổng quan",
+      "Ngân hàng câu hỏi",
+      "Quản lý thư viện biểu mẫu",
+      "Tư vấn chuyên sâu",
+      "Tư vấn nhanh",
+      "Danh mục dùng chung",
+      "Cấu hình SLA",
+      "Cấu hình phân công",
+      "Tài khoản & phân quyền",
+      "Quản lý API Consumer"
+    ]
+  },
+  "canbo_bn": {
+    "landing": "http://103.172.236.130:3000/403",
+    "hoidap_enabled": true,
+    "user_display": "CB | Cán bộ BN | CB_BN",
+    "disabled_menus": [
+      "Tổng quan",
+      "Ngân hàng câu hỏi",
+      "Quản lý thư viện biểu mẫu",
+      "Tư vấn chuyên sâu",
+      "Tư vấn nhanh",
+      "Danh mục dùng chung",
+      "Cấu hình SLA",
+      "Cấu hình phân công",
+      "Tài khoản & phân quyền",
+      "Quản lý API Consumer"
+    ]
+  },
+  "canbo_tinh": {
+    "landing": "http://103.172.236.130:3000/403",
+    "hoidap_enabled": true,
+    "user_display": "CT | Cán bộ Tỉnh | CB_TINH",
+    "disabled_menus": [
+      "Tổng quan",
+      "Ngân hàng câu hỏi",
+      "Quản lý thư viện biểu mẫu",
+      "Tư vấn chuyên sâu",
+      "Tư vấn nhanh",
+      "Danh mục dùng chung",
+      "Cấu hình SLA",
+      "Cấu hình phân công",
+      "Tài khoản & phân quyền",
+      "Quản lý API Consumer"
+    ]
+  },
+  "lanhdao_tw": {
+    "landing": "http://103.172.236.130:3000/403",
+    "hoidap_enabled": true,
+    "user_display": "LT | Lãnh đạo TW | LANH_DAO_TW",
+    "disabled_menus": [
+      "Tổng quan",
+      "Ngân hàng câu hỏi",
+      "Quản lý thư viện biểu mẫu",
+      "Tư vấn chuyên sâu",
+      "Tư vấn nhanh",
+      "Danh mục dùng chung",
+      "Cấu hình SLA",
+      "Cấu hình phân công",
+      "Quản lý API Consumer"
+    ]
+  },
+  "lanhdao_bn": {
+    "landing": "http://103.172.236.130:3000/403",
+    "hoidap_enabled": true,
+    "user_display": "LB | Lãnh đạo BN | LANH_DAO_BN",
+    "disabled_menus": [
+      "Tổng quan",
+      "Ngân hàng câu hỏi",
+      "Quản lý thư viện biểu mẫu",
+      "Tư vấn chuyên sâu",
+      "Tư vấn nhanh",
+      "Danh mục dùng chung",
+      "Cấu hình SLA",
+      "Cấu hình phân công",
+      "Quản lý API Consumer"
+    ]
+  },
+  "lanhdao_dp": {
+    "landing": "http://103.172.236.130:3000/403",
+    "hoidap_enabled": true,
+    "user_display": "LĐ | Lãnh đạo ĐP | LANH_DAO_DP",
+    "disabled_menus": [
+      "Tổng quan",
+      "Ngân hàng câu hỏi",
+      "Quản lý thư viện biểu mẫu",
+      "Tư vấn chuyên sâu",
+      "Tư vấn nhanh",
+      "Danh mục dùng chung",
+      "Cấu hình SLA",
+      "Cấu hình phân công",
+      "Quản lý API Consumer"
+    ]
+  },
+  "nht_user": {
+    "landing": "http://103.172.236.130:3000/403",
+    "hoidap_enabled": true,
+    "user_display": "NN | Nguyễn Văn NHT | NHT",
+    "disabled_menus": [
+      "Tổng quan",
+      "Ngân hàng câu hỏi",
+      "Giảng viên",
+      "Quản lý chuyên gia / tư vấn viên",
+      "Quản lý doanh nghiệp được hỗ trợ",
+      "Đánh giá hiệu quả hỗ trợ pháp lý",
+      "Quản lý thư viện biểu mẫu",
+      "Quản lý tư vấn",
+      "Tư vấn chuyên sâu",
+      "Tư vấn nhanh",
+      "Hợp đồng tư vấn",
+      "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+      "Báo cáo thống kê",
+      "Danh mục dùng chung",
+      "Cấu hình SLA",
+      "Cấu hình phân công",
+      "Tài khoản & phân quyền",
+      "Quản lý API Consumer"
+    ]
+  },
+  "tvv_user": {
+    "landing": "http://103.172.236.130:3000/403",
+    "hoidap_enabled": true,
+    "user_display": "TT | Trần Văn TVV | TVV",
+    "disabled_menus": [
+      "Tổng quan",
+      "Ngân hàng câu hỏi",
+      "Giảng viên",
+      "Quản lý chi trả chi phí",
+      "Quản lý doanh nghiệp được hỗ trợ",
+      "Đánh giá hiệu quả hỗ trợ pháp lý",
+      "Quản lý thư viện biểu mẫu",
+      "Tư vấn chuyên sâu",
+      "Tư vấn nhanh",
+      "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+      "Báo cáo thống kê",
+      "Danh mục dùng chung",
+      "Cấu hình SLA",
+      "Cấu hình phân công",
+      "Tài khoản & phân quyền",
+      "Quản lý API Consumer"
+    ]
+  },
+  "chuyengia_user": {
+    "landing": "http://103.172.236.130:3000/403",
+    "hoidap_enabled": false,
+    "user_display": "LC | Lê Văn CG | CHUYEN_GIA",
+    "disabled_menus": [
+      "Tổng quan",
+      "Quản lý hỏi đáp pháp lý",
+      "Quản lý đào tạo, tập huấn",
+      "Chương trình đào tạo",
+      "Khóa học",
+      "Ngân hàng câu hỏi",
+      "Giảng viên",
+      "Quản lý vụ việc hỗ trợ pháp lý",
+      "Quản lý chi trả chi phí",
+      "Quản lý doanh nghiệp được hỗ trợ",
+      "Đánh giá hiệu quả hỗ trợ pháp lý",
+      "Quản lý thư viện biểu mẫu",
+      "Quản lý tư vấn",
+      "Tư vấn chuyên sâu",
+      "Tư vấn nhanh",
+      "Hợp đồng tư vấn",
+      "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+      "Báo cáo thống kê",
+      "Danh mục dùng chung",
+      "Cấu hình SLA",
+      "Cấu hình phân công",
+      "Tài khoản & phân quyền",
+      "Quản lý API Consumer"
+    ]
+  },
+  "dn_user": {
+    "landing": "http://103.172.236.130:3000/403",
+    "hoidap_enabled": true,
+    "user_display": "CT | Công ty TNHH Test | DOANH_NGHIEP",
+    "disabled_menus": [
+      "Tổng quan",
+      "Ngân hàng câu hỏi",
+      "Giảng viên",
+      "Quản lý chuyên gia / tư vấn viên",
+      "Quản lý vụ việc hỗ trợ pháp lý",
+      "Quản lý doanh nghiệp được hỗ trợ",
+      "Đánh giá hiệu quả hỗ trợ pháp lý",
+      "Quản lý thư viện biểu mẫu",
+      "Quản lý tư vấn",
+      "Tư vấn chuyên sâu",
+      "Tư vấn nhanh",
+      "Hợp đồng tư vấn",
+      "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+      "Báo cáo thống kê",
+      "Danh mục dùng chung",
+      "Cấu hình SLA",
+      "Cấu hình phân công",
+      "Tài khoản & phân quyền",
+      "Quản lý API Consumer"
+    ]
+  }
+}

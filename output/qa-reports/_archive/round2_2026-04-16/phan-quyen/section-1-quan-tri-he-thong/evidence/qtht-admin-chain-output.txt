@@ -1,0 +1,17 @@
+[click] Clicked input[maxlength="1"]:first-of-type → now at http://103.172.236.130:3000/login
+
+[type] Typed 6 characters
+
+[wait] Element button:has-text("Quản trị hệ thống") appeared
+
+[click] Clicked button:has-text("Quản trị hệ thống") → now at http://103.172.236.130:3000/dashboard
+
+[wait] Element button:has-text("Danh mục dùng chung") appeared
+
+[click] Clicked button:has-text("Danh mục dùng chung") → now at http://103.172.236.130:3000/quan-tri/danh-muc/LINH_VUC_PL
+
+[wait] Element button:has-text("Thêm mới") appeared
+
+[url] http://103.172.236.130:3000/quan-tri/danh-muc/LINH_VUC_PL
+
+[screenshot] Screenshot saved: output/qa-reports/round3_2026-04-17/phan-quyen/section-1-quan-tri-he-thong/screenshots/qtht-admin-01-danh-muc.png

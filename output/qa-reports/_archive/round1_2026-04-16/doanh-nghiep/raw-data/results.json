@@ -1,0 +1,106 @@
+{
+  "ts": "2026-04-15T14:19:10.472Z",
+  "module": "Doanh nghiệp",
+  "summary": {
+    "pass": 10,
+    "fail": 2,
+    "info": 1,
+    "total": 13,
+    "bugs": 0
+  },
+  "testResults": [
+    {
+      "id": "DN-001",
+      "name": "Xem danh sách DN",
+      "status": "FAIL",
+      "detail": "No table found",
+      "severity": ""
+    },
+    {
+      "id": "DN-002",
+      "name": "Tìm kiếm DN theo từ khóa",
+      "status": "PASS",
+      "detail": "Search \"DN001\" → 2 results",
+      "severity": ""
+    },
+    {
+      "id": "DN-002b",
+      "name": "Bộ lọc dropdown",
+      "status": "PASS",
+      "detail": "3 dropdown filters found",
+      "severity": ""
+    },
+    {
+      "id": "DN-003a",
+      "name": "Form thêm DN hiển thị",
+      "status": "PASS",
+      "detail": "10 fields found",
+      "severity": ""
+    },
+    {
+      "id": "DN-003",
+      "name": "Thêm DN mới (happy path)",
+      "status": "PASS",
+      "detail": "Redirect: http://103.172.236.130:3000/doanh-nghiep/danh-sach?page=1&pageSize=10, Success msg: false",
+      "severity": ""
+    },
+    {
+      "id": "DN-005a",
+      "name": "Mở form sửa DN",
+      "status": "PASS",
+      "detail": "URL: http://103.172.236.130:3000/doanh-nghiep/a03241a1-a018-405e-835d-11d3b225b0c7/chinh-sua",
+      "severity": ""
+    },
+    {
+      "id": "DN-005",
+      "name": "Sửa thông tin DN",
+      "status": "FAIL",
+      "detail": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('input').first()\n    - locator resolved to <input type=\"text\"/>\n    - fill(\" (edited)\")\n  - attempting fill action\n    2 × wai",
+      "severity": ""
+    },
+    {
+      "id": "DN-006a",
+      "name": "Xóa DN - confirmation dialog",
+      "status": "PASS",
+      "detail": "Confirmation dialog shown",
+      "severity": ""
+    },
+    {
+      "id": "DN-006",
+      "name": "Xóa DN flow",
+      "status": "PASS",
+      "detail": "Confirm dialog exists, cancelled to preserve data",
+      "severity": ""
+    },
+    {
+      "id": "DN-009",
+      "name": "Phân loại quy mô DN",
+      "status": "PASS",
+      "detail": "Options: Siêu nhỏ, Nhỏ, Vừa",
+      "severity": ""
+    },
+    {
+      "id": "DN-013",
+      "name": "Xuất Excel - nút hiển thị",
+      "status": "PASS",
+      "detail": "Export button found",
+      "severity": ""
+    },
+    {
+      "id": "DN-008",
+      "name": "Xem lịch sử hỗ trợ DN",
+      "status": "PASS",
+      "detail": "URL: http://103.172.236.130:3000/doanh-nghiep/a03241a1-a018-405e-835d-11d3b225b0c7, History section: true",
+      "severity": ""
+    },
+    {
+      "id": "DN-010",
+      "name": "Import Excel",
+      "status": "INFO",
+      "detail": "Import button not found on list page",
+      "severity": ""
+    }
+  ],
+  "issues": [],
+  "jsErrors": []
+}

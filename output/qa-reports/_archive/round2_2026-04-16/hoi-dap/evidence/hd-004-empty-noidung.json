@@ -1,0 +1,1 @@
+{"success":false,"error":{"code":"ERR-VAL-SYS-00-01","field":"noiDung","message":"noiDung should not be empty","details":[{"field":"noiDung","message":"noiDung should not be empty"}],"timestamp":"2026-04-17T07:50:33.288Z","requestId":"0fce93dc-d5d7-4fa5-88fa-cccf943f483f"}}

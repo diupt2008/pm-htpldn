@@ -1,0 +1,7 @@
+[
+  ["click","aside button:has-text(\"Quản trị hệ thống\")"],
+  ["js","new Promise(r=>setTimeout(r,1500))"],
+  ["click","aside button:has-text(\"Danh mục dùng chung\")"],
+  ["wait",".ant-table-row, .ant-empty"],
+  ["js","new Promise(r=>setTimeout(r,1500))"]
+]

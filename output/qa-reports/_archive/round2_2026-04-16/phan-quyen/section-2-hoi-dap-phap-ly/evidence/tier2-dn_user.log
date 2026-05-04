@@ -1,0 +1,11 @@
+=== TIER-2 dn_user @ 14:16:42 ===
+/tmp/test_tier2.sh: line 14:  4867 Terminated: 15          $B wait 'input[placeholder="Nhập tên đăng nhập"]' > /dev/null 2>&1
+[browse] Starting server...
+[browse] Starting server...
+Operation timed out: fill: Timeout 5000ms exceeded.
+Landing: about:blank
+Menu state: {"exists":false,"disabled":null}
+HINT: 3 consecutive failures. Consider using 'handoff' to let the user help.
+URL after wait: about:blank
+{"url":"blank","is403":false,"rowCount":0,"headers":[],"mainButtons":[],"firstRowClickables":[],"firstRowText":null,"filtersVisible":[],"hasCreate":false,"hasExport":false,"hasApproveBtn":false,"hasImport":false}
+--- done ---

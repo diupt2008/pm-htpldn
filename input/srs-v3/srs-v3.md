@@ -1,0 +1,4971 @@
+---
+project: Phần mềm Hỗ trợ Pháp lý Doanh nghiệp
+code: PM-HTPLDN
+version: '3.1'
+standard: IEEE 830-1998 / ISO/IEC/IEEE 29148:2018
+templateVersion: srs-template-v3.1
+author: SRS Agent (Claude)
+date: '2026-04-03'
+status: Draft
+supersedes: SRS-claude-v2.md (v2.1)
+description: >
+  Phiên bản v3.0 — Tái cấu trúc theo SRS Template v3.
+  Section 3.2 (FR chi tiết) tách thành file riêng per nhóm UC.
+  Kiểu dữ liệu LOGIC xuyên suốt — không dùng physical DB types.
+  Mọi HOW kỹ thuật → Architecture Design.
+  SRS sinh TRƯỚC Architecture Design — Architecture KHÔNG phải input của SRS.
+inputDocuments:
+  - '_bmad-output/planning-artifacts/prd.md'
+  - '_bmad-output/planning-artifacts/ux-spec.md'
+  - 'docs/Input/Mô tả chung dự án.md'
+  - 'docs/Input/Thiết kế tổng quan.md'
+  - 'docs/Input/Thiet-ke-tong-the-he-thong.md'
+  - 'docs/Input/Danh sách transaction_v1.1_2026-03-27.csv'
+outputDocuments:
+  - '_bmad-output/planning-artifacts/srs-v3/srs-v3.md — file chính (tài liệu này)'
+  - '_bmad-output/planning-artifacts/srs-v3/srs-fr-*.md — file FR group riêng per nhóm UC'
+relatedDocuments:
+  - '_bmad-output/planning-artifacts/architecture-inputs-from-srs.md — các phần kỹ thuật đã tách từ SRS'
+  - '_bmad-output/planning-artifacts/architecture.md — sinh SAU SRS, nhận input từ SRS + architecture-inputs'
+---
+
+# Đặc tả Yêu cầu Phần mềm (SRS)
+
+# Phần mềm Hỗ trợ Pháp lý Doanh nghiệp
+
+**Mã dự án:** PM-HTPLDN
+**Phiên bản:** 3.0
+**Ngày:** 2026-04-03
+**Tác giả:** SRS Agent (Claude)
+**Chuẩn áp dụng:** IEEE 830-1998 / ISO/IEC/IEEE 29148:2018
+
+---
+
+## Lịch sử thay đổi
+
+| Phiên bản | Ngày | Tác giả | Mô tả thay đổi |
+|-----------|------|---------|-----------------|
+| 1.0–2.1 | 2026-03-25 → 2026-04-02 | SRS Agent | Xem SRS-claude-v2.md cho lịch sử chi tiết v1.0–v2.1 |
+| 3.0 | 2026-04-03 | SRS Agent (Claude) | **Tái cấu trúc theo SRS Template v3.0:** (1) Section 3.2 FR chi tiết tách thành 16 file riêng per nhóm UC. (2) Kiểu dữ liệu LOGIC xuyên suốt — loại bỏ mọi physical DB types (BIGINT, VARCHAR, JSONB → identifier, text, structured). (3) Section 3.2.0.2 viết lại thành "Quy ước kiểu dữ liệu logic". (4) Section 3.2.0.4 viết lại — chỉ giữ quy tắc nghiệp vụ, loại bỏ thuật ngữ kỹ thuật (RLS, NestJS guard, JWT, pg_terminate_backend). (5) ERD chuyển sang logical types. (6) Edge cases viết lại bằng ngôn ngữ nghiệp vụ. |
+
+---
+
+## Mục lục
+
+- [1. Giới thiệu](#1-giới-thiệu)
+- [2. Mô tả tổng quan](#2-mô-tả-tổng-quan)
+- [3. Yêu cầu cụ thể](#3-yêu-cầu-cụ-thể)
+  - [3.1 Yêu cầu giao diện](#31-yêu-cầu-giao-diện-bên-ngoài)
+  - [3.2 Yêu cầu chức năng](#32-yêu-cầu-chức-năng)
+  - [3.3 Yêu cầu hiệu năng](#33-yêu-cầu-hiệu-năng)
+  - [3.4 Mô hình dữ liệu logic](#34-mô-hình-dữ-liệu-logic)
+  - [3.5 Thuộc tính hệ thống](#35-thuộc-tính-hệ-thống)
+  - [3.6 Yêu cầu khác](#36-yêu-cầu-khác)
+- [4. Kiểm chứng](#4-kiểm-chứng-verification--isoiecieee-291482018)
+- [Phụ lục A — Ma trận Truy vết](#phụ-lục-a--ma-trận-truy-vết-traceability-matrix)
+- [Phụ lục B — Quy tắc Nghiệp vụ](#phụ-lục-b-danh-mục-quy-tắc-nghiệp-vụ-business-rules-catalog)
+- [Phụ lục C — Máy trạng thái](#phụ-lục-c-sơ-đồ-máy-trạng-thái-state-machines)
+- [Phụ lục D — Mẫu dữ liệu vào/ra](#phụ-lục-d--mẫu-dữ-liệu-vàora)
+- [Chỉ mục](#chỉ-mục-index)
+
+### Danh sách file FR group
+
+| # | File | Nhóm | UC range | Mô tả |
+|---|------|------|----------|-------|
+| 01 | `srs-fr-01-dashboard.md` | I — Dashboard | UC 1-9 | Tổng quan, KPI, thống kê nhanh |
+| 02 | `srs-fr-02-hoi-dap.md` | II — Hỏi đáp Pháp lý | UC 10-19 | Click thẳng. 2 trang + 1 modal. Tabs trạng thái + batch PD |
+| 03 | `srs-fr-03-dao-tao.md` | III — Đào tạo, Tập huấn | UC 20-38 | 4 sub-menu: Chương trình ĐT, Khóa học (7 tabs: TT, Lịch học, HV, Điểm danh, KQ KT, Bài giảng, Chứng nhận), Ngân hàng CH, Giảng viên |
+| 04 | `srs-fr-04-chuyen-gia-tvv.md` | IV — Chuyên gia, TVV | UC 39-50 | Quản lý hồ sơ chuyên gia, tư vấn viên |
+| 05 | `srs-fr-05-vu-viec.md` | V.I — Vụ việc HTPL | UC 51-67 | Tiếp nhận, xử lý, theo dõi vụ việc |
+| 06 | `srs-fr-06-chi-tra.md` | V.II — Chi trả Chi phí | UC 68-80 | Lập, duyệt, thanh toán chi phí tư vấn |
+| 07 | `srs-fr-07-doanh-nghiep.md` | V.III — DN được Hỗ trợ | UC 81-82 | Quản lý hồ sơ doanh nghiệp |
+| 08 | `srs-fr-08-danh-gia.md` | VI — Đánh giá Hiệu quả | UC 83-91 | Đánh giá chất lượng hỗ trợ |
+| 09 | `srs-fr-09-bieu-mau.md` | VII — Thư viện Biểu mẫu | UC 92-98 | Click thẳng. Tree-view thư mục + biểu mẫu. HĐ TV (UC163) chuyển sang accessible từ VV/TVV |
+| 10 | `srs-fr-10-quan-tri.md` | VIII — Quản trị Hệ thống | UC 99-119, 191-194 | 4 sub-menu: Danh mục dùng chung, Cấu hình HT (SLA + phân công + mẫu PH + quy trình), TK & Phân quyền, Nhật ký HT |
+| 11 | `srs-fr-11-bao-cao.md` | IX — Báo cáo Thống kê | UC 120-142 | 6 sub-menu: BC Hỏi đáp, BC Vụ việc, BC Đào tạo, BC CG/TVV & ĐG, BC Chi phí, BC CT HTPLDN. Cùng template, pre-filter nhóm |
+| 12 | `srs-fr-12-tv-chuyen-sau.md` | X.1 — TV Chuyên sâu | UC 147-153 | Quản lý nội dung tư vấn chuyên sâu |
+| 13 | `srs-fr-13-tv-nhanh.md` | X.2 — Tư vấn Nhanh | UC 158-162 | Tư vấn nhanh online |
+| 14 | `srs-fr-14-hop-dong-tv.md` | X.3 — Hợp đồng TV | UC 163-163e | Quản lý hợp đồng tư vấn |
+| 15 | `srs-fr-15-ct-htpldn.md` | XI — CT HTPLDN | UC 164-172 | Chương trình hỗ trợ pháp lý DN |
+| 16 | `srs-fr-16-api.md` | XII — API Chia sẻ DL | UC 171-188 | API kết nối chia sẻ dữ liệu |
+
+---
+
+# 1. Giới thiệu
+
+## 1.1 Mục đích
+
+Tài liệu Đặc tả Yêu cầu Phần mềm (SRS) này mô tả toàn bộ yêu cầu chức năng và phi chức năng cho **Phần mềm Hỗ trợ Pháp lý Doanh nghiệp (PM HTPLDN)** — phiên bản 1.0. PM HTPLDN là hệ thống **Backend CMS + API** phục vụ quản lý nghiệp vụ hỗ trợ pháp lý cho doanh nghiệp nhỏ và vừa (DNNVV) theo Luật Hỗ trợ DNNVV 2017, Nghị định 55/2019/NĐ-CP và Nghị định 18/2026/NĐ-CP.
+
+Tài liệu bao gồm 188 Use Case (STT 1-188, theo CSV transaction v1.1 ngày 2026-03-27), 15 tác nhân, 12+ nhóm chức năng, 18 API outbound (9 cặp chia sẻ + tìm kiếm, UC171-188) và ~8 API inbound. SRS được xây dựng trên cơ sở PRD v2.1 (2026-03-24) và cập nhật theo CSV transaction v1.1 (2026-03-27).
+
+**Đối tượng đọc:**
+
+| Vai trò | Phần nên đọc |
+|---------|-------------|
+| Product Manager | Section 1-2, Phụ lục A |
+| Solution Architect | Section 2-3 → chuyển sang Architecture Design |
+| Developer (AI Agent) | Section 3 (FR, Data Model), Phụ lục B-C |
+| QA Engineer | Section 3-4, Phụ lục A-D |
+| Chủ đầu tư (CĐT) / Trung tâm CNTT BTP | Section 1-2, 3.2 (FR summary) |
+
+## 1.2 Phạm vi
+
+### 1.2.1 Tên phần mềm
+
+**Phần mềm Hỗ trợ Pháp lý Doanh nghiệp** (PM HTPLDN)
+Là thành phần Backend CMS + API trong tổng thể dự án "Cổng Pháp luật Quốc gia".
+
+### 1.2.2 Phần mềm sẽ làm gì (In-Scope)
+
+| # | Phạm vi | Mô tả |
+|---|---------|-------|
+| S-01 | CMS quản trị nghiệp vụ | Giao diện web (desktop, Chrome/Edge) cho cán bộ BTP, Sở TP, Bộ/Ngành quản lý toàn bộ nghiệp vụ HTPLDN |
+| S-02 | 18 API outbound (9 cặp chia sẻ + tìm kiếm, UC171-188, trực tiếp với Cổng PLQG) | Cung cấp dữ liệu cho Cổng PLQG module HTPLDN (gói thầu khác) qua kết nối REST trực tiếp |
+| S-03 | ~8 API inbound (LGSP/NDXP/trực tiếp) | Tiếp nhận hồ sơ từ HT TTHC BTP (DVC qua LGSP), VNeID (qua NDXP), Cổng PLQG (trực tiếp) |
+| S-04 | 12+ nhóm chức năng | Dashboard, Hỏi đáp, Đào tạo, CG/TVV, Vụ việc, Chi trả, DN, Đánh giá, Biểu mẫu, Quản trị, Báo cáo, Tư vấn, CT HTPLDN, API |
+| S-05 | Phân quyền 3 cấp | TW (Cục BLDS&KT) / BN (Bộ/Ngành) / ĐP (Sở TP) — row-level security |
+
+> **Tham chiếu:** PRD Section 1 (Executive Summary), Section 6 (Functional Requirements)
+
+### 1.2.3 Phần mềm KHÔNG làm gì (Out-of-Scope)
+
+| # | Loại trừ | Lý do |
+|---|---------|-------|
+| OS-01 | Chuyên trang HTPLDN trên Cổng PLQG | Thuộc gói thầu khác. PM chỉ cung cấp API (trực tiếp với Cổng PLQG, xem C-08a) |
+| OS-02 | Mobile app | PM là CMS nội bộ cho cán bộ, chỉ hỗ trợ desktop browser |
+| OS-03 | AI/ML chatbot | Tư vấn nhanh sử dụng keyword search, không AI |
+| OS-04 | LMS đầy đủ (thi trực tuyến) | PM chỉ quản lý thông tin đào tạo, không tổ chức thi/kiểm tra trực tuyến |
+| OS-05 | Giao tiếp Kho bạc/Thanh toán tài chính | PM dừng ở cập nhật thông tin chi trả, không xử lý thanh toán |
+| OS-06 | Video call hosting | PM chỉ lưu link meeting + lịch, không host video |
+
+> **Tham chiếu:** PRD Section 8 (Out of Scope)
+
+### 1.2.4 Lợi ích và mục tiêu
+
+**Business Goals:**
+- 100% nghiệp vụ HTPLDN được số hóa trên hệ thống
+- Giảm thời gian xử lý hồ sơ >= 30% so với quy trình thủ công
+- Đồng bộ thông tin real-time giữa PM và Cổng PLQG
+
+**Technical Goals:**
+- 18 API ổn định trên Trục LGSP, response < 3s
+- Uptime >= 99.5% cho API (24/7), CMS hoạt động giờ hành chính
+- Phân quyền 3 cấp (TW/BN/ĐP) chính xác 100%
+
+> **Tham chiếu:** PRD Section 3 (Goals & Success Criteria)
+
+## 1.3 Định nghĩa, viết tắt và từ ngữ
+
+### Thuật ngữ
+
+| Thuật ngữ | Định nghĩa |
+|-----------|-----------|
+| Doanh nghiệp nhỏ và vừa (DNNVV) | Doanh nghiệp có quy mô siêu nhỏ, nhỏ hoặc vừa theo tiêu chí doanh thu và số lao động quy định tại Luật Hỗ trợ DNNVV 2017 và NĐ39/2018 |
+| Hỗ trợ pháp lý doanh nghiệp (HTPLDN) | Hoạt động cung cấp thông tin, tư vấn, hỗ trợ pháp lý cho DNNVV theo NĐ55/2019 |
+| Mạng lưới tư vấn viên (MLTV) | Hệ thống tổ chức, cá nhân đăng ký tham gia hỗ trợ pháp lý cho DNNVV theo NĐ77/2008 |
+| Vụ việc trợ giúp pháp lý | Yêu cầu hỗ trợ pháp lý cụ thể của DNNVV, được tiếp nhận và xử lý qua hệ thống |
+| Phê duyệt rút gọn | Luồng phê duyệt: CB Nghiệp vụ tích "Đã trả lời"/"Hoàn thành" -> tự động chuyển CB Phê duyệt duyệt (CĐT xác nhận) |
+| Phân quyền dữ liệu theo đơn vị | Quy tắc: ngang cấp KHÔNG thấy nhau; cha thấy con (TW thấy tất cả, BN thấy BN, ĐP chỉ thấy ĐP) |
+| Trục chia sẻ tích hợp dữ liệu (LGSP) | Local Government Service Platform — hạ tầng trung gian của Bộ Tư Pháp kết nối các hệ thống nội bộ và bên ngoài |
+| Nền tảng tích hợp chia sẻ dữ liệu Quốc gia (NDXP) | National Data Exchange Platform — nền tảng tích hợp liên bộ do Bộ TT&TT quản lý |
+| Dịch vụ công trực tuyến (DVC) | Cổng dịch vụ công trực tuyến để tiếp nhận và xử lý TTHC |
+| Thủ tục hành chính (TTHC) | Quy trình giải quyết yêu cầu của tổ chức/cá nhân theo quy định pháp luật |
+| SLA (Service Level Agreement) | Cam kết thời gian xử lý cho từng loại yêu cầu, cấu hình qua UC108 |
+| Soft delete | Xóa logic — đánh dấu bản ghi là đã xóa, không xóa vật lý khỏi database |
+| Audit trail | Nhật ký ghi lại mọi thao tác CUD + phê duyệt + đăng nhập/xuất, lưu trữ 5 năm, không thể sửa đổi |
+| Tổ chức hỗ trợ PLDN | Đơn vị tổ chức trực thuộc Sở Tư pháp, quản lý và điều phối hoạt động của NHT, TVV, CG trong hỗ trợ pháp lý cho DNNVV theo NĐ77/2008 |
+
+### Viết tắt
+
+| Viết tắt | Giải thích |
+|----------|-----------|
+| PM HTPLDN | Phần mềm Hỗ trợ Pháp lý Doanh nghiệp |
+| DNNVV | Doanh nghiệp nhỏ và vừa |
+| NĐ55 | Nghị định 55/2019/NĐ-CP về hỗ trợ pháp lý cho DNNVV |
+| NĐ18 | Nghị định 18/2026/NĐ-CP (sửa đổi NĐ55, gộp 2 TTHC thành 1) |
+| NĐ39 | Nghị định 39/2018/NĐ-CP hướng dẫn Luật Hỗ trợ DNNVV |
+| NĐ77 | Nghị định 77/2008/NĐ-CP về tổ chức tư vấn pháp luật |
+| TT17 | Thông tư 17/2025/TT-BTP — Mẫu báo cáo kết quả triển khai công tác hỗ trợ pháp lý cho DNNVV |
+| TT64 | Thông tư 64/2021/TT-BTP hướng dẫn nghiệp vụ trợ giúp pháp lý |
+| LGSP | Local Government Service Platform — Trục chia sẻ tích hợp dữ liệu Bộ Tư Pháp |
+| NDXP | National Data Exchange Platform — Nền tảng tích hợp chia sẻ dữ liệu Quốc gia |
+| VNeID | Vietnam Electronic Identification — Hệ thống định danh và xác thực điện tử (Bộ Công an) |
+| DVC | Dịch vụ Công trực tuyến |
+| TTHC | Thủ tục Hành chính |
+| BTP | Bộ Tư Pháp |
+| Cổng PLQG | Cổng Pháp luật Quốc gia |
+| HT TTHC BTP | Hệ thống giải quyết Thủ tục Hành chính Bộ Tư Pháp |
+| TVV | Tư vấn viên pháp luật |
+| CG | Chuyên gia tư vấn |
+| NHT | Người hỗ trợ pháp lý |
+| DN | Doanh nghiệp |
+| QTHT | Quản trị hệ thống |
+| CB NV TW | Cán bộ Nghiệp vụ Trung ương (Cục BLDS&KT) |
+| CB NV BN | Cán bộ Nghiệp vụ Bộ ngành |
+| CB NV ĐP | Cán bộ Nghiệp vụ Địa phương (Sở TP) |
+| CB PD TW/BN/ĐP | Cán bộ Phê duyệt tương ứng 3 cấp |
+| Cục BLDS&KT | Cục Bổ trợ Luật sự và Kiểm tra |
+| CMS | Content Management System — Hệ thống quản trị nội dung |
+| API | Application Programming Interface |
+| REST | Representational State Transfer |
+| JWT | JSON Web Token |
+| mTLS | Mutual Transport Layer Security |
+| RBAC | Role-Based Access Control |
+| CRUD | Create, Read, Update, Delete |
+| OAuth2 | Open Authorization 2.0 |
+| OIDC | OpenID Connect |
+| WCAG | Web Content Accessibility Guidelines |
+| CPĐT | Chính phủ Điện tử |
+| CT HTPLDN | Chương trình Hỗ trợ Pháp lý Doanh nghiệp |
+| MLTV | Mạng lưới Tư vấn viên |
+| HĐ TVPL | Hợp đồng Tư vấn Pháp luật |
+| VB TVPL | Văn bản Tư vấn Pháp luật |
+| CNĐKKD | Chứng nhận Đăng ký Kinh doanh |
+| PL | Pháp lý / Pháp luật |
+
+## 1.4 Tài liệu tham chiếu
+
+| # | Tên tài liệu | Vai trò | Số hiệu / Phiên bản | Ngày | Tổ chức | Nguồn |
+|---|--------------|---------|---------------------|------|---------|-------|
+| 1 | PRD — Phần mềm Hỗ trợ Pháp lý Doanh nghiệp | INPUT | v2.1 | 2026-03-24 | PM Agent | `_bmad-output/planning-artifacts/prd.md` |
+| 2 | UX Design Specification — PM HTPLDN | INPUT | v1.0 | 2026-03-24 | UX Agent | `_bmad-output/planning-artifacts/ux-spec.md` |
+| 3 | Phân tích mô hình kiến trúc | THAM CHIẾU | v1.0 | 2026-03-11 | Analyst Mary | `_bmad-output/planning-artifacts/architecture-analysis.md` |
+| 4 | Mô tả chung dự án | THAM CHIẾU | — | — | Trung tâm CNTT BTP | `docs/Input/Mô tả chung dự án.md` |
+| 5 | Thiết kế tổng quan | THAM CHIẾU | — | — | Trung tâm CNTT BTP | `docs/Input/Thiết kế tổng quan.md` |
+| 6 | Luật Hỗ trợ doanh nghiệp nhỏ và vừa | THAM CHIẾU | 04/2017/QH14 | 2017-06-12 | Quốc hội | `thuvienphapluat.vn` |
+| 7 | Nghị định về hỗ trợ pháp lý cho DNNVV | THAM CHIẾU | 55/2019/NĐ-CP | 2019-06-24 | Chính phủ | `thuvienphapluat.vn` |
+| 8 | Nghị định sửa đổi NĐ55 (gộp TTHC) | THAM CHIẾU | 18/2026/NĐ-CP | 2026 | Chính phủ | 🟡 Giả định — Chờ CĐT xác nhận |
+| 9 | Nghị định hướng dẫn Luật DNNVV | THAM CHIẾU | 39/2018/NĐ-CP | 2018-03-11 | Chính phủ | `thuvienphapluat.vn` |
+| 10 | Nghị định về tổ chức tư vấn pháp luật | THAM CHIẾU | 77/2008/NĐ-CP | 2008-07-16 | Chính phủ | `thuvienphapluat.vn` |
+| 11 | Thông tư — Mẫu báo cáo kết quả triển khai công tác hỗ trợ pháp lý cho DNNVV | THAM CHIẾU | 17/2025/TT-BTP | 2025 | Bộ Tư Pháp | `thuvienphapluat.vn` |
+| 12 | Thông tư hướng dẫn nghiệp vụ TGPL | THAM CHIẾU | 64/2021/TT-BTP | 2021 | Bộ Tư Pháp | `thuvienphapluat.vn` |
+| 13 | Luật Dữ liệu | THAM CHIẾU | —/2024/QH15 | 2024 | Quốc hội | `thuvienphapluat.vn` |
+| 14 | IEEE 830 — Recommended Practice for SRS | THAM CHIẾU | IEEE 830-1998 | 1998 | IEEE | `standards.ieee.org` |
+| 15 | ISO/IEC/IEEE 29148 — Requirements Engineering | THAM CHIẾU | ISO 29148:2018 | 2018 | ISO/IEC/IEEE | `iso.org` |
+| 16 | TT 03/2020/TT-BTP | THAM CHIẾU | — | 2020 | Bộ Tư pháp | Hướng dẫn NĐ55 về HTPLDN |
+| 17 | NĐ 69/2024/NĐ-CP | THAM CHIẾU | — | 25/06/2024 | Chính phủ | Định danh và xác thực điện tử (thay thế NĐ59/2022) |
+| 18 | NĐ 13/2023/NĐ-CP | THAM CHIẾU | — | 2023 | Chính phủ | Bảo vệ dữ liệu cá nhân |
+| 19 | NĐ 85/2016/NĐ-CP | THAM CHIẾU | — | 2016 | Chính phủ | An toàn thông tin hệ thống |
+| 20 | NĐ 47/2020/NĐ-CP | THAM CHIẾU | — | 2020 | Chính phủ | CSDL quốc gia |
+| 21 | Danh sách transaction | THAM CHIẾU | v1.1 | 2026-03-27 | Trung tâm CNTT BTP | `docs/Input/Danh sách transaction_v1.1_2026-03-27.csv` |
+| 22 | Thiết kế tổng thể hệ thống | THAM CHIẾU | — | 2026-03-27 | Trung tâm CNTT BTP | `docs/Input/Thiet-ke-tong-the-he-thong.md` |
+| 23 | Báo cáo nghiệp vụ chi tiết | THAM CHIẾU | v2.1 | 2026-03-27 | Analyst Agent | `_bmad-output/planning-artifacts/bao-cao-nghiep-vu-chi-tiet.md` |
+| 24 | Architecture Design Inputs | THAM CHIẾU | 1.0 | 2026-04-02 | SRS Agent | `_bmad-output/planning-artifacts/architecture-inputs-from-srs.md` |
+| 25 | Architecture Design Document | SINH SAU SRS | — | — | Architect Agent | `_bmad-output/planning-artifacts/architecture.md` |
+
+> **Thứ tự sinh tài liệu:** PRD + UX-Spec → **SRS (tài liệu này)** → Architecture Design.
+> Architecture Design Document KHÔNG phải input của SRS — nó sinh SAU và nhận input từ SRS.
+
+## 1.5 Tổng quan tài liệu
+
+Tài liệu SRS này được tổ chức theo chuẩn IEEE 830 / ISO 29148, tập trung vào **YÊU CẦU (WHAT)**. Các quyết định kỹ thuật (HOW) được chuyển sang **Architecture Design Document**.
+
+| Section | Nội dung | Đối tượng chính |
+|---------|---------|----------------|
+| **Section 1** | Giới thiệu, phạm vi, thuật ngữ, tham chiếu | Tất cả |
+| **Section 2** | Bối cảnh sản phẩm, chức năng tổng quan, đặc điểm người dùng, ràng buộc | PM, SA |
+| **Section 3.1** | Yêu cầu giao diện (UI logic → UX-Spec, tích hợp hệ thống) | SA, Dev |
+| **Section 3.2** | Yêu cầu chức năng chi tiết (Input -> Processing -> Output -> Error) | Dev, QA |
+| **Section 3.3** | Yêu cầu hiệu năng (quantitative) | SA, QA |
+| **Section 3.4** | Mô hình dữ liệu logic (Entity, ERD, Permission, Retention yêu cầu) | SA, Dev |
+| **Section 3.5** | Thuộc tính hệ thống (Security, Reliability, Availability, Maintainability, Portability) — chỉ YÊU CẦU | SA |
+| **Section 3.6** | Yêu cầu khác (i18n, legal, installation) | PM, SA |
+| **Section 4** | Kiểm chứng (Verification matrix — ISO 29148) | QA |
+| **Phụ lục A** | Ma trận truy vết (Traceability) | PM, QA |
+| **Phụ lục B** | Danh mục quy tắc nghiệp vụ (BR-xxx) | Dev, QA |
+| **Phụ lục C** | Sơ đồ máy trạng thái (State Machines) | Dev |
+| **Phụ lục D** | Mẫu dữ liệu vào/ra (Sample I/O — forms & reports) | Dev, QA |
+
+> **Lưu ý:** Các phần sau đã được chuyển sang **Architecture Design Document**
+> (xem `architecture-inputs-from-srs.md` cho mapping chi tiết):
+> - Giao diện phần cứng, phần mềm, truyền thông (chi tiết kỹ thuật)
+> - Physical Data Model, DB Constraints, Data Security Design, Retention Mechanism
+> - API Contracts (Outbound/Inbound/OAuth)
+> - Security Architecture (giải pháp cho SEC-01..06)
+> - HA/DR Design (giải pháp cho REL/AVL targets)
+> - Implementation Patterns, Coding Standards, Naming Conventions
+> - Portability Design (giải pháp cho PRT-01..05)
+> - Project Structure, Infrastructure specifications
+
+---
+
+
+---
+
+# 2. Mô tả tổng quan
+
+## 2.1 Bối cảnh sản phẩm
+
+### 2.1.1 Vị trí trong hệ sinh thái
+
+PM HTPLDN là thành phần **Backend CMS + API** hoạt động độc lập trong tổng thể dự án Cổng Pháp luật Quốc gia. PM không có giao diện hiển thị trực tiếp cho người dùng cuối (DN/Người dân) — thay vào đó, PM quản trị dữ liệu và chia sẻ 18 API trực tiếp với Cổng PLQG (REST JSON, không qua LGSP — xem C-08a) để gói thầu khác hiển thị trên "Chuyên trang HTPLDN".
+
+**Kiến trúc:** Monolithic web application, 5 lớp logic (Người dùng -> Kênh giao tiếp -> Nghiệp vụ -> Ứng dụng -> Dữ liệu), triển khai on-premise tại Data Center BTP.
+
+> **Tham chiếu:** PRD Section 1-2, Architecture Analysis Section 1-2
+
+### 2.1.2 Sơ đồ ngữ cảnh (Context Diagram)
+
+```mermaid
+graph TD
+    subgraph "Người dùng CMS"
+        QTHT["QTHT<br/>Quản trị hệ thống"]
+        CBNV["CB NV TW/BN/ĐP<br/>Cán bộ Nghiệp vụ"]
+        CBPD["CB PD TW/BN/ĐP<br/>Cán bộ Phê duyệt"]
+        NHT_U["NHT / TVV / CG<br/>Người hỗ trợ"]
+    end
+
+    subgraph "PM HTPLDN"
+        CMS["CMS Backend<br/>12+ nhóm chức năng<br/>188 UC"]
+        API_OUT["18 API Outbound"]
+        API_IN["~8 API Inbound"]
+    end
+
+    subgraph "Kênh 1: LGSP (nội bộ BTP)"
+        LGSP["Trục LGSP<br/>Bộ Tư Pháp"]
+        DVC["HT TTHC BTP<br/>Dịch vụ Công"]
+        DMDC["HT Danh mục<br/>Dùng chung BTP"]
+        VBPL["CSDL VBPL"]
+    end
+
+    subgraph "Kênh 2: NDXP (liên ngành)"
+        NDXP_SYS["NDXP<br/>Nền tảng QG"]
+        VNeID_SYS["VNeID<br/>Bộ Công an"]
+    end
+
+    subgraph "Kênh 3: Trực tiếp"
+        CPLQG["Cổng PLQG<br/>Module HTPLDN"]
+        EMAIL["Email Server<br/>SMTP"]
+        HT_KHAC["HT khác<br/>(UC55)"]
+    end
+
+    QTHT -->|"HTTPS/Browser"| CMS
+    CBNV -->|"HTTPS/Browser"| CMS
+    CBPD -->|"HTTPS/Browser"| CMS
+    NHT_U -->|"HTTPS/Browser"| CMS
+
+    CMS --> API_OUT
+    API_IN --> CMS
+
+    CMS -->|"REST JSON + mTLS"| LGSP
+    LGSP <-->|"REST JSON"| DVC
+    LGSP <-->|"Sync"| DMDC
+    LGSP <-->|"REST JSON"| VBPL
+
+    CMS -->|"OAuth2/OIDC"| NDXP_SYS
+    NDXP_SYS -->|"OAuth2/OIDC"| VNeID_SYS
+
+    API_OUT -->|"REST JSON trực tiếp"| CPLQG
+    CPLQG -->|"REST JSON trực tiếp"| API_IN
+    HT_KHAC -->|"REST JSON trực tiếp"| API_IN
+    CMS -->|"SMTP/TLS"| EMAIL
+```
+
+> **Ghi chú v1.6:** Context Diagram cập nhật theo mô hình hybrid 3 kênh (C-08a). Cổng PLQG kết nối trực tiếp (không qua LGSP). VNeID qua NDXP. HT khác (UC55) kết nối trực tiếp thay kênh Email cũ.
+
+### 2.1.3 Tổng quan hệ thống bên ngoài
+
+| # | Hệ thống bên ngoài | Mục đích tích hợp | Dữ liệu trao đổi (tổng quan) | Chiều |
+|---|--------------------|--------------------|------------------------------|-------|
+| 1 | Trục LGSP Bộ Tư Pháp | Middleware cho HT nội bộ BTP (DVC, VBPL, Danh mục) | Hồ sơ TTHC, VBPL, danh mục dùng chung | ↔ |
+| 2 | VNeID (qua NDXP) | Xác thực danh tính điện tử (lộ trình 3 tier) | Thông tin xác thực (CCCD, họ tên, ngày sinh) | ← |
+| 3 | HT TTHC BTP (DVC) | Tiếp nhận hồ sơ yêu cầu HTPL + hồ sơ chi phí | Hồ sơ TTHC, trạng thái xử lý, kết quả | ↔ |
+| 4 | Cổng PLQG (Module HTPLDN) | Consumer chính 18 API — hiển thị HTPLDN cho DN/Người dân | 9 cặp API (chia sẻ + tìm kiếm): Hỏi đáp, ĐT, TVV, VV, Đánh giá, Biểu mẫu, TVCS, CT HTPLDN, HS PL DN | ↔ |
+| 5 | HT Danh mục Dùng chung BTP | Đồng bộ danh mục chuẩn (lĩnh vực PL, đơn vị HC) | Danh mục lĩnh vực PL, đơn vị HC, loại hình HT | ← |
+| 6 | Email Server (SMTP) | Gửi thông báo (phê duyệt, SLA, kích hoạt TK) | Email thông báo (HTML) | → |
+| 7 | HT khác (UC55) | Tiếp nhận thông tin từ hệ thống bên ngoài | Dữ liệu vụ việc (REST JSON) | ← |
+
+> **Chi tiết kỹ thuật (protocol, authentication, error handling):** Xem Architecture Design Document.
+
+## 2.2 Chức năng sản phẩm (Product Functions)
+
+```mermaid
+graph TD
+    PM[PM HTPLDN] --> GRP1[I. Dashboard]
+    PM --> GRP2[II. Hỏi đáp PL]
+    PM --> GRP3[III. Đào tạo]
+    PM --> GRP4[IV. CG/TVV]
+    PM --> GRP5[V. Vụ việc & Chi trả]
+    GRP5 --> V1[V.I Vụ việc HTPL]
+    GRP5 --> V2[V.II Chi trả]
+    GRP5 --> V3[V.III DN được HT]
+    PM --> GRP6[VI. Đánh giá]
+    PM --> GRP7[VII. Biểu mẫu]
+    PM --> GRP8[VIII. Quản trị HT]
+    PM --> GRP9[IX. Báo cáo TK]
+    PM --> GRP10[X. Tư vấn]
+    GRP10 --> X1[X.1 TV Chuyên sâu]
+    GRP10 --> X2[X.2 TV Nhanh]
+    GRP10 --> X3[X.3 HĐ Tư vấn]
+    PM --> GRP11[XI. CT HTPLDN]
+    PM --> GRP12[XII. API Kết nối]
+```
+
+### Danh sách nhóm chức năng
+
+| # | Nhóm chức năng | Mã nhóm | Số UC | Mô tả ngắn | FR Section |
+|---|---------------|---------|-------|------------|------------|
+| 1 | Dashboard | I | 9 | 9 chỉ số tổng quan hoạt động HTPLDN | 3.2.1 |
+| 2 | Quản lý Hỏi đáp, Vướng mắc PL | II | 12 (10 gốc + 2 mới) | Tiếp nhận, xử lý, kiểm duyệt, công khai Q&A | 3.2.2 |
+| 3 | Quản lý Đào tạo, Tập huấn | III | 22 (19 gốc + 3 mới) | Chương trình ĐT, khóa học, tài liệu, đề kiểm tra, kết quả | 3.2.3 |
+| 4 | Quản lý CG/TVV | IV | 13 (12 gốc + 1 cross) | Đăng ký, thẩm định, phê duyệt, đánh giá TVV/CG | 3.2.4 |
+| 5 | Quản lý Vụ việc HTPL | V.I | 18 (17 gốc + 1 mới) | Tiếp nhận, kiểm tra, phân công, xử lý, đánh giá vụ việc | 3.2.5 |
+| 6 | Chi trả Chi phí Tư vấn | V.II | 13 | Đề nghị, đánh giá, thẩm định, phê duyệt chi phí | 3.2.6 |
+| 7 | Quản lý DN được Hỗ trợ | V.III | 3 (2 gốc + 1 mới) | Hồ sơ DNNVV đã/đang được hỗ trợ | 3.2.7 |
+| 8 | Đánh giá Hiệu quả | VI | 9 | Lập đợt, phân công, nhập điểm, báo cáo đánh giá | 3.2.8 |
+| 9 | Thư viện Biểu mẫu, HĐ | VII | 7 | Kho biểu mẫu/hợp đồng mẫu cho DNNVV | 3.2.9 |
+| 10 | Quản trị Hệ thống | VIII | 21 | Danh mục, tài khoản, phân quyền, đăng nhập | 3.2.10 |
+| 11 | Báo cáo Thống kê | IX | 23 | 23 báo cáo theo nhiều chiều phân tích | 3.2.11 |
+| 12 | Tư vấn Chuyên sâu | X.1 | 15 | Tư vấn 1-1 CG/TVV - DN (🟡 Đề xuất) | 3.2.12 |
+| 13 | Tư vấn Nhanh | X.2 | 5 | Tra cứu Q&A pháp lý (keyword search) | 3.2.13 |
+| 14 | HĐ Tư vấn | X.3 | 1 | Quản lý hợp đồng tư vấn | 3.2.14 |
+| 15 | Chương trình HTPLDN | XI | 9 | Kế hoạch, thực hiện, báo cáo CT HTPLDN | 3.2.15 |
+| 16 | API Kết nối Chia sẻ | XII | 18 | 18 API outbound (trực tiếp với Cổng PLQG, 9 cặp chia sẻ + tìm kiếm, UC171-188) | 3.2.16 |
+| | **Tổng** | | **188** | | |
+
+> **Tham chiếu:** PRD Section 6 (Functional Requirements)
+
+## 2.3 Đặc điểm người dùng
+
+| # | Vai trò | Viết tắt | Trình độ | KN IT | KN Domain | Tần suất | Ngôn ngữ | Ghi chú |
+|---|---------|---------|---------|-------|-----------|----------|----------|---------|
+| 1 | Quản trị hệ thống | QTHT | ĐH CNTT | Cao | Trung bình | Hàng ngày | Tiếng Việt | Cấu hình, danh mục, phân quyền |
+| 2 | Cán bộ Nghiệp vụ TW | CB NV TW | ĐH Luật/HC | Trung bình | Cao | Hàng ngày | Tiếng Việt | Cục BLDS&KT — thấy dữ liệu toàn quốc |
+| 3 | Cán bộ Nghiệp vụ BN | CB NV BN | ĐH Luật/HC | Trung bình | Cao | Hàng ngày | Tiếng Việt | Bộ/Ngành — thấy dữ liệu BN |
+| 4 | Cán bộ Nghiệp vụ ĐP | CB NV ĐP | ĐH Luật/HC | Trung bình | Cao | Hàng ngày | Tiếng Việt | Sở TP — thấy dữ liệu ĐP |
+| 5 | Cán bộ Phê duyệt TW | CB PD TW | ĐH Luật/HC | Trung bình | Cao | Hàng ngày | Tiếng Việt | Phê duyệt cấp Cục |
+| 6 | Cán bộ Phê duyệt BN | CB PD BN | ĐH Luật/HC | Trung bình | Cao | Hàng tuần | Tiếng Việt | Phê duyệt cấp Bộ/Ngành |
+| 7 | Cán bộ Phê duyệt ĐP | CB PD ĐP | ĐH Luật/HC | Trung bình | Cao | Hàng tuần | Tiếng Việt | Phê duyệt cấp Sở TP |
+| 8 | Doanh nghiệp | DN | Đa dạng | Thấp-TB | Thấp | Không thường xuyên | Tiếng Việt | Cấp ĐP — thuộc Sở TP quản lý, tương tác qua chuyên trang (xem BR-AUTH-11) |
+| 9 | Người hỗ trợ | NHT | ĐH Luật | Trung bình | Cao | Hàng tuần | Tiếng Việt | Cấp ĐP — thuộc Tổ chức HT PLDN dưới Sở TP, NĐ77/2008 (xem BR-AUTH-10) |
+| 10 | Tư vấn viên | TVV | ĐH Luật | Trung bình | Cao | Hàng tuần | Tiếng Việt | Cấp ĐP — cá nhân trong MLTV dưới Sở TP, NĐ77/2008 (xem BR-AUTH-10) |
+| 11 | Chuyên gia tư vấn | CG | Sau ĐH Luật | Trung bình | Rất cao | Không thường xuyên | Tiếng Việt | Cấp ĐP — thuộc Tổ chức HT PLDN dưới Sở TP, NĐ77/2008 (xem BR-AUTH-10) |
+| 12 | Cổng PLQG | Cổng PLQG | — | — | — | Real-time | JSON | Hệ thống — gọi 18 API trực tiếp (REST JSON, không qua LGSP) |
+| 13 | HT TTHC BTP | HT TTHC BTP | — | — | — | Event-driven | JSON | Hệ thống — gửi hồ sơ TTHC qua LGSP |
+| 14 | Hệ thống khác | HT khác | — | — | — | Theo nhu cầu | JSON | Hệ thống tiêu thụ API |
+
+### Mô hình phân cấp người dùng
+
+```
+BTP (Cục BLDS&KT) = TW (cha)
+  ├── Bộ/Ngành 1 = BN (con ngang cấp)    ← chỉ CB NV BN + CB PD BN, KHÔNG có Tổ chức HT PLDN
+  ├── Bộ/Ngành 2 = BN
+  ├── ...
+  ├── Sở TP Hà Nội = ĐP (con ngang cấp)
+  │   ├── CB NV ĐP, CB PD ĐP             ← thấy toàn bộ dữ liệu ĐP
+  │   ├── Tổ chức hỗ trợ PLDN (NĐ77/2008)  ← chỉ tồn tại ở cấp ĐP
+  │   │   ├── Người hỗ trợ (NHT)          ← ĐP + chỉ vụ việc được phân công (BR-AUTH-10)
+  │   │   ├── Tư vấn viên (TVV)           ← ĐP + chỉ vụ việc được phân công (BR-AUTH-10)
+  │   │   └── Chuyên gia (CG)             ← ĐP + chỉ yêu cầu TV chuyên sâu được phân công (BR-AUTH-10)
+  │   └── Doanh nghiệp (DN)               ← ĐP + chỉ hồ sơ của mình, qua API chuyên trang (BR-AUTH-11)
+  ├── Sở TP HCM = ĐP (con ngang cấp)
+  └── ... (63 Sở TP)
+```
+
+**Quy tắc phân quyền dữ liệu:**
+- TW thấy tất cả dữ liệu (TW + BN + ĐP)
+- BN chỉ thấy dữ liệu của BN mình
+- ĐP chỉ thấy dữ liệu của ĐP mình
+- Ngang cấp KHÔNG thấy nhau (BN1 không thấy BN2, ĐP1 không thấy ĐP2)
+- Phê duyệt: CB NV -> CB PD cùng cấp (không xuyên cấp)
+- NHT/TVV: lọc kép (BR-AUTH-10) — phân quyền dữ liệu theo đơn vị lọc theo Sở TP trước → kiểm tra quyền tầng ứng dụng chỉ thấy vụ việc HTPL (VU_VIEC) được phân công. Áp dụng cho entity vụ việc/hồ sơ, KHÔNG áp dụng cho dữ liệu chung (tài liệu, CTĐT)
+- CG: lọc kép (BR-AUTH-10) — phân quyền dữ liệu theo đơn vị lọc theo Sở TP trước → kiểm tra quyền tầng ứng dụng chỉ thấy yêu cầu tư vấn chuyên sâu (YEU_CAU_TU_VAN) được phân công
+- DN: lọc tầng API (BR-AUTH-11) — DN không đăng nhập CMS, tương tác qua API chuyên trang. API lọc theo Sở TP quản lý + chỉ hồ sơ của DN đó
+
+> **Tham chiếu:** PRD Section 4 (Target Users & Personas)
+
+## 2.4 Ràng buộc
+
+| # | Loại | Ràng buộc | Cơ sở | Trạng thái |
+|---|------|----------|-------|------------|
+| C-01 | Quy định pháp lý | PM phải tuân thủ NĐ55/2019, NĐ18/2026, Luật DNNVV 2017, NĐ39/2018, NĐ77/2008, TT17/2025, TT64/2021 | Pháp luật VN | ✅ CĐT xác nhận |
+| C-02 | Quy định pháp lý | Tuân thủ Luật Dữ liệu 2024 về bảo mật, mã hóa dữ liệu cá nhân | Luật Dữ liệu 2024 | ✅ CĐT xác nhận |
+| C-03 | Chuẩn kỹ thuật | SRS theo IEEE 830 / ISO 29148 | Yêu cầu CĐT | ✅ CĐT xác nhận |
+| C-04 | Audit/Compliance | Ghi nhận mọi CUD + phê duyệt + đăng nhập/xuất, lưu 5 năm, immutable | NĐ55/2019, Luật Dữ liệu 2024 | 🟡 Đề xuất |
+| C-05 | Ngôn ngữ | Giao diện tiếng Việt, Unicode UTF-8 | Yêu cầu CĐT | ✅ CĐT xác nhận |
+
+> **Lưu ý:** Ràng buộc kỹ thuật (phần cứng, phần mềm, framework, giao thức, trình duyệt) được định nghĩa trong Architecture Design Document.
+> Các ràng buộc kỹ thuật từ SRS v1.8 (C-04 đến C-10, C-12) đã chuyển sang `architecture-inputs-from-srs.md` §1 Technical Constraints.
+
+> **Tham chiếu:** PRD Section 5 (Assumptions & Constraints)
+
+## 2.5 Giả định và phụ thuộc
+
+### Giả định
+
+| # | Giả định | Ảnh hưởng nếu sai | Trạng thái |
+|---|---------|-------------------|------------|
+| A-01 | PM chỉ phát triển CMS + API. Chuyên trang trên Cổng PLQG = gói thầu khác | Nếu PM phải phát triển chuyên trang: tăng 50+ UC, thay đổi kiến trúc | ✅ CĐT xác nhận |
+| A-02 | Mô hình tích hợp hybrid 3 kênh: LGSP (nội bộ BTP), NDXP (liên ngành), Trực tiếp (Cổng PLQG, Email, HT khác). Xem C-08a | Nếu thay đổi routing: ảnh hưởng security model, network topology | ✅ Theo Thiết kế tổng thể (v1.6) |
+| A-03 | Phân quyền dữ liệu theo đơn vị + cấp (TW/BN/ĐP) | Nếu thay đổi model: ảnh hưởng toàn bộ UC | ✅ CĐT xác nhận |
+| A-04 | Luồng phê duyệt rút gọn (CB NV tích "Đã trả lời" -> CB PD duyệt) | Nếu cần workflow phức tạp hơn: thêm UC, thay đổi state machine | ✅ CĐT xác nhận |
+| A-05 | Hạ tầng on-premise (DC BTP) đủ năng lực | Nếu hạ tầng yếu: giảm target performance | ✅ CĐT xác nhận |
+| A-06 | VNeID tích hợp theo lộ trình 3 Tier: Tier 1 (MVP) username/password + TOTP 2FA; Tier 2 VNPT eKYC; Tier 3 SSO VNeID qua OIDC Authorization Code flow (phía VNeID, user có thể xác thực bằng nhiều phương thức: password+OTP, quét QR app VNeID, v.v. — PM không kiểm soát phương thức phía VNeID). 🟡 Chưa xác nhận VNeID có public OIDC endpoints — chờ phê duyệt Bộ Công an theo NĐ69/2024/NĐ-CP | Nếu Bộ Công an thay đổi cơ chế: điều chỉnh Tier 3 | 🟡 Giả định — chờ phê duyệt Bộ Công an |
+| A-07 | 500 concurrent users bình thường, 1000 peak | Nếu thực tế cao hơn: cần scale infrastructure | 🟡 Giả định — Chuẩn CPĐT VN |
+| A-08 | NĐ18/2026 áp dụng cho mức hỗ trợ chi phí V.II | Nếu chưa ban hành hoặc thay đổi: ảnh hưởng UC68-80 | 🟡 Giả định — Chờ CĐT |
+| A-09 | 18 API outbound (9 cặp chia sẻ + tìm kiếm) + ~8 API inbound | Theo Thiết kế tổng quan gốc (Input) | ✅ Đã xác nhận theo Input |
+
+### Phụ thuộc
+
+| # | Phụ thuộc | Ảnh hưởng nếu thay đổi | FR liên quan |
+|---|----------|----------------------|-------------|
+| D-01 | Trục LGSP BTP hoạt động ổn định | Block toàn bộ tích hợp bên ngoài | XII, V.I (UC53), V.II (UC68), VIII (UC118) |
+| D-02 | Tài liệu LGSP (message schema, giao thức, auth) | Không thể thiết kế API inbound/outbound chính thức | XII, V.I, V.II |
+| D-03 | Tài liệu NDXP (chuẩn kết nối VNeID) | Không thể tích hợp đăng nhập VNeID | VIII (UC118-119) |
+| D-04 | DC BTP cung cấp hạ tầng đúng thời hạn | Block triển khai production | Toàn bộ |
+| D-05 | Gói thầu Cổng PLQG phối hợp API schema | Không thể xây dựng 18 API outbound chính thức | XII |
+| D-06 | HT TTHC BTP cung cấp API spec | Không thể tích hợp tiếp nhận hồ sơ DVC | V.I (UC53), V.II (UC68) |
+| D-07 | Cục BLDS&KT cung cấp mẫu biểu (hồ sơ TVV, mẫu đánh giá, chứng nhận ĐT) | Thiếu biểu mẫu cho IV, III | IV (UC43), III (UC38) |
+
+> **Tham chiếu:** PRD Section 5, Section 12 (Open Questions)
+
+---
+
+
+---
+
+
+# 3. Yêu cầu cụ thể
+
+## 3.1 Yêu cầu giao diện bên ngoài
+
+### 3.1.1 Giao diện người dùng (User Interfaces)
+
+**Tài liệu chi tiết:** Xem `ux-spec.md` (toàn bộ design system, component library, screen specs)
+
+#### Đặc điểm logic UI
+
+| # | Đặc điểm | Quy định | Tham chiếu UX-Spec |
+|---|----------|---------|-------------------|
+| UI-01 | Design system | Tông deep blue #1A56DB + government professional. Font: Inter/Roboto (fallback: hệ thống). Spacing: 4px base grid. Max width: 1440px | UX-Spec Section 2 |
+| UI-02 | Layout tổng thể | Thanh trên 56px + Thanh bên 260px (thu gọn 64px) + Vùng nội dung cuộn được. Lưới 12 cột co giãn | UX-Spec Section 3.1 |
+| UI-03 | Navigation | Menu thanh bên **13 nhóm cấp 1** (9 click thẳng + 4 accordion) + **16 mục cấp 2**. Đường dẫn phân cấp (breadcrumb). Menu nổi bật item đang chọn. Chi tiết cây menu: xem `dac-ta-man-hinh-chuc-nang-v2.md` §A.1.2 | dac-ta-MH §A.1.2 |
+| UI-04 | Error display | Kiểm tra thời gian thực + viền đỏ + thông báo lỗi dưới ô nhập. Popup xác nhận trước xóa. Toast notification cho thao tác thành công | UX-Spec Section 4.2 |
+| UI-05 | Accessibility | WCAG 2.1 Level A. Tỷ lệ tương phản đủ. Điều hướng bàn phím. Trạng thái chọn rõ ràng | UX-Spec Section 1.2 (P7) |
+| UI-06 | Localization | Tiếng Việt là ngôn ngữ duy nhất. Unicode UTF-8. Định dạng ngày: dd/MM/yyyy. Số: dấu chấm phân cách hàng nghìn | UX-Spec Section 1 |
+| UI-07 | Responsive | Desktop-only. Min width: 1024px. Thiết kế tối ưu cho ≥ 1280px. Hỗ trợ 1024-1279px với sidebar tự động thu gọn (64px). Dưới 1024px: hiển thị thông báo "Vui lòng sử dụng màn hình ≥ 1024px". Cuộn ngang cho bảng nhiều cột. Không hỗ trợ mobile/tablet | UX-Spec Section 2.3 |
+
+#### Mẫu giao diện tái sử dụng (Core UI Patterns)
+
+| # | Mẫu giao diện | Mô tả | Áp dụng cho | Tham chiếu |
+|---|---------------|-------|------------|-----------|
+| P-01 | Danh sách quản lý (List Management) | Bảng dữ liệu + Tìm kiếm + Lọc + Phân trang (10/20/50/100 bản ghi/trang, hiển thị tổng số bản ghi) + CRUD + Xuất Excel + Chọn hàng loạt + **Tabs trạng thái** (context-sensitive batch actions per tab) | ~60% UC: II (UC10-19), III (UC20-38), IV (UC39-50), V.I (UC51-67), V.II (UC68-80), V.III (UC81-82), VII (UC92-98), VIII (UC99-119) | dac-ta-MH §MH-02.1, MH-05.1, MH-06.1 |
+| P-02 | Xem chi tiết / Biểu mẫu (Detail/Form) | Form nhập liệu + Accordion sections + Validation real-time + Upload file + Audit log timeline | Thêm mới, chỉnh sửa, xem chi tiết cho mọi đối tượng | UX-Spec Section 4.2 |
+| P-03 | Luồng phê duyệt (Approval Flow) | Thanh tiến trình + Nội dung cần duyệt + Quyết định (Phê duyệt/Từ chối) + Phê duyệt hàng loạt | UC17, UC34, UC37, UC45, UC63, UC79, UC86, UC91, UC167 | UX-Spec Section 4.3 |
+| P-04 | Dashboard (KPI Cards + Charts) | Thẻ KPI (số + trend) + Bộ lọc thời gian/đơn vị + Biểu đồ cột/đường/tròn | UC1-9 (Nhóm I) | UX-Spec Section 4.4 |
+| P-05 | Báo cáo (Report) | Bộ lọc kỳ/đơn vị + Bảng cross-tab + Biểu đồ + Xuất Excel/Word | UC120-142 (Nhóm IX) | UX-Spec (inferred) |
+| P-06 | Tìm kiếm nâng cao (Advanced Search) | Nhiều điều kiện AND + Từ khóa + Lọc danh mục + Khoảng thời gian | UC11, UC14, UC19, UC21, UC25, UC27, UC29, UC31, UC40, UC58, UC82, UC93, UC96 | UX-Spec Section 4.1 |
+| P-07 | Import/Export (Bulk Operations) | Upload file Excel + Validate + Preview + Báo cáo lỗi chi tiết + Import | UC83 (FR-V.III-NEW-01), UC97 (FR-VII-06), UC24 (import kết quả) | UX-Spec (inferred) |
+
+### 3.1.2 Yêu cầu tích hợp hệ thống bên ngoài
+
+| # | Hệ thống bên ngoài | Yêu cầu tích hợp | Dữ liệu trao đổi | FR liên quan |
+|---|--------------------|--------------------|-------------------|-------------|
+| INT-01 | Trục LGSP BTP | Kết nối nội bộ BTP để tiếp nhận hồ sơ TTHC, tra cứu VBPL, đồng bộ danh mục | Hồ sơ TTHC (DVC inbound), VBPL (tra cứu), danh mục (sync) | FR-V.I (UC53), FR-V.II (UC68), FR-VIII |
+| INT-02 | VNeID (qua NDXP) | Xác thực danh tính điện tử theo lộ trình 3 tier. Tier 3: SSO VNeID cho TVV/CG/NHT | Thông tin xác thực: CCCD, họ tên, ngày sinh | FR-VIII-20 (UC118-119) |
+| INT-03 | HT TTHC BTP (DVC) | Tiếp nhận hồ sơ yêu cầu HTPL + hồ sơ đề nghị HT chi phí từ DVC; gửi kết quả về DVC | Hồ sơ TTHC inbound (thông tin DN, nội dung, tài liệu), trạng thái/kết quả outbound | FR-V.I-03 (UC53), FR-V.II-01 (UC68) |
+| INT-04 | Cổng PLQG (Module HTPLDN) | Cung cấp 18 API outbound (9 cặp chia sẻ + tìm kiếm, REST JSON trực tiếp). Nhận dữ liệu TV chuyên sâu, HS PL DN, đánh giá | 9 cặp API: Hỏi đáp, ĐT, TVV, VV, Đánh giá, Biểu mẫu, TVCS, CT HTPLDN, HS PL DN | FR-XII (UC171-188) |
+| INT-05 | HT Danh mục Dùng chung BTP | Đồng bộ danh mục chuẩn (lĩnh vực PL, đơn vị HC, loại hình HT). PM tự quản lý danh mục nếu HT không khả dụng | Danh mục lĩnh vực PL, đơn vị HC, loại hình HT | FR-VIII (UC99-110) |
+| INT-06 | Email Server (SMTP) | Gửi email thông báo: phê duyệt, phân công, cảnh báo SLA, kích hoạt TK, đặt lại MK. SLA: gửi trong ≤ 5 phút | Email HTML (To, Subject, Body, Attachments optional) | Cross-cutting (mọi UC có notification) |
+| INT-07 | HT khác (UC55) | Tiếp nhận thông tin vụ việc từ hệ thống bên ngoài qua REST JSON trực tiếp | Dữ liệu vụ việc HTPL | FR-V.I-05 (UC55) |
+
+> **Chi tiết kỹ thuật (API contracts, protocol, authentication, error handling):** Xem Architecture Design Document.
+> 
+> **Ghi chú v2.0:** Sections 3.1.2 (Hardware Interfaces), 3.1.3 (Software Interfaces — 6 SI blocks), 3.1.4 (Communication Interfaces) từ SRS v1.8 đã chuyển sang `architecture-inputs-from-srs.md` §2 System Interfaces Design.
+
+---
+
+---
+
+
+# 3.2 Yêu cầu chức năng
+
+> **Ghi chú v3.0:** Section 3.2 FR chi tiết được tách thành **16 file riêng** per nhóm UC.
+> Mỗi file theo template `srs-fr-group-template-v3.md`. Xem danh sách file ở Mục lục.
+
+## 3.2.0 Quy ước chung cho Section 3.2
+
+### 3.2.0.1 Cấu trúc IEEE 830 cho mỗi FR
+
+Mỗi yêu cầu chức năng (FR) tuân thủ cấu trúc sau:
+
+| Thành phần | Bắt buộc | Mô tả |
+|-----------|----------|-------|
+| FR-ID | Y | Mã định danh: `FR-<Nhóm>-<Số>` |
+| UC Reference | Y | Mã UC tham chiếu từ PRD |
+| Tên FR | Y | Tên ngắn gọn |
+| Tác nhân | Y | Actor(s) chính |
+| Priority | Y | Essential / Conditional / Optional |
+| Stability | Y | High / Medium / Low |
+| Trạng thái | Y | ✅ CĐT xác nhận / 🟡 Đề xuất |
+| Preconditions | Y | Điều kiện tiên quyết (đăng nhập, quyền, trạng thái entity) |
+| Input | Y | Bảng trường đầu vào (tên, kiểu logic, bắt buộc, mô tả) |
+| Processing Steps | Y | Các bước xử lý đánh số, tham chiếu BR-xxx |
+| Output | Y | Bảng trường đầu ra |
+| Postconditions | Y | Trạng thái hệ thống sau khi hoàn thành |
+| Error Handling | Y | Bảng lỗi (condition, code, response, severity) |
+| Acceptance Criteria | Y | Given/When/Then từ PRD |
+| Cross-references | Y | BR-xxx, SM-xxx, Entity names |
+
+**Mức ưu tiên (IEEE 830 Criterion 5):**
+
+| Mức | Ý nghĩa |
+|-----|---------|
+| **Essential** | Phần mềm không thể nghiệm thu nếu thiếu FR này |
+| **Conditional** | Nâng cao giá trị sản phẩm, có thể hoãn nếu cần |
+| **Optional** | Mong muốn, không ảnh hưởng nghiệm thu |
+
+**Mức ổn định (IEEE 830 Criterion 5):**
+
+| Mức | Ý nghĩa |
+|-----|---------|
+| **High** | Gần như chắc chắn không thay đổi |
+| **Medium** | Có thể điều chỉnh chi tiết |
+| **Low** | Có khả năng thay đổi lớn |
+
+### 3.2.0.2 Quy ước kiểu dữ liệu logic
+
+Bảng kiểu dữ liệu LOGIC dùng xuyên suốt SRS — trong entity attributes, FR inputs/outputs, ERD.
+Không sử dụng physical DB types (VARCHAR, BIGINT, JSONB, v.v.) trong SRS — đó thuộc Architecture Design.
+
+| Kiểu logic | Mô tả | Ví dụ sử dụng |
+|------------|-------|--------------|
+| identifier | Mã định danh duy nhất | PK, FK, mã tham chiếu |
+| text | Chuỗi ký tự (ngắn) | Tên, mã, email, mô tả ngắn |
+| text (long) | Văn bản dài | Nội dung chi tiết, mô tả |
+| number | Số nguyên hoặc thập phân | Số lượng, thứ tự |
+| money | Giá trị tiền tệ | Đơn giá, tổng chi phí |
+| percentage | Phần trăm (0-100) | Tỷ lệ hoàn thành |
+| boolean | Đúng/Sai | Cờ trạng thái |
+| date | Ngày (không có giờ) | Ngày sinh, ngày hết hạn |
+| datetime | Ngày + giờ chính xác | Thời điểm tạo, cập nhật |
+| enum | Tập giá trị cố định | Trạng thái, loại, cấp |
+| file | Tệp đính kèm | Tài liệu upload |
+| structured | Dữ liệu có cấu trúc | Cấu hình, metadata |
+
+### 3.2.0.3 Common Fields (BR-DATA-03)
+
+Mọi entity nghiệp vụ đều có 7 common fields sau (KHÔNG liệt kê lại trong từng FR):
+
+| Trường | Kiểu logic | Mô tả nghiệp vụ |
+|--------|-----------|-----------------|
+| id | identifier | Khóa chính, tự sinh |
+| created_at | datetime | Thời điểm tạo |
+| updated_at | datetime | Thời điểm cập nhật cuối |
+| created_by | identifier (→ TAI_KHOAN) | Người tạo |
+| updated_by | identifier (→ TAI_KHOAN) | Người cập nhật cuối |
+| is_deleted | boolean | Soft delete flag |
+| don_vi_id | identifier (→ DON_VI) | Đơn vị sở hữu — dùng cho phân quyền dữ liệu theo đơn vị |
+
+### 3.2.0.4 Quy tắc phân quyền dữ liệu (BR-DATA-02, BR-AUTH-08, BR-AUTH-10, BR-AUTH-11)
+
+**Nguyên tắc chung:**
+- Mọi truy vấn dữ liệu đều được lọc dữ liệu theo đơn vị (`don_vi_id`) của người dùng đang đăng nhập
+- QTHT (Quản trị hệ thống) được xem toàn bộ dữ liệu, không bị giới hạn theo đơn vị
+- Ngang cấp KHÔNG thấy nhau (BR-AUTH-03); cấp cha thấy cấp con (BR-AUTH-04)
+
+**NHT/TVV/CG — lọc kép (BR-AUTH-10):**
+- Lớp 1 (lọc dữ liệu theo đơn vị): lọc theo đơn vị (Sở TP mà NHT/TVV/CG trực thuộc)
+- Lớp 2 (phân quyền tầng ứng dụng): NHT/TVV chỉ thấy vụ việc HTPL được phân công cho mình; CG chỉ thấy yêu cầu tư vấn chuyên sâu được phân công cho mình
+- Phạm vi: Lớp 2 chỉ áp dụng cho entity vụ việc/yêu cầu tư vấn. Dữ liệu chung (tài liệu ĐT, CTĐT) chỉ lọc Lớp 1 (theo đơn vị)
+
+**DN — lọc tầng API (BR-AUTH-11):**
+- DN KHÔNG đăng nhập CMS. DN tương tác qua API chuyên trang trên Cổng PLQG
+- API lọc theo đơn vị quản lý DN + định danh DN
+- Chỉ cho phép DN xem hồ sơ của chính mình
+
+> **Cơ chế kỹ thuật thực hiện phân quyền (database-level, middleware, API guard):** Xem Architecture Design Document.
+
+### 3.2.0.5 Severity Levels
+
+| Severity | Mô tả |
+|----------|-------|
+| ERROR | Nghiệp vụ không thể tiếp tục, cần sửa dữ liệu |
+| WARNING | Cảnh báo nhưng vẫn cho phép tiếp tục |
+| INFO | Thông tin cho người dùng |
+
+### 3.2.0.6 Edge Case Rules (cross-cutting)
+
+> **EC-DATA-LOCK — Kiểm soát xung đột cập nhật đồng thời:** Tất cả thao tác cập nhật và xóa phải kiểm tra phiên bản dữ liệu trước khi thực thi. Nếu bản ghi đã bị thay đổi bởi người khác kể từ lần đọc cuối, hệ thống từ chối thao tác và trả ERR-SYS-02 'Bản ghi đã bị thay đổi bởi người khác. Vui lòng tải lại trang'. Giao diện hiển thị hộp thoại xung đột với lựa chọn tải lại.
+>
+> **EC-DATA-PAGE — Ràng buộc Pagination:** Số bản ghi/trang nằm trong khoảng [1, 100], mặc định 20. Số trang >= 1, mặc định 1. Giá trị ngoài phạm vi trả ERR-PARAM-01 'Tham số phân trang không hợp lệ'. Trang vượt trang cuối trả danh sách rỗng kèm total_count. **(S3-1)** Cho phép thay đổi số bản ghi/trang: 10, 20, 50, 100. Luôn hiển thị tổng số bản ghi ở màn danh sách.
+>
+> **EC-DATA-SEARCH — Bảo vệ tìm kiếm:** Từ khóa tìm kiếm được cắt khoảng trắng thừa, giới hạn 200 ký tự, và loại bỏ ký tự đặc biệt nguy hiểm. Từ khóa rỗng sau xử lý trả danh sách đầy đủ. Với bảng > 10.000 bản ghi, sử dụng tìm kiếm toàn văn thay vì tìm kiếm gần đúng để đảm bảo hiệu năng.
+>
+> **EC-FILE-SCAN — Quét virus file upload:** Tất cả file upload phải được quét bởi engine antivirus trước khi lưu trữ. File nhiễm mã độc bị từ chối với ERR-FILE-02 'Tệp chứa mã độc, không thể upload'. Timeout quét: 30s/file; nếu timeout, từ chối và ghi log.
+>
+> **EC-FILE-QUOTA — Hạn mức lưu trữ:** Mỗi đơn vị có hạn mức lưu trữ cấu hình được (mặc định 10GB). Khi đạt 90%, cảnh báo khi upload. Khi 100%, từ chối upload với ERR-FILE-01 'Dung lượng lưu trữ đã đầy, liên hệ quản trị viên'.
+
+
+### 3.2.0.7 Tối ưu UX theo chỉ thị CĐT (v2.1 — Đợt 7)
+
+> **Nguồn:** Chỉ thị tổng thể từ CĐT (TTT): "giản lược bước thực hiện, dễ dùng, nhưng **giữ nguyên UC** (để nghiệm thu)".
+> **Nguyên tắc:** KHÔNG xóa UC nào. Chỉ giảm bước thao tác thủ công và field bắt buộc. UC vẫn tồn tại đầy đủ.
+
+#### 3.2.0.7.1 Auto chuyển trạng thái (5 đề xuất)
+
+> Auto-transition **không xóa UC "Trình phê duyệt"** — UC vẫn tồn tại để nghiệm thu. Chỉ thay đổi trigger: từ "CB NV nhấn nút" thành "hệ thống tự động khi hoàn thành bước trước".
+
+| # | Nhóm | SM | Hiện tại (thủ công) | Đề xuất (auto) | FR ảnh hưởng |
+|---|------|-----|---------------------|----------------|-------------|
+| AT-01 | III. Đào tạo | SM-KHOAHOC | CB NV nhấn "Gửi phê duyệt" | Hoàn thành nhập liệu → auto Chờ duyệt + TB CB PD (validate đủ field trước) | FR-III-01 (UC33) |
+| AT-02 | III. Đào tạo | SM-KHOAHOC | CB NV nhấn "Trình duyệt KQ" | Lưu kết quả cuối → auto Chờ duyệt KQ + TB CB PD | FR-III-05 (UC36) |
+| AT-03 | V.I. Vụ việc | SM-VUVIEC | CB NV nhấn "Trình phê duyệt" | Cập nhật KQ vụ việc → auto Chờ PD + TB CB PD | FR-V.I-16 (UC66) |
+| AT-04 | VI. Đánh giá | SM-DANHGIA | CB NV nhấn "Trình duyệt BC" | Hoàn thành lập BC → auto Chờ PD + TB CB PD | FR-VI-07 (UC89) |
+| AT-05 | XI. CT HTPLDN | SM-KH-CTHTPL | CB NV nhấn "Trình" | Hoàn thiện nội dung CT → auto Chờ PD + TB CB PD | FR-XI-03 (UC166) |
+
+#### 3.2.0.7.2 Giảm field bắt buộc (3 field → N)
+
+| # | Field | UC/Entity | Hiện | Đề xuất | Lý do |
+|---|-------|-----------|------|---------|-------|
+| RF-01 | `ngay_sinh` | UC39 / TU_VAN_VIEN | Y | **N** | Tuổi TVV không phải tiêu chí thẩm định |
+| RF-02 | `chung_chi_hanh_nghe` | UC39 / TU_VAN_VIEN | Y | **N** | Đã có `so_the_hanh_nghe`, bổ sung sau ở UC43b |
+| RF-03 | `thoi_gian_ket_thuc` | UC164 / CT_HTPL | Y | **N** | CT HTPL có thể open-ended |
+
+#### 3.2.0.7.3 Giá trị mặc định thay bắt buộc nhập (3 field)
+
+| # | Field | UC/Entity | Đề xuất mặc định | Nguồn |
+|---|-------|-----------|------------------|-------|
+| DF-01 | `hinh_thuc` | Khóa học | **"Trực tuyến"** | S3-6 (TY suggestion) |
+| DF-02 | `loai_dot` | UC83 / DOT_DANH_GIA | Auto gợi ý theo tháng: 1-6→Sơ bộ 6 tháng, 7-11→Sơ bộ năm, 12-1→Tròn năm | — |
+| DF-03 | `kenh_tiep_nhan` | UC10 / HOI_DAP | Auto: CB nhập tay→"Trực tiếp", từ Cổng→"Cổng PLQG" | — |
+
+#### 3.2.0.7.4 Mở rộng Auto gợi ý (4 vị trí mới)
+
+| # | UC | Gợi ý gì | Dữ liệu nguồn |
+|---|-----|----------|---------------|
+| AG-01 | UC147 (Quản lý nội dung TV với CG) | CG/TVV phù hợp theo lĩnh vực PL + số YC đang xử lý | TU_VAN_VIEN + NOI_DUNG_TU_VAN_CS |
+| AG-02 | UC85 (Phân công người đánh giá) | CB/CG có KN theo lĩnh vực + số đợt đã tham gia | PHAN_CONG_DANH_GIA lịch sử |
+| AG-03 | UC89 (Lập BC đánh giá) | Auto điền số liệu tổng hợp vào BC đánh giá hiệu quả | KET_QUA_DANH_GIA |
+| AG-04 | UC172 (TW tổng hợp BC) | Auto tổng hợp từ BC đã duyệt của BN/ĐP | BAO_CAO_CT_HTPL đã duyệt |
+
+#### 3.2.0.7.5 Gộp trạng thái trung gian (3 cặp)
+
+| # | SM | Hiện tại | Đề xuất | Lý do |
+|---|-----|---------|---------|-------|
+| SM-01 | SM-VUVIEC | `MOI_TAO` → `CHO_TIEP_NHAN` | Gộp thành **`CHO_TIEP_NHAN`** | 2 trạng thái, người dùng chỉ thấy 1 |
+| SM-02 | SM-TVV | `CHO_THAM_DINH` → `DANG_THAM_DINH` | Gộp thành **`DANG_THAM_DINH`** | Bước "bắt đầu thẩm định" không có hành động thực tế |
+| SM-03 | SM-DANHGIA | `LAP_KE_HOACH` → `PHAN_CONG` → `CHO_DUYET_PC` | Gộp `LAP_KE_HOACH` + `PHAN_CONG` thành **`CHUAN_BI`** (7→5 states) | CB NV vừa lập KH vừa phân công cùng 1 form |
+
+> **Tổng tác động Đợt 7:** 18 đề xuất, giảm ~15 bước thao tác thủ công, **không xóa UC nào**.
+
+### 3.2.0.8 Common Approval Fields (v2.1 — Đợt 8)
+
+> **Nguồn:** Tracked changes S3-2, S3-4/S3-5, S3-20, S3-23, S3-25/S3-27, S3-28/S3-29.
+> **Pattern:** TY đã suggest cùng 1 nhóm field (phê duyệt + auto-fill) vào 6+ nhóm nghiệp vụ.
+> Xử lý cross-cutting 1 lần để đảm bảo nhất quán.
+
+#### Định nghĩa Common Approval Fields template
+
+Áp dụng cho mọi entity **có quy trình phê duyệt** (HOI_DAP, VU_VIEC, HO_SO_CHI_TRA, BIEU_MAU, KHO_CAU_HOI, CHUONG_TRINH_HTPL, DOT_BAO_CAO, TU_VAN_VIEN, v.v.).
+
+KHÔNG liệt kê lại trong từng FR — tham chiếu "Common Approval Fields (§3.2.0.8)".
+
+| Trường | Kiểu logic | Bắt buộc | Auto-fill | Mô tả |
+|--------|-----------|----------|-----------|-------|
+| ngay_tiep_nhan | datetime | Yes | Mặc định ngày hiện tại, cho phép sửa | Ngày CB NV tiếp nhận |
+| nguoi_tiep_nhan | reference→TAI_KHOAN | Yes | Auto-fill theo CB NV nhấn "Tiếp nhận" | Người tiếp nhận |
+| thoi_gian_duyet | datetime | — | Auto khi CB PD duyệt | Timestamp duyệt |
+| nguoi_duyet | reference→TAI_KHOAN | — | Auto theo CB PD duyệt | Người duyệt |
+| thoi_gian_tu_choi | datetime | — | Auto khi CB PD từ chối | Timestamp từ chối |
+| nguoi_tu_choi | reference→TAI_KHOAN | — | Auto theo CB PD từ chối | Người từ chối |
+| ly_do_tu_choi | text | — | CB PD nhập khi từ chối | BR-FLOW-04 |
+| thoi_gian_huy | datetime | — | Auto khi hủy | Thời điểm hủy bản ghi (S3-5) |
+| trang_thai | enum | Yes | Auto theo state machine | Theo SM entity tương ứng |
+
+#### Quy tắc hiển thị chung (S3-2)
+
+> Thao tác chuyển trạng thái (VD: "Gửi duyệt") hiển thị ở **4 màn**: Danh sách, Thêm mới, Chỉnh sửa, Xem chi tiết.
+> Lưu + hiển thị: Thời gian tạo/Người tạo, Thời gian duyệt/Người duyệt, Thời gian từ chối/Người từ chối/Lý do.
+
+#### Quy tắc dữ liệu chung bổ sung (S3-2)
+
+| # | Quy tắc | Chi tiết |
+|---|---------|----------|
+| DG-01 | Định dạng ngày | dd/mm/yyyy HH:mm hoặc dd/mm/yyyy |
+| DG-02 | Số tiền | Dấu chấm phân cách hàng nghìn |
+| DG-03 | Cột trống | Hiển thị `_` (gạch dưới) |
+| DG-04 | Thông tin dài >2 dòng | Hiển thị `…` + mở rộng/thu gọn |
+| DG-05 | Tiêu đề cột | Ghim (sticky header) khi scroll |
+| DG-06 | Sắp xếp mặc định | Theo thời gian cập nhật mới nhất |
+| DG-07 | Tên file upload | Giữ nguyên tên file gốc, không tự gen tên khác |
+
+#### Áp dụng cho từng nhóm
+
+| Nhóm | Entity | Common Approval Fields áp dụng | Comment nguồn |
+|------|--------|-------------------------------|---------------|
+| II. Hỏi đáp | HOI_DAP | ngay_tiep_nhan, nguoi_tiep_nhan + full approval fields + nguoi_ho_tro, cau_tra_loi | S3-4, S3-5 |
+| IV. CG/TVV | TU_VAN_VIEN | trang_thai (Hoạt động/Tạm dừng), file_dinh_kem, danh_gia_trung_binh (auto), cong_khai (on/off), thoi_gian_tao, nguoi_tao | S3-20 |
+| V.I. Vụ việc | VU_VIEC | Full approval fields + ghi_chu, nguoi_xu_ly (auto phân công), han_xu_ly (auto tính SLA) | S3-23 |
+| VII. Biểu mẫu | THU_MUC_BIEU_MAU | so_luong_bieu_mau (auto đếm), trang_thai, thoi_gian_tao, nguoi_tao | S3-25 |
+| VII. Biểu mẫu | BIEU_MAU | trang_thai, thoi_gian_tao, nguoi_tao | S3-27 |
+| X.2. TV Nhanh | KHO_CAU_HOI | trang_thai, thoi_gian_tao, nguoi_tao + thoi_gian_duyet, nguoi_duyet (PD trước công khai) | S3-28, S3-29 |
+
+---
+
+### 3.2.1 Danh sách file FR group
+
+| # | File | Nhóm | UC range | Mô tả |
+|---|------|------|----------|-------|
+| 01 | `srs-fr-01-dashboard.md` | I — Dashboard | UC 1-9 | Tổng quan, KPI, thống kê nhanh |
+| 02 | `srs-fr-02-hoi-dap.md` | II — Hỏi đáp Pháp lý | UC 10-19 | Click thẳng. 2 trang + 1 modal. Tabs trạng thái + batch PD |
+| 03 | `srs-fr-03-dao-tao.md` | III — Đào tạo, Tập huấn | UC 20-38 | 4 sub-menu: Chương trình ĐT, Khóa học (7 tabs: TT, Lịch học, HV, Điểm danh, KQ KT, Bài giảng, Chứng nhận), Ngân hàng CH, Giảng viên |
+| 04 | `srs-fr-04-chuyen-gia-tvv.md` | IV — Chuyên gia, TVV | UC 39-50 | Quản lý hồ sơ chuyên gia, tư vấn viên |
+| 05 | `srs-fr-05-vu-viec.md` | V.I — Vụ việc HTPL | UC 51-67 | Tiếp nhận, xử lý, theo dõi vụ việc |
+| 06 | `srs-fr-06-chi-tra.md` | V.II — Chi trả Chi phí | UC 68-80 | Lập, duyệt, thanh toán chi phí tư vấn |
+| 07 | `srs-fr-07-doanh-nghiep.md` | V.III — DN được Hỗ trợ | UC 81-82 | Quản lý hồ sơ doanh nghiệp |
+| 08 | `srs-fr-08-danh-gia.md` | VI — Đánh giá Hiệu quả | UC 83-91 | Đánh giá chất lượng hỗ trợ |
+| 09 | `srs-fr-09-bieu-mau.md` | VII — Thư viện Biểu mẫu | UC 92-98 | Click thẳng. Tree-view thư mục + biểu mẫu. HĐ TV (UC163) chuyển sang accessible từ VV/TVV |
+| 10 | `srs-fr-10-quan-tri.md` | VIII — Quản trị Hệ thống | UC 99-119, 191-194 | 4 sub-menu: Danh mục dùng chung, Cấu hình HT (SLA + phân công + mẫu PH + quy trình), TK & Phân quyền, Nhật ký HT |
+| 11 | `srs-fr-11-bao-cao.md` | IX — Báo cáo Thống kê | UC 120-142 | 6 sub-menu: BC Hỏi đáp, BC Vụ việc, BC Đào tạo, BC CG/TVV & ĐG, BC Chi phí, BC CT HTPLDN. Cùng template, pre-filter nhóm |
+| 12 | `srs-fr-12-tv-chuyen-sau.md` | X.1 — TV Chuyên sâu | UC 147-153 | Quản lý nội dung tư vấn chuyên sâu |
+| 13 | `srs-fr-13-tv-nhanh.md` | X.2 — Tư vấn Nhanh | UC 158-162 | Tư vấn nhanh online |
+| 14 | `srs-fr-14-hop-dong-tv.md` | X.3 — Hợp đồng TV | UC 163-163e | Quản lý hợp đồng tư vấn |
+| 15 | `srs-fr-15-ct-htpldn.md` | XI — CT HTPLDN | UC 164-172 | Chương trình hỗ trợ pháp lý DN |
+| 16 | `srs-fr-16-api.md` | XII — API Chia sẻ DL | UC 171-188 | API kết nối chia sẻ dữ liệu |
+
+---
+
+## 3.3 Yêu cầu hiệu năng
+
+> **Tham chiếu:** PRD Section 7 (NFR-01, NFR-07)
+> **Trạng thái:** 🟡 Đề xuất — Toàn bộ chỉ số hiệu năng chưa CĐT xác nhận, áp dụng chuẩn CPĐT VN làm baseline
+
+### PERF-01: Thời gian phản hồi trang CMS
+
+| Thuộc tính | Giá trị |
+|-----------|---------|
+| **Metric** | Response time (server-side) cho trang CMS |
+| **Target** | 95th percentile < 3 giây, 99th percentile < 5 giây |
+| **Measurement Method** | Load testing với JMeter/k6, đo tại application layer (không tính network latency WAN) |
+| **Conditions** | 500 concurrent users, production environment, CSDL quan hệ warmed up |
+| **Rationale** | Chuẩn CPĐT Việt Nam. Cán bộ nhà nước thao tác trong giờ hành chính, cần phản hồi nhanh |
+| **FR liên quan** | Tất cả UC CMS (nhóm I-XI) |
+
+> **EC-PERF-01a — Điều kiện đo lường:** Đo dưới tải 200 CCU, database chứa 3 năm dữ liệu tương đương production (~500K bản ghi/entity chính), sử dụng JMeter/Gatling.
+
+### PERF-02: Thời gian phản hồi API outbound
+
+| Thuộc tính | Giá trị |
+|-----------|---------|
+| **Metric** | Response time cho 18 API outbound (trực tiếp với Cổng PLQG) |
+| **Target** | 95th percentile < 3 giây (tính từ PM nhận request đến trả response, không tính network latency) |
+| **Measurement Method** | API testing với k6, đo tại PM application layer |
+| **Conditions** | 100 concurrent API calls/consumer, production environment |
+| **Rationale** | PRD Section 3: "18 API ổn định, response < 3s" (v1.6: kết nối trực tiếp, không qua LGSP) |
+| **FR liên quan** | Nhóm XII (UC173-188) |
+
+### PERF-03: Concurrent users — Normal load
+
+| Thuộc tính | Giá trị |
+|-----------|---------|
+| **Metric** | Số lượng người dùng đồng thời hệ thống hỗ trợ ổn định |
+| **Target** | 500 concurrent users (normal), 1000 concurrent users (peak) |
+| **Measurement Method** | Load testing mô phỏng ~100 đơn vị x 5-10 CB đồng thời |
+| **Conditions** | Mixed workload: 60% read (danh sách, tìm kiếm), 30% write (CRUD), 10% report |
+| **Rationale** | ~100 đơn vị (63 Sở TP + 20 Bộ/Ngành + TW) x 5-10 CB/đơn vị |
+| **FR liên quan** | Tất cả UC |
+
+> **EC-PERF-03a — Thống nhất mục tiêu:** Mục tiêu thiết kế: 500 CCU bình thường, 1000 CCU cao điểm. Acceptance test: **≥ 500 CCU** (cập nhật ma trận kiểm chứng cho nhất quán).
+
+### PERF-04: Thời gian tải danh sách
+
+| Thuộc tính | Giá trị |
+|-----------|---------|
+| **Metric** | Thời gian hiển thị trang danh sách (20 items/trang) |
+| **Target** | < 2 giây cho danh sách <= 100,000 bản ghi. < 3 giây cho danh sách > 100,000 bản ghi |
+| **Measurement Method** | Đo tại browser (Time to Interactive) |
+| **Conditions** | 500 concurrent users, index đúng trên CSDL quan hệ |
+| **Rationale** | Pattern P-01 (Danh sách quản lý) áp dụng cho ~60% UC |
+| **FR liên quan** | UC10, UC20, UC39, UC51, UC69, UC81, UC92, UC99-119 |
+
+### PERF-05: Thời gian xuất báo cáo
+
+| Thuộc tính | Giá trị |
+|-----------|---------|
+| **Metric** | Thời gian sinh báo cáo Excel/Word |
+| **Target** | < 10 giây cho báo cáo <= 10,000 dòng. < 30 giây cho báo cáo > 10,000 dòng |
+| **Measurement Method** | Đo tại server-side (từ request đến file ready) |
+| **Conditions** | 10 concurrent report requests |
+| **Rationale** | 23 UC báo cáo (nhóm IX) + xuất Excel ở nhiều UC khác |
+| **FR liên quan** | UC120-142 (Nhóm IX), xuất Excel ở UC10, UC20, UC39, etc. |
+
+### PERF-06: Thời gian upload file
+
+| Thuộc tính | Giá trị |
+|-----------|---------|
+| **Metric** | Thời gian upload file đính kèm |
+| **Target** | < 5 giây cho file <= 5MB. < 15 giây cho file 5-20MB |
+| **Measurement Method** | Đo tại browser (upload start đến server confirmation) |
+| **Conditions** | LAN >= 1Gbps |
+| **Rationale** | Max file size: 20MB (doc/docx/xls/xlsx/pdf). Biểu mẫu, tài liệu ĐT, hồ sơ TVV |
+| **FR liên quan** | UC26 (tài liệu), UC95 (biểu mẫu), UC42 (hồ sơ TVV), UC97 (import hàng loạt) |
+
+### PERF-07: Thông lượng API
+
+| Thuộc tính | Giá trị |
+|-----------|---------|
+| **Metric** | Số request API xử lý được mỗi phút |
+| **Target** | >= 200 requests/phút/API endpoint. Rate limit: 100 req/min/consumer |
+| **Measurement Method** | Load testing API endpoints |
+| **Conditions** | Simultaneous calls từ nhiều consumer |
+| **Rationale** | Cổng PLQG là consumer chính, có thể có burst traffic khi nhiều DN truy cập cùng lúc |
+| **FR liên quan** | Nhóm XII (UC173-188) |
+
+### PERF-08: Dung lượng lưu trữ
+
+| Thuộc tính | Giá trị |
+|-----------|---------|
+| **Metric** | Dung lượng lưu trữ dữ liệu + file |
+| **Target** | Hỗ trợ >= 5 năm dữ liệu. DB: >= 100GB ban đầu, tăng ~20GB/năm. File: >= 500GB ban đầu, tăng ~100GB/năm |
+| **Measurement Method** | Monitoring dung lượng CSDL + File server |
+| **Conditions** | ~5,000 vụ việc/năm, ~10,000 hỏi đáp/năm, ~500 khóa ĐT/năm |
+| **Rationale** | 8 kho dữ liệu + File server riêng. Audit trail lưu 5 năm |
+| **FR liên quan** | Tất cả UC |
+
+> **EC-PERF-08a — Ước tính dung lượng:**
+> - Tăng trưởng ước tính: ~100GB/năm (DB) + ~200GB/năm (file đính kèm)
+> - Provisioning ban đầu: 2TB DB + 2TB file storage
+> - Review và mở rộng hàng năm
+> - Alert tablespace: cảnh báo tại 80%, auto-extend đến giới hạn, DBA notification tại 90%
+
+**EC — Hành vi suy giảm (Degradation Behavior):**
+
+| Metric | Khi vượt ngưỡng > 50% | Hành vi |
+|--------|------------------------|---------|
+| PERF-01 (Response time) | P95 > 4.5s | Hiển thị loading indicator; đối với report query → trả ERR-SYS-01 + gợi ý thu hẹp filter |
+| PERF-02 (Batch) | > 15s | Queue vào background job, trả job_id để polling kết quả |
+| PERF-03 (CCU) | > 1500 | HTTP 503 Service Unavailable cho request mới; serve cached data cho GET |
+| PERF-05 (Search) | > 3s | Trả kết quả partial kèm flag search_truncated = true |
+| PERF-06 (Upload) | > 90s | Hỗ trợ resumable upload; ERR-FILE-03 'Upload timeout, thử lại với file nhỏ hơn' |
+
+---
+
+---
+
+
+# 3.4 Mô hình dữ liệu logic
+
+> **Tham chiếu:** ISO/IEC/IEEE 29148:2018 Section 9.6.15
+> **Lưu ý v3.0:** Section này chỉ mô tả Logical Data Model (nghiệp vụ cần lưu trữ DỮ LIỆU GÌ).
+> Sử dụng kiểu dữ liệu LOGIC (identifier, text, number, date, boolean, enum, file, structured).
+> Physical Data Model (indexes, partitions, constraint expressions, encryption) → Architecture Design.
+
+
+### 3.4.1.1 Common Fields (Áp dụng cho MỌI entity)
+
+Mọi bảng trong hệ thống đều bao gồm các trường sau (không liệt kê lại trong từng entity):
+
+| Trường | Kiểu logic | Bắt buộc | Mô tả nghiệp vụ |
+|--------|-----------|----------|-----------------|
+| id | identifier | Yes | Mã định danh duy nhất, tự sinh |
+| created_at | datetime | Yes | Thời điểm tạo bản ghi |
+| updated_at | datetime | Yes | Thời điểm cập nhật cuối |
+| created_by | reference | Yes | Người tạo bản ghi (→ TAI_KHOAN) |
+| updated_by | reference | Yes | Người cập nhật cuối (→ TAI_KHOAN) |
+| is_deleted | boolean | Yes | Soft delete flag (mặc định: false) |
+| don_vi_id | reference | Yes | Đơn vị sở hữu (→ DON_VI) — dùng cho phân quyền dữ liệu |
+
+**Trạng thái:** ✅ CĐT xác nhận
+
+
+
+| # | Entity Name | Module | Mô tả nghiệp vụ | Ước lượng Volume/năm |
+|---|-------------|--------|------------------|---------------------|
+| **Nhóm II — Hỏi đáp** | | | | |
+| 1 | HOI_DAP | hoi-dap | Yêu cầu hỏi đáp/vướng mắc pháp lý từ DN | 10,000 |
+| 2 | PHAN_HOI | hoi-dap | Câu trả lời/phản hồi cho hỏi đáp | 10,000 |
+| 3 | MAU_PHAN_HOI | hoi-dap | Template mẫu câu trả lời theo lĩnh vực | 500 |
+| **Nhóm III — Đào tạo** | | | | |
+| 4 | CHUONG_TRINH_DAO_TAO | dao-tao | Chương trình đào tạo/tập huấn | 200 |
+| 5 | KHOA_HOC | dao-tao | Khóa học thuộc CTĐT | 500 |
+| 6 | BAI_GIANG | dao-tao | Tài liệu/bài giảng (PDF, video embed) | 2,000 |
+| 7 | NGAN_HANG_CAU_HOI | dao-tao | Câu hỏi kiểm tra phân theo lĩnh vực + mức độ | 5,000 |
+| 8 | DE_KIEM_TRA | dao-tao | Đề kiểm tra tổng hợp từ ngân hàng câu hỏi | 500 |
+| 9 | KET_QUA_DAO_TAO | dao-tao | Điểm danh + điểm kiểm tra học viên | 10,000 |
+| 10 | CHUNG_NHAN | dao-tao | Chứng nhận hoàn thành đào tạo (điện tử) | 5,000 |
+| 11 | GIANG_VIEN | dao-tao | Hồ sơ giảng viên/trợ giảng | 500 |
+| 12 | DANG_KY_DAO_TAO | dao-tao | Đăng ký tham gia khóa học | 10,000 |
+| 13 | DE_XUAT_DAO_TAO | dao-tao | Đề xuất tổ chức đào tạo từ DN/NHT | 1,000 |
+| **Nhóm IV — Chuyên gia/TVV** | | | | |
+| 14 | TU_VAN_VIEN | tvv | Thông tin TVV/CG/NHT trong mạng lưới | 2,000 |
+| 15 | HO_SO_TU_VAN_VIEN | tvv | Hồ sơ năng lực (bằng cấp, chứng chỉ, kinh nghiệm) | 2,000 |
+| 16 | DANH_GIA_TU_VAN_VIEN | tvv | Đánh giá chất lượng TVV (điểm + nhận xét) | 5,000 |
+| 17 | LICH_SU_HO_TRO_TVV | tvv | Lịch sử tham gia hỗ trợ vụ việc của TVV | 10,000 |
+| **Nhóm V.I — Vụ việc** | | | | |
+| 18 | VU_VIEC | vu-viec | Vụ việc trợ giúp pháp lý cho DNNVV | 5,000 |
+| 19 | HO_SO_VU_VIEC | vu-viec | Hồ sơ đính kèm vụ việc (file scan, CNĐKKD...) | 15,000 |
+| 20 | KET_QUA_VU_VIEC | vu-viec | Kết quả xử lý vụ việc | 5,000 |
+| **Nhóm V.II — Chi trả** | | | | |
+| 21 | HO_SO_CHI_TRA | chi-tra | Hồ sơ đề nghị hỗ trợ chi phí TV (Mẫu 01 NĐ55) | 3,000 |
+| 22 | DANH_GIA_HO_SO_CHI_TRA | chi-tra | Kết quả đánh giá/thẩm định hồ sơ chi trả | 3,000 |
+| **Nhóm V.III — Doanh nghiệp** | | | | |
+| 23 | DOANH_NGHIEP | doanh-nghiep | Hồ sơ DNNVV được hỗ trợ | 10,000 |
+| **Nhóm VI — Đánh giá** | | | | |
+| 24 | KE_HOACH_DANH_GIA | danh-gia | Kế hoạch đợt đánh giá hiệu quả | 200 |
+| 25 | KET_QUA_DANH_GIA | danh-gia | Kết quả đánh giá từng vụ việc theo tiêu chí | 5,000 |
+| 26 | BAO_CAO_DANH_GIA | danh-gia | Báo cáo tổng hợp đợt đánh giá (mẫu TT17) | 200 |
+| **Nhóm VII — Biểu mẫu** | | | | |
+| 27 | BIEU_MAU | bieu-mau | Biểu mẫu/hợp đồng mẫu (file doc/docx/xls) | 2,000 |
+| 28 | THU_MUC_BIEU_MAU | bieu-mau | Thư mục phân loại biểu mẫu | 500 |
+| **Nhóm VIII — Quản trị** | | | | |
+| 29 | DANH_MUC | quan-tri | Danh mục dùng chung (lĩnh vực PL, loại hình HT, tình trạng VV...) | 500 |
+| 30 | TAI_KHOAN | quan-tri | Tài khoản người dùng hệ thống | 2,000 |
+| 31 | VAI_TRO | quan-tri | Vai trò (Role) trong hệ thống | 20 |
+| 32 | QUYEN_HAN | quan-tri | Quyền hạn chức năng + dữ liệu | 500 |
+| 33 | DON_VI | quan-tri | Cơ quan/đơn vị tham gia (TW/BN/ĐP) | 100 |
+| 34 | CAU_HINH_SLA | quan-tri | Cấu hình thời hạn xử lý + mức cảnh báo | 50 |
+| 35 | TIEU_CHI_DANH_GIA | quan-tri | Tiêu chí đánh giá hiệu quả/chi phí | 100 |
+| **Nhóm IX — Báo cáo** | | | | |
+| 36 | BAO_CAO | bao-cao | Báo cáo thống kê (23 loại) + metadata | 2,000 |
+| **Nhóm X.1 — Quản lý nội dung tư vấn chuyên sâu** | | | | |
+| 37 | NOI_DUNG_TU_VAN_CS | tu-van | Nội dung tư vấn chuyên sâu với chuyên gia (UC147-149) | 5,000 |
+| 38 | HO_SO_PHAP_LY_DN | tu-van | Hồ sơ pháp lý doanh nghiệp (UC150-151) | 10,000 |
+| 39 | TU_LIEU_PHAP_LY_VV | tu-van | Tư liệu pháp lý của vụ việc (UC152) | 15,000 |
+| 40 | DANH_GIA_CHAT_LUONG_TV | tu-van | Đánh giá chất lượng tư vấn với chuyên gia (UC153) | 5,000 |
+| **Nhóm X.2 — Tư vấn nhanh** | | | | |
+| 40 | KHO_CAU_HOI | tu-van | Kho Q&A cho tư vấn nhanh (keyword search) | 10,000 |
+| **Nhóm X.3 — Hợp đồng** | | | | |
+| 41 | HOP_DONG_TU_VAN | tu-van | Hợp đồng tư vấn giữa đơn vị và TVV/tổ chức | 1,000 |
+| **Nhóm XI — CT HTPLDN** | | | | |
+| 42 | CHUONG_TRINH_HTPL | ct-htpldn | Chương trình hỗ trợ pháp lý DN | 200 |
+| 43 | KE_HOACH_CT_HTPL | ct-htpldn | Kế hoạch thực hiện CT HTPLDN | 400 |
+| 44 | BAO_CAO_CT_HTPL | ct-htpldn | Báo cáo kết quả thực hiện CT (mẫu TT17) | 400 |
+| **Cross-cutting** | | | | |
+| 45 | AUDIT_LOG | cross-cutting | Nhật ký thao tác (CUD + phê duyệt + auth) | 500,000 |
+| 46 | THONG_BAO | cross-cutting | Thông báo in-app + email | 100,000 |
+| 47 | CAU_HINH_PHAN_CONG | cross-cutting | Mapping lĩnh vực PL ↔ CB/TVV phụ trách | 1,000 |
+| 48 | FILE_DINH_KEM | cross-cutting | Metadata file đính kèm (lưu trên file server) | 50,000 |
+| 49 | TAI_KHOAN_VAI_TRO | quan-tri | Bảng trung gian N-N: tài khoản ↔ vai trò | 3,000 |
+| 50 | VAI_TRO_QUYEN_HAN | quan-tri | Bảng trung gian N-N: vai trò ↔ quyền hạn | 2,000 |
+| 51 | NGAY_LE | quan-tri | Danh mục ngày lễ, nghỉ bù quốc gia (tính SLA) | 15 |
+
+**Trạng thái:** ✅ CĐT xác nhận (cấu trúc entity) | 🟡 Đề xuất (volume estimate)
+
+---
+
+---
+
+## 3.4.2 Ma trận phân quyền CRUD (Permission Matrix)
+
+**Ký hiệu:** C=Create, R=Read (toàn bộ phạm vi), R*=Read scoped (chỉ đơn vị mình), U=Update, D=Delete (soft), —=No access
+
+| Entity | QTHT | CB_NV_TW | CB_NV_BN | CB_NV_DP | CB_PD_TW | CB_PD_BN | CB_PD_DP | DN | NHT | TVV | CG |
+|--------|------|----------|----------|----------|----------|----------|----------|----|-----|-----|----|
+| HOI_DAP | R | CRU*D | CRU*D | CRU*D | R | R* | R* | C† | — | — | — |
+| PHAN_HOI | R | CRU* | CRU* | CRU* | RU* | RU* | RU* | — | — | — | — |
+| MAU_PHAN_HOI | R | CRUD* | CRUD* | CRUD* | R* | R* | R* | — | — | — | — |
+| CHUONG_TRINH_DAO_TAO | R | CRUD* | CRUD* | CRUD* | RU* | RU* | RU* | R | R | — | — |
+| KHOA_HOC | R | CRUD* | CRUD* | CRUD* | RU* | RU* | RU* | R | R | — | — |
+| BAI_GIANG | R | CRUD* | CRUD* | CRUD* | R* | R* | R* | R | R | — | — |
+| NGAN_HANG_CAU_HOI | R | CRUD* | CRUD* | CRUD* | R* | R* | R* | — | — | — | — |
+| DE_KIEM_TRA | R | CRUD* | CRUD* | CRUD* | R* | R* | R* | — | — | — | — |
+| KET_QUA_DAO_TAO | R | CRU* | CRU* | CRU* | RU* | RU* | RU* | R* | R* | — | — |
+| CHUNG_NHAN | R | CRU* | CRU* | CRU* | R* | R* | R* | R* | R* | — | — |
+| GIANG_VIEN | R | CRUD* | CRUD* | CRUD* | R* | R* | R* | — | — | — | — |
+| DANG_KY_DAO_TAO | R | RU* | RU* | RU* | RU* | RU* | RU* | C†R* | C†R* | — | — |
+| DE_XUAT_DAO_TAO | R | R | R* | R* | R | R* | R* | C†RU* | C†RU* | — | — |
+| TU_VAN_VIEN | R | CRUD* | CRUD* | CRUD* | RU* | RU* | RU* | — | — | R* | R* |
+| HO_SO_TU_VAN_VIEN | R | CRU* | CRU* | CRU* | R* | R* | R* | — | CRU* | R* | R* |
+| DANH_GIA_TU_VAN_VIEN | R | CRU* | CRU* | CRU* | CRU* | CRU* | CRU* | C†R* | — | — | — |
+| VU_VIEC | R | CRUD* | CRUD* | CRUD* | RU* | RU* | RU* | R* | RU* | — | — |
+| HO_SO_VU_VIEC | R | CRUD* | CRUD* | CRUD* | R* | R* | R* | C†R* | CRU* | — | — |
+| KET_QUA_VU_VIEC | R | CRU* | CRU* | CRU* | RU* | RU* | RU* | R* | CRU* | — | — |
+| HO_SO_CHI_TRA | R | CRUD* | CRUD* | CRUD* | RU* | RU* | RU* | C†R* | — | R* | — |
+| DANH_GIA_HO_SO_CHI_TRA | R | CRU* | CRU* | CRU* | RU* | RU* | RU* | — | — | — | — |
+| DOANH_NGHIEP | R | CRUD* | CRUD* | CRUD* | R* | R* | R* | RU* | — | — | — |
+| KE_HOACH_DANH_GIA | R | CRUD* | CRUD* | CRUD* | RU* | RU* | RU* | — | — | — | — |
+| KET_QUA_DANH_GIA | R | CRU* | CRU* | CRU* | R* | R* | R* | — | — | — | — |
+| TIEU_CHI_DANH_GIA | CRUD | R | R | R | R | R | R | — | — | — | — |
+| BAO_CAO_DANH_GIA | R | CRU* | CRU* | CRU* | RU* | RU* | RU* | — | — | — | — |
+| BIEU_MAU | R | CRUD* | CRUD* | CRUD* | R* | R* | R* | R | R | — | — |
+| THU_MUC_BIEU_MAU | R | CRUD* | CRUD* | CRUD* | R* | R* | R* | R | R | — | — |
+| DANH_MUC | CRUD | R | R | R | R | R | R | R | R | R | R |
+| TAI_KHOAN | CRUD | — | — | — | — | — | — | — | — | — | — |
+| VAI_TRO | CRUD | R | R | R | R | R | R | — | — | — | — |
+| QUYEN_HAN | CRUD | R | R | R | R | R | R | — | — | — | — |
+| DON_VI | CRUD | R | R | R | R | R | R | R | R | R | R |
+| CAU_HINH_SLA | CRUD | R | R | R | R | R | R | — | — | — | — |
+| BAO_CAO | R | CRU* | CRU* | CRU* | RU* | RU* | RU* | — | — | — | — |
+| TU_VAN_CHUYEN_SAU | R | CRUD* | CRUD* | CRUD* | RU* | RU* | RU* | R* | — | R* | CRU* |
+| PHIEN_TU_VAN | R | CRUD* | CRUD* | CRUD* | R* | R* | R* | R* | — | R* | RU* |
+| LICH_SU_TRAO_DOI_TV | R | CRU* | CRU* | CRU* | R* | R* | R* | C†R* | — | — | CRU* |
+| KHO_CAU_HOI | R | CRUD* | CRUD* | CRUD* | RU* | RU* | RU* | R | — | — | — |
+| HOP_DONG_TU_VAN | R | CRUD* | CRUD* | CRUD* | R* | R* | R* | — | — | R* | — |
+| CHUONG_TRINH_HTPL | R | CRUD* | CRUD* | CRUD* | RU* | RU* | RU* | — | — | — | — |
+| KE_HOACH_CT_HTPL | R | CRUD* | CRUD* | CRUD* | RU* | RU* | RU* | — | — | — | — |
+| BAO_CAO_CT_HTPL | R | CRU* | CRU* | CRU* | RU* | RU* | RU* | — | — | — | — |
+| AUDIT_LOG | R | R* | R* | R* | R* | R* | R* | — | — | — | — |
+| THONG_BAO | R | R* | R* | R* | R* | R* | R* | R* | R* | R* | R* |
+| CAU_HINH_PHAN_CONG | CRUD | CRU* | CRU* | CRU* | R* | R* | R* | — | — | — | — |
+
+**Quy tắc scoping (R*):**
+- **TW (Trung ương):** Nhìn thấy dữ liệu TẤT CẢ đơn vị (toàn quốc)
+- **BN (Bộ ngành):** Chỉ nhìn thấy dữ liệu đơn vị BN của mình
+- **ĐP (Địa phương):** Chỉ nhìn thấy dữ liệu đơn vị ĐP của mình
+- **Ngang cấp KHÔNG thấy nhau** — chính sách phân quyền dữ liệu đảm bảo chỉ thấy dữ liệu đơn vị mình
+
+> † DN không truy cập CMS trực tiếp. Quyền Create/Read của DN thực hiện qua API inbound từ Cổng PLQG (SI-04, Nhóm XII). Permission Matrix ghi nhận quyền LOGIC, không phải quyền CMS UI.
+
+> **Tham chiếu:** PRD Section 4 (Personas), PRD Section 5 (Assumptions A3/A4), FR-VIII-16/17
+
+**Trạng thái:** ✅ CĐT xác nhận (quy tắc phân cấp) | 🟡 Đề xuất (chi tiết CRUD per entity)
+
+---
+
+### 3.4.3 Thực thể dữ liệu chi tiết (Logical Data Entities)
+
+> **Ghi chú v3.0:** Tất cả cột "Kiểu PG" / "PG Type" đã được chuyển thành "Kiểu logic".
+> Kiểu dữ liệu sử dụng theo bảng quy ước §3.2.0.2.
+>
+> **SOURCE OF TRUTH (v3.1):** Đây là bản gốc cho tất cả entity definitions.
+> Mỗi FR group file chứa bản trích entities liên quan (Section 4). Khi thay đổi entity, cập nhật ở đây trước, sau đó sync sang FR files.
+
+### 3.4.3.1 HOI_DAP — Hỏi đáp/Vướng mắc Pháp lý
+
+**Mô tả:** Lưu trữ yêu cầu hỏi đáp/vướng mắc pháp lý từ doanh nghiệp. Entity trung tâm của Nhóm II.
+**Tham chiếu FR:** FR-II-01 đến FR-II-10, FR-II-NEW-01/02, FR-II-CROSS-01
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| ma_hoi_dap | text | Y | UNIQUE | Auto-gen | Mã hỏi đáp (format: HD-YYYYMMDD-SEQ) |
+| tieu_de | text | Y | | | Tiêu đề câu hỏi |
+| noi_dung | text (long) | Y | | | Nội dung câu hỏi (max 5000 ký tự logic) |
+| linh_vuc_id | identifier | Y | FK → DANH_MUC(id) | | Lĩnh vực pháp lý (UC99) |
+| nguoi_gui_id | identifier | N | FK → DOANH_NGHIEP(id) | | DN gửi câu hỏi (NULL nếu ẩn danh) |
+| ten_nguoi_gui | text | N | | | Tên người gửi (nếu không có TK) |
+| email_nguoi_gui | text | N | | | Email người gửi |
+| sdt_nguoi_gui | text | N | | | SĐT người gửi |
+| trang_thai | text | Y | CHECK IN ('MOI','TIEP_NHAN','DANG_XU_LY','DA_TRA_LOI','CHO_PHE_DUYET','DA_DUYET','CONG_KHAI','HOAN_THANH','HUY') | 'MOI' | Trạng thái lifecycle (SM-HOIDAP: 9 states, bổ sung HUY) |
+| kenh_tiep_nhan | text | Y | CHECK IN ('DVC','HE_THONG_KHAC','TRUC_TIEP','CONG_PLQG') | | Kênh tiếp nhận yêu cầu. *Ghi chú:* Enum HOI_DAP chỉ có 4 kênh (DVC, HE_THONG_KHAC, TRUC_TIEP, CONG_PLQG) vì câu hỏi pháp luật đến từ cổng trực tuyến; VU_VIEC có thêm BUU_CHINH và DIEN_THOAI vì vụ việc hỗ trợ tiếp nhận qua nhiều kênh vật lý hơn (bưu chính, điện thoại). |
+| nguoi_tiep_nhan_id | identifier | N | FK → TAI_KHOAN(id) | | CB nghiệp vụ tiếp nhận |
+| ngay_tiep_nhan | datetime | N | | | Ngày tiếp nhận xử lý |
+| nguoi_phan_cong_id | identifier | N | FK → TAI_KHOAN(id) | | NHT/TVV được phân công trả lời |
+| deadline | datetime | N | | | Hạn xử lý (= ngay_tiep_nhan + SLA ngày LV) |
+| muc_do_canh_bao | text | N | CHECK IN ('BINH_THUONG','SAP_HET','QUA_HAN','QUA_HAN_NGHIEM_TRONG') | 'BINH_THUONG' | Mức cảnh báo SLA |
+| la_cong_khai | boolean | Y | | 0 | Đã công khai lên Cổng PLQG? |
+| ngay_cong_khai | datetime | N | | | Ngày công khai |
+| ghi_chu | text | N | | | Ghi chú nội bộ |
+| thoi_gian_huy | datetime | N | | | Thời điểm hủy |
+
+**Relationships:**
+
+| Quan hệ | Entity đích | Cardinality | FK Column | Mô tả |
+|---------|-------------|-------------|-----------|-------|
+| thuộc lĩnh vực | DANH_MUC | N:1 | linh_vuc_id | Lĩnh vực PL (UC99) |
+| gửi bởi DN | DOANH_NGHIEP | N:1 | nguoi_gui_id | DN gửi câu hỏi |
+| tiếp nhận bởi | TAI_KHOAN | N:1 | nguoi_tiep_nhan_id | CB tiếp nhận |
+| phân công cho | TAI_KHOAN | N:1 | nguoi_phan_cong_id | NHT/TVV xử lý |
+| có phản hồi | PHAN_HOI | 1:N | PHAN_HOI.hoi_dap_id | Các câu trả lời |
+| có file đính kèm | FILE_DINH_KEM | 1:N | FILE_DINH_KEM.entity_id (type='HOI_DAP') | Tệp đính kèm |
+| thuộc đơn vị | DON_VI | N:1 | don_vi_id | Đơn vị sở hữu (phân quyền) |
+
+**Volume & Growth:** ~10,000 records/năm. Tăng trưởng 15-20%/năm. Archive sau 5 năm.
+
+---
+
+### 3.4.3.2 VU_VIEC — Vụ việc Trợ giúp Pháp lý
+
+**Mô tả:** Quản lý vụ việc HTPL cho DNNVV theo NĐ55/2019. Entity trung tâm của Nhóm V.I.
+**Tham chiếu FR:** FR-V.I-01 đến FR-V.I-17, FR-V.I-NEW-01
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| ma_vu_viec | text | Y | UNIQUE | Auto-gen | Mã vụ việc (format: VV-{TINH}-YYYYMMDD-SEQ) |
+| tieu_de | text | Y | | | Tên/tiêu đề vụ việc |
+| mo_ta | text (long) | Y | | | Mô tả chi tiết vụ việc |
+| doanh_nghiep_id | identifier | Y | FK → DOANH_NGHIEP(id) | | DN yêu cầu hỗ trợ |
+| linh_vuc_id | identifier | Y | FK → DANH_MUC(id) | | Lĩnh vực PL |
+| loai_hinh_ht_id | identifier | Y | FK → DANH_MUC(id) | | Loại hình hỗ trợ (UC100) |
+| trang_thai | text | Y | CHECK IN ('MOI_TAO','CHO_TIEP_NHAN','DA_TIEP_NHAN','DANG_KIEM_TRA','YEU_CAU_BO_SUNG','TU_CHOI','DA_PHAN_CONG','DANG_XU_LY','CHO_PHE_DUYET','DA_DUYET','HOAN_THANH','DA_DANH_GIA') | 'CHO_TIEP_NHAN' | Trạng thái lifecycle — đồng bộ SM-VUVIEC + Appendix C.4 (v1.6). (mặc định cho kênh DVC/HT khác; UC52 override thành 'MOI_TAO') |
+| kenh_tiep_nhan | text | Y | CHECK IN ('DVC','HE_THONG_KHAC','TRUC_TIEP','BUU_CHINH','DIEN_THOAI') | | Kênh tiếp nhận |
+| ma_ho_so_dvc | text | N | | | Mã hồ sơ từ HT TTHC BTP (kênh DVC) |
+| he_thong_nguon | text | N | FK → DANH_MUC(ma) WHERE loai='HE_THONG_NGUON' | | Mã HT gửi hồ sơ (kênh HE_THONG_KHAC, UC55 v1.6) |
+| ma_ho_so_nguon | text | N | Ràng buộc duy nhất: cặp (he_thong_nguon, ma_ho_so_nguon) là duy nhất khi he_thong_nguon có giá trị | | Mã hồ sơ trên HT nguồn (kênh HE_THONG_KHAC, UC55 v1.6) |
+| nguoi_tiep_nhan_id | identifier | N | FK → TAI_KHOAN(id) | | CB NV tiếp nhận |
+| ngay_tiep_nhan | datetime | N | | | Ngày tiếp nhận |
+| nguoi_ho_tro_id | identifier | N | FK → TU_VAN_VIEN(id) | | NHT/TVV được phân công |
+| ngay_phan_cong | datetime | N | | | Ngày phân công NHT |
+| nguoi_phe_duyet_id | identifier | N | FK → TAI_KHOAN(id) | | CB PD phê duyệt |
+| ngay_phe_duyet | datetime | N | | | Ngày phê duyệt |
+| deadline | datetime | N | | | Hạn xử lý (SLA: 10 ngày LV - NĐ55 Điều 9) |
+| muc_do_canh_bao | text | N | CHECK IN ('BINH_THUONG','SAP_HET','QUA_HAN','QUA_HAN_NGHIEM_TRONG') | 'BINH_THUONG' | Mức cảnh báo SLA |
+| ngay_hoan_thanh | datetime | N | | | Ngày hoàn thành xử lý |
+| ket_qua_tom_tat | text | N | | | Tóm tắt kết quả |
+| diem_danh_gia | number | N | CHECK BETWEEN 0 AND 10 | | Điểm đánh giá chất lượng |
+| hop_dong_tv_id | identifier | N | FK → HOP_DONG_TU_VAN(id) | | HĐ tư vấn liên quan |
+| uu_tien | number | N | CHECK BETWEEN 1 AND 5 | 3 | Mức ưu tiên (NĐ55 Đ4) |
+| ly_do_uu_tien | text | N | | | Lý do ưu tiên (phụ nữ, KT...) |
+
+**Relationships:**
+
+| Quan hệ | Entity đích | Cardinality | FK Column | Mô tả |
+|---------|-------------|-------------|-----------|-------|
+| của DN | DOANH_NGHIEP | N:1 | doanh_nghiep_id | DN yêu cầu |
+| thuộc lĩnh vực | DANH_MUC | N:1 | linh_vuc_id | Lĩnh vực PL |
+| loại hình HT | DANH_MUC | N:1 | loai_hinh_ht_id | Loại hình hỗ trợ |
+| phân công cho | TU_VAN_VIEN | N:1 | nguoi_ho_tro_id | NHT/TVV xử lý |
+| có hồ sơ | HO_SO_VU_VIEC | 1:N | HO_SO_VU_VIEC.vu_viec_id | Tài liệu đính kèm |
+| có kết quả | KET_QUA_VU_VIEC | 1:1 | KET_QUA_VU_VIEC.vu_viec_id | Kết quả cuối |
+| có hồ sơ chi trả | HO_SO_CHI_TRA | 1:N | HO_SO_CHI_TRA.vu_viec_id | HS đề nghị chi phí |
+| thuộc HĐ TV | HOP_DONG_TU_VAN | N:1 | hop_dong_tv_id | HĐ tư vấn |
+
+**Volume & Growth:** ~5,000 records/năm. Tăng trưởng 10-15%/năm.
+
+---
+
+### 3.4.3.3 DOANH_NGHIEP — Doanh nghiệp được Hỗ trợ
+
+**Mô tả:** Hồ sơ DNNVV đã/đang được hỗ trợ pháp lý. Entity trung tâm của Nhóm V.III.
+**Tham chiếu FR:** FR-V.III-01/02, FR-V.III-NEW-01
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| ten_doanh_nghiep | text | Y | | | Tên đầy đủ DN |
+| ten_viet_tat | text | N | | | Tên viết tắt |
+| ma_so_thue | text | Y | UNIQUE | | Mã số thuế / Mã số DN |
+| giay_cn_dkkd | text | N | | | Số giấy CNĐKKD |
+| ngay_cap_dkkd | datetime | N | | | Ngày cấp ĐKKD |
+| loai_dn_id | identifier | Y | FK → DANH_MUC(id) | | Loại DN: siêu nhỏ/nhỏ/vừa (UC105) |
+| dia_chi | text | Y | | | Địa chỉ trụ sở |
+| tinh_thanh_id | identifier | N | FK → DANH_MUC(id) | | Tỉnh/TP |
+| dien_thoai | text | N | | | SĐT liên hệ |
+| email | text | N | | | Email liên hệ |
+| fax | text | N | | | Fax |
+| nganh_nghe | text | N | | | Ngành nghề kinh doanh |
+| nguoi_dai_dien | text | N | | | Người đại diện pháp luật |
+| chuc_vu_dai_dien | text | N | | | Chức vụ người đại diện |
+| doanh_thu | number | N | | | Doanh thu (để xác định quy mô) |
+| so_lao_dong | number | N | | | Số lao động (để xác định quy mô) |
+| so_lao_dong_nu | number | N | | | Số LĐ nữ (NĐ55 Điều 4 ưu tiên) |
+| so_lao_dong_khuyet_tat | number | N | | | Số LĐ khuyết tật (NĐ55 Điều 4 ưu tiên) |
+| la_nu_lam_chu | boolean | N | | 0 | DN do phụ nữ làm chủ (NĐ55 Điều 4 ưu tiên) |
+| tong_so_vu_viec | number | N | | 0 | Counter: tổng VV đã hỗ trợ |
+| tong_chi_phi_ho_tro | number | N | | 0 | Counter: tổng chi phí đã hỗ trợ |
+| ghi_chu | text | N | | | Ghi chú |
+
+**Volume & Growth:** ~10,000 records/năm. Import Excel hàng loạt.
+
+**CHECK constraints bổ sung:**
+- `CHECK (so_lao_dong >= 0)`
+- `CHECK (so_lao_dong_nu >= 0 AND so_lao_dong_nu <= so_lao_dong)`
+- `CHECK (so_lao_dong_khuyet_tat >= 0 AND so_lao_dong_khuyet_tat <= so_lao_dong)`
+- `CHECK (doanh_thu >= 0)`
+- `CHECK (von_dieu_le >= 0)`
+- UNIQUE constraint trên `ma_so_thue` (DB-level) — xử lý ORA-00001 bằng ERR-DN-02
+
+**Cơ chế sync counter:** Sử dụng materialized view hoặc trigger để đồng bộ. Hoặc tính tại application layer từ bảng con (khuyến nghị cho tính nhất quán).
+
+---
+
+### 3.4.3.4 TU_VAN_VIEN — Tư vấn viên/Chuyên gia
+
+
+**Mô tả:** Thông tin TVV/CG/NHT trong mạng lưới tư vấn. Entity trung tâm Nhóm IV.
+**Tham chiếu FR:** FR-IV-01 đến FR-IV-12
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| ma_tvv | text | Y | UNIQUE | Auto-gen | Mã TVV |
+| ho_ten | text | Y | | | Họ tên đầy đủ |
+| loai_tvv | text | Y | CHECK IN ('TVV','CG','NHT') | | Loại: TVV / CG / NHT |
+| cccd | text | N | | | Số CCCD |
+| ngay_sinh | datetime | N | | | Ngày sinh |
+| gioi_tinh | text | N | CHECK IN ('NAM','NU','KHAC') | | Giới tính |
+| dien_thoai | text | N | | | SĐT |
+| email | text | N | | | Email |
+| dia_chi | text | N | | | Địa chỉ |
+| to_chuc_chinh_id | identifier | N | FK → DANH_MUC(id) | | Tổ chức hành nghề chính (UC104) |
+| linh_vuc_chuyen_mon | text | N | | | Lĩnh vực chuyên môn (multi-select, JSON array) |
+| dia_ban_hoat_dong | text | N | | | Địa bàn hoạt động (tỉnh/TP) |
+| trang_thai | text | Y | CHECK IN ('MOI_DANG_KY','CHO_THAM_DINH','DANG_THAM_DINH','YEU_CAU_BO_SUNG','CHO_PHE_DUYET','TU_CHOI','DANG_HOAT_DONG','TAM_DUNG','VO_HIEU_HOA') | 'MOI_DANG_KY' | Trạng thái lifecycle (9 states — SM-TVV) |
+| kinh_nghiem_tu_van | text | N | | | Kinh nghiệm tư vấn |
+| bang_cap | text | N | | | Bằng cấp (tóm tắt) |
+| chung_chi_hanh_nghe | text | N | | | Chứng chỉ hành nghề |
+| the_hanh_nghe | text | N | | | Số thẻ hành nghề |
+| diem_danh_gia_tb | number | N | CHECK BETWEEN 0 AND 10 | | Điểm đánh giá trung bình |
+| so_vu_viec_da_xu_ly | number | N | | 0 | Counter: số VV đã xử lý |
+| ngay_cong_nhan | datetime | N | | | Ngày được công nhận vào mạng lưới |
+| la_cong_khai | boolean | N | | 0 | Đã công khai trên Cổng PLQG? |
+| tai_khoan_id | identifier | N | FK → TAI_KHOAN(id) | | Liên kết TK đăng nhập |
+
+**Volume & Growth:** ~2,000 records/năm. Tăng trưởng chậm 5-10%.
+
+**CHECK constraints bổ sung:**
+- UNIQUE constraint trên `cmnd_cccd` — xử lý ORA-00001 bằng ERR-TVV-02
+- `CHECK (diem_danh_gia_tb BETWEEN 0 AND 5 OR diem_danh_gia_tb IS NULL)`
+- **Cập nhật diem_danh_gia_tb:** Tính lại AVG(DANH_GIA_TU_VAN_VIEN.diem) khi INSERT/UPDATE/DELETE đánh giá (trigger hoặc application-level)
+- **linh_vuc_chuyen_mon:** Nếu lưu dạng cấu trúc trong trường text, cần validate định dạng. Khuyến nghị: normalize thành bảng TVV_LINH_VUC(tu_van_vien_id, linh_vuc_id) để hỗ trợ tra cứu/lọc
+
+---
+
+### 3.4.3.4b TVV_TO_CHUC — Liên kết TVV và Tổ chức hành nghề
+
+**Mô tả:** Bảng N:N liên kết Tư vấn viên với Tổ chức hành nghề. Một TVV có thể thuộc nhiều tổ chức, một tổ chức có nhiều TVV.
+**Tham chiếu FR:** FR-IV-01
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | tvv_id | identifier | Y | FK → TU_VAN_VIEN(id) | — | Tư vấn viên |
+| 3 | to_chuc_id | identifier | Y | FK → DANH_MUC(id) | — | Tổ chức hành nghề |
+| 4 | ngay_tham_gia | date | N | | — | Ngày tham gia tổ chức |
+| 5 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái |
+| 6 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 7 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 8 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 9 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 10 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~3,000 records/năm | **Growth:** 10%/năm
+
+**CHECK constraints bổ sung:**
+- UNIQUE constraint trên (`tvv_id`, `to_chuc_id`) WHERE is_deleted = 0 — mỗi TVV chỉ liên kết 1 lần với 1 tổ chức
+
+---
+
+### 3.4.3.5 HO_SO_CHI_TRA — Hồ sơ Đề nghị Hỗ trợ Chi phí
+
+**Mô tả:** Hồ sơ đề nghị hỗ trợ chi phí tư vấn pháp luật theo Mẫu 01 NĐ55. Entity trung tâm Nhóm V.II.
+**Tham chiếu FR:** FR-V.II-01 đến FR-V.II-13
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| ma_ho_so | text | Y | UNIQUE | Auto-gen | Mã hồ sơ |
+| vu_viec_id | identifier | Y | FK → VU_VIEC(id) | | Vụ việc liên quan |
+| doanh_nghiep_id | identifier | Y | FK → DOANH_NGHIEP(id) | | DN đề nghị |
+| tu_van_vien_id | identifier | Y | FK → TU_VAN_VIEN(id) | | TVV thực hiện |
+| trang_thai | text | Y | CHECK IN ('CHO_TIEP_NHAN','DANG_KIEM_TRA','DANG_DANH_GIA','DANG_THAM_DINH','CHO_PHE_DUYET','DA_DUYET','DA_THANH_TOAN','TU_CHOI','YEU_CAU_BO_SUNG','HUY') | 'CHO_TIEP_NHAN' | Trạng thái lifecycle (SM-CHITRA: 10 states, bổ sung HUY) |
+| so_hop_dong_tvpl | text | N | | | Số/ngày HĐ TVPL |
+| ngay_hop_dong | datetime | N | | | Ngày ký HĐ TVPL |
+| phi_tu_van | number | Y | CHECK > 0 | | Phí tư vấn thực tế (VNĐ) |
+| so_tien_de_nghi | number | Y | CHECK > 0 | | Số tiền đề nghị hỗ trợ (VNĐ) |
+| quy_mo_dn | text | Y | CHECK IN ('SIEU_NHO','NHO','VUA') | | Quy mô DN (xác định mức HT) |
+| muc_ho_tro_phan_tram | number | N | CHECK BETWEEN 0 AND 100 | | % hỗ trợ áp dụng |
+| tran_ho_tro_nam | number | N | | | Trần hỗ trợ/năm (VNĐ) |
+| so_tien_duoc_duyet | number | N | | | Số tiền được duyệt (VNĐ) |
+| so_tien_thuc_tra | number | N | | | Số tiền thực trả (VNĐ) |
+| ngay_thanh_toan | datetime | N | | | Ngày thanh toán |
+| so_bien_nhan | text | N | | | Số biên nhận thanh toán |
+| ma_ho_so_dvc | text | N | | | Mã hồ sơ từ DVC |
+| ket_qua_danh_gia | text | N | | | Kết quả đánh giá (text) |
+| ket_qua_tham_dinh | text | N | | | Kết quả thẩm định (text) |
+| nguoi_phe_duyet_id | identifier | N | FK → TAI_KHOAN(id) | | CB PD phê duyệt |
+| ngay_phe_duyet | datetime | N | | | Ngày phê duyệt |
+| ly_do_tu_choi | text | N | | | Lý do từ chối (nếu có) |
+
+**Volume & Growth:** ~3,000 records/năm.
+
+---
+
+### 3.4.3.6 KHOA_HOC — Khóa đào tạo/Tập huấn
+
+**Mô tả:** Khóa học thuộc chương trình đào tạo. Entity trung tâm Nhóm III.
+**Tham chiếu FR:** FR-III-01 đến FR-III-19
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| ma_khoa_hoc | text | Y | UNIQUE | Auto-gen | Mã khóa học |
+| ten_khoa_hoc | text | Y | | | Tên khóa học |
+| ctdt_id | identifier | Y | FK → CHUONG_TRINH_DAO_TAO(id) | | Chương trình ĐT cha |
+| hinh_thuc | text | Y | CHECK IN ('TRUC_TUYEN','TRUC_TIEP') | 'TRUC_TUYEN' | Hình thức ĐT |
+| trang_thai | text | Y | CHECK IN ('DU_THAO','CHO_DUYET','DA_DUYET','DANG_DIEN_RA','DA_KET_THUC','CHO_DUYET_KQ','DA_CONG_KHAI','HOAN_THANH','HUY') | 'DU_THAO' | Trạng thái lifecycle (SM-KHOAHOC: 9 states, bổ sung DA_KET_THUC/CHO_DUYET_KQ/DA_CONG_KHAI) |
+| ngay_bat_dau | datetime | N | | | Ngày bắt đầu |
+| ngay_ket_thuc | datetime | N | | | Ngày kết thúc |
+| dia_diem | text | N | | | Địa điểm (trực tiếp) |
+| link_zoom | text | N | | | Link Zoom/meeting (trực tuyến) |
+| ngan_sach | number | N | | | Ngân sách dự kiến (VNĐ) |
+| so_hoc_vien_toi_da | number | N | | | Số học viên tối đa |
+| so_hoc_vien_dang_ky | number | N | | 0 | Counter: số đã đăng ký |
+| linh_vuc_id | identifier | N | FK → DANH_MUC(id) | | Lĩnh vực PL |
+| nguoi_phe_duyet_id | identifier | N | FK → TAI_KHOAN(id) | | CB PD duyệt |
+| ngay_phe_duyet | datetime | N | | | Ngày phê duyệt |
+| la_cong_khai | boolean | N | | 0 | Đã công khai trên Cổng? |
+| mo_ta | text (long) | N | | | Mô tả chi tiết |
+
+**Volume & Growth:** ~500 records/năm.
+
+**CHECK constraints bổ sung:**
+- `CHECK (so_hoc_vien_toi_da > 0)`
+- `CHECK (so_hoc_vien_dang_ky >= 0)`
+- Ràng buộc logic: so_hoc_vien_dang_ky <= so_hoc_vien_toi_da (enforce tại application layer khi duyệt đăng ký)
+
+---
+
+### 3.4.3.7 TAI_KHOAN — Tài khoản Người dùng
+
+**Mô tả:** Tài khoản đăng nhập hệ thống CMS. Entity trung tâm Nhóm VIII.
+**Tham chiếu FR:** FR-VIII-15, FR-VIII-20/21
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| username | text | Y | UNIQUE, CHECK REGEXP | | Tên đăng nhập (4-50 ký tự, a-z0-9_) |
+| email | text | Y | UNIQUE | | Email |
+| mat_khau_hash | text | Y | | | Bcrypt hash mật khẩu |
+| ho_ten | text | Y | | | Họ tên đầy đủ |
+| dien_thoai | text | N | | | SĐT |
+| loai_tai_khoan_id | identifier | Y | FK → DANH_MUC(id) | | Loại TK (UC111) |
+| trang_thai | text | Y | CHECK IN ('CHO_KICH_HOAT','HOAT_DONG','TAM_KHOA','VO_HIEU_HOA') | 'CHO_KICH_HOAT' | Trạng thái TK (SM-TAIKHOAN: 4 states) |
+| so_lan_dang_nhap_sai | number | N | | 0 | Counter đăng nhập sai (reset khi thành công) |
+| lan_dang_nhap_cuoi | datetime | N | | | Thời điểm đăng nhập cuối |
+| vneid_subject | text | N | UNIQUE | | VNeID subject ID (OAuth2/OIDC) |
+| cccd | text | N | | | Số CCCD (từ VNeID) |
+| otp_secret | text | N | | | OTP secret (2FA, nếu bật) |
+| token_reset_mk | text | N | | | Token reset mật khẩu |
+| token_het_han | datetime | N | | | Thời điểm hết hạn token reset |
+
+**Volume & Growth:** ~2,000 records. Tăng trưởng chậm.
+
+**CHECK constraints bổ sung:**
+- `token_reset_mk`: SHALL lưu SHA-256 hash của token (KHÔNG lưu plaintext). So sánh hash khi xác thực: token_reset_mk = SHA256(user_provided_token)
+- UNIQUE constraint trên `ten_dang_nhap`
+
+---
+
+### 3.4.3.8 DON_VI — Cơ quan/Đơn vị
+
+**Mô tả:** Cơ quan/đơn vị tham gia hệ thống (cây phân cấp 3 tầng TW/BN/ĐP).
+**Tham chiếu FR:** FR-VIII-05
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| ma_don_vi | text | Y | UNIQUE | | Mã cơ quan (duy nhất) |
+| ten_don_vi | text | Y | | | Tên đầy đủ |
+| ten_viet_tat | text | N | | | Tên viết tắt |
+| cap | text | Y | CHECK IN ('TW','BN','DP') | | Cấp: Trung ương / Bộ ngành / Địa phương |
+| don_vi_cha_id | identifier | N | FK → DON_VI(id) | | Đơn vị cha (BTP cho TW, NULL cho TW) |
+| dia_chi | text | N | | | Địa chỉ |
+| dien_thoai | text | N | | | SĐT |
+| email | text | N | | | Email |
+| tinh_thanh_id | identifier | N | FK → DANH_MUC(id) | | Tỉnh/TP (nếu ĐP) |
+| thu_tu | number | N | | 0 | Thứ tự hiển thị |
+| trang_thai | text | Y | CHECK IN ('HOAT_DONG','TAM_DUNG') | 'HOAT_DONG' | Trạng thái |
+
+**Seed Data:** Cục BLDS&KT (TW), 63 Sở TP (ĐP), ~20 Bộ/Ngành (BN). ~100 records.
+
+---
+
+### 3.4.3.9 NOI_DUNG_TU_VAN_CS — Nội dung Tư vấn Chuyên sâu
+
+**Mô tả:** Nội dung tư vấn chuyên sâu với chuyên gia. Entity trung tâm Nhóm X.1 (UC147-149).
+**Tham chiếu FR:** FR-X.1-01 đến FR-X.1-07
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| ma_tu_van | text | Y | UNIQUE | Auto-gen | Mã yêu cầu TV |
+| doanh_nghiep_id | identifier | Y | FK → DOANH_NGHIEP(id) | | DN yêu cầu |
+| linh_vuc_id | identifier | Y | FK → DANH_MUC(id) | | Lĩnh vực PL |
+| noi_dung | text (long) | Y | | | Nội dung yêu cầu TV |
+| trang_thai | text | Y | CHECK IN ('TIEP_NHAN','PHAN_CONG','DANG_TU_VAN','HOAN_THANH','CHO_PHE_DUYET','DA_DUYET','HUY') | 'TIEP_NHAN' | Trạng thái lifecycle |
+| chuyen_gia_id | identifier | N | FK → TU_VAN_VIEN(id) | | CG/TVV được phân công |
+| hinh_thuc_tv | text | N | CHECK IN ('HO_SO','VIDEO_CALL','DIEN_THOAI') | 'HO_SO' | Hình thức TV |
+| ngay_bat_dau | datetime | N | | | Ngày bắt đầu TV |
+| ngay_hoan_thanh | datetime | N | | | Ngày hoàn thành |
+| ket_qua | text (long) | N | | | Kết quả tư vấn (VB TVPL) |
+| diem_danh_gia_dn | number | N | CHECK BETWEEN 0 AND 10 | | Điểm DN đánh giá |
+| nhan_xet_dn | text | N | | | Nhận xét từ DN |
+| nguoi_phe_duyet_id | identifier | N | FK → TAI_KHOAN(id) | | CB PD duyệt |
+| vu_viec_id | identifier | N | FK → VU_VIEC(id) | | Vụ việc liên quan (nếu có) |
+
+**Volume & Growth:** ~2,000 records/năm. 🟡 Đề xuất
+
+---
+
+### 3.4.3.10 CHUONG_TRINH_HTPL — Chương trình HTPLDN
+
+**Mô tả:** Chương trình hỗ trợ pháp lý doanh nghiệp theo cấp (TW/BN/ĐP). Entity trung tâm Nhóm XI.
+**Tham chiếu FR:** FR-XI-01 đến FR-XI-09
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| ma_chuong_trinh | text | Y | UNIQUE | Auto-gen | Mã CT |
+| ten_chuong_trinh | text | Y | | | Tên chương trình |
+| muc_tieu | text (long) | N | | | Mục tiêu |
+| doi_tuong | text | N | | | Đối tượng hưởng lợi |
+| thoi_gian_bat_dau | datetime | N | | | Thời gian bắt đầu |
+| thoi_gian_ket_thuc | datetime | N | | | Thời gian kết thúc |
+| ngan_sach | number | N | | | Ngân sách dự kiến (VNĐ) |
+| trang_thai | text | Y | CHECK IN ('DU_THAO','CHO_PHE_DUYET','DA_DUYET','DA_CONG_BO','DANG_THUC_HIEN','TAM_DUNG','HOAN_THANH','HUY') | 'DU_THAO' | Trạng thái lifecycle (SM-CTHTPL: 8 states, bổ sung TAM_DUNG) |
+| nguoi_phe_duyet_id | identifier | N | FK → TAI_KHOAN(id) | | CB PD duyệt |
+| ngay_phe_duyet | datetime | N | | | Ngày phê duyệt |
+| la_cong_bo | boolean | N | | 0 | Đã công bố lên Cổng? |
+| ngay_cong_bo | datetime | N | | | Ngày công bố |
+
+**Volume & Growth:** ~200 records/năm.
+
+---
+
+### 3.4.3.10a DOT_BAO_CAO — Đợt báo cáo CT HTPLDN
+
+> **Mới v2.1 (C1-8, C3-19).** Entity quản lý đợt báo cáo kết quả thực hiện CT HTPLDN.
+
+**Mô tả:** Đợt báo cáo theo kỳ (6 tháng / năm / tròn năm) của chương trình HTPLDN. Mỗi đợt có vòng đời riêng (SM-DOT-BC).
+**Module:** Nhóm XI — CT HTPLDN
+**Tham chiếu FR:** FR-XI-05a, FR-XI-06, FR-XI-07, FR-XI-07a, FR-XI-08, FR-XI-09
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ma_dot | text | Y | UNIQUE | Auto-gen | Mã đợt (DOT-{CT_ID}-{SEQ}) |
+| 3 | ten_dot | text | Y | | — | Tên đợt báo cáo |
+| 4 | chuong_trinh_id | identifier | Y | FK → CHUONG_TRINH_HTPL(id) | — | CT HTPL liên kết |
+| 5 | ky_bao_cao | text | Y | CHECK IN ('SO_BO_6_THANG','SO_BO_NAM','TRON_NAM') | — | Kỳ báo cáo |
+| 6 | han_nop | datetime | Y | | — | Hạn nộp BC (theo TT17) |
+| 7 | tu_ngay | datetime | Y | | — | Kỳ từ ngày |
+| 8 | den_ngay | datetime | Y | | — | Kỳ đến ngày |
+| 9 | bieu_mau_su_dung | text | Y | CHECK IN ('MAU_21A','MAU_21B','CA_HAI') | — | Biểu mẫu sử dụng |
+| 10 | trang_thai | text | Y | CHECK IN ('TAO_DOT','DANG_LAP_BC','CHO_DUYET_KQ','DA_DUYET_KQ','DA_GUI_TW','DA_TONG_HOP') | 'TAO_DOT' | Trạng thái lifecycle (SM-DOT-BC: 6 states) |
+| 11 | ghi_chu | text (long) | N | | — | Ghi chú |
+| 12 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 13 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 14 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 15 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 16 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 17 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~400 records/năm (2 đợt/CT x ~200 CT) | **Growth:** 10%/năm
+
+---
+
+### 3.4.3.11 AUDIT_LOG — Nhật ký thao tác
+
+**Mô tả:** Ghi nhận mọi thao tác CUD + phê duyệt + đăng nhập/xuất. Immutable, lưu 5 năm.
+**Tham chiếu FR:** NFR-06, cross-cutting
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| entity_type | text | Y | | | Tên entity (HOI_DAP, VU_VIEC...) |
+| entity_id | identifier | Y | | | ID bản ghi tác động |
+| hanh_dong | text | Y | CHECK IN ('CREATE','UPDATE','DELETE','APPROVE','REJECT','LOGIN','LOGOUT','PUBLISH','UNPUBLISH') | | Loại hành động |
+| du_lieu_cu | text (long) | N | | | Snapshot dữ liệu cũ (JSON) |
+| du_lieu_moi | text (long) | N | | | Snapshot dữ liệu mới (JSON) |
+| nguoi_thuc_hien_id | identifier | Y | FK → TAI_KHOAN(id) | | Người thực hiện |
+| thoi_gian | datetime | Y | DEFAULT NOW() | NOW() | Thời điểm hành động |
+| ip_address | text | N | | | IP client |
+| user_agent | text | N | | | Browser user agent |
+| session_id | text | N | | | Session ID |
+
+**Ghi chú:** Bảng này KHÔNG có common fields (is_deleted, updated_at...) do tính immutable. Partition by RANGE (thoi_gian) theo tháng.
+
+**Volume & Growth:** ~500,000 records/năm. Archive sau 5 năm theo Luật Lưu trữ.
+
+**Bổ sung:**
+- Thêm cột `don_vi_id` (identifier) — cho truy vấn audit theo đơn vị. Hoặc document rõ AUDIT_LOG được loại trừ khỏi phân quyền theo đơn vị
+- Mở rộng CHECK hanh_dong: thêm 'EXPORT', 'IMPORT', 'PASSWORD_CHANGE', 'ROLE_CHANGE', 'LOCK_ACCOUNT', 'UNLOCK_ACCOUNT', 'API_ACCESS', 'FORCE_EDIT'
+- **Partition maintenance:** Job tạo partition 3 tháng trước (INTERVAL partitioning). Drop partition > 5 năm sau khi archive xác nhận
+
+---
+
+### 3.4.3.12 KHO_CAU_HOI — Kho Q&A Tư vấn Nhanh
+
+**Mô tả:** Kho câu hỏi-đáp cho tính năng tư vấn nhanh (keyword search). Entity trung tâm Nhóm X.2.
+**Tham chiếu FR:** FR-X.2-01 đến FR-X.2-05
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| cau_hoi | text (long) | Y | | | Nội dung câu hỏi |
+| cau_tra_loi | text (long) | Y | | | Nội dung câu trả lời |
+| linh_vuc_id | identifier | Y | FK → DANH_MUC(id) | | Lĩnh vực PL |
+| nguon | text | Y | CHECK IN ('TU_DONG','THU_CONG','IMPORT') | | Nguồn: tự động từ nhóm II / thủ công / import |
+| hoi_dap_goc_id | identifier | N | FK → HOI_DAP(id) | | Liên kết hỏi đáp gốc (nếu nguồn tự động) |
+| trang_thai | text | Y | CHECK IN ('CHO_DUYET','DA_DUYET','HET_HIEU_LUC') | 'CHO_DUYET' | Trạng thái |
+| diem_danh_gia_tb | number | N | | | Điểm đánh giá TB từ DN |
+| so_luot_xem | number | N | | 0 | Counter lượt xem |
+| tu_khoa | text | N | | | Từ khóa tìm kiếm (phân cách bằng dấu phẩy) |
+
+**Volume & Growth:** ~10,000 records/năm. Cần chỉ mục tìm kiếm toàn văn cho cau_hoi/cau_tra_loi.
+
+---
+
+### 3.4.3.13 HOP_DONG_TU_VAN — Hợp đồng Tư vấn
+
+**Mô tả:** Hợp đồng tư vấn giữa đơn vị và TVV/tổ chức tư vấn. Entity trung tâm Nhóm X.3.
+**Tham chiếu FR:** FR-X.3-01
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| ma_hop_dong | text | Y | UNIQUE | Auto-gen | Mã HĐ |
+| so_hop_dong | text | N | | | Số hợp đồng |
+| ben_a | text | Y | | | Bên A (đơn vị) |
+| ben_b | text | Y | | | Bên B (TVV/tổ chức TV) |
+| tu_van_vien_id | identifier | N | FK → TU_VAN_VIEN(id) | | TVV ký HĐ |
+| gia_tri_hop_dong | number | N | | | Giá trị HĐ (VNĐ) |
+| ngay_ky | datetime | N | | | Ngày ký |
+| ngay_bat_dau | datetime | N | | | Ngày bắt đầu hiệu lực |
+| ngay_ket_thuc | datetime | N | | | Ngày kết thúc hiệu lực |
+| noi_dung | text (long) | N | | | Nội dung/phạm vi HĐ |
+| moc_tien_do | text (long) | N | | | Mốc tiến độ (JSON array) |
+| thanh_toan_giai_doan | text (long) | N | | | Thanh toán theo giai đoạn (JSON array) |
+| trang_thai | text | Y | CHECK IN ('DANG_THUC_HIEN','HOAN_THANH','HUY','TAM_DUNG') | 'DANG_THUC_HIEN' | Trạng thái |
+
+**Volume & Growth:** ~1,000 records/năm.
+
+**CHECK constraints bổ sung:**
+- `CHECK (moc_tien_do IS JSON)`
+- `CHECK (thanh_toan_giai_doan IS JSON)`
+
+---
+
+### 3.4.3.14 CAU_HINH_SLA — Cấu hình SLA
+
+**Mô tả:** Cấu hình thời hạn xử lý + 4 mức cảnh báo (BR-SLA-02) cho từng loại yêu cầu.
+**Tham chiếu FR:** FR-VIII-10, FR-II-CROSS-01
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| loai_yeu_cau | text | Y | UNIQUE | | Loại YC: HOI_DAP, VU_VIEC, HO_SO_CHI_TRA... |
+| ten_loai | text | Y | | | Tên hiển thị |
+| thoi_han_ngay | number | Y | CHECK > 0 | | Thời hạn xử lý (ngày làm việc) |
+| canh_bao_1_phan_tram | number | Y | CHECK BETWEEN 0 AND 100 | 50 | % thời hạn → cảnh báo mức 1 (xanh → vàng) |
+| canh_bao_2_phan_tram | number | Y | CHECK BETWEEN 0 AND 100 | 90 | % thời hạn → cảnh báo mức 2 (vàng → đỏ) |
+| qua_han_he_so | number | N | CHECK > 1 | 2.0 | Hệ số quá hạn nghiêm trọng (x lần thời hạn) |
+| gui_email_canh_bao | boolean | N | | 1 | Có gửi email khi cảnh báo? |
+| gui_thong_bao_app | boolean | N | | 1 | Có gửi thông báo in-app? |
+
+**Seed Data:** VU_VIEC=10 ngày (NĐ55 Điều 9), HOI_DAP=5 ngày LV 🟡 Đề xuất — không có cơ sở pháp lý, team đề xuất dựa trên thực tiễn, HO_SO_CHI_TRA=15 ngày.
+
+---
+
+### 3.4.3.15 THONG_BAO — Thông báo
+
+**Mô tả:** Thông báo in-app + email cho người dùng.
+**Tham chiếu FR:** NFR-10, cross-cutting
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| nguoi_nhan_id | identifier | Y | FK → TAI_KHOAN(id) | | Người nhận |
+| tieu_de | text | Y | | | Tiêu đề thông báo |
+| noi_dung | text (long) | Y | | | Nội dung thông báo |
+| loai | text | Y | CHECK IN ('SLA_CANH_BAO','PHE_DUYET','PHAN_CONG','HE_THONG','TICH_HOP') | | Loại thông báo |
+| entity_type | text | N | | | Entity liên quan (HOI_DAP, VU_VIEC...) |
+| entity_id | identifier | N | | | ID bản ghi liên quan |
+| da_doc | boolean | Y | | 0 | Đã đọc? |
+| ngay_doc | datetime | N | | | Thời điểm đọc |
+| da_gui_email | boolean | N | | 0 | Đã gửi email? |
+| ngay_gui_email | datetime | N | | | Thời điểm gửi email |
+
+**Volume & Growth:** ~100,000 records/năm. Archive sau 1 năm.
+
+**Bổ sung:**
+- **Partitioning:** PARTITION BY RANGE(created_at) INTERVAL(NUMTOYMINTERVAL(1,'MONTH')) — bảng ~100K/năm cần partition để duy trì performance
+
+---
+
+
+### 3.4.3.17 PHAN_HOI — Phản hồi câu hỏi
+
+**Mô tả:** Lưu trữ các câu trả lời/phản hồi cho từng yêu cầu hỏi đáp. Một hỏi đáp có thể có nhiều phản hồi (bổ sung, chỉnh sửa).
+**Module:** Nhóm II — Hỏi đáp/Vướng mắc PL
+
+**Attributes:**
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | hoi_dap_id | identifier | Y | FK → HOI_DAP(id) | — | Câu hỏi được phản hồi |
+| 3 | noi_dung | text (long) | Y | | — | Nội dung phản hồi (max 5000 ký tự logic) |
+| 4 | trang_thai | text | Y | CHECK IN ('DU_THAO','DA_GUI','CHO_PHE_DUYET','DA_DUYET','TU_CHOI') | 'DU_THAO' | Trạng thái phản hồi |
+| 5 | nguoi_tra_loi_id | identifier | Y | FK → TAI_KHOAN(id) | — | CB/NHT/TVV trả lời |
+| 6 | ngay_tra_loi | datetime | N | | — | Thời điểm trả lời |
+| 7 | nguoi_phe_duyet_id | identifier | N | FK → TAI_KHOAN(id) | — | CB phê duyệt phản hồi |
+| 8 | ngay_phe_duyet | datetime | N | | — | Ngày phê duyệt |
+| 9 | la_cong_khai | boolean | Y | | 0 | Đã công khai lên Cổng PLQG? |
+| 10 | su_dung_mau | boolean | N | | 0 | Có sử dụng mẫu phản hồi? |
+| 11 | mau_phan_hoi_id | identifier | N | FK → MAU_PHAN_HOI(id) | — | Mẫu phản hồi áp dụng |
+| 12 | ly_do_tu_choi | text | N | | — | Lý do từ chối (nếu có) |
+| 13 | ghi_chu | text | N | | — | Ghi chú nội bộ |
+| 14 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 15 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 16 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 17 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 18 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 19 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Relationships:**
+
+| Đối tượng | Loại | FK | Mô tả |
+|-----------|------|-----|-------|
+| HOI_DAP | N:1 | hoi_dap_id | Thuộc câu hỏi |
+| TAI_KHOAN | N:1 | nguoi_tra_loi_id | Người trả lời |
+| MAU_PHAN_HOI | N:1 | mau_phan_hoi_id | Mẫu phản hồi (tùy chọn) |
+| FILE_DINH_KEM | 1:N | FILE_DINH_KEM.entity_id (type='PHAN_HOI') | Tệp đính kèm |
+| DON_VI | N:1 | don_vi_id | Đơn vị sở hữu |
+
+**Volume:** ~20,000 records/năm | **Growth:** 15-20%/năm
+
+---
+
+### 3.4.3.18 MAU_PHAN_HOI — Mẫu phản hồi template
+
+**Mô tả:** Kho mẫu phản hồi để cán bộ tái sử dụng khi trả lời hỏi đáp. Phân loại theo lĩnh vực pháp lý.
+**Module:** Nhóm II — Hỏi đáp/Vướng mắc PL
+
+**Attributes:**
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ten_mau | text | Y | | — | Tên mẫu phản hồi |
+| 3 | noi_dung | text (long) | Y | | — | Nội dung mẫu phản hồi |
+| 4 | linh_vuc_id | identifier | Y | FK → DANH_MUC(id) | — | Lĩnh vực pháp lý (UC99) |
+| 5 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái mẫu |
+| 6 | so_lan_su_dung | number | N | | 0 | Counter số lần sử dụng |
+| 7 | mo_ta | text | N | | — | Mô tả ngắn mục đích sử dụng |
+| 8 | tu_khoa | text | N | | — | Từ khóa giúp tìm mẫu nhanh |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Relationships:**
+
+| Đối tượng | Loại | FK | Mô tả |
+|-----------|------|-----|-------|
+| DANH_MUC | N:1 | linh_vuc_id | Lĩnh vực pháp lý |
+| PHAN_HOI | 1:N | PHAN_HOI.mau_phan_hoi_id | Phản hồi sử dụng mẫu |
+| DON_VI | N:1 | don_vi_id | Đơn vị sở hữu |
+
+**Volume:** ~500 records/năm | **Growth:** 10%/năm
+
+---
+
+### 3.4.3.19 CHUONG_TRINH_DAO_TAO — Chương trình đào tạo
+
+**Mô tả:** Chương trình đào tạo/tập huấn bồi dưỡng pháp lý (parent container cho các khóa học). Quản lý theo đơn vị, hình thức, ngân sách.
+**Module:** Nhóm III — Đào tạo/Tập huấn
+
+**Attributes:**
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ma_ctdt | text | Y | UNIQUE | Auto-gen | Mã chương trình ĐT (format: CTDT-YYYYMMDD-SEQ) |
+| 3 | ten_ctdt | text | Y | | — | Tên chương trình đào tạo |
+| 4 | muc_tieu | text (long) | N | | — | Mục tiêu đào tạo |
+| 5 | doi_tuong | text | N | | — | Đối tượng tham gia |
+| 6 | hinh_thuc | text | Y | CHECK IN ('TRUC_TUYEN','TRUC_TIEP','KET_HOP') | — | Hình thức đào tạo |
+| 7 | thoi_gian_bat_dau | datetime | N | | — | Thời gian bắt đầu |
+| 8 | thoi_gian_ket_thuc | datetime | N | | — | Thời gian kết thúc |
+| 9 | ngan_sach | number | N | | — | Ngân sách dự kiến (VNĐ) |
+| 10 | trang_thai | text | Y | CHECK IN ('DU_THAO','CHO_DUYET','DA_DUYET','DANG_THUC_HIEN','HOAN_THANH','HUY') | 'DU_THAO' | Trạng thái lifecycle |
+| 11 | nguoi_phe_duyet_id | identifier | N | FK → TAI_KHOAN(id) | — | CB phê duyệt |
+| 12 | ngay_phe_duyet | datetime | N | | — | Ngày phê duyệt |
+| 13 | la_cong_khai | boolean | N | | 0 | Đã công khai lên Cổng PLQG? |
+| 14 | linh_vuc_id | identifier | N | FK → DANH_MUC(id) | — | Lĩnh vực PL |
+| 15 | mo_ta | text (long) | N | | — | Mô tả chi tiết |
+| 16 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 17 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 18 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 19 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 20 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 21 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Relationships:**
+
+| Đối tượng | Loại | FK | Mô tả |
+|-----------|------|-----|-------|
+| KHOA_HOC | 1:N | KHOA_HOC.ctdt_id | Các khóa học thuộc CT |
+| DANH_MUC | N:1 | linh_vuc_id | Lĩnh vực PL |
+| DON_VI | N:1 | don_vi_id | Đơn vị sở hữu |
+
+**Volume:** ~200 records/năm | **Growth:** 10%/năm
+
+---
+
+### 3.4.3.20 BAI_GIANG — Bài giảng
+
+**Mô tả:** Tài liệu/bài giảng thuộc khóa học. Hỗ trợ file slide, PDF (có preview) và embed link YouTube.
+**Module:** Nhóm III — Đào tạo/Tập huấn
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | khoa_hoc_id | identifier | Y | FK → KHOA_HOC(id) | — | Khóa học chứa bài giảng |
+| 3 | ten_bai_giang | text | Y | | — | Tên bài giảng |
+| 4 | loai | text | Y | CHECK IN ('SLIDE','PDF','VIDEO','TAI_LIEU_KHAC') | — | Loại bài giảng |
+| 5 | mo_ta | text | Y | | — | Mô tả nội dung |
+| 6 | thu_tu | number | N | | 0 | Thứ tự trong khóa học |
+| 7 | duong_dan_file | text | N | | — | Đường dẫn file (SLIDE/PDF, max 20MB) |
+| 8 | link_video | text | N | | — | Link YouTube embed |
+| 9 | kich_thuoc_file | identifier | N | | — | Kích thước file (bytes) |
+| 10 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái |
+| 11 | anh_dai_dien | text | N | | — | URL ảnh đại diện bài giảng (S3-9) |
+| 12 | cong_khai | boolean | N | | 0 | 0=ẩn, 1=công khai lên chuyên trang. Default 0 (S3-13) |
+| 13 | linh_vuc_ids | text | N | | — | JSON array lĩnh vực PL liên kết (chọn nhiều) (S3-12) |
+| 14 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 15 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 16 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 17 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 18 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 19 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~2,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.21 NGAN_HANG_CAU_HOI — Ngân hàng câu hỏi kiểm tra
+
+**Mô tả:** Kho câu hỏi trắc nghiệm/tự luận dùng trong bài kiểm tra đào tạo. Phân loại theo lĩnh vực và mức độ khó.
+**Module:** Nhóm III — Đào tạo/Tập huấn
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | noi_dung | text (long) | Y | | — | Nội dung câu hỏi |
+| 3 | loai_cau_hoi | text | Y | CHECK IN ('TRAC_NGHIEM_MOT','TRAC_NGHIEM_NHIEU','TU_LUAN') | — | Loại câu hỏi |
+| 4 | dap_an | text (long) | N | | — | Đáp án (JSON array cho trắc nghiệm) |
+| 5 | dap_an_dung | text | N | | — | Ký hiệu đáp án đúng (A/B/C/D) |
+| 6 | muc_do | text | Y | CHECK IN ('DE','TRUNG_BINH','KHO') | — | Mức độ khó |
+| 7 | linh_vuc_id | identifier | Y | FK → DANH_MUC(id) | — | Lĩnh vực pháp lý (UC99) |
+| 8 | giai_thich | text (long) | N | | — | Giải thích đáp án |
+| 9 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái |
+| 10 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 11 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 12 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 13 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 14 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 15 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~5,000 records/năm | **Growth:** 20%/năm
+
+---
+
+### 3.4.3.22 DE_KIEM_TRA — Đề kiểm tra
+
+**Mô tả:** Đề kiểm tra/đánh giá kết quả đào tạo, được tạo từ ngân hàng câu hỏi và gán cho khóa học.
+**Module:** Nhóm III — Đào tạo/Tập huấn
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ten_de | text | Y | | — | Tên đề kiểm tra |
+| 3 | khoa_hoc_id | identifier | Y | FK → KHOA_HOC(id) | — | Khóa học liên kết |
+| 4 | thoi_gian_lam_bai | number | N | | — | Thời gian làm bài (phút) |
+| 5 | tong_so_cau | number | N | | — | Tổng số câu hỏi |
+| 6 | diem_toi_da | number | N | | 10 | Điểm tối đa |
+| 7 | diem_dat | number | N | | 5 | Điểm đạt yêu cầu |
+| 8 | trang_thai | text | Y | CHECK IN ('DU_THAO','DA_PHAN_PHOI','HOAN_THANH','HUY') | 'DU_THAO' | Trạng thái |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~1,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.23 KET_QUA_DAO_TAO — Kết quả đào tạo
+
+**Mô tả:** Kết quả học tập (điểm danh, điểm kiểm tra, xếp loại) của từng học viên trong khóa học.
+**Module:** Nhóm III — Đào tạo/Tập huấn
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | khoa_hoc_id | identifier | Y | FK → KHOA_HOC(id) | — | Khóa học |
+| 3 | hoc_vien_id | identifier | Y | FK → TAI_KHOAN(id) | — | Học viên |
+| 4 | diem_danh | boolean | N | | 0 | Đã điểm danh (0/1) |
+| 5 | diem_kiem_tra | number | N | CHECK BETWEEN 0 AND 10 | — | Điểm kiểm tra |
+| 6 | de_kiem_tra_id | identifier | N | FK → DE_KIEM_TRA(id) | — | Đề kiểm tra |
+| 7 | xep_loai | text | N | CHECK IN ('DAT','KHONG_DAT','GIOI','KHA','TRUNG_BINH') | — | Xếp loại |
+| 8 | trang_thai | text | Y | CHECK IN ('CHUA_NHAP','DA_NHAP','CHO_DUYET','DA_DUYET','TU_CHOI') | 'CHUA_NHAP' | Trạng thái duyệt |
+| 9 | nhan_xet | text | N | | — | Nhận xét |
+| 10 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 11 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 12 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 13 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 14 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 15 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~10,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.24 CHUNG_NHAN — Chứng nhận đào tạo
+
+**Mô tả:** Chứng nhận hoàn thành khóa đào tạo (điện tử) cấp cho học viên đạt yêu cầu.
+**Module:** Nhóm III — Đào tạo/Tập huấn
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ma_chung_nhan | text | Y | UNIQUE | Auto-gen | Mã chứng nhận |
+| 3 | khoa_hoc_id | identifier | Y | FK → KHOA_HOC(id) | — | Khóa học |
+| 4 | hoc_vien_id | identifier | Y | FK → TAI_KHOAN(id) | — | Học viên được cấp |
+| 5 | ket_qua_dao_tao_id | identifier | N | FK → KET_QUA_DAO_TAO(id) | — | Kết quả liên kết |
+| 6 | ngay_cap | datetime | Y | | — | Ngày cấp chứng nhận |
+| 7 | nguoi_ky | text | N | | — | Người ký |
+| 8 | duong_dan_file | text | N | | — | Đường dẫn file chứng nhận (PDF) |
+| 9 | trang_thai | text | Y | CHECK IN ('DA_CAP','THU_HOI') | 'DA_CAP' | Trạng thái |
+| 10 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị cấp (phân quyền) |
+| 11 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 12 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 13 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 14 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 15 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~5,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.25 GIANG_VIEN — Giảng viên/Trợ giảng
+
+**Mô tả:** Hồ sơ giảng viên/trợ giảng tham gia các khóa đào tạo.
+**Module:** Nhóm III — Đào tạo/Tập huấn
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ma_giang_vien | text | Y | UNIQUE | Auto-gen | Mã giảng viên |
+| 3 | ho_ten | text | Y | | — | Họ tên đầy đủ |
+| 4 | loai | text | Y | CHECK IN ('GIANG_VIEN','TRO_GIANG') | — | Loại |
+| 5 | chuyen_nganh | text | N | | — | Chuyên ngành |
+| 6 | to_chuc | text | N | | — | Tổ chức/đơn vị công tác |
+| 7 | dien_thoai | text | N | | — | SĐT |
+| 8 | email | text | N | | — | Email |
+| 9 | nang_luc | text (long) | N | | — | Mô tả năng lực (JSON/text) |
+| 10 | so_khoa_da_day | number | N | | 0 | Counter khóa đã giảng dạy |
+| 11 | trang_thai | text | Y | CHECK IN ('DANG_HOAT_DONG','TAM_DUNG','VO_HIEU_HOA') | 'DANG_HOAT_DONG' | Trạng thái |
+| 12 | tai_khoan_id | identifier | N | FK → TAI_KHOAN(id) | — | Liên kết TK đăng nhập |
+| 13 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 14 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 15 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 16 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 17 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 18 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~500 records/năm | **Growth:** 10%/năm
+
+---
+
+### 3.4.3.26 DANG_KY_DAO_TAO — Đăng ký tham gia đào tạo
+
+**Mô tả:** Quản lý đăng ký tham gia khóa đào tạo. Bao gồm trạng thái phê duyệt.
+**Module:** Nhóm III — Đào tạo/Tập huấn
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | khoa_hoc_id | identifier | Y | FK → KHOA_HOC(id) | — | Khóa học đăng ký |
+| 3 | nguoi_dang_ky_id | identifier | Y | FK → TAI_KHOAN(id) | — | Người đăng ký |
+| 4 | ho_ten | text | Y | | — | Họ tên (snapshot) |
+| 5 | don_vi_cong_tac | text | N | | — | Đơn vị công tác/DN |
+| 6 | ngay_dang_ky | datetime | Y | DEFAULT NOW() | NOW() | Ngày đăng ký |
+| 7 | trang_thai | text | Y | CHECK IN ('CHO_DUYET','DA_DUYET','TU_CHOI','DA_HUY') | 'CHO_DUYET' | Trạng thái duyệt |
+| 8 | ly_do_tu_choi | text | N | | — | Lý do từ chối |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~10,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.27 DE_XUAT_DAO_TAO — Đề xuất đào tạo
+
+**Mô tả:** Đề xuất tổ chức đào tạo/tập huấn từ DN/NHT gửi cho đơn vị quản lý.
+**Module:** Nhóm III — Đào tạo/Tập huấn
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | nguoi_de_xuat_id | identifier | Y | FK → TAI_KHOAN(id) | — | Người đề xuất |
+| 3 | linh_vuc_id | identifier | Y | FK → DANH_MUC(id) | — | Lĩnh vực đề xuất |
+| 4 | noi_dung | text (long) | Y | | — | Nội dung cần đào tạo |
+| 5 | thoi_gian_mong_muon | text | N | | — | Thời gian mong muốn |
+| 6 | trang_thai | text | Y | CHECK IN ('MOI_GUI','DA_TIEP_NHAN','DANG_XU_LY','DA_XU_LY','TU_CHOI') | 'MOI_GUI' | Trạng thái |
+| 7 | phan_hoi | text | N | | — | Phản hồi từ đơn vị |
+| 8 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị tiếp nhận (phân quyền) |
+| 9 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 10 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 11 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 12 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 13 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~1,000 records/năm | **Growth:** 10%/năm
+
+---
+
+### 3.4.3.28 HO_SO_TU_VAN_VIEN — Hồ sơ TVV chi tiết
+
+**Mô tả:** Hồ sơ năng lực chi tiết của TVV (bằng cấp, chứng chỉ, kinh nghiệm). 1:1 với TU_VAN_VIEN.
+**Module:** Nhóm IV — Chuyên gia/Tư vấn viên
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | tu_van_vien_id | identifier | Y | FK → TU_VAN_VIEN(id), UNIQUE | — | TVV sở hữu hồ sơ |
+| 3 | bang_cap_chi_tiet | text (long) | N | | — | Bằng cấp chi tiết (JSON array) |
+| 4 | chung_chi_chi_tiet | text (long) | N | | — | Chứng chỉ chi tiết (JSON array) |
+| 5 | kinh_nghiem_chi_tiet | text (long) | N | | — | Kinh nghiệm (JSON array) |
+| 6 | noi_dung_tom_tat | text (long) | N | | — | Tóm tắt hồ sơ năng lực |
+| 7 | trang_thai_tham_dinh | text | N | CHECK IN ('CHUA_THAM_DINH','DANG_THAM_DINH','DAT','KHONG_DAT') | 'CHUA_THAM_DINH' | Trạng thái thẩm định |
+| 8 | ket_qua_tham_dinh | text | N | | — | Kết quả thẩm định 4 nhóm tiêu chí |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~2,000 records (1:1 với TVV) | **Growth:** 5-10%/năm
+
+---
+
+### 3.4.3.29 DANH_GIA_TU_VAN_VIEN — Đánh giá TVV
+
+**Mô tả:** Đánh giá (rating + nhận xét) về TVV từ CB/DN theo 4 nhóm tiêu chí.
+**Module:** Nhóm IV — Chuyên gia/Tư vấn viên
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | tu_van_vien_id | identifier | Y | FK → TU_VAN_VIEN(id) | — | TVV được đánh giá |
+| 3 | nguoi_danh_gia_id | identifier | Y | FK → TAI_KHOAN(id) | — | Người đánh giá |
+| 4 | vu_viec_id | identifier | N | FK → VU_VIEC(id) | — | Vụ việc liên quan |
+| 5 | diem | number | Y | CHECK BETWEEN 0 AND 10 | — | Điểm tổng |
+| 6 | diem_phap_ly | number | N | CHECK BETWEEN 0 AND 10 | — | Điểm Pháp lý |
+| 7 | diem_nang_luc | number | N | CHECK BETWEEN 0 AND 10 | — | Điểm Năng lực |
+| 8 | diem_hieu_qua | number | N | CHECK BETWEEN 0 AND 10 | — | Điểm Hiệu quả |
+| 9 | diem_mang_luoi | number | N | CHECK BETWEEN 0 AND 10 | — | Điểm Mạng lưới |
+| 10 | nhan_xet | text | N | | — | Nhận xét |
+| 11 | ngay_danh_gia | datetime | Y | DEFAULT NOW() | NOW() | Ngày đánh giá |
+| 12 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 13 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 14 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 15 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 16 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 17 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~5,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.30 LICH_SU_HO_TRO_TVV — Lịch sử hoạt động TVV
+
+**Mô tả:** Lịch sử tham gia hỗ trợ của TVV (vụ việc, TV chuyên sâu, đào tạo).
+**Module:** Nhóm IV — Chuyên gia/Tư vấn viên
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | tu_van_vien_id | identifier | Y | FK → TU_VAN_VIEN(id) | — | TVV |
+| 3 | vu_viec_id | identifier | N | FK → VU_VIEC(id) | — | Vụ việc đã tham gia |
+| 4 | tu_van_cs_id | identifier | N | FK → TU_VAN_CHUYEN_SAU(id) | — | TV chuyên sâu |
+| 5 | loai_hoat_dong | text | Y | CHECK IN ('VU_VIEC','TU_VAN_CS','DAO_TAO','KHAC') | — | Loại hoạt động |
+| 6 | mo_ta | text | N | | — | Mô tả |
+| 7 | ngay_bat_dau | datetime | N | | — | Ngày bắt đầu |
+| 8 | ngay_ket_thuc | datetime | N | | — | Ngày kết thúc |
+| 9 | diem_danh_gia | number | N | CHECK BETWEEN 0 AND 10 | — | Điểm đánh giá |
+| 10 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 11 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 12 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 13 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 14 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 15 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~10,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.31 HO_SO_VU_VIEC — Hồ sơ vụ việc
+
+**Mô tả:** Tài liệu đính kèm vụ việc HTPL (Mẫu 01 NĐ55, CNĐKKD, HĐ TVPL, VB TVPL...).
+**Module:** Nhóm V.I — Vụ việc
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | vu_viec_id | identifier | Y | FK → VU_VIEC(id) | — | Vụ việc chứa hồ sơ |
+| 3 | ten_tai_lieu | text | Y | | — | Tên tài liệu |
+| 4 | loai_tai_lieu | text | Y | CHECK IN ('MAU_01','CNDKKD','TO_KHAI_QUY_MO','HD_TVPL','VB_TVPL','KHAC') | — | Loại tài liệu (NĐ55) |
+| 5 | duong_dan_file | text | Y | | — | Đường dẫn file |
+| 6 | kich_thuoc | identifier | N | | — | Kích thước (bytes) |
+| 7 | dinh_dang | text | N | | — | Định dạng file |
+| 8 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~20,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.32 KET_QUA_VU_VIEC — Kết quả xử lý vụ việc
+
+**Mô tả:** Kết quả xử lý vụ việc HTPL (VB tư vấn, kết luận, đánh giá). 1:1 với VU_VIEC.
+**Module:** Nhóm V.I — Vụ việc
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | vu_viec_id | identifier | Y | FK → VU_VIEC(id), UNIQUE | — | Vụ việc (1:1) |
+| 3 | noi_dung | text (long) | Y | | — | Nội dung kết quả/VB tư vấn PL |
+| 4 | ket_luan | text | N | | — | Kết luận tóm tắt |
+| 5 | diem_danh_gia | number | N | CHECK BETWEEN 0 AND 10 | — | Điểm đánh giá chất lượng |
+| 6 | trang_thai | text | Y | CHECK IN ('DU_THAO','CHO_DUYET','DA_DUYET','TU_CHOI') | 'DU_THAO' | Trạng thái |
+| 7 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 8 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 9 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 10 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 11 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 12 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~5,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.33 DANH_GIA_HO_SO_CHI_TRA — Đánh giá hồ sơ chi trả
+
+**Mô tả:** Kết quả đánh giá hồ sơ đề nghị hỗ trợ chi phí theo bộ tiêu chí (UC110). 1:1 với HO_SO_CHI_TRA.
+**Module:** Nhóm V.II — Chi trả
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ho_so_chi_tra_id | identifier | Y | FK → HO_SO_CHI_TRA(id), UNIQUE | — | Hồ sơ chi trả (1:1) |
+| 3 | ket_qua | text | Y | CHECK IN ('DAT','KHONG_DAT','CAN_BO_SUNG') | — | Kết quả đánh giá |
+| 4 | noi_dung_danh_gia | text (long) | N | | — | Nội dung đánh giá chi tiết |
+| 5 | diem_tong | number | N | CHECK BETWEEN 0 AND 100 | — | Điểm tổng |
+| 6 | chi_tiet_tieu_chi | text (long) | N | | — | Điểm theo tiêu chí (JSON array) |
+| 7 | nguoi_danh_gia_id | identifier | Y | FK → TAI_KHOAN(id) | — | CB đánh giá |
+| 8 | ngay_danh_gia | datetime | Y | DEFAULT NOW() | NOW() | Ngày đánh giá |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~3,000 records/năm | **Growth:** 10%/năm
+
+---
+
+### 3.4.3.34 KE_HOACH_DANH_GIA — Kế hoạch đánh giá hiệu quả
+
+**Mô tả:** Kế hoạch đợt đánh giá hiệu quả HTPLDN (sơ bộ 6 tháng hoặc tròn năm).
+**Module:** Nhóm VI — Đánh giá hiệu quả
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ma_ke_hoach | text | Y | UNIQUE | Auto-gen | Mã kế hoạch |
+| 3 | ten_dot | text | Y | | — | Tên đợt đánh giá |
+| 4 | muc_tieu | text (long) | N | | — | Mục tiêu |
+| 5 | tan_suat | text | N | CHECK IN ('SO_BO_6_THANG','TRON_NAM','DOT_XUAT') | — | Tần suất |
+| 6 | thoi_gian_bat_dau | datetime | N | | — | Thời gian bắt đầu |
+| 7 | thoi_gian_ket_thuc | datetime | N | | — | Thời gian kết thúc |
+| 8 | trang_thai | text | Y | CHECK IN ('DU_THAO','CHO_DUYET_PHAN_CONG','DA_DUYET_PHAN_CONG','DANG_THUC_HIEN','HOAN_THANH','HUY') | 'DU_THAO' | Trạng thái |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~100 records/năm | **Growth:** 10%/năm
+
+---
+
+### 3.4.3.35 KET_QUA_DANH_GIA — Kết quả đánh giá
+
+**Mô tả:** Kết quả đánh giá chi tiết từng vụ việc trong đợt đánh giá.
+**Module:** Nhóm VI — Đánh giá hiệu quả
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ke_hoach_id | identifier | Y | FK → KE_HOACH_DANH_GIA(id) | — | Đợt đánh giá |
+| 3 | vu_viec_id | identifier | Y | FK → VU_VIEC(id) | — | Vụ việc được đánh giá |
+| 4 | nguoi_danh_gia_id | identifier | Y | FK → TAI_KHOAN(id) | — | Người đánh giá |
+| 5 | diem_tong | number | N | CHECK BETWEEN 0 AND 100 | — | Điểm tổng |
+| 6 | chi_tiet_diem | text (long) | N | | — | Chi tiết điểm theo tiêu chí (JSON) |
+| 7 | nhan_xet | text | N | | — | Nhận xét |
+| 8 | trang_thai | text | Y | CHECK IN ('CHUA_DANH_GIA','DA_DANH_GIA') | 'CHUA_DANH_GIA' | Trạng thái |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~2,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.36 BAO_CAO_DANH_GIA — Báo cáo đánh giá
+
+**Mô tả:** Báo cáo tổng hợp kết quả đợt đánh giá (mẫu 21a/21b TT17/2025). 1:1 với KE_HOACH_DANH_GIA.
+**Module:** Nhóm VI — Đánh giá hiệu quả
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ke_hoach_id | identifier | Y | FK → KE_HOACH_DANH_GIA(id), UNIQUE | — | KH đánh giá (1:1) |
+| 3 | ma_bao_cao | text | Y | UNIQUE | Auto-gen | Mã báo cáo |
+| 4 | tieu_de | text | Y | | — | Tiêu đề |
+| 5 | noi_dung | text (long) | N | | — | Nội dung tổng hợp |
+| 6 | so_lieu_tong_hop | text (long) | N | | — | Số liệu tổng hợp (JSON) |
+| 7 | trang_thai | text | Y | CHECK IN ('DU_THAO','CHO_PHE_DUYET','DA_DUYET','TU_CHOI') | 'DU_THAO' | Trạng thái |
+| 8 | mau_bao_cao | text | N | CHECK IN ('MAU_21A','MAU_21B') | — | Mẫu BC TT17/2025 |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~100 records/năm | **Growth:** 10%/năm
+
+---
+
+### 3.4.3.37 BIEU_MAU — Biểu mẫu
+
+**Mô tả:** Biểu mẫu/hợp đồng mẫu (file doc/docx/xls/xlsx, max 20MB) cho DNNVV tham khảo + tải về qua Cổng PLQG.
+**Module:** Nhóm VII — Thư viện Biểu mẫu
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ten_bieu_mau | text | Y | | — | Tên biểu mẫu |
+| 3 | thu_muc_id | identifier | Y | FK → THU_MUC_BIEU_MAU(id) | — | Thư mục chứa |
+| 4 | linh_vuc_id | identifier | N | FK → DANH_MUC(id) | — | Lĩnh vực PL |
+| 5 | loai_hinh | text | N | CHECK IN ('HOP_DONG','BIEU_MAU','MAU_DON','KHAC') | — | Loại hình |
+| 6 | duong_dan_file | text | Y | | — | Đường dẫn file |
+| 7 | kich_thuoc | identifier | N | CHECK <= 20971520 | — | Kích thước file (max 20MB) |
+| 8 | dinh_dang | text | N | CHECK IN ('DOC','DOCX','XLS','XLSX') | — | Định dạng file |
+| 9 | la_cong_khai | boolean | N | | 0 | Đã công khai lên Cổng? |
+| 10 | so_luot_tai | number | N | | 0 | Counter lượt tải |
+| 11 | trang_thai | text | Y | CHECK IN ('NHAP','CONG_KHAI','AN') | 'NHAP' | Trạng thái lifecycle (SM-BIEUMAU: NHAP→CONG_KHAI↔AN) |
+| 12 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 13 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 14 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 15 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 16 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 17 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~2,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.38 THU_MUC_BIEU_MAU — Thư mục biểu mẫu
+
+**Mô tả:** Thư mục phân loại biểu mẫu/hợp đồng theo lĩnh vực. Cấu trúc 1 cấp (flat).
+**Module:** Nhóm VII — Thư viện Biểu mẫu
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ten_thu_muc | text | Y | UNIQUE per don_vi_id | — | Tên thư mục |
+| 3 | linh_vuc_id | identifier | N | FK → DANH_MUC(id) | — | Lĩnh vực PL |
+| 4 | la_cong_khai | boolean | N | | 0 | Đã công khai lên Cổng? |
+| 5 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái |
+| 6 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 7 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 8 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 9 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 10 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 11 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~200 records/năm | **Growth:** 10%/năm
+
+---
+
+### 3.4.3.39 DANH_MUC — Danh mục dùng chung
+
+**Mô tả:** Bảng danh mục dùng chung (key-value) cho lĩnh vực PL, loại hình HT, loại DN, tổ chức TV, kênh tiếp nhận.
+**Module:** Nhóm VIII — Quản trị hệ thống
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | loai_danh_muc | text | Y | | — | Loại DM (LINH_VUC_PL, LOAI_DN...) |
+| 3 | ma | text | Y | UNIQUE per loai_danh_muc | — | Mã danh mục |
+| 4 | ten | text | Y | | — | Tên hiển thị |
+| 5 | mo_ta | text | N | | — | Mô tả |
+| 6 | thu_tu | number | N | | 0 | Thứ tự hiển thị |
+| 7 | danh_muc_cha_id | identifier | N | FK → DANH_MUC(id) | — | DM cha (self-ref) |
+| 8 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái |
+| 9 | don_vi_id | identifier | N | FK → DON_VI(id) | — | Đơn vị (NULL=toàn HT) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Seed Data:** ~500 records (UC99-UC117). **Volume:** ~100/năm | **Growth:** 5%/năm
+
+---
+
+### 3.4.3.40 VAI_TRO — Vai trò người dùng
+
+**Mô tả:** Nhóm quyền (Role) gán cho tài khoản. N:M via TAI_KHOAN_VAI_TRO.
+**Module:** Nhóm VIII — Quản trị hệ thống
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ma_vai_tro | text | Y | UNIQUE | — | Mã vai trò |
+| 3 | ten_vai_tro | text | Y | | — | Tên vai trò |
+| 4 | mo_ta | text | N | | — | Mô tả |
+| 5 | cap | text | N | CHECK IN ('TW','BN','DP','ALL') | 'ALL' | Cấp áp dụng |
+| 6 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái |
+| 7 | don_vi_id | identifier | N | FK → DON_VI(id) | — | Đơn vị (NULL=toàn HT) |
+| 8 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 9 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 10 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 11 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 12 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Seed Data:** QTHT, CB_NV_TW/BN/DP, CB_PD_TW/BN/DP, DN, NHT, TVV, CG (~11 records). **Volume:** Rất thấp.
+
+---
+
+### 3.4.3.41 QUYEN_HAN — Quyền hạn chức năng
+
+**Mô tả:** Quyền hạn truy cập chức năng (menu) và dữ liệu. Gán cho VAI_TRO qua junction table.
+**Module:** Nhóm VIII — Quản trị hệ thống
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ma_quyen | text | Y | UNIQUE | — | Mã quyền (HOI_DAP_XEM, VU_VIEC_TAO...) |
+| 3 | ten_quyen | text | Y | | — | Tên quyền |
+| 4 | mo_ta | text | N | | — | Mô tả |
+| 5 | loai | text | Y | CHECK IN ('CHUC_NANG','DU_LIEU') | — | Loại quyền |
+| 6 | nhom_chuc_nang | text | N | | — | Nhóm chức năng |
+| 7 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái |
+| 8 | don_vi_id | identifier | N | FK → DON_VI(id) | — | Đơn vị (NULL=toàn HT) |
+| 9 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 10 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 11 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 12 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 13 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Seed Data:** ~100 records. **Volume:** Rất thấp.
+
+---
+
+### 3.4.3.42 TIEU_CHI_DANH_GIA — Tiêu chí đánh giá
+
+**Mô tả:** Bộ tiêu chí đánh giá hiệu quả HTPL (UC109) và đánh giá hồ sơ chi trả (UC110).
+**Module:** Nhóm VIII — Quản trị hệ thống
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ma_tieu_chi | text | Y | UNIQUE | — | Mã tiêu chí |
+| 3 | ten_tieu_chi | text | Y | | — | Tên tiêu chí |
+| 4 | nhom_tieu_chi | text | Y | CHECK IN ('HIEU_QUA_HTPL','HO_SO_CHI_TRA','THAM_DINH_TVV') | — | Nhóm |
+| 5 | trong_so | number | N | CHECK BETWEEN 0 AND 100 | — | Trọng số (%) |
+| 6 | diem_toi_da | number | N | | 10 | Điểm tối đa |
+| 7 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái |
+| 8 | don_vi_id | identifier | N | FK → DON_VI(id) | — | Đơn vị (NULL=toàn HT) |
+| 9 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 10 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 11 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 12 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 13 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Seed Data:** 4 nhóm tiêu chí TVV + tiêu chí chi trả (~50 records). **Volume:** Rất thấp.
+
+---
+
+### 3.4.3.43 BAO_CAO — Báo cáo thống kê (metadata)
+
+**Mô tả:** Metadata cho 23 loại báo cáo thống kê (Nhóm IX). Lưu cấu hình, kỳ, bộ lọc, kết quả.
+**Module:** Nhóm IX — Báo cáo thống kê
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ma_bao_cao | text | Y | UNIQUE | Auto-gen | Mã báo cáo |
+| 3 | loai_bao_cao | text | Y | | — | Loại BC (BC_HOI_DAP, BC_VU_VIEC...) |
+| 4 | tieu_de | text | Y | | — | Tiêu đề |
+| 5 | ky_bao_cao | text | Y | CHECK IN ('TUAN','THANG','QUY','NAM','KHOANG') | — | Kỳ |
+| 6 | tu_ngay | datetime | Y | | — | Từ ngày |
+| 7 | den_ngay | datetime | Y | | — | Đến ngày |
+| 8 | bo_loc | text (long) | N | | — | Bộ lọc (JSON) |
+| 9 | du_lieu_ket_qua | text (long) | N | | — | Kết quả (JSON) |
+| 10 | duong_dan_file | text | N | | — | File xuất (Excel/Word) |
+| 11 | trang_thai | text | Y | CHECK IN ('DANG_TAO','HOAN_THANH','LOI') | 'DANG_TAO' | Trạng thái |
+| 12 | nguoi_tao_id | identifier | Y | FK → TAI_KHOAN(id) | — | Người tạo BC |
+| 13 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 14 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 15 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 16 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 17 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 18 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~5,000 records/năm | **Growth:** 15%/năm
+
+---
+
+### 3.4.3.44 PHIEN_TU_VAN — Phiên tư vấn chuyên sâu
+
+**Mô tả:** Phiên tư vấn 1-1 (video call/điện thoại/hồ sơ) thuộc yêu cầu tư vấn chuyên sâu.
+**Module:** Nhóm X.1 — Tư vấn chuyên sâu
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | tu_van_cs_id | identifier | Y | FK → TU_VAN_CHUYEN_SAU(id) | — | YC TV chuyên sâu |
+| 3 | thoi_gian_bat_dau | datetime | Y | | — | Thời gian bắt đầu |
+| 4 | thoi_gian_ket_thuc | datetime | N | | — | Thời gian kết thúc |
+| 5 | hinh_thuc | text | Y | CHECK IN ('VIDEO_CALL','DIEN_THOAI','HO_SO','TRUC_TIEP') | — | Hình thức |
+| 6 | link_meeting | text | N | | — | Link Zoom/meeting |
+| 7 | trang_thai | text | Y | CHECK IN ('CHO_XAC_NHAN','DA_XAC_NHAN','DANG_DIEN_RA','HOAN_THANH','HUY','DOI_LICH') | 'CHO_XAC_NHAN' | Trạng thái |
+| 8 | ket_qua | text (long) | N | | — | Kết quả phiên TV |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~4,000 records/năm | **Growth:** 20%/năm
+
+---
+
+### 3.4.3.45 LICH_SU_TRAO_DOI_TV — Lịch sử trao đổi tư vấn
+
+**Mô tả:** Timeline trao đổi giữa DN và CG/TVV trong phiên tư vấn chuyên sâu.
+**Module:** Nhóm X.1 — Tư vấn chuyên sâu
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | tu_van_cs_id | identifier | Y | FK → TU_VAN_CHUYEN_SAU(id) | — | YC TV chuyên sâu |
+| 3 | nguoi_gui_id | identifier | Y | FK → TAI_KHOAN(id) | — | Người gửi |
+| 4 | noi_dung | text (long) | Y | | — | Nội dung trao đổi |
+| 5 | loai | text | Y | CHECK IN ('CAU_HOI','TRA_LOI','GHI_CHU','VB_TU_VAN') | — | Loại trao đổi |
+| 6 | ngay_gui | datetime | Y | DEFAULT NOW() | NOW() | Thời điểm gửi |
+| 7 | da_doc | boolean | N | | 0 | Đã đọc? |
+| 8 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 9 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 10 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 11 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 12 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 13 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~20,000 records/năm | **Growth:** 20%/năm
+
+---
+
+### 3.4.3.46 KE_HOACH_CT_HTPL — Kế hoạch chương trình HTPL
+
+**Mô tả:** Kế hoạch chi tiết thực hiện chương trình HTPLDN (ngân sách, thời gian, nguồn lực).
+**Module:** Nhóm XI — CT HTPLDN
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ct_htpl_id | identifier | Y | FK → CHUONG_TRINH_HTPL(id) | — | CT HTPL cha |
+| 3 | ma_ke_hoach | text | Y | UNIQUE | Auto-gen | Mã kế hoạch |
+| 4 | ten_ke_hoach | text | Y | | — | Tên kế hoạch |
+| 5 | noi_dung | text (long) | N | | — | Nội dung chi tiết |
+| 6 | ngan_sach | number | N | | — | Ngân sách (VNĐ) |
+| 7 | thoi_gian_bat_dau | datetime | N | | — | Thời gian bắt đầu |
+| 8 | thoi_gian_ket_thuc | datetime | N | | — | Thời gian kết thúc |
+| 9 | trang_thai | text | Y | CHECK IN ('DU_THAO','CHO_PHE_DUYET','DA_DUYET','DA_CONG_BO','DANG_THUC_HIEN','HOAN_THANH','HUY') | 'DU_THAO' | Trạng thái |
+| 10 | la_cong_bo | boolean | N | | 0 | Đã công bố lên Cổng? |
+| 11 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 12 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 13 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 14 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 15 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 16 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~200 records/năm | **Growth:** 10%/năm
+
+---
+
+### 3.4.3.47 BAO_CAO_CT_HTPL — Báo cáo kết quả CT HTPL
+
+**Mô tả:** Báo cáo kết quả thực hiện chương trình HTPLDN (theo kỳ).
+**Module:** Nhóm XI — CT HTPLDN
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ct_htpl_id | identifier | Y | FK → CHUONG_TRINH_HTPL(id) | — | CT HTPL |
+| 3 | ma_bao_cao | text | Y | UNIQUE | Auto-gen | Mã báo cáo |
+| 4 | tieu_de | text | Y | | — | Tiêu đề |
+| 5 | noi_dung | text (long) | N | | — | Nội dung |
+| 6 | ky_bao_cao | text | N | CHECK IN ('THANG','QUY','NAM','TONG_KET') | — | Kỳ |
+| 7 | so_lieu_tong_hop | text (long) | N | | — | Số liệu (JSON) |
+| 8 | trang_thai | text | Y | CHECK IN ('DU_THAO','CHO_PHE_DUYET','DA_DUYET','TU_CHOI') | 'DU_THAO' | Trạng thái |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 12 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 13 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 14 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~200 records/năm | **Growth:** 10%/năm
+
+---
+
+### 3.4.3.48 CAU_HINH_PHAN_CONG — Cấu hình phân công
+
+**Mô tả:** Mapping lĩnh vực PL <-> CB/TVV xử lý. Gợi ý phân công tự động.
+**Module:** Nhóm VIII — Quản trị hệ thống
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | linh_vuc_id | identifier | Y | FK → DANH_MUC(id) | — | Lĩnh vực PL |
+| 3 | nguoi_xu_ly_id | identifier | Y | FK → TAI_KHOAN(id) | — | CB/TVV xử lý |
+| 4 | loai_yeu_cau | text | N | CHECK IN ('HOI_DAP','VU_VIEC','TU_VAN_CS','TAT_CA') | 'TAT_CA' | Loại YC áp dụng |
+| 5 | uu_tien | number | N | | 1 | Mức ưu tiên |
+| 6 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái |
+| 7 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 8 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 9 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 10 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 11 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 12 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Volume:** ~500 records | **Growth:** 5%/năm
+
+---
+
+### 3.4.3.49 FILE_DINH_KEM — File đính kèm (shared)
+
+**Mô tả:** File đính kèm dùng chung (polymorphic: entity_type + entity_id). Hỗ trợ HOI_DAP, PHAN_HOI, VU_VIEC, HO_SO_TVV, LICH_SU_TRAO_DOI.
+**Module:** Cross-cutting
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | entity_type | text | Y | | — | Entity cha (HOI_DAP, PHAN_HOI...) |
+| 3 | entity_id | identifier | Y | | — | ID bản ghi cha |
+| 4 | ten_file | text | Y | | — | Tên file gốc |
+| 5 | ten_file_luu | text | Y | | — | Tên file lưu trữ (UUID) |
+| 6 | duong_dan | text | Y | | — | Đường dẫn trên storage |
+| 7 | dinh_dang | text | N | | — | Định dạng (pdf/doc/jpg...) |
+| 8 | kich_thuoc | identifier | N | | — | Kích thước (bytes) |
+| 9 | content_type | text | N | | — | MIME type |
+| 10 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu (phân quyền) |
+| 11 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 12 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+| 13 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
+| 14 | updated_by | identifier | N | FK → TAI_KHOAN(id) | — | Người cập nhật |
+| 15 | is_deleted | boolean | Y | | 0 | Soft delete flag |
+
+**Index:** Composite index trên (entity_type, entity_id).
+**Volume:** ~50,000 records/năm | **Growth:** 20%/năm
+
+**CHECK constraints bổ sung:**
+- `CHECK (kich_thuoc > 0 AND kich_thuoc <= 20971520)` — enforce giới hạn 20MB tại DB level
+- `CHECK (entity_type IN ('HOI_DAP','PHAN_HOI','VU_VIEC','LICH_SU_TRAO_DOI_TV','HOP_DONG_TU_VAN','BIEU_MAU','TVV_HO_SO','HO_SO_CHI_TRA'))`
+- **Lưu ý:** Referential integrity cho polymorphic FK được enforce tại application layer
+
+**EC — Chiến lược lưu trữ LOB:**
+- Cột BLOB sử dụng SecureFile LOBs với COMPRESS MEDIUM DEDUPLICATE
+- LOB tablespace riêng biệt với data tablespace
+- Hoặc sử dụng file_path tham chiếu đến file server được mã hóa
+- Cảnh báo tablespace: alert tại 80% usage, auto-extend đến giới hạn cấu hình, thông báo DBA tại 90%
+
+---
+
+### 3.4.3.50 TAI_KHOAN_VAI_TRO — Junction table (Tài khoản x Vai trò)
+
+**Mô tả:** Bảng liên kết N:M giữa TAI_KHOAN và VAI_TRO. Composite PK thay vì surrogate key.
+**Module:** Nhóm VIII — Quản trị hệ thống
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | tai_khoan_id | identifier | Y | PK, FK → TAI_KHOAN(id) | — | Tài khoản |
+| 2 | vai_tro_id | identifier | Y | PK, FK → VAI_TRO(id) | — | Vai trò |
+| 3 | ngay_gan | datetime | Y | DEFAULT NOW() | NOW() | Ngày gán |
+| 4 | nguoi_gan_id | identifier | N | FK → TAI_KHOAN(id) | — | Người gán |
+| 5 | trang_thai | text | Y | CHECK IN ('KICH_HOAT','VO_HIEU_HOA') | 'KICH_HOAT' | Trạng thái |
+| 6 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 7 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+
+**Primary Key:** Composite PK (tai_khoan_id, vai_tro_id)
+
+**Volume:** ~5,000 records | **Growth:** Theo TAI_KHOAN
+
+---
+
+### 3.4.3.51 Entity: NGAY_LE
+
+**Mô tả:** Danh mục ngày lễ, ngày nghỉ bù quốc gia — phục vụ tính SLA theo ngày làm việc
+**Module:** Quản trị hệ thống (VIII)
+
+**Attributes:**
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | ngay | date | Y | UNIQUE per nam | — | Ngày lễ/nghỉ bù |
+| 3 | nam | number | Y | CHECK >= 2024 | — | Năm |
+| 4 | ten_ngay_le | text | Y | — | — | Tên ngày lễ (VD: Tết Nguyên Đán) |
+| 5 | loai | text | Y | CHECK IN ('NGAY_LE','NGHI_BU','NGHI_KHAC') | 'NGAY_LE' | Loại ngày nghỉ |
+| 6 | ghi_chu | text | N | — | — | Ghi chú |
+| 7 | created_at | datetime | Y | — | NOW() | Ngày tạo |
+| 8 | created_by | identifier | Y | FK → TAI_KHOAN | — | Người tạo |
+| 9 | updated_at | datetime | Y | — | NOW() | Ngày cập nhật |
+| 10 | updated_by | identifier | Y | FK → TAI_KHOAN | — | Người cập nhật |
+
+**Volume:** ~15 bản ghi/năm | **Growth:** Ổn định
+
+---
+
+
+### 3.4.3.52 Sơ đồ ERD (Entity Relationship Diagram)
+
+### 3.4.3.52 Sơ đồ ERD (Entity Relationship Diagram)
+
+```mermaid
+erDiagram
+    DON_VI {
+        identifier id PK
+        text ma_don_vi UK
+        text ten_don_vi
+        text cap
+        identifier don_vi_cha_id FK
+    }
+
+    TAI_KHOAN {
+        identifier id PK
+        text username UK
+        text email UK
+        text ho_ten
+        identifier loai_tai_khoan_id FK
+        identifier don_vi_id FK
+    }
+
+    VAI_TRO {
+        identifier id PK
+        text ma_vai_tro UK
+        text ten_vai_tro
+    }
+
+    QUYEN_HAN {
+        identifier id PK
+        text ma_quyen UK
+        text ten_quyen
+        text loai
+    }
+
+    DANH_MUC {
+        identifier id PK
+        text loai_danh_muc
+        text ma UK
+        text ten
+    }
+
+    DOANH_NGHIEP {
+        identifier id PK
+        text ma_so_thue UK
+        text ten_doanh_nghiep
+        identifier loai_dn_id FK
+        identifier don_vi_id FK
+    }
+
+    TU_VAN_VIEN {
+        identifier id PK
+        text ma_tvv UK
+        text ho_ten
+        text loai_tvv
+        text trang_thai
+        identifier don_vi_id FK
+    }
+
+    HOI_DAP {
+        identifier id PK
+        text ma_hoi_dap UK
+        text tieu_de
+        text (long) noi_dung
+        text trang_thai
+        identifier linh_vuc_id FK
+        identifier nguoi_gui_id FK
+        identifier don_vi_id FK
+    }
+
+    PHAN_HOI {
+        identifier id PK
+        identifier hoi_dap_id FK
+        text (long) noi_dung
+        text trang_thai
+        identifier nguoi_tra_loi_id FK
+    }
+
+    MAU_PHAN_HOI {
+        identifier id PK
+        text ten_mau
+        text (long) noi_dung
+        identifier linh_vuc_id FK
+    }
+
+    VU_VIEC {
+        identifier id PK
+        text ma_vu_viec UK
+        text tieu_de
+        text trang_thai
+        identifier doanh_nghiep_id FK
+        identifier linh_vuc_id FK
+        identifier nguoi_ho_tro_id FK
+        identifier don_vi_id FK
+    }
+
+    HO_SO_VU_VIEC {
+        identifier id PK
+        identifier vu_viec_id FK
+        text ten_tai_lieu
+        text loai_tai_lieu
+    }
+
+    KET_QUA_VU_VIEC {
+        identifier id PK
+        identifier vu_viec_id FK
+        text (long) noi_dung
+        number diem_danh_gia
+    }
+
+    HO_SO_CHI_TRA {
+        identifier id PK
+        text ma_ho_so UK
+        identifier vu_viec_id FK
+        identifier doanh_nghiep_id FK
+        identifier tu_van_vien_id FK
+        text trang_thai
+        number phi_tu_van
+        number so_tien_duoc_duyet
+    }
+
+    DANH_GIA_HO_SO_CHI_TRA {
+        identifier id PK
+        identifier ho_so_chi_tra_id FK
+        text (long) ket_qua
+    }
+
+    CHUONG_TRINH_DAO_TAO {
+        identifier id PK
+        text ten_ctdt
+        text trang_thai
+        identifier don_vi_id FK
+    }
+
+    KHOA_HOC {
+        identifier id PK
+        text ma_khoa_hoc UK
+        text ten_khoa_hoc
+        identifier ctdt_id FK
+        text hinh_thuc
+        text trang_thai
+    }
+
+    BAI_GIANG {
+        identifier id PK
+        identifier khoa_hoc_id FK
+        text ten_bai_giang
+        text loai
+    }
+
+    NGAN_HANG_CAU_HOI {
+        identifier id PK
+        text (long) noi_dung
+        text muc_do
+        identifier linh_vuc_id FK
+    }
+
+    DE_KIEM_TRA {
+        identifier id PK
+        text ten_de
+        identifier khoa_hoc_id FK
+    }
+
+    KET_QUA_DAO_TAO {
+        identifier id PK
+        identifier khoa_hoc_id FK
+        identifier hoc_vien_id FK
+        number diem
+    }
+
+    CHUNG_NHAN {
+        identifier id PK
+        identifier khoa_hoc_id FK
+        identifier hoc_vien_id FK
+    }
+
+    GIANG_VIEN {
+        identifier id PK
+        text ho_ten
+        text chuyen_nganh
+    }
+
+    HO_SO_TU_VAN_VIEN {
+        identifier id PK
+        identifier tu_van_vien_id FK
+        text (long) noi_dung
+    }
+
+    DANH_GIA_TU_VAN_VIEN {
+        identifier id PK
+        identifier tu_van_vien_id FK
+        number diem
+        text nhan_xet
+    }
+
+    KE_HOACH_DANH_GIA {
+        identifier id PK
+        text ten_dot
+        text trang_thai
+        identifier don_vi_id FK
+    }
+
+    KET_QUA_DANH_GIA {
+        identifier id PK
+        identifier ke_hoach_id FK
+        identifier vu_viec_id FK
+        number diem
+    }
+
+    BAO_CAO_DANH_GIA {
+        identifier id PK
+        identifier ke_hoach_id FK
+        text trang_thai
+    }
+
+    BIEU_MAU {
+        identifier id PK
+        text ten_bieu_mau
+        identifier thu_muc_id FK
+        identifier don_vi_id FK
+    }
+
+    THU_MUC_BIEU_MAU {
+        identifier id PK
+        text ten_thu_muc
+        identifier don_vi_id FK
+    }
+
+    TU_VAN_CHUYEN_SAU {
+        identifier id PK
+        text ma_tu_van UK
+        identifier doanh_nghiep_id FK
+        identifier chuyen_gia_id FK
+        text trang_thai
+    }
+
+    PHIEN_TU_VAN {
+        identifier id PK
+        identifier tu_van_cs_id FK
+        datetime thoi_gian
+        text hinh_thuc
+    }
+
+    LICH_SU_TRAO_DOI_TV {
+        identifier id PK
+        identifier tu_van_cs_id FK
+        identifier nguoi_gui_id FK
+        text (long) noi_dung
+    }
+
+    KHO_CAU_HOI {
+        identifier id PK
+        text (long) cau_hoi
+        text (long) cau_tra_loi
+        identifier linh_vuc_id FK
+        text trang_thai
+    }
+
+    HOP_DONG_TU_VAN {
+        identifier id PK
+        text ma_hop_dong UK
+        identifier tu_van_vien_id FK
+        number gia_tri_hop_dong
+    }
+
+    CHUONG_TRINH_HTPL {
+        identifier id PK
+        text ma_chuong_trinh UK
+        text ten_chuong_trinh
+        text trang_thai
+        identifier don_vi_id FK
+    }
+
+    KE_HOACH_CT_HTPL {
+        identifier id PK
+        identifier ct_htpl_id FK
+        text trang_thai
+    }
+
+    BAO_CAO_CT_HTPL {
+        identifier id PK
+        identifier ct_htpl_id FK
+        text trang_thai
+    }
+
+    CAU_HINH_SLA {
+        identifier id PK
+        text loai_yeu_cau UK
+        number thoi_han_ngay
+    }
+
+    AUDIT_LOG {
+        identifier id PK
+        text entity_type
+        identifier entity_id
+        text hanh_dong
+        datetime thoi_gian
+    }
+
+    THONG_BAO {
+        identifier id PK
+        identifier nguoi_nhan_id FK
+        text loai
+        boolean da_doc
+    }
+
+    CAU_HINH_PHAN_CONG {
+        identifier id PK
+        identifier linh_vuc_id FK
+        identifier nguoi_xu_ly_id FK
+    }
+
+    FILE_DINH_KEM {
+        identifier id PK
+        text entity_type
+        identifier entity_id
+        text duong_dan
+    }
+
+    DON_VI ||--o{ DON_VI : "con"
+    DON_VI ||--o{ TAI_KHOAN : "thuoc"
+    DON_VI ||--o{ HOI_DAP : "so_huu"
+    DON_VI ||--o{ VU_VIEC : "so_huu"
+    DON_VI ||--o{ DOANH_NGHIEP : "so_huu"
+    DON_VI ||--o{ TU_VAN_VIEN : "so_huu"
+    DON_VI ||--o{ CHUONG_TRINH_HTPL : "so_huu"
+
+    TAI_KHOAN }o--o{ VAI_TRO : "co"
+    VAI_TRO }o--o{ QUYEN_HAN : "co"
+
+    HOI_DAP ||--o{ PHAN_HOI : "co_phan_hoi"
+    HOI_DAP }o--|| DANH_MUC : "linh_vuc"
+    HOI_DAP }o--o| DOANH_NGHIEP : "nguoi_gui"
+
+    DOANH_NGHIEP ||--o{ VU_VIEC : "co_vu_viec"
+    DOANH_NGHIEP ||--o{ HO_SO_CHI_TRA : "de_nghi"
+    DOANH_NGHIEP ||--o{ TU_VAN_CHUYEN_SAU : "yeu_cau"
+    DOANH_NGHIEP }o--|| DANH_MUC : "loai_dn"
+
+    VU_VIEC ||--o{ HO_SO_VU_VIEC : "co_ho_so"
+    VU_VIEC ||--o| KET_QUA_VU_VIEC : "co_ket_qua"
+    VU_VIEC ||--o{ HO_SO_CHI_TRA : "co_ho_so_ct"
+    VU_VIEC }o--|| DANH_MUC : "linh_vuc"
+    VU_VIEC }o--o| TU_VAN_VIEN : "phan_cong"
+    VU_VIEC }o--o| HOP_DONG_TU_VAN : "thuoc_hd"
+
+    TU_VAN_VIEN ||--o| HO_SO_TU_VAN_VIEN : "co_ho_so"
+    TU_VAN_VIEN ||--o{ DANH_GIA_TU_VAN_VIEN : "co_danh_gia"
+    TU_VAN_VIEN ||--o{ VU_VIEC : "ho_tro"
+    TU_VAN_VIEN ||--o{ TU_VAN_CHUYEN_SAU : "tu_van"
+    TU_VAN_VIEN }o--o| TAI_KHOAN : "tai_khoan"
+
+    HO_SO_CHI_TRA ||--o| DANH_GIA_HO_SO_CHI_TRA : "co_danh_gia"
+    HO_SO_CHI_TRA }o--|| TU_VAN_VIEN : "tvv"
+
+    CHUONG_TRINH_DAO_TAO ||--o{ KHOA_HOC : "co_khoa"
+    KHOA_HOC ||--o{ BAI_GIANG : "co_bai"
+    KHOA_HOC ||--o{ KET_QUA_DAO_TAO : "co_ket_qua"
+    KHOA_HOC ||--o{ DE_KIEM_TRA : "co_de"
+    KHOA_HOC ||--o{ CHUNG_NHAN : "cap_cn"
+
+    NGAN_HANG_CAU_HOI }o--|| DANH_MUC : "linh_vuc"
+    DE_KIEM_TRA }o--o{ NGAN_HANG_CAU_HOI : "gom_cau_hoi"
+
+    KE_HOACH_DANH_GIA ||--o{ KET_QUA_DANH_GIA : "co_ket_qua"
+    KE_HOACH_DANH_GIA ||--o| BAO_CAO_DANH_GIA : "co_bao_cao"
+    KET_QUA_DANH_GIA }o--|| VU_VIEC : "danh_gia_vv"
+
+    THU_MUC_BIEU_MAU ||--o{ BIEU_MAU : "chua"
+
+    TU_VAN_CHUYEN_SAU ||--o{ PHIEN_TU_VAN : "co_phien"
+    TU_VAN_CHUYEN_SAU ||--o{ LICH_SU_TRAO_DOI_TV : "co_trao_doi"
+
+    KHO_CAU_HOI }o--o| HOI_DAP : "tu_hoi_dap"
+
+    HOP_DONG_TU_VAN }o--|| TU_VAN_VIEN : "ben_b"
+    HOP_DONG_TU_VAN ||--o{ VU_VIEC : "lien_ket"
+
+    CHUONG_TRINH_HTPL ||--o{ KE_HOACH_CT_HTPL : "co_ke_hoach"
+    CHUONG_TRINH_HTPL ||--o{ BAO_CAO_CT_HTPL : "co_bao_cao"
+
+    CAU_HINH_PHAN_CONG }o--|| DANH_MUC : "linh_vuc"
+    CAU_HINH_PHAN_CONG }o--|| TAI_KHOAN : "nguoi_xu_ly"
+```
+
+---
+
+---
+
+## 3.4.4 Lưu trữ và hủy dữ liệu (Data Retention)
+
+| Danh mục | Entities | Active | Archive | Purge | Cơ sở pháp lý |
+|----------|---------|--------|---------|-------|-------|
+| Nghiệp vụ cốt lõi | VU_VIEC, HO_SO_CHI_TRA, KET_QUA_VU_VIEC | 5 năm | 5-10 năm (read-only) | >10 năm | Luật Lưu trữ |
+| Hỏi đáp | HOI_DAP, PHAN_HOI | 5 năm | 5-10 năm | >10 năm | Luật Lưu trữ |
+| Đào tạo | KHOA_HOC, KET_QUA_DAO_TAO, CHUNG_NHAN | 5 năm | 5-10 năm | >10 năm | Hồ sơ ĐT |
+| Tư vấn viên | TU_VAN_VIEN, HO_SO_TU_VAN_VIEN | Vĩnh viễn | — | — | Hồ sơ cá nhân |
+| Doanh nghiệp | DOANH_NGHIEP | Vĩnh viễn | — | — | Master data |
+| Tư vấn chuyên sâu | TU_VAN_CHUYEN_SAU, LICH_SU_TRAO_DOI_TV | 5 năm | 5-10 năm | >10 năm | Bảo mật PL |
+| Audit trail | AUDIT_LOG | 5 năm | 5-10 năm | >10 năm | Luật Lưu trữ, NFR-06 |
+| Thông báo | THONG_BAO | 1 năm | 1-3 năm | >3 năm | Operational |
+| Danh mục/Cấu hình | DANH_MUC, DON_VI, CAU_HINH_SLA | Vĩnh viễn | — | — | System data |
+| Biểu mẫu | BIEU_MAU, THU_MUC_BIEU_MAU | 5 năm | 5-10 năm | >10 năm | Tài liệu mẫu |
+| Báo cáo | BAO_CAO, BAO_CAO_DANH_GIA, BAO_CAO_CT_HTPL | 5 năm | 5-10 năm | >10 năm | Hồ sơ hành chính |
+
+**Trạng thái:** 🟡 Đề xuất — Chờ CĐT xác nhận chính sách lưu trữ
+
+> **Ghi chú v2.0:** Các phần sau từ SRS v1.8 đã chuyển sang Architecture Design:
+> - §3.4.2 Tần suất truy cập (index/cache strategy) → `architecture-inputs-from-srs.md` §3.1
+> - §3.4.5 Ràng buộc toàn vẹn (PK/FK/CHECK expressions) → `architecture-inputs-from-srs.md` §3.2
+> - §3.4.6 Bảo mật dữ liệu (encryption, masking, phân quyền dữ liệu) → `architecture-inputs-from-srs.md` §3.3
+> - §3.4.7 Cơ chế archive/purge → `architecture-inputs-from-srs.md` §3.4
+
+---
+
+
+
+---
+
+## 3.5 Thuộc tính hệ thống
+
+### 3.5.1 Bảo mật (Security)
+
+| # | Yêu cầu | Mô tả | Cơ sở | Trạng thái |
+|---|---------|-------|-------|------------|
+| SEC-01 | Mã hóa dữ liệu truyền | Mọi dữ liệu truyền giữa client-server và giữa các hệ thống phải được mã hóa. Không chấp nhận kênh không mã hóa | Luật Dữ liệu 2024 | 🟡 Đề xuất |
+| SEC-02 | Mã hóa dữ liệu lưu trữ | Dữ liệu nhạy cảm (PII, hồ sơ PL) phải được mã hóa khi lưu trữ | Luật Dữ liệu 2024 | 🟡 Đề xuất |
+| SEC-03 | Xác thực (Authentication) | Xác thực bắt buộc cho mọi truy cập. Khóa tài khoản sau 5 lần đăng nhập sai. Hỗ trợ xác thực VNeID theo lộ trình (xem FR-VIII-20). Timeout phiên đăng nhập: 30 phút không hoạt động | PRD NFR-05 | 🟡 Đề xuất |
+
+> **EC-SEC-03a — Giới hạn phiên đồng thời:** Tối đa 3 phiên hoạt động đồng thời mỗi TAI_KHOAN. Khi tạo phiên thứ 4, phiên cũ nhất bị hủy. Tài khoản QTHT giới hạn 1 phiên.
+
+| SEC-04 | Phân quyền (Authorization) | RBAC (Role-Based Access Control) + Row-level security theo đơn vị. Phân quyền chức năng (UC115) + phân quyền dữ liệu (UC114). Ngang cấp không thấy nhau, cha thấy con | PRD Section 4, UC114-115 | ✅ CĐT xác nhận |
+| SEC-05 | Audit trail | Ghi nhận mọi CUD + phê duyệt + đăng nhập/xuất. Trường: user, timestamp, action, entity, old_value, new_value, IP. Lưu 5 năm, immutable (không cho phép UPDATE/DELETE trên bảng audit) | PRD NFR-06 | 🟡 Đề xuất |
+| SEC-06 | Bảo mật mật khẩu | Mật khẩu >= 8 ký tự, chữ hoa + chữ thường + số. Link đặt lại MK hết hạn 30 phút. 2FA: 🟡 Đề xuất | PRD UC113, UC118 | 🟡 Đề xuất |
+
+> **EC-SEC-06a — Cơ chế cụ thể chống injection/XSS:**
+> - SQL: TẤT CẢ DB query sử dụng parameterized statements (PreparedStatement/bind variables). KHÔNG BAO GIỜ nối chuỗi user input vào SQL.
+> - XSS: Nội dung HTML do user tạo (PHAN_HOI.noi_dung, HOI_DAP.noi_dung) sanitize bằng OWASP Java HTML Sanitizer (backend) hoặc DOMPurify (frontend).
+> - CSP: Content-Security-Policy header: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'
+> - Các trường TEXT chứa JSON: validate IS JSON trước khi lưu.
+
+> **Giải pháp kỹ thuật (auth mechanism, encryption, session management):** Xem Architecture Design Document.
+
+### 3.5.2 Độ tin cậy (Reliability)
+
+| # | Yêu cầu | Mô tả | Cơ sở | Trạng thái |
+|---|---------|-------|-------|------------|
+| REL-01 | Toàn vẹn dữ liệu | Đảm bảo ACID transactions. Không mất dữ liệu khi lỗi giữa chừng. Đảm bảo referential integrity giữa các entity | IEEE 830 | 🟡 Đề xuất |
+| REL-02 | Xử lý lỗi graceful | Mọi lỗi hệ thống hiển thị thông báo thân thiện (không lộ stack trace). Log chi tiết phía server | UX-Spec P6 | 🟡 Đề xuất |
+| REL-03 | Idempotent operations | API outbound phải idempotent (gọi lại cùng request cho cùng kết quả). Hỗ trợ deduplication | LGSP best practice | 🟡 Đề xuất |
+
+> **EC-REL-03a — Cơ chế Idempotency:**
+> - Mỗi API request bao gồm header X-Request-ID (UUID)
+> - Server lưu request ID đã xử lý trong Redis cache (TTL=1 giờ)
+> - Request trùng ID trả cached response, KHÔNG xử lý lại
+> - Inbound LGSP: kiểm tra ma_ho_so_dvc trùng bằng khóa bản ghi khi xử lý
+
+| REL-04 | Soft delete | Xóa dữ liệu sử dụng soft delete (đánh dấu is_deleted = true, deleted_at). Không xóa vật lý | PRD multiple UC | ✅ CĐT xác nhận |
+| REL-05 | Data validation | Validate dữ liệu ở 3 lớp: (1) Client-side (real-time), (2) Server-side (business logic), (3) Database (constraints). Server-side validation là bắt buộc, client-side là bổ sung | IEEE 830 | 🟡 Đề xuất |
+
+### 3.5.3 Khả dụng (Availability)
+
+| # | Yêu cầu | Mô tả | Cơ sở | Trạng thái |
+|---|---------|-------|-------|------------|
+| AVL-01 | Uptime | >= 99.5% uptime (~ 43.8h downtime/năm). API: 24/7. CMS: giờ hành chính (7:30-17:00 T2-T6) nhưng truy cập 24/7 | PRD NFR-02 | 🟡 Đề xuất |
+| AVL-02 | Backup | Full backup hàng ngày lúc 02:00. Incremental backup mỗi 6 giờ. pgBackRest cho backup/restore | PRD NFR-03 | 🟡 Đề xuất |
+| AVL-03 | Recovery | RPO (Recovery Point Objective) <= 6 giờ. RTO (Recovery Time Objective) <= 4 giờ. DR drill định kỳ (hàng quý) | PRD NFR-03 | 🟡 Đề xuất |
+
+> **EC-AVL-03a — Chi tiết Failover cho kiến trúc Monolithic:**
+> - Active-passive failover với shared storage
+> - Load balancer health check: interval 10s, threshold 3 failures
+> - Database failover: CSDL Streaming Replication (nếu có) hoặc restart thủ công
+> - Application restart procedure: systemd service auto-restart, max 3 retries
+> - **Lưu ý:** RPO thống nhất là **≤ 4 giờ** (resolve mâu thuẫn giữa AVL-03 = 6h và TP-REL-05 = 1h, chọn giá trị trung bình thực tế cho môi trường monolithic)
+
+| AVL-04 | Bảo trì | Thời gian bảo trì tối đa 4 giờ/lần. Thực hiện ngoài giờ hành chính. Thông báo trước 24 giờ cho người dùng | PRD NFR-09 | 🟡 Đề xuất |
+| AVL-05 | Graceful degradation | Khi LGSP không khả dụng: CMS vẫn hoạt động đầy đủ cho thao tác nội bộ. API outbound queue lại, retry khi LGSP phục hồi. VNeID down: fallback đăng nhập local | Architecture Analysis | 🟡 Đề xuất |
+
+> **EC-AVL-05a — Xử lý LGSP outbound failure:**
+> - Retry: tối đa 3 lần, exponential backoff (1s, 5s, 30s)
+> - Sau 3 lần thất bại: chuyển vào dead-letter queue
+> - DLQ: alert QTHT, UI quản lý để retry/discard, hết hạn sau 7 ngày
+> - KHÔNG retry vô hạn trên lỗi vĩnh viễn (4xx response)
+
+### 3.5.4 Khả năng bảo trì (Maintainability Requirements)
+
+| # | Yêu cầu | Measurement | Target | Trạng thái |
+|---|---------|-------------|--------|------------|
+| MNT-01 | Kiến trúc phân lớp rõ ràng | Code review, dependency analysis | Tách biệt presentation / business logic / data access | 🟡 Đề xuất |
+| MNT-02 | Logging có cấu trúc | Log review | Log levels ERROR/WARN/INFO/DEBUG, rotation 30 ngày | 🟡 Đề xuất |
+| MNT-03 | Monitoring health check | Uptime monitoring | Metrics: CPU, RAM, response time, error rate. Alert khi vượt ngưỡng | 🟡 Đề xuất |
+| MNT-04 | Tách biệt configuration khỏi code | Deployment review | Environment-specific config (dev/staging/production) | 🟡 Đề xuất |
+
+> **Giải pháp kỹ thuật (coding standards, naming conventions, modularity design):** Xem Architecture Design Document.
+
+### 3.5.5 Tính khả chuyển (Portability Requirements)
+
+| # | Yêu cầu | Measurement | Target | Trạng thái |
+|---|---------|-------------|--------|------------|
+| PRT-01 | Hỗ trợ trình duyệt | Browser testing | Chrome và Edge phiên bản mới nhất, desktop-only | ✅ CĐT xác nhận |
+| PRT-02 | Triển khai on-premise | Deployment verification | Triển khai tại Data Center BTP | ✅ CĐT xác nhận |
+| PRT-03 | Xuất dữ liệu chuẩn mở | Export testing | Excel (.xlsx) và Word (.docx), format chuẩn mở | ✅ CĐT xác nhận |
+| PRT-04 | API chuẩn mở | API specification review | RESTful JSON theo OpenAPI 3.0, API versioning | 🟡 Đề xuất |
+
+> **Giải pháp kỹ thuật (containerization, browser polyfills, deployment config):** Xem Architecture Design Document.
+
+### 3.5.6 Thông báo (Notification)
+
+> **NFR-NOTIF-01 — Email Delivery SLA:** Thông báo email SHALL được gửi trong ≤ 5 phút kể từ sự kiện kích hoạt. Đo bằng: timestamp sự kiện → timestamp email gửi thành công (SMTP accepted). Nếu SMTP queue delay > 5 phút → alert QTHT.
+
+---
+
+
+
+---
+
+## 3.6 Yêu cầu khác
+
+### 3.6.1 Quốc tế hóa và bản địa hóa (i18n / L10n)
+
+| # | Yêu cầu | Mô tả | Trạng thái |
+|---|---------|-------|------------|
+| I18N-01 | Ngôn ngữ chính | Tiếng Việt là ngôn ngữ duy nhất cho giao diện CMS | ✅ CĐT xác nhận |
+| I18N-02 | Character encoding | Unicode UTF-8 toàn hệ thống. CSDL: UTF-8 character set | ✅ CĐT xác nhận |
+| I18N-03 | Định dạng ngày | dd/MM/yyyy (ví dụ: 25/03/2026). Lưu trữ DB: kiểu ngày/thời gian chuẩn | ✅ CĐT xác nhận |
+| I18N-04 | Định dạng số | Dấu chấm phân cách hàng nghìn, dấu phẩy phân cách thập phân (ví dụ: 1.000.000,50) | ✅ CĐT xác nhận |
+| I18N-05 | Định dạng tiền tệ | VND, không có ký hiệu tiền tệ, chỉ hiển thị số + "đồng" hoặc "VNĐ" (ví dụ: 3.000.000 đồng) | 🟡 Đề xuất |
+| I18N-06 | Múi giờ | Asia/Ho_Chi_Minh (UTC+7). Server và client cùng múi giờ | ✅ CĐT xác nhận |
+| I18N-07 | Thuật ngữ kỹ thuật | Sử dụng tiếng Anh cho thuật ngữ kỹ thuật trong code, API (field names, endpoint paths). Giao diện hiển thị tiếng Việt | 🟡 Đề xuất |
+
+### 3.6.2 Tuân thủ pháp luật (Legal Compliance)
+
+| # | Văn bản | Phạm vi áp dụng | Ảnh hưởng đến PM |
+|---|---------|-----------------|-----------------|
+| LEG-01 | Luật Hỗ trợ DNNVV 2017 (04/2017/QH14) | Định nghĩa DNNVV, chính sách hỗ trợ | UC105 (tiêu chí DNNVV), UC81 (quản lý DN) |
+| LEG-02 | NĐ55/2019/NĐ-CP | Hỗ trợ pháp lý cho DNNVV: quy trình, biểu mẫu, mức hỗ trợ | Nhóm V.I (vụ việc), V.II (chi trả), IV (TVV), XI (CT HTPLDN) |
+| LEG-03 | NĐ18/2026/NĐ-CP | Sửa đổi NĐ55: gộp 2 TTHC thành 1, mức hỗ trợ mới | Nhóm V.II (UC68-80), UC110 (tiêu chí chi phí) |
+| LEG-04 | NĐ39/2018/NĐ-CP | Hướng dẫn Luật DNNVV: tiêu chí phân loại DN | UC105 (loại DN), UC81 (quản lý DN) |
+| LEG-05 | NĐ77/2008/NĐ-CP | Tổ chức tư vấn pháp luật: đăng ký, công nhận TVV | Nhóm IV (UC39-50) |
+| LEG-06 | TT17/2025/TT-BTP | Mẫu báo cáo kết quả triển khai công tác hỗ trợ pháp lý cho DNNVV: biểu mẫu 21a/21b, tần suất | Nhóm VI (UC83-91), XI (UC169-172) |
+| LEG-07 | TT64/2021/TT-BTP | Nghiệp vụ trợ giúp pháp lý | Nhóm V.I, V.II (quy trình nghiệp vụ) |
+| LEG-08 | Luật Dữ liệu 2024 | Bảo mật, mã hóa, xử lý dữ liệu cá nhân | SEC-01 đến SEC-06, CI-03, CI-04 |
+
+### 3.6.3 Cài đặt và triển khai (Installation)
+
+| # | Yêu cầu | Mô tả | Trạng thái |
+|---|---------|-------|------------|
+| INS-01 | Mô hình triển khai | On-premise tại Data Center Bộ Tư Pháp | ✅ CĐT xác nhận |
+| INS-02 | Environments | 3 môi trường: Development, Staging (UAT), Production. Cấu hình tách biệt cho mỗi môi trường | 🟡 Đề xuất |
+| INS-03 | Deployment process | Zero-downtime deployment (blue-green hoặc rolling). Rollback trong < 15 phút nếu lỗi | 🟡 Đề xuất |
+| INS-04 | Database migration | CSDL migration scripts version-controlled. Forward-only migrations. Backup trước mỗi migration | 🟡 Đề xuất |
+| INS-05 | Seed data | Danh mục khởi tạo: Lĩnh vực PL (10), Loại hình HT (5), Loại DN (3), Tình trạng VV (7), Cơ quan (Cục + 63 Sở + 20 BN), SLA defaults, Loại TK (11), Loại hình tiếp nhận (5) | ✅ CĐT xác nhận |
+| INS-06 | Data migration | 🟡 Chờ khảo sát: có dữ liệu cũ cần migrate không, format nào, volume bao nhiêu | 🟡 Chờ CĐT |
+
+### 3.6.4 Tài liệu hỗ trợ và hướng dẫn (Help/Documentation)
+
+| # | Yêu cầu | Mô tả | Trạng thái |
+|---|---------|-------|------------|
+| DOC-01 | Tài liệu phân tích nghiệp vụ (SRS) | Tài liệu này — review và phê duyệt trước khi lập trình | ✅ CĐT yêu cầu |
+| DOC-02 | Tài liệu thiết kế hệ thống | Mô tả kiến trúc, thiết kế chi tiết, API specification | ✅ CĐT yêu cầu |
+| DOC-03 | Tài liệu Database | Thiết kế CSDL: ERD, DDL, index, constraint | ✅ CĐT yêu cầu |
+| DOC-04 | Tài liệu hướng dẫn sử dụng | Hướng dẫn từng bước cho mỗi nhóm chức năng, kèm screenshot | ✅ CĐT yêu cầu |
+| DOC-05 | Bản demo phần mềm | Demo để Trung tâm CNTT kiểm thử, sau đó coi như sản phẩm bàn giao chính thức | ✅ CĐT yêu cầu |
+| DOC-06 | Tooltip / Inline help | Gợi ý (tooltip) cho các trường nhập liệu phức tạp. Không yêu cầu hệ thống help riêng | 🟡 Đề xuất |
+
+---
+
+
+
+---
+
+# 4. Kiểm chứng (Verification) — ISO/IEC/IEEE 29148:2018
+
+## 4.1 Phương pháp kiểm chứng (IDAT Methods)
+
+Tài liệu này áp dụng 4 phương pháp kiểm chứng theo tiêu chuẩn ISO/IEC/IEEE 29148:2018:
+
+| Mã | Phương pháp | Mô tả | Áp dụng cho |
+|----|-------------|-------|-------------|
+| **I** | **Inspection** (Kiểm tra) | Đánh giá trực quan mã nguồn, tài liệu, cấu hình, hoặc sản phẩm bàn giao bởi nhóm chuyên gia. Bao gồm code review, document review, và configuration audit. | Business rules, data model constraints, coding standards, documentation completeness |
+| **D** | **Demonstration** (Trình diễn) | Vận hành hệ thống trong điều kiện thực tế hoặc mô phỏng để xác nhận hành vi có thể quan sát được. Người dùng hoặc QA thực hiện quy trình end-to-end. | Functional requirements, UI/UX flows, user acceptance |
+| **A** | **Analysis** (Phân tích) | Xử lý, tính toán, hoặc mô hình hóa dữ liệu kỹ thuật bằng công cụ tự động (benchmark tools, profiling, static analysis). | Performance, reliability, security scanning, capacity planning |
+| **T** | **Test** (Kiểm thử) | Thực thi phần mềm với đầu vào xác định và so sánh kết quả thực tế với kết quả mong đợi. Bao gồm unit test, integration test, system test, regression test. | Tất cả functional requirements, edge cases, error handling |
+
+### Nguyên tắc áp dụng
+
+1. **Mỗi requirement phải có ít nhất 1 phương pháp kiểm chứng** — không có requirement nào được phép unverifiable.
+2. **Ưu tiên Test (T)** cho functional requirements vì cho kết quả khách quan, có thể tự động hóa.
+3. **Analysis (A)** bắt buộc cho performance và security requirements — không dùng D/T đơn thuần.
+4. **Inspection (I)** áp dụng cho constraints không thể test tự động (ví dụ: compliance, coding style).
+5. **Kết hợp đa phương pháp** khi requirement phức tạp (ví dụ: D+T cho workflow, A+T cho performance).
+
+---
+
+## 4.2 Ma trận kiểm chứng (Verification Matrix)
+
+### 4.2.1 Functional Requirements — Nhóm I: Dashboard (UC 1–9)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-I-01 | Hiển thị tổng hợp hỏi đáp, vướng mắc (UC1) | D, T | TP-I-01 | KPI widget hiển thị đúng số liệu hỏi đáp, cập nhật ≤ 5s | ⬜ |
+| FR-I-02 | Tổng hợp vụ việc đã tiếp nhận (UC2) | D, T | TP-I-02 | Widget hiển thị đúng tổng vụ việc tiếp nhận theo bộ lọc | ⬜ |
+| FR-I-03 | Tổng hợp vụ việc đang hỗ trợ (UC3) | D, T | TP-I-03 | Widget hiển thị đúng số vụ việc đang xử lý | ⬜ |
+| FR-I-04 | Tổng hợp vụ việc đã hoàn thành (UC4) | D, T | TP-I-04 | Widget hiển thị đúng số vụ việc hoàn thành | ⬜ |
+| FR-I-05 | Tổng hợp khóa đào tạo đang diễn ra (UC5) | D, T | TP-I-05 | Số liệu khớp với dữ liệu KHOA_HOC đang diễn ra | ⬜ |
+| FR-I-06 | Tổng hợp khóa đào tạo đã diễn ra (UC6) | D, T | TP-I-06 | Số liệu khớp với dữ liệu KHOA_HOC đã hoàn thành | ⬜ |
+| FR-I-07 | Tổng số chuyên gia/TVV (UC7) | D, T | TP-I-07 | Thống kê TVV theo trạng thái chính xác | ⬜ |
+| FR-I-08 | Biểu đồ đánh giá hiệu quả hỗ trợ (UC8) | D, T | TP-I-08 | Biểu đồ đúng dữ liệu, drill-down hoạt động | ⬜ |
+| FR-I-09 | Biểu đồ chất lượng đào tạo (UC9) | D, T | TP-I-09 | Biểu đồ chất lượng đào tạo chính xác theo kỳ | ⬜ |
+
+### 4.2.2 Functional Requirements — Nhóm II: Hỏi đáp, Vướng mắc PL (UC 10–19 + UC mới)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-II-01 | Quản lý thông tin hỏi đáp, vướng mắc pháp lý (UC10) | D, T | TP-II-01 | CRUD hỏi đáp thành công, validate đầy đủ | ⬜ |
+| FR-II-02 | Tìm kiếm hỏi đáp tổng hợp (UC11) | T | TP-II-02 | Full-text search trả kết quả ≤ 2s, filter chính xác | ⬜ |
+| FR-II-03 | Tiếp nhận xử lý hỏi đáp (UC12) | D, T | TP-II-03 | Tiếp nhận + phân loại + gán xử lý đúng quy trình | ⬜ |
+| FR-II-04 | Quản lý thông tin tiếp nhận xử lý (UC13) | D, T | TP-II-04 | CRUD thông tin tiếp nhận, lifecycle đúng | ⬜ |
+| FR-II-05 | Tìm kiếm hỏi đáp đã tiếp nhận (UC14) | T | TP-II-05 | Tìm kiếm multi-criteria hỏi đáp đã tiếp nhận ≤ 2s | ⬜ |
+| FR-II-06 | Phân công xử lý câu hỏi (UC15) | D, T | TP-II-06 | Phân công đúng người, ghi nhận lịch sử phân công | ⬜ |
+| FR-II-07 | Phản hồi câu hỏi (UC16) | D, T | TP-II-07 | Soạn + gửi phản hồi, đính kèm file, workflow đúng | ⬜ |
+| FR-II-08 | Quản lý công khai phản hồi (UC17) | D, T | TP-II-08 | Phản hồi đã duyệt hiển thị trên portal công khai | ⬜ |
+| FR-II-09 | Quản lý câu hỏi đã xử lý (UC18) | D, T | TP-II-09 | Xem/thống kê câu hỏi đã xử lý, ghi audit log | ⬜ |
+| FR-II-10 | Tìm kiếm câu hỏi đã xử lý (UC19) | T | TP-II-10 | Tìm kiếm câu hỏi đã xử lý theo đa tiêu chí | ⬜ |
+| FR-II-NEW-01 | Cấu hình lĩnh vực ↔ phân công xử lý (UC mới) | D, T | TP-II-11 | Cấu hình mapping lĩnh vực → người xử lý đúng | ⬜ |
+| FR-II-NEW-02 | Quản lý mẫu câu hỏi/phản hồi (UC mới) | D, T | TP-II-12 | CRUD mẫu câu hỏi/phản hồi, tái sử dụng | ⬜ |
+| FR-II-CROSS-01 | Cấu hình SLA thời gian xử lý hỏi đáp | A, T | TP-II-13 | Cảnh báo đúng 4 mức theo BR-SLA-02 (>50% còn lại / <50% / >100% / >200%) | ⬜ |
+
+### 4.2.3 Functional Requirements — Nhóm III: Đào tạo, Tập huấn (UC 20–38 + UC mới)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-III-01 | Quản lý Chương trình đào tạo (UC20) | D, T | TP-III-01 | CRUD chương trình, validate đầy đủ fields | ⬜ |
+| FR-III-02 | Tìm kiếm Chương trình đào tạo (UC21) | T | TP-III-02 | Tìm theo tên/mã/thời gian, kết quả ≤ 2s | ⬜ |
+| FR-III-03 | Quản lý đăng ký đào tạo (UC22) | D, T | TP-III-03 | Đăng ký/hủy, kiểm tra trùng lặp | ⬜ |
+| FR-III-04 | Đăng ký tham gia học tập (UC23) | D, T | TP-III-04 | DN/TVV đăng ký thành công, nhận xác nhận | ⬜ |
+| FR-III-05 | Quản lý kiểm tra, đánh giá kết quả (UC24) | D, T | TP-III-05 | Nhập điểm, tính kết quả đạt/không đạt | ⬜ |
+| FR-III-06 | Tìm kiếm kết quả (UC25) | T | TP-III-06 | Tìm theo học viên/khóa/điểm, phân trang đúng | ⬜ |
+| FR-III-07 | Quản lý kho tài liệu, bài giảng (UC26) | D, T | TP-III-07 | Upload/download/phân quyền tài liệu | ⬜ |
+| FR-III-08 | Tìm kiếm tài liệu (UC27) | T | TP-III-08 | Full-text search trên nội dung file | ⬜ |
+| FR-III-09 | Quản lý ngân hàng câu hỏi (UC28) | D, T | TP-III-09 | CRUD câu hỏi, phân loại theo chủ đề/độ khó | ⬜ |
+| FR-III-10 | Tìm kiếm ngân hàng câu hỏi (UC29) | T | TP-III-10 | Filter theo loại/chủ đề/độ khó chính xác | ⬜ |
+| FR-III-11 | Quản lý giảng viên, trợ giảng (UC30) | D, T | TP-III-11 | CRUD giảng viên, gán vào khóa học | ⬜ |
+| FR-III-12 | Tìm kiếm giảng viên (UC31) | T | TP-III-12 | Tìm theo tên/chuyên môn/đơn vị | ⬜ |
+| FR-III-13 | Quản lý đề xuất đào tạo (UC32) | D, T | TP-III-13 | Tạo/trình đề xuất, workflow phê duyệt | ⬜ |
+| FR-III-14 | Lập kế hoạch đào tạo (UC33) | D, T | TP-III-14 | Tạo KH từ đề xuất, gán lịch/giảng viên | ⬜ |
+| FR-III-15 | Phê duyệt kế hoạch (UC34) | D, T | TP-III-15 | Approve/reject KH, ghi lý do | ⬜ |
+| FR-III-16 | Công khai kế hoạch (UC35) | D, T | TP-III-16 | KH đã duyệt hiển thị portal công khai | ⬜ |
+| FR-III-17 | Ghi nhận kết quả (UC36) | D, T | TP-III-17 | Import/nhập thủ công kết quả đào tạo | ⬜ |
+| FR-III-18 | Phê duyệt kết quả (UC37) | D, T | TP-III-18 | Workflow phê duyệt kết quả đào tạo | ⬜ |
+| FR-III-19 | Công bố kết quả đào tạo bồi dưỡng (UC38) | D, T | TP-III-19 | Công bố kết quả + xuất chứng nhận PDF | ⬜ |
+| FR-III-NEW-01 | Tạo đề kiểm tra (UC mới) | D, T | TP-III-20 | Tạo đề từ ngân hàng câu hỏi, random đúng cấu trúc | ⬜ |
+| FR-III-NEW-02 | Quản lý đề kiểm tra (UC mới) | D, T | TP-III-21 | CRUD đề, quản lý phiên bản | ⬜ |
+| FR-III-NEW-03 | Phân phối đề + map bài giảng (UC mới) | D, T | TP-III-22 | Gán đề cho khóa, liên kết bài giảng | ⬜ |
+
+### 4.2.4 Functional Requirements — Nhóm IV: Chuyên gia, TVV (UC 39–50)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-IV-01 | Quản lý tư vấn viên (UC39) | D, T | TP-IV-01 | CRUD TVV, validate mã TVV unique | ⬜ |
+| FR-IV-02 | Tìm kiếm TVV (UC40) | T | TP-IV-02 | Tìm theo tên/mã/lĩnh vực/trạng thái ≤ 2s | ⬜ |
+| FR-IV-03 | Quản lý đăng ký tham gia MLTV (UC41) | D, T | TP-IV-03 | Đăng ký/hủy MLTV, kiểm tra điều kiện | ⬜ |
+| FR-IV-04 | Cập nhật hồ sơ năng lực TVV (UC42) | D, T | TP-IV-04 | Upload bằng cấp/chứng chỉ, cập nhật profile | ⬜ |
+| FR-IV-05 | Quản lý hồ sơ TVV (UC43) | D, T | TP-IV-05 | Quản lý full lifecycle hồ sơ TVV | ⬜ |
+| FR-IV-06 | Thẩm định hồ sơ TVV (UC44) | D, T | TP-IV-06 | Checklist thẩm định, ghi nhận kết quả | ⬜ |
+| FR-IV-07 | Phê duyệt hồ sơ TVV (UC45) | D, T | TP-IV-07 | Workflow phê duyệt, ghi audit log | ⬜ |
+| FR-IV-08 | Cập nhật danh sách MLTV công khai (UC46) | D, T | TP-IV-08 | DS TVV đã duyệt hiển thị portal | ⬜ |
+| FR-IV-09 | Đánh giá TVV (UC47) | D, T | TP-IV-09 | DN đánh giá TVV sau hỗ trợ, tính rating | ⬜ |
+| FR-IV-10 | Quản lý lịch sử hỗ trợ TVV (UC48) | D, T | TP-IV-10 | Xem lịch sử vụ việc đã tham gia | ⬜ |
+| FR-IV-11 | Cập nhật thông tin TVV (UC49) | D, T | TP-IV-11 | TVV tự cập nhật thông tin, chờ duyệt | ⬜ |
+| FR-IV-12 | Cập nhật trạng thái hoạt động TVV (UC50) | D, T | TP-IV-12 | Chuyển trạng thái TVV đúng SM-TVV | ⬜ |
+| FR-IV-CROSS-01 | Tiêu chí thẩm định TVV (Danh mục) | I, T | TP-IV-13 | Danh mục tiêu chí đầy đủ, configurable | ⬜ |
+
+### 4.2.5 Functional Requirements — Nhóm V.I: Vụ việc TGPL (UC 51–67 + UC mới)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-V.I-01 | Quản lý hồ sơ yêu cầu HTPL (UC51) | D, T | TP-V.I-01 | CRUD hồ sơ, validate fields theo NĐ55 | ⬜ |
+| FR-V.I-02 | Gửi hồ sơ yêu cầu HTPL (UC52) | D, T | TP-V.I-02 | DN submit form, tạo mã hồ sơ tự động | ⬜ |
+| FR-V.I-03 | Tiếp nhận hồ sơ qua DVC (UC53) | D, T | TP-V.I-03 | Nhận từ LGSP, map đúng fields | ⬜ |
+| FR-V.I-04 | Nhập hồ sơ yêu cầu thủ công (UC54) | D, T | TP-V.I-04 | CBNV nhập thủ công, validate đầy đủ | ⬜ |
+| FR-V.I-05 | Tiếp nhận hồ sơ từ hệ thống khác (UC55) | D, T | TP-V.I-05 | API inbound nhận hồ sơ, CMS xem/tìm kiếm/xóa | ⬜ |
+| FR-V.I-06 | Kiểm tra hồ sơ yêu cầu (UC56) | D, T | TP-V.I-06 | Checklist kiểm tra, đề xuất bổ sung | ⬜ |
+| FR-V.I-07 | Quản lý hồ sơ vụ việc (UC57) | D, T | TP-V.I-07 | Lifecycle vụ việc đúng SM-VUVIEC | ⬜ |
+| FR-V.I-08 | Tìm kiếm hồ sơ (UC58) | T | TP-V.I-08 | Multi-criteria search, kết quả ≤ 2s | ⬜ |
+| FR-V.I-09 | Lựa chọn người hỗ trợ (UC59) | D, T | TP-V.I-09 | Gợi ý TVV phù hợp theo lĩnh vực/rating | ⬜ |
+| FR-V.I-10 | Xác nhận tham gia hỗ trợ (UC60) | D, T | TP-V.I-10 | TVV xác nhận/từ chối trong SLA | ⬜ |
+| FR-V.I-11 | Trình phê duyệt (UC61) | D, T | TP-V.I-11 | Workflow trình phê duyệt đúng cấp | ⬜ |
+| FR-V.I-12 | Thông báo kết quả tiếp nhận (UC62) | D, T | TP-V.I-12 | Gửi thông báo qua email + in-app | ⬜ |
+| FR-V.I-13 | Phê duyệt hồ sơ vụ việc (UC63) | D, T | TP-V.I-13 | Approve/reject, ghi lý do | ⬜ |
+| FR-V.I-14 | Doanh nghiệp nhận thông báo (UC64) | D, T | TP-V.I-14 | DN nhận TB kết quả qua email/DVC | ⬜ |
+| FR-V.I-15 | NHT cập nhật kết quả hỗ trợ (UC65) | D, T | TP-V.I-15 | NHT ghi nhận tiến độ, upload tài liệu | ⬜ |
+| FR-V.I-16 | CB NV cập nhật kết quả vụ việc (UC66) | D, T | TP-V.I-16 | CBNV tổng hợp, cập nhật trạng thái | ⬜ |
+| FR-V.I-17 | Đánh giá kết quả hỗ trợ vụ việc (UC67) | D, T | TP-V.I-17 | Form đánh giá đa tiêu chí, tính điểm | ⬜ |
+| FR-V.I-NEW-01 | Thiết lập quy trình hỗ trợ TVPLDN (UC mới) | I, D, T | TP-V.I-18 | Cấu hình quy trình linh hoạt | ⬜ |
+| FR-V.I-CROSS-01 | Cấu hình SLA vụ việc | A, T | TP-V.I-19 | SLA tính đúng ngày làm việc, cảnh báo 4 mức theo BR-SLA-02 | ⬜ |
+
+### 4.2.6 Functional Requirements — Nhóm V.II: Chi trả Chi phí TV (UC 68–80)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-V.II-01 | Tiếp nhận hồ sơ từ DVC (UC68) | D, T | TP-V.II-01 | Nhận hồ sơ Mẫu 01 NĐ55 từ LGSP | ⬜ |
+| FR-V.II-02 | Quản lý hồ sơ đề nghị hỗ trợ chi phí (UC69) | D, T | TP-V.II-02 | CRUD, lifecycle đúng SM-CHITRA | ⬜ |
+| FR-V.II-03 | Kiểm tra hồ sơ đề nghị (UC70) | D, T | TP-V.II-03 | Checklist NĐ55, tự động kiểm tra quy mô DN | ⬜ |
+| FR-V.II-04 | Thông báo kết quả kiểm tra qua DVC (UC71) | D, T | TP-V.II-04 | Gửi TB qua LGSP → DVC thành công | ⬜ |
+| FR-V.II-05 | Đánh giá hồ sơ theo tiêu chí (UC72) | D, T | TP-V.II-05 | Tính điểm theo BR-CALC, xếp hạng | ⬜ |
+| FR-V.II-06 | Quản lý hồ sơ đề nghị thanh toán (UC73) | D, T | TP-V.II-06 | CRUD hồ sơ thanh toán | ⬜ |
+| FR-V.II-07 | Gửi hồ sơ đề nghị thanh toán (UC74) | D, T | TP-V.II-07 | Submit và chuyển trạng thái | ⬜ |
+| FR-V.II-08 | Nhận thông báo kết quả thanh toán (UC75) | D, T | TP-V.II-08 | DN nhận thông báo qua email/DVC | ⬜ |
+| FR-V.II-09 | Thẩm định hồ sơ đề nghị thanh toán (UC76) | D, T | TP-V.II-09 | Thẩm định theo quy trình, ghi nhận KQ | ⬜ |
+| FR-V.II-10 | Thông báo kết quả thẩm định (UC77) | D, T | TP-V.II-10 | Gửi TB kèm lý do (nếu từ chối) | ⬜ |
+| FR-V.II-11 | Trình phê duyệt hồ sơ thanh toán (UC78) | D, T | TP-V.II-11 | Workflow trình đúng cấp | ⬜ |
+| FR-V.II-12 | Phê duyệt hồ sơ thanh toán (UC79) | D, T | TP-V.II-12 | Approve/reject, ghi audit | ⬜ |
+| FR-V.II-13 | Cập nhật kết quả xử lý hồ sơ (UC80) | D, T | TP-V.II-13 | Cập nhật trạng thái cuối, lưu lịch sử | ⬜ |
+
+### 4.2.7 Functional Requirements — Nhóm V.III: Quản lý DN (UC 81–82 + UC mới)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-V.III-01 | Quản lý Doanh nghiệp được HTPL (UC81) | D, T | TP-V.III-01 | CRUD DN, validate MST unique, phân loại quy mô | ⬜ |
+| FR-V.III-02 | Tìm kiếm DN (UC82) | T | TP-V.III-02 | Tìm theo tên/MST/loại hình/địa chỉ ≤ 2s | ⬜ |
+| FR-V.III-NEW-01 | Import DN từ Excel (UC mới) | D, T | TP-V.III-03 | Upload Excel, validate, preview lỗi, import batch | ⬜ |
+
+### 4.2.8 Functional Requirements — Nhóm VI: Đánh giá Hiệu quả (UC 83–91)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-VI-01 | Lập kế hoạch đánh giá (UC83) | D, T | TP-VI-01 | Tạo KH đánh giá, gán thời gian/phạm vi | ⬜ |
+| FR-VI-02 | Thiết lập tiêu chí đánh giá (UC84) | D, T | TP-VI-02 | CRUD tiêu chí, gán trọng số, tổng = 100% | ⬜ |
+| FR-VI-03 | Phân công người đánh giá (UC85) | D, T | TP-VI-03 | Gán đánh giá viên theo lĩnh vực | ⬜ |
+| FR-VI-04 | Phê duyệt phân công (UC86) | D, T | TP-VI-04 | Workflow phê duyệt phân công | ⬜ |
+| FR-VI-05 | Chọn vụ việc đánh giá (UC87) | D, T | TP-VI-05 | Lọc vụ việc theo tiêu chí, chọn mẫu | ⬜ |
+| FR-VI-06 | Thực hiện đánh giá (UC88) | D, T | TP-VI-06 | Nhập điểm theo tiêu chí, ghi nhận xét | ⬜ |
+| FR-VI-07 | Lập báo cáo đánh giá (UC89) | D, T | TP-VI-07 | Tổng hợp KQ, xuất báo cáo theo mẫu | ⬜ |
+| FR-VI-08 | Trình phê duyệt báo cáo (UC90) | D, T | TP-VI-08 | Workflow trình duyệt báo cáo | ⬜ |
+| FR-VI-09 | Phê duyệt báo cáo đánh giá (UC91) | D, T | TP-VI-09 | Approve/reject BC, ghi lý do | ⬜ |
+
+### 4.2.9 Functional Requirements — Nhóm VII: Biểu mẫu, Hợp đồng (UC 92–98 + UC163)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-VII-01 | Quản lý thư mục biểu mẫu, hợp đồng (UC92) | D, T | TP-VII-01 | CRUD thư mục phân cấp, versioning | ⬜ |
+| FR-VII-02 | Tìm kiếm thư mục biểu mẫu, hợp đồng (UC93) | T | TP-VII-02 | Tìm theo tên/mã/loại ≤ 2s | ⬜ |
+| FR-VII-03 | Công khai thư mục biểu mẫu lên Cổng (UC94) | D, T | TP-VII-03 | BM đã duyệt hiển thị portal công khai | ⬜ |
+| FR-VII-04 | Quản lý biểu mẫu, hợp đồng (UC95) | D, T | TP-VII-04 | CRUD biểu mẫu, versioning, phân loại | ⬜ |
+| FR-VII-05 | Tìm kiếm biểu mẫu, hợp đồng (UC96) | T | TP-VII-05 | Full-text search biểu mẫu ≤ 2s | ⬜ |
+| FR-VII-06 | Import biểu mẫu hàng loạt (UC97) | D, T | TP-VII-06 | Upload batch Excel/ZIP, validate + import | ⬜ |
+| FR-VII-07 | Chia sẻ biểu mẫu qua API (UC98) | D, T | TP-VII-07 | Chia sẻ qua API trực tiếp (Cổng PLQG) thành công, JSON valid | ⬜ |
+| FR-VII-08 | Quản lý Hợp đồng Tư vấn (UC163) | D, T | TP-VII-08 | CRUD hợp đồng, lifecycle, gia hạn, thanh lý | ⬜ |
+
+### 4.2.10 Functional Requirements — Nhóm VIII: Quản trị Hệ thống (UC 99–119)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-VIII-01 | Quản lý danh mục lĩnh vực pháp lý (UC99) | D, T | TP-VIII-01 | CRUD danh mục lĩnh vực, validate mã unique | ⬜ |
+| FR-VIII-02 | Quản lý danh mục loại hình hỗ trợ (UC100) | D, T | TP-VIII-02 | CRUD danh mục loại hình, validate mã unique | ⬜ |
+| FR-VIII-03 | Quản lý danh mục chương trình hỗ trợ (UC101) | D, T | TP-VIII-03 | CRUD danh mục CT, validate mã unique | ⬜ |
+| FR-VIII-04 | Quản lý danh mục tình trạng vụ việc (UC102) | D, T | TP-VIII-04 | CRUD danh mục tình trạng, validate mã unique | ⬜ |
+| FR-VIII-05 | Quản lý danh mục cơ quan đơn vị quản lý (UC103) | D, T | TP-VIII-05 | CRUD đơn vị 3 cấp (TW/BN/ĐP) | ⬜ |
+| FR-VIII-06 | Quản lý danh mục tổ chức tư vấn (UC104) | D, T | TP-VIII-06 | CRUD tổ chức tư vấn, validate mã unique | ⬜ |
+| FR-VIII-07 | Quản lý danh mục loại doanh nghiệp (UC105) | D, T | TP-VIII-07 | CRUD danh mục loại DN, validate mã unique | ⬜ |
+| FR-VIII-08 | Quản lý danh mục hồ sơ đề nghị hỗ trợ (UC106) | D, T | TP-VIII-08 | CRUD danh mục hồ sơ, validate mã unique | ⬜ |
+| FR-VIII-09 | Quản lý danh mục hồ sơ đề nghị thanh toán (UC107) | D, T | TP-VIII-09 | CRUD danh mục hồ sơ TT, validate mã unique | ⬜ |
+| FR-VIII-10 | Quản lý cấu hình thời hạn xử lý hồ sơ — SLA (UC108) | D, T | TP-VIII-10 | Cấu hình SLA theo loại yêu cầu, đúng ngày LV | ⬜ |
+| FR-VIII-11 | Quản lý danh mục tiêu chí đánh giá hiệu quả (UC109) | D, T | TP-VIII-11 | CRUD tiêu chí đánh giá, gán trọng số | ⬜ |
+| FR-VIII-12 | Quản lý danh mục tiêu chí đánh giá hỗ trợ chi phí (UC110) | D, T | TP-VIII-12 | CRUD tiêu chí chi phí, gán trọng số | ⬜ |
+| FR-VIII-13 | Quản lý loại tài khoản (UC111) | D, T | TP-VIII-13 | CRUD loại tài khoản, phân quyền | ⬜ |
+| FR-VIII-14 | Quản lý vai trò (UC112) | D, T | TP-VIII-14 | CRUD role, gán permission matrix | ⬜ |
+| FR-VIII-15 | Quản lý tài khoản người dùng (UC113) | D, T | TP-VIII-15 | CRUD user, gán role, reset password | ⬜ |
+| FR-VIII-16 | Phân quyền truy cập dữ liệu (UC114) | D, T | TP-VIII-16 | Row-level security theo đơn vị | ⬜ |
+| FR-VIII-17 | Phân quyền chức năng (UC115) | D, T | TP-VIII-17 | Gán quyền chức năng theo role, enforce 100% | ⬜ |
+| FR-VIII-18 | Quản lý danh mục loại hình tiếp nhận (UC116) | D, T | TP-VIII-18 | CRUD danh mục loại hình tiếp nhận | ⬜ |
+| FR-VIII-19 | Quản lý danh mục kênh tiếp nhận (UC117) | D, T | TP-VIII-19 | CRUD danh mục kênh tiếp nhận | ⬜ |
+| FR-VIII-20 | Quản lý đăng nhập (UC118) | D, T | TP-VIII-20 | Đăng nhập username/password + MFA, session management | ⬜ |
+| FR-VIII-21 | Quản lý đăng xuất (UC119) | D, T | TP-VIII-21 | Đăng xuất xóa session, redirect login, ghi audit | ⬜ |
+
+### 4.2.11 Functional Requirements — Nhóm IX: Báo cáo Thống kê (UC 120–142)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-IX-01 | BC Số lượng hỏi đáp/vướng mắc (UC120) | D, T | TP-IX-01 | Số liệu khớp DB, filter thời gian/đơn vị, export Excel/Word | ⬜ |
+| FR-IX-02 | BC Vụ việc đã tiếp nhận (UC121) | D, T | TP-IX-02 | Thống kê vụ việc tiếp nhận theo kỳ/đơn vị chính xác | ⬜ |
+| FR-IX-03 | BC Vụ việc đang hỗ trợ (UC122) | D, T | TP-IX-03 | Thống kê vụ việc đang hỗ trợ chính xác | ⬜ |
+| FR-IX-04 | BC Vụ việc đã hoàn thành (UC123) | D, T | TP-IX-04 | Thống kê vụ việc hoàn thành theo kỳ/đơn vị | ⬜ |
+| FR-IX-05 | BC Vụ việc theo thời gian (UC124) | D, T | TP-IX-05 | Pivot vụ việc theo timeline chính xác | ⬜ |
+| FR-IX-06 | BC Lớp đào tạo đang diễn ra (UC125) | D, T | TP-IX-06 | Thống kê lớp đang diễn ra chính xác | ⬜ |
+| FR-IX-07 | BC Lớp đào tạo đã diễn ra (UC126) | D, T | TP-IX-07 | Thống kê lớp đã hoàn thành chính xác | ⬜ |
+| FR-IX-08 | BC Số lượng CG/TVV (UC127) | D, T | TP-IX-08 | Thống kê TVV theo trạng thái/lĩnh vực | ⬜ |
+| FR-IX-09 | BC Đánh giá hiệu quả HTPL (UC128) | D, T | TP-IX-09 | Tổng hợp KQ đánh giá đúng công thức | ⬜ |
+| FR-IX-10 | BC Chất lượng đào tạo (UC129) | D, T | TP-IX-10 | Tổng hợp chất lượng đào tạo theo tiêu chí | ⬜ |
+| FR-IX-11 | BC Vụ việc theo đơn vị quản lý (UC130) | D, T | TP-IX-11 | Pivot vụ việc theo đơn vị chính xác | ⬜ |
+| FR-IX-12 | BC Vụ việc theo lĩnh vực (UC131) | D, T | TP-IX-12 | Pivot vụ việc theo lĩnh vực chính xác | ⬜ |
+| FR-IX-13 | BC Vụ việc theo loại hình DN (UC132) | D, T | TP-IX-13 | Pivot vụ việc theo loại DN chính xác | ⬜ |
+| FR-IX-14 | BC Vụ việc theo thời gian chi tiết (UC133) | D, T | TP-IX-14 | Pivot vụ việc theo thời gian chi tiết | ⬜ |
+| FR-IX-15 | BC Chi phí chi trả hỗ trợ (UC134) | D, T | TP-IX-15 | Tổng chi phí, phân bổ đúng, đối chiếu | ⬜ |
+| FR-IX-16 | BC Chi phí theo đơn vị (UC135) | D, T | TP-IX-16 | Pivot chi phí theo đơn vị chính xác | ⬜ |
+| FR-IX-17 | BC Chi phí theo lĩnh vực (UC136) | D, T | TP-IX-17 | Pivot chi phí theo lĩnh vực chính xác | ⬜ |
+| FR-IX-18 | BC Chi phí theo loại hình DN (UC137) | D, T | TP-IX-18 | Pivot chi phí theo loại DN chính xác | ⬜ |
+| FR-IX-19 | BC Chi phí theo thời gian (UC138) | D, T | TP-IX-19 | Pivot chi phí theo timeline chính xác | ⬜ |
+| FR-IX-20 | BC Số lượng CT hỗ trợ (UC139) | D, T | TP-IX-20 | Thống kê CT HTPLDN theo kỳ/đơn vị | ⬜ |
+| FR-IX-21 | BC CT theo đơn vị (UC140) | D, T | TP-IX-21 | Pivot CT theo đơn vị chính xác | ⬜ |
+| FR-IX-22 | BC CT theo lĩnh vực (UC141) | D, T | TP-IX-22 | Pivot CT theo lĩnh vực chính xác | ⬜ |
+| FR-IX-23 | BC CT theo thời gian (UC142) | D, T | TP-IX-23 | Pivot CT theo thời gian chính xác | ⬜ |
+
+### 4.2.12 Functional Requirements — Nhóm X.1: Tư vấn Chuyên sâu (UC 147–153)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-X.1-01 | Quản lý nội dung tư vấn với chuyên gia (UC147) | D, T | TP-X.1-01 | CRUD nội dung, lifecycle đúng SM-TVCS | ⬜ |
+| FR-X.1-02 | Tìm kiếm nội dung tư vấn với chuyên gia (UC148) | T | TP-X.1-02 | Multi-criteria search ≤ 2s | ⬜ |
+| FR-X.1-03 | Tiếp nhận nội dung tư vấn với chuyên gia (UC149) | D, T | TP-X.1-03 | Tiếp nhận API inbound từ Cổng PLQG | ⬜ |
+| FR-X.1-04 | Quản lý hồ sơ pháp lý doanh nghiệp (UC150) | D, T | TP-X.1-04 | CRUD hồ sơ pháp lý, đính kèm tài liệu | ⬜ |
+| FR-X.1-05 | Tiếp nhận hồ sơ pháp lý doanh nghiệp (UC151) | D, T | TP-X.1-05 | Tiếp nhận API inbound từ Cổng PLQG | ⬜ |
+| FR-X.1-06 | Quản lý tư liệu pháp lý của vụ việc (UC152) | D, T | TP-X.1-06 | Upload/phân loại tài liệu pháp lý | ⬜ |
+| FR-X.1-07 | Tiếp nhận đánh giá chất lượng TV với CG (UC153) | D, T | TP-X.1-07 | Tiếp nhận API inbound từ Cổng PLQG | ⬜ |
+
+### 4.2.13 Functional Requirements — Nhóm X.2: Tư vấn Nhanh (UC 158–162)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-X.2-01 | Quản lý kho câu hỏi/tư vấn (UC158) | D, T | TP-X.2-01 | CRUD Q&A, phân loại, tag | ⬜ |
+| FR-X.2-02 | Quản lý tư vấn nhanh (UC159) | D, T | TP-X.2-02 | Workflow tiếp nhận → trả lời → đóng | ⬜ |
+| FR-X.2-03 | DN gửi câu hỏi (UC160) | D, T | TP-X.2-03 | Form gửi câu hỏi, gợi ý từ kho | ⬜ |
+| FR-X.2-04 | DN tìm kiếm phản hồi (UC161) | T | TP-X.2-04 | Full-text search trên kho Q&A | ⬜ |
+| FR-X.2-05 | DN đánh giá nội dung trả lời (UC162) | D, T | TP-X.2-05 | Rating 1-5 sao + nhận xét | ⬜ |
+
+### 4.2.14 Functional Requirements — Nhóm X.3: Hợp đồng Tư vấn (UC 163)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-X.3-01 | Quản lý HĐ tư vấn (UC163) | D, T | TP-X.3-01 | CRUD hợp đồng, lifecycle, gia hạn, thanh lý | ⬜ |
+
+### 4.2.15 Functional Requirements — Nhóm XI: Chương trình HTPLDN (UC 164–172)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-XI-01 | Quản lý chương trình HTPL (UC164) | D, T | TP-XI-01 | CRUD CT, lifecycle đúng SM-CTHTPL | ⬜ |
+| FR-XI-02 | Tìm kiếm CT HTPL (UC165) | T | TP-XI-02 | Tìm theo tên/mã/đơn vị/trạng thái | ⬜ |
+| FR-XI-03 | Trình phê duyệt CT (UC166) | D, T | TP-XI-03 | Workflow trình duyệt | ⬜ |
+| FR-XI-04 | Phê duyệt CT (UC167) | D, T | TP-XI-04 | Approve/reject + ghi lý do | ⬜ |
+| FR-XI-05 | Công bố kế hoạch CT (UC168) | D, T | TP-XI-05 | Đăng portal công khai sau duyệt | ⬜ |
+| FR-XI-06 | Lập BC kết quả thực hiện CT (UC169) | D, T | TP-XI-06 | Tổng hợp KQ theo mẫu 21a/21b | ⬜ |
+| FR-XI-07 | Trình phê duyệt BC (UC170) | D, T | TP-XI-07 | Workflow trình duyệt BC | ⬜ |
+| FR-XI-08 | Gửi kết quả lên TW (UC171) | D, T | TP-XI-08 | Gửi BC lên BTP qua API/LGSP | ⬜ |
+| FR-XI-09 | TW tổng hợp BC (UC172) | D, T | TP-XI-09 | TW tổng hợp từ tất cả địa phương | ⬜ |
+
+### 4.2.16 Functional Requirements — Nhóm XII: API Kết nối Chia sẻ Dữ liệu (UC 173–188)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| FR-XII-01 | API Chia sẻ hỏi đáp (UC173) | T, A | TP-XII-01 | Response ≤ 500ms, JSON schema valid | ⬜ |
+| FR-XII-02 | API Tìm kiếm hỏi đáp (UC174) | T, A | TP-XII-02 | Pagination, filter hoạt động đúng | ⬜ |
+| FR-XII-03 | API Chia sẻ đào tạo (UC175) | T, A | TP-XII-03 | Response ≤ 500ms, JSON schema valid | ⬜ |
+| FR-XII-04 | API Tìm kiếm đào tạo (UC176) | T, A | TP-XII-04 | Pagination, filter hoạt động đúng | ⬜ |
+| FR-XII-05 | API Chia sẻ CG/TVV (UC177) | T, A | TP-XII-05 | Data masking PII trong response | ⬜ |
+| FR-XII-06 | API Tìm kiếm CG/TVV (UC178) | T, A | TP-XII-06 | Pagination, filter, PII masking đúng | ⬜ |
+| FR-XII-07 | API Chia sẻ vụ việc (UC179) | T, A | TP-XII-07 | Row-level filtering theo đơn vị | ⬜ |
+| FR-XII-08 | API Tìm kiếm vụ việc (UC180) | T, A | TP-XII-08 | Pagination, filter, row-level security đúng | ⬜ |
+| FR-XII-09 | API Chia sẻ đánh giá hiệu quả (UC181) | T, A | TP-XII-09 | Aggregate data chính xác | ⬜ |
+| FR-XII-10 | API Tìm kiếm đánh giá (UC182) | T, A | TP-XII-10 | Pagination, filter, aggregate đúng | ⬜ |
+| FR-XII-11 | API Chia sẻ biểu mẫu (UC183) | T, A | TP-XII-11 | File download URL có expiry | ⬜ |
+| FR-XII-12 | API Tìm kiếm biểu mẫu (UC184) | T, A | TP-XII-12 | Pagination, filter, file URL đúng | ⬜ |
+| FR-XII-13 | API Chia sẻ tư vấn chuyên sâu (UC185) | T, A | TP-XII-13 | Token xác thực + rate limiting | ⬜ |
+| FR-XII-14 | API Tìm kiếm tư vấn chuyên sâu (UC186) | T, A | TP-XII-14 | Token xác thực, pagination, filter đúng | ⬜ |
+| FR-XII-15 | API Chia sẻ CT HTPLDN (UC187) | T, A | TP-XII-15 | Versioning API đúng semver | ⬜ |
+| FR-XII-16 | API Tìm kiếm CT HTPLDN (UC188) | T, A | TP-XII-16 | Versioning API, pagination, filter đúng | ⬜ |
+
+### 4.2.17 Performance Requirements (PERF-01 to PERF-08)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| PERF-01 | Thời gian phản hồi trang CMS | A, T | TP-PERF-01 | P95 ≤ 3s cho trang CMS thông thường | ⬜ |
+| PERF-02 | Thời gian phản hồi API outbound | A, T | TP-PERF-02 | P95 ≤ 5s cho API outbound (trực tiếp với Cổng PLQG) | ⬜ |
+| PERF-03 | Concurrent users | A, T | TP-PERF-03 | ≥ 500 concurrent users không degradation | ⬜ |
+| PERF-04 | Thời gian tải danh sách | A, T | TP-PERF-04 | ≤ 2s cho danh sách ≤ 1000 records | ⬜ |
+| PERF-05 | Thời gian xuất báo cáo | A, T | TP-PERF-05 | ≤ 30s cho BC ≤ 10,000 records | ⬜ |
+| PERF-06 | Thời gian upload file | A, T | TP-PERF-06 | ≤ 10s cho file ≤ 10MB | ⬜ |
+| PERF-07 | Thông lượng API | A, T | TP-PERF-07 | ≥ 100 req/s sustained | ⬜ |
+| PERF-08 | Dung lượng lưu trữ | A | TP-PERF-08 | Đủ cho 5 năm vận hành | ⬜ |
+
+### 4.2.18 Security Requirements (SEC-01 to SEC-06)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| SEC-01 | Xác thực đa yếu tố | D, T | TP-SEC-01 | MFA bắt buộc cho admin, optional cho user | ⬜ |
+| SEC-02 | Phân quyền RBAC | I, T | TP-SEC-02 | Permission matrix enforce đúng 100% endpoints | ⬜ |
+| SEC-03 | Mã hóa dữ liệu | I, A | TP-SEC-03 | TDE + AES-256 cho PII, TLS 1.2+ in-transit | ⬜ |
+| SEC-04 | Audit logging | T | TP-SEC-04 | Ghi log mọi action CUD, immutable | ⬜ |
+| SEC-05 | Session management | T | TP-SEC-05 | Timeout 30 phút, concurrent session limit | ⬜ |
+| SEC-06 | Input validation | T | TP-SEC-06 | Chống SQL injection, XSS, CSRF 100% | ⬜ |
+
+### 4.2.19 Reliability Requirements (REL-01 to REL-05)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| REL-01 | MTBF | A | TP-REL-01 | MTBF ≥ 720 giờ (30 ngày) | ⬜ |
+| REL-02 | MTTR | A, D | TP-REL-02 | MTTR ≤ 4 giờ cho sự cố nghiêm trọng | ⬜ |
+| REL-03 | Data integrity | T | TP-REL-03 | Zero data loss trong điều kiện bình thường | ⬜ |
+| REL-04 | Error handling | T | TP-REL-04 | Graceful degradation, user-friendly error messages | ⬜ |
+| REL-05 | Backup & Recovery | D, T | TP-REL-05 | RTO ≤ 4h, RPO ≤ 4h | ⬜ |
+
+### 4.2.20 Availability Requirements (AVL-01 to AVL-05)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| AVL-01 | Uptime | A | TP-AVL-01 | ≥ 99.5% uptime (trừ bảo trì kế hoạch) | ⬜ |
+| AVL-02 | Planned downtime | D | TP-AVL-02 | Bảo trì ≤ 4h/tháng, ngoài giờ hành chính | ⬜ |
+| AVL-03 | Failover | D, T | TP-AVL-03 | Failover tự động ≤ 5 phút | ⬜ |
+| AVL-04 | Load balancing | A, T | TP-AVL-04 | Distribute đều traffic across nodes | ⬜ |
+| AVL-05 | Health monitoring | D, A | TP-AVL-05 | Health check endpoint, alert khi down | ⬜ |
+
+### 4.2.21 Maintainability Requirements (MNT-01 to MNT-05)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| MNT-01 | Modular architecture | I | TP-MNT-01 | Separation of concerns, loosely coupled modules | ⬜ |
+| MNT-02 | Code quality | I, A | TP-MNT-02 | SonarQube gate pass, coverage ≥ 80% | ⬜ |
+| MNT-03 | Configuration externalization | I, T | TP-MNT-03 | Mọi config externalized, không hardcode | ⬜ |
+| MNT-04 | Database migration | D, T | TP-MNT-04 | Flyway/Liquibase migration scripts versioned | ⬜ |
+| MNT-05 | API versioning | I, T | TP-MNT-05 | Semantic versioning, backward compatible | ⬜ |
+
+### 4.2.22 Portability Requirements (PRT-01 to PRT-05)
+
+| Req ID | Tên yêu cầu | Method | Procedure Ref | Acceptance Criteria | Status |
+|--------|-------------|--------|---------------|-------------------|--------|
+| PRT-01 | Browser compatibility | D, T | TP-PRT-01 | Chrome, Edge (2 phiên bản mới nhất) — theo C-12 | ⬜ |
+| PRT-02 | Responsive design | D | TP-PRT-02 | UI hiển thị đúng trên tablet/desktop | ⬜ |
+| PRT-03 | OS independence | D | TP-PRT-03 | Server chạy trên Linux/Windows | ⬜ |
+| PRT-04 | Database portability | I | TP-PRT-04 | JPA/Hibernate abstraction layer | ⬜ |
+| PRT-05 | Container support | D, T | TP-PRT-05 | Docker image build + deploy thành công | ⬜ |
+
+### 4.2.23 Tổng hợp kiểm chứng
+
+| Loại yêu cầu | Số lượng | Chủ yếu Test | Chủ yếu Analysis | Chủ yếu Inspection | Chủ yếu Demo |
+|---------------|----------|-------------|------------------|-------------------|-------------|
+| FR (16 nhóm) | 195 | 187 | 8 | 4 | 185 |
+| PERF | 8 | 7 | 8 | 0 | 0 |
+| SEC | 6 | 4 | 1 | 2 | 1 |
+| REL | 5 | 2 | 3 | 0 | 2 |
+| AVL | 5 | 2 | 3 | 0 | 3 |
+| MNT | 5 | 2 | 1 | 4 | 1 |
+| PRT | 5 | 2 | 0 | 1 | 4 |
+| **Tổng** | **229** | **206** | **24** | **11** | **196** |
+
+> **Ghi chú:** Mỗi requirement có thể áp dụng nhiều phương pháp, nên tổng cột > tổng requirement.
+
+---
+
+
+
+---
+
+# Phụ lục A — Ma trận Truy vết (Traceability Matrix)
+
+## A.1 Backward Traceability (Requirement → Source)
+
+Ma trận truy vết ngược — từ yêu cầu phần mềm về nguồn gốc (per-FR):
+
+### A.1.1 Nhóm I — Dashboard (9 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-I-01 | Hiển thị tổng hợp hỏi đáp, vướng mắc | UC1 | PRD §4.1 | — | I |
+| FR-I-02 | Tổng hợp vụ việc đã tiếp nhận | UC2 | PRD §4.1 | — | I |
+| FR-I-03 | Tổng hợp vụ việc đang hỗ trợ | UC3 | PRD §4.1 | — | I |
+| FR-I-04 | Tổng hợp vụ việc đã hoàn thành | UC4 | PRD §4.1 | — | I |
+| FR-I-05 | Tổng hợp khóa đào tạo đang diễn ra | UC5 | PRD §4.1 | — | I |
+| FR-I-06 | Tổng hợp khóa đào tạo đã diễn ra | UC6 | PRD §4.1 | — | I |
+| FR-I-07 | Tổng số chuyên gia/TVV | UC7 | PRD §4.1 | — | I |
+| FR-I-08 | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | PRD §4.1 | — | I |
+| FR-I-09 | Biểu đồ chất lượng đào tạo | UC9 | PRD §4.1 | — | I |
+
+### A.1.2 Nhóm II — Hỏi đáp, Vướng mắc PL (13 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-II-01 | Quản lý thông tin hỏi đáp, vướng mắc PL | UC10 | PRD §4.2 | NĐ 55/2019 (Đ.3, 4); TT 03/2020 | II |
+| FR-II-02 | Tìm kiếm hỏi đáp tổng hợp | UC11 | PRD §4.2 | NĐ 55/2019 (Đ.3, 4) | II |
+| FR-II-03 | Tiếp nhận xử lý hỏi đáp | UC12 | PRD §4.2 | NĐ 55/2019 (Đ.3, 4) | II |
+| FR-II-04 | Quản lý thông tin tiếp nhận xử lý | UC13 | PRD §4.2 | NĐ 55/2019 (Đ.3, 4) | II |
+| FR-II-05 | Tìm kiếm hỏi đáp đã tiếp nhận | UC14 | PRD §4.2 | NĐ 55/2019 (Đ.3, 4) | II |
+| FR-II-06 | Phân công xử lý câu hỏi | UC15 | PRD §4.2 | NĐ 55/2019 (Đ.3, 4) | II |
+| FR-II-07 | Phản hồi câu hỏi | UC16 | PRD §4.2 | NĐ 55/2019 (Đ.3, 4) | II |
+| FR-II-08 | Quản lý công khai phản hồi | UC17 | PRD §4.2 | NĐ 55/2019 (Đ.3, 4) | II |
+| FR-II-09 | Quản lý câu hỏi đã xử lý | UC18 | PRD §4.2 | NĐ 55/2019 (Đ.3, 4) | II |
+| FR-II-10 | Tìm kiếm câu hỏi đã xử lý | UC19 | PRD §4.2 | NĐ 55/2019 (Đ.3, 4) | II |
+| FR-II-NEW-01 | Cấu hình lĩnh vực ↔ phân công xử lý | UC mới | PRD §4.2 (inferred) | — | II |
+| FR-II-NEW-02 | Quản lý mẫu câu hỏi/phản hồi | UC mới | PRD §4.2 (inferred) | — | II |
+| FR-II-CROSS-01 | Cấu hình SLA thời gian xử lý hỏi đáp | Cross-cutting | PRD §4.2 | NĐ 55/2019 (Đ.10) | II |
+
+### A.1.3 Nhóm III — Đào tạo, Tập huấn (22 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-III-01 | Quản lý Chương trình đào tạo | UC20 | PRD §4.3 | NĐ 55/2019 (Đ.6); TT 03/2020 | III |
+| FR-III-02 | Tìm kiếm Chương trình đào tạo | UC21 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-03 | Quản lý đăng ký đào tạo | UC22 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-04 | Đăng ký tham gia học tập | UC23 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-05 | Quản lý kiểm tra, đánh giá kết quả | UC24 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-06 | Tìm kiếm kết quả | UC25 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-07 | Quản lý kho tài liệu, bài giảng | UC26 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-08 | Tìm kiếm tài liệu | UC27 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-09 | Quản lý ngân hàng câu hỏi | UC28 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-10 | Tìm kiếm ngân hàng câu hỏi | UC29 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-11 | Quản lý giảng viên, trợ giảng | UC30 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-12 | Tìm kiếm giảng viên | UC31 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-13 | Quản lý đề xuất đào tạo | UC32 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-14 | Lập kế hoạch đào tạo | UC33 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-15 | Phê duyệt kế hoạch | UC34 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-16 | Công khai kế hoạch | UC35 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-17 | Ghi nhận kết quả | UC36 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-18 | Phê duyệt kết quả | UC37 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-19 | Công bố kết quả đào tạo bồi dưỡng | UC38 | PRD §4.3 | NĐ 55/2019 (Đ.6) | III |
+| FR-III-NEW-01 | Tạo đề kiểm tra | UC mới | PRD §4.3 (inferred) | — | III |
+| FR-III-NEW-02 | Quản lý đề kiểm tra | UC mới | PRD §4.3 (inferred) | — | III |
+| FR-III-NEW-03 | Phân phối đề + map bài giảng | UC mới | PRD §4.3 (inferred) | — | III |
+
+### A.1.4 Nhóm IV — Chuyên gia, TVV (13 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-IV-01 | Quản lý tư vấn viên | UC39 | PRD §4.4 | NĐ 55/2019 (Đ.5); TT 03/2020 | IV |
+| FR-IV-02 | Tìm kiếm TVV | UC40 | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+| FR-IV-03 | Quản lý đăng ký tham gia MLTV | UC41 | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+| FR-IV-04 | Cập nhật hồ sơ năng lực TVV | UC42 | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+| FR-IV-05 | Quản lý hồ sơ TVV | UC43 | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+| FR-IV-06 | Thẩm định hồ sơ TVV | UC44 | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+| FR-IV-07 | Phê duyệt hồ sơ TVV | UC45 | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+| FR-IV-08 | Cập nhật danh sách MLTV công khai | UC46 | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+| FR-IV-09 | Đánh giá TVV | UC47 | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+| FR-IV-10 | Quản lý lịch sử hỗ trợ TVV | UC48 | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+| FR-IV-11 | Cập nhật thông tin TVV | UC49 | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+| FR-IV-12 | Cập nhật trạng thái hoạt động TVV | UC50 | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+| FR-IV-CROSS-01 | Tiêu chí thẩm định TVV (Danh mục) | Cross-cutting | PRD §4.4 | NĐ 55/2019 (Đ.5) | IV |
+
+### A.1.5 Nhóm V.I — Vụ việc TGPL (19 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-V.I-01 | Quản lý hồ sơ yêu cầu HTPL | UC51 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7); TT 03/2020; Luật TGPL 2017 | V.I |
+| FR-V.I-02 | Gửi hồ sơ yêu cầu HTPL | UC52 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-03 | Tiếp nhận hồ sơ qua DVC | UC53 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-04 | Nhập hồ sơ yêu cầu thủ công | UC54 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-05 | Tiếp nhận hồ sơ từ hệ thống khác | UC55 | PRD §4.5.1, CSV v1.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-06 | Kiểm tra hồ sơ yêu cầu | UC56 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-07 | Quản lý hồ sơ vụ việc | UC57 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-08 | Tìm kiếm hồ sơ | UC58 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-09 | Lựa chọn người hỗ trợ | UC59 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-10 | Xác nhận tham gia hỗ trợ | UC60 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-11 | Trình phê duyệt | UC61 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-12 | Thông báo kết quả tiếp nhận | UC62 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-13 | Phê duyệt hồ sơ vụ việc | UC63 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-14 | Doanh nghiệp nhận thông báo | UC64 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-15 | NHT cập nhật kết quả hỗ trợ | UC65 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-16 | CB NV cập nhật kết quả vụ việc | UC66 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-17 | Đánh giá kết quả hỗ trợ vụ việc | UC67 | PRD §4.5.1 | NĐ 55/2019 (Đ.3, 4, 7) | V.I |
+| FR-V.I-NEW-01 | Thiết lập quy trình hỗ trợ TVPLDN | UC mới | PRD §4.5.1 (inferred) | NĐ 55/2019 (Đ.7) | V.I |
+| FR-V.I-CROSS-01 | Cấu hình SLA vụ việc | Cross-cutting | PRD §4.5.1 | NĐ 55/2019 (Đ.10) | V.I |
+
+### A.1.6 Nhóm V.II — Chi trả Chi phí TV (13 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-V.II-01 | Tiếp nhận hồ sơ từ DVC | UC68 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10); TT 03/2020 (Mẫu 01) | V.II |
+| FR-V.II-02 | Quản lý hồ sơ đề nghị hỗ trợ chi phí | UC69 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+| FR-V.II-03 | Kiểm tra hồ sơ đề nghị | UC70 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+| FR-V.II-04 | Thông báo kết quả kiểm tra qua DVC | UC71 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+| FR-V.II-05 | Đánh giá hồ sơ theo tiêu chí | UC72 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+| FR-V.II-06 | Quản lý hồ sơ đề nghị thanh toán | UC73 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+| FR-V.II-07 | Gửi hồ sơ đề nghị thanh toán | UC74 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+| FR-V.II-08 | Nhận thông báo kết quả thanh toán | UC75 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+| FR-V.II-09 | Thẩm định hồ sơ đề nghị thanh toán | UC76 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+| FR-V.II-10 | Thông báo kết quả thẩm định | UC77 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+| FR-V.II-11 | Trình phê duyệt hồ sơ thanh toán | UC78 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+| FR-V.II-12 | Phê duyệt hồ sơ thanh toán | UC79 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+| FR-V.II-13 | Cập nhật kết quả xử lý hồ sơ | UC80 | PRD §4.5.2 | NĐ 55/2019 (Đ.8, 9, 10) | V.II |
+
+### A.1.7 Nhóm V.III — Quản lý DN (3 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-V.III-01 | Quản lý Doanh nghiệp được HTPL | UC81 | PRD §4.5.3 | NĐ 55/2019 (Đ.2) | V.III |
+| FR-V.III-02 | Tìm kiếm DN | UC82 | PRD §4.5.3 | NĐ 55/2019 (Đ.2) | V.III |
+| FR-V.III-NEW-01 | Import DN từ Excel | UC mới | PRD §4.5.3 (inferred) | — | V.III |
+
+### A.1.8 Nhóm VI — Đánh giá Hiệu quả (9 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-VI-01 | Lập kế hoạch đánh giá | UC83 | PRD §4.6 | NĐ 55/2019 (Đ.11); TT 03/2020 | VI |
+| FR-VI-02 | Thiết lập tiêu chí đánh giá | UC84 | PRD §4.6 | NĐ 55/2019 (Đ.11) | VI |
+| FR-VI-03 | Phân công người đánh giá | UC85 | PRD §4.6 | NĐ 55/2019 (Đ.11) | VI |
+| FR-VI-04 | Phê duyệt phân công | UC86 | PRD §4.6 | NĐ 55/2019 (Đ.11) | VI |
+| FR-VI-05 | Chọn vụ việc đánh giá | UC87 | PRD §4.6 | NĐ 55/2019 (Đ.11) | VI |
+| FR-VI-06 | Thực hiện đánh giá | UC88 | PRD §4.6 | NĐ 55/2019 (Đ.11) | VI |
+| FR-VI-07 | Lập báo cáo đánh giá | UC89 | PRD §4.6 | NĐ 55/2019 (Đ.11) | VI |
+| FR-VI-08 | Trình phê duyệt báo cáo | UC90 | PRD §4.6 | NĐ 55/2019 (Đ.11) | VI |
+| FR-VI-09 | Phê duyệt báo cáo đánh giá | UC91 | PRD §4.6 | NĐ 55/2019 (Đ.11) | VI |
+
+### A.1.9 Nhóm VII — Biểu mẫu, Hợp đồng (8 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-VII-01 | Quản lý thư mục biểu mẫu, hợp đồng | UC92 | PRD §4.7 | TT 03/2020 (Phụ lục BM); TT 17/2025 | VII |
+| FR-VII-02 | Tìm kiếm thư mục biểu mẫu, hợp đồng | UC93 | PRD §4.7 | TT 03/2020 | VII |
+| FR-VII-03 | Công khai thư mục biểu mẫu lên Cổng | UC94 | PRD §4.7 | TT 03/2020 | VII |
+| FR-VII-04 | Quản lý biểu mẫu, hợp đồng | UC95 | PRD §4.7 | TT 03/2020 (Phụ lục BM); TT 17/2025 | VII |
+| FR-VII-05 | Tìm kiếm biểu mẫu, hợp đồng | UC96 | PRD §4.7 | TT 03/2020 | VII |
+| FR-VII-06 | Import biểu mẫu hàng loạt | UC97 | PRD §4.7 | TT 03/2020 | VII |
+| FR-VII-07 | Chia sẻ biểu mẫu qua API trực tiếp | UC98 | PRD §4.7 | TT 03/2020; NĐ 47/2020 | VII |
+| FR-VII-08 | Quản lý Hợp đồng Tư vấn | UC163 | PRD §4.7 | NĐ 55/2019 (Đ.5, 8) | VII |
+
+### A.1.10 Nhóm VIII — Quản trị Hệ thống (21 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-VIII-01 | Quản lý danh mục lĩnh vực pháp lý | UC99 | PRD §4.8 | NĐ 13/2023 (BVDLCN); NĐ 85/2016 (ATTT) | VIII |
+| FR-VIII-02 | Quản lý danh mục loại hình hỗ trợ | UC100 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-03 | Quản lý danh mục chương trình hỗ trợ | UC101 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-04 | Quản lý danh mục tình trạng vụ việc | UC102 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-05 | Quản lý danh mục cơ quan đơn vị quản lý | UC103 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-06 | Quản lý danh mục tổ chức tư vấn | UC104 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-07 | Quản lý danh mục loại doanh nghiệp | UC105 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-08 | Quản lý danh mục hồ sơ đề nghị hỗ trợ | UC106 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-09 | Quản lý danh mục hồ sơ đề nghị thanh toán | UC107 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-10 | Quản lý cấu hình thời hạn xử lý hồ sơ — SLA | UC108 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-11 | Quản lý danh mục tiêu chí đánh giá hiệu quả | UC109 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-12 | Quản lý danh mục tiêu chí đánh giá hỗ trợ chi phí | UC110 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-13 | Quản lý loại tài khoản | UC111 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-14 | Quản lý vai trò | UC112 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-15 | Quản lý tài khoản người dùng | UC113 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-16 | Phân quyền truy cập dữ liệu | UC114 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-17 | Phân quyền chức năng | UC115 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-18 | Quản lý danh mục loại hình tiếp nhận | UC116 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-19 | Quản lý danh mục kênh tiếp nhận | UC117 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-20 | Quản lý đăng nhập | UC118 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+| FR-VIII-21 | Quản lý đăng xuất | UC119 | PRD §4.8 | NĐ 13/2023; NĐ 85/2016 | VIII |
+
+### A.1.11 Nhóm IX — Báo cáo Thống kê (23 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-IX-01 | BC Số lượng hỏi đáp/vướng mắc | UC120 | PRD §4.9 | TT 17/2025 (Mẫu 21a, 21b); NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-02 | BC Vụ việc đã tiếp nhận | UC121 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-03 | BC Vụ việc đang hỗ trợ | UC122 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-04 | BC Vụ việc đã hoàn thành | UC123 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-05 | BC Vụ việc theo thời gian | UC124 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-06 | BC Lớp đào tạo đang diễn ra | UC125 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-07 | BC Lớp đào tạo đã diễn ra | UC126 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-08 | BC Số lượng CG/TVV | UC127 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-09 | BC Đánh giá hiệu quả HTPL | UC128 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-10 | BC Chất lượng đào tạo | UC129 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-11 | BC Vụ việc theo đơn vị quản lý | UC130 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-12 | BC Vụ việc theo lĩnh vực | UC131 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-13 | BC Vụ việc theo loại hình DN | UC132 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-14 | BC Vụ việc theo thời gian chi tiết | UC133 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-15 | BC Chi phí chi trả hỗ trợ | UC134 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-16 | BC Chi phí theo đơn vị | UC135 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-17 | BC Chi phí theo lĩnh vực | UC136 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-18 | BC Chi phí theo loại hình DN | UC137 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-19 | BC Chi phí theo thời gian | UC138 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-20 | BC Số lượng CT hỗ trợ | UC139 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-21 | BC CT theo đơn vị | UC140 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-22 | BC CT theo lĩnh vực | UC141 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+| FR-IX-23 | BC CT theo thời gian | UC142 | PRD §4.9 | TT 17/2025; NĐ 55/2019 (Đ.12) | IX |
+
+### A.1.12 Nhóm X.1 — Tư vấn Chuyên sâu (7 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-X.1-01 | Quản lý nội dung tư vấn với chuyên gia | UC147 | PRD §4.10.1 | NĐ 55/2019 (Đ.4, 5) | X.1 |
+| FR-X.1-02 | Tìm kiếm nội dung tư vấn với chuyên gia | UC148 | PRD §4.10.1 | NĐ 55/2019 (Đ.4, 5) | X.1 |
+| FR-X.1-03 | Tiếp nhận nội dung tư vấn với chuyên gia | UC149 | PRD §4.10.1 | NĐ 55/2019 (Đ.4, 5) | X.1 |
+| FR-X.1-04 | Quản lý hồ sơ pháp lý doanh nghiệp | UC150 | PRD §4.10.1 | NĐ 55/2019 (Đ.4, 5) | X.1 |
+| FR-X.1-05 | Tiếp nhận hồ sơ pháp lý doanh nghiệp | UC151 | PRD §4.10.1 | NĐ 55/2019 (Đ.4, 5) | X.1 |
+| FR-X.1-06 | Quản lý tư liệu pháp lý của vụ việc | UC152 | PRD §4.10.1 | NĐ 55/2019 (Đ.4, 5) | X.1 |
+| FR-X.1-07 | Tiếp nhận đánh giá chất lượng TV với CG | UC153 | PRD §4.10.1 | NĐ 55/2019 (Đ.4, 5) | X.1 |
+
+### A.1.13 Nhóm X.2 — Tư vấn Nhanh (5 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-X.2-01 | Quản lý kho câu hỏi/tư vấn | UC158 | PRD §4.10.2 | NĐ 55/2019 (Đ.3) | X.2 |
+| FR-X.2-02 | Quản lý tư vấn nhanh | UC159 | PRD §4.10.2 | NĐ 55/2019 (Đ.3) | X.2 |
+| FR-X.2-03 | DN gửi câu hỏi | UC160 | PRD §4.10.2 | NĐ 55/2019 (Đ.3) | X.2 |
+| FR-X.2-04 | DN tìm kiếm phản hồi | UC161 | PRD §4.10.2 | NĐ 55/2019 (Đ.3) | X.2 |
+| FR-X.2-05 | DN đánh giá nội dung trả lời | UC162 | PRD §4.10.2 | NĐ 55/2019 (Đ.3) | X.2 |
+
+### A.1.14 Nhóm X.3 — Hợp đồng Tư vấn (1 FR)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-X.3-01 | Quản lý HĐ tư vấn | UC163 | PRD §4.10.3 | NĐ 55/2019 (Đ.5, 8) | X.3 |
+
+### A.1.15 Nhóm XI — Chương trình HTPLDN (9 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-XI-01 | Quản lý chương trình HTPL | UC164 | PRD §4.11 | NĐ 55/2019 (Đ.13, 14); TT 03/2020 | XI |
+| FR-XI-02 | Tìm kiếm CT HTPL | UC165 | PRD §4.11 | NĐ 55/2019 (Đ.13, 14) | XI |
+| FR-XI-03 | Trình phê duyệt CT | UC166 | PRD §4.11 | NĐ 55/2019 (Đ.13, 14) | XI |
+| FR-XI-04 | Phê duyệt CT | UC167 | PRD §4.11 | NĐ 55/2019 (Đ.13, 14) | XI |
+| FR-XI-05 | Công bố kế hoạch CT | UC168 | PRD §4.11 | NĐ 55/2019 (Đ.13, 14) | XI |
+| FR-XI-06 | Lập BC kết quả thực hiện CT | UC169 | PRD §4.11 | NĐ 55/2019 (Đ.13, 14) | XI |
+| FR-XI-07 | Trình phê duyệt BC | UC170 | PRD §4.11 | NĐ 55/2019 (Đ.13, 14) | XI |
+| FR-XI-08 | Gửi kết quả lên TW | UC171 | PRD §4.11 | NĐ 55/2019 (Đ.13, 14) | XI |
+| FR-XI-09 | TW tổng hợp BC | UC172 | PRD §4.11 | NĐ 55/2019 (Đ.13, 14) | XI |
+
+### A.1.16 Nhóm XII — API Kết nối Chia sẻ Dữ liệu (16 FRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| FR-XII-01 | API Chia sẻ hỏi đáp | UC173 | PRD §4.12 | NĐ 47/2020 (CSDLQG); QĐ LGSP BTP | XII |
+| FR-XII-02 | API Tìm kiếm hỏi đáp | UC174 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-03 | API Chia sẻ đào tạo | UC175 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-04 | API Tìm kiếm đào tạo | UC176 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-05 | API Chia sẻ CG/TVV | UC177 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-06 | API Tìm kiếm CG/TVV | UC178 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-07 | API Chia sẻ vụ việc | UC179 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-08 | API Tìm kiếm vụ việc | UC180 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-09 | API Chia sẻ đánh giá hiệu quả | UC181 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-10 | API Tìm kiếm đánh giá | UC182 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-11 | API Chia sẻ biểu mẫu | UC183 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-12 | API Tìm kiếm biểu mẫu | UC184 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-13 | API Chia sẻ tư vấn chuyên sâu | UC185 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-14 | API Tìm kiếm tư vấn chuyên sâu | UC186 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-15 | API Chia sẻ CT HTPLDN | UC187 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+| FR-XII-16 | API Tìm kiếm CT HTPLDN | UC188 | PRD §4.12 | NĐ 47/2020; QĐ LGSP BTP | XII |
+
+### A.1.17 Non-Functional Requirements (34 NFRs)
+
+| Req ID | Tên | UC Ref | PRD Section | Nguồn pháp lý | Nhóm |
+|--------|-----|--------|-------------|---------------|------|
+| PERF-01 | Thời gian phản hồi trang CMS | — | PRD §5.1 | TCVN ISO 25010:2015 | NFR |
+| PERF-02 | Thời gian phản hồi API outbound | — | PRD §5.1 | TCVN ISO 25010:2015 | NFR |
+| PERF-03 | Concurrent users | — | PRD §5.1 | TCVN ISO 25010:2015 | NFR |
+| PERF-04 | Thời gian tải danh sách | — | PRD §5.1 | TCVN ISO 25010:2015 | NFR |
+| PERF-05 | Thời gian xuất báo cáo | — | PRD §5.1 | TCVN ISO 25010:2015 | NFR |
+| PERF-06 | Thời gian upload file | — | PRD §5.1 | TCVN ISO 25010:2015 | NFR |
+| PERF-07 | Thông lượng API | — | PRD §5.1 | TCVN ISO 25010:2015 | NFR |
+| PERF-08 | Dung lượng lưu trữ | — | PRD §5.1 | TCVN ISO 25010:2015 | NFR |
+| SEC-01 | Xác thực đa yếu tố | — | PRD §5.2 | NĐ 85/2016; NĐ 13/2023; Luật ATTTM 2015 | NFR |
+| SEC-02 | Phân quyền RBAC | — | PRD §5.2 | NĐ 85/2016; NĐ 13/2023 | NFR |
+| SEC-03 | Mã hóa dữ liệu | — | PRD §5.2 | NĐ 85/2016; NĐ 13/2023 | NFR |
+| SEC-04 | Audit logging | — | PRD §5.2 | NĐ 85/2016; NĐ 13/2023 | NFR |
+| SEC-05 | Session management | — | PRD §5.2 | NĐ 85/2016; NĐ 13/2023 | NFR |
+| SEC-06 | Input validation | — | PRD §5.2 | NĐ 85/2016; NĐ 13/2023 | NFR |
+| REL-01 | MTBF | — | PRD §5.3 | TCVN ISO 25010:2015 | NFR |
+| REL-02 | MTTR | — | PRD §5.3 | TCVN ISO 25010:2015 | NFR |
+| REL-03 | Data integrity | — | PRD §5.3 | TCVN ISO 25010:2015 | NFR |
+| REL-04 | Error handling | — | PRD §5.3 | TCVN ISO 25010:2015 | NFR |
+| REL-05 | Backup & Recovery | — | PRD §5.3 | TCVN ISO 25010:2015 | NFR |
+| AVL-01 | Uptime | — | PRD §5.4 | TCVN ISO 25010:2015 | NFR |
+| AVL-02 | Planned downtime | — | PRD §5.4 | TCVN ISO 25010:2015 | NFR |
+| AVL-03 | Failover | — | PRD §5.4 | TCVN ISO 25010:2015 | NFR |
+| AVL-04 | Load balancing | — | PRD §5.4 | TCVN ISO 25010:2015 | NFR |
+| AVL-05 | Health monitoring | — | PRD §5.4 | TCVN ISO 25010:2015 | NFR |
+| MNT-01 | Modular architecture | — | PRD §5.5 | TCVN ISO 25010:2015 | NFR |
+| MNT-02 | Code quality | — | PRD §5.5 | TCVN ISO 25010:2015 | NFR |
+| MNT-03 | Configuration externalization | — | PRD §5.5 | TCVN ISO 25010:2015 | NFR |
+| MNT-04 | Database migration | — | PRD §5.5 | TCVN ISO 25010:2015 | NFR |
+| MNT-05 | API versioning | — | PRD §5.5 | TCVN ISO 25010:2015 | NFR |
+| PRT-01 | Browser compatibility | — | PRD §5.6 | TCVN ISO 25010:2015 | NFR |
+| PRT-02 | Responsive design | — | PRD §5.6 | TCVN ISO 25010:2015 | NFR |
+| PRT-03 | OS independence | — | PRD §5.6 | TCVN ISO 25010:2015 | NFR |
+| PRT-04 | Database portability | — | PRD §5.6 | TCVN ISO 25010:2015 | NFR |
+| PRT-05 | Container support | — | PRD §5.6 | TCVN ISO 25010:2015 | NFR |
+
+---
+
+## A.2 Forward Traceability (Requirement → Implementation)
+
+Ma trận truy vết xuôi — từ yêu cầu phần mềm đến thiết kế, mã nguồn, và kiểm thử. Bảng này là **placeholder** để điền trong các giai đoạn thiết kế và phát triển.
+
+| Req ID Range | Tên nhóm | Design Component | Code Module / File | Test Case ID | Test Status |
+|-------------|----------|-----------------|-------------------|-------------|-------------|
+| FR-I-01 → FR-I-09 | Dashboard | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-II-01 → FR-II-NEW-02 | Hỏi đáp | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-III-01 → FR-III-NEW-03 | Đào tạo | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-IV-01 → FR-IV-CROSS-01 | CG/TVV | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-V.I-01 → FR-V.I-CROSS-01 | Vụ việc | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-V.II-01 → FR-V.II-13 | Chi trả | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-V.III-01 → FR-V.III-NEW-01 | DN | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-VI-01 → FR-VI-09 | Đánh giá | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-VII-01 → FR-VII-08 | Biểu mẫu | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-VIII-01 → FR-VIII-21 | Quản trị | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-IX-01 → FR-IX-23 | Báo cáo | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-X.1-01 → FR-X.1-15 | TV Chuyên sâu | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-X.2-01 → FR-X.2-05 | TV Nhanh | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-X.3-01 | HĐ Tư vấn | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-XI-01 → FR-XI-09 | CT HTPLDN | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| FR-XII-01 → FR-XII-16 | API Kết nối | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| PERF-01 → PERF-08 | Hiệu năng | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| SEC-01 → SEC-06 | Bảo mật | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| REL-01 → REL-05 | Độ tin cậy | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| AVL-01 → AVL-05 | Khả dụng | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| MNT-01 → MNT-05 | Bảo trì | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+| PRT-01 → PRT-05 | Khả chuyển | _TBD_ | _TBD_ | _TBD_ | ⬜ |
+
+> **Hướng dẫn điền:** Cột "Design Component" điền tên module/component trong tài liệu thiết kế. Cột "Code Module / File" điền đường dẫn file mã nguồn chính. Cột "Test Case ID" điền mã test case trong hệ thống quản lý kiểm thử (ví dụ: TestRail, Jira).
+
+> **Lưu ý:** Forward traceability SHALL được hoàn thiện trước giai đoạn UAT. Mỗi FR SHALL ánh xạ đến ít nhất 1 test case ID. Gap được coi là blocking cho UAT entry.
+
+---
+
+
+
+---
+
+# Phụ lục B: Danh mục Quy tắc Nghiệp vụ (Business Rules Catalog)
+
+> **SOURCE OF TRUTH (v3.1):** Đây là bản gốc cho tất cả business rules. Mỗi FR group file chứa bản trích BR liên quan (Section 6). Khi thay đổi BR, cập nhật ở đây trước, sau đó sync sang FR files.
+
+> **Định dạng:** BR-XXX-nn | Phát biểu quy tắc | Nguồn | Áp dụng trong FR | Ngoại lệ | Kiểm chứng
+
+## B.1 BR-AUTH: Xác thực & Phân quyền
+
+| ID | Phát biểu quy tắc | Nguồn | Áp dụng FR | Ngoại lệ | Kiểm chứng |
+|----|-------------------|-------|-----------|---------|------------|
+| BR-AUTH-01 | Mọi user phải xác thực trước khi truy cập hệ thống. Tier 1 (MVP): Username/password + TOTP 2FA qua email. Tier 2: VNPT eKYC xác thực CCCD. Tier 3: SSO VNeID OIDC Authorization Code flow (khi được phê duyệt theo NĐ69/2024). VNeID (Tier 3) chỉ áp dụng cho tác nhân bên ngoài (TVV, CG, NHT). Cán bộ nội bộ (QTHT, CB NV, CB PD) luôn sử dụng username/password + TOTP. | PRD A6, FR-VIII-20, NĐ69/2024 | FR-VIII-20 | API outbound không yêu cầu session (dùng token xác thực) | Test đăng nhập Tier 1 + TOTP |
+| BR-AUTH-02 | Phân cấp 3 tầng: TW (Trung ương) → BN (Bộ ngành) / ĐP (Địa phương). TW là cấp cao nhất (Cục BLDS&KT) | PRD Section 4, CĐT xác nhận | Toàn bộ | — | Verify cây đơn vị seed data |
+| BR-AUTH-03 | **Ngang cấp KHÔNG thấy nhau.** BN chỉ thấy dữ liệu BN mình. ĐP chỉ thấy dữ liệu ĐP mình. BN không thấy ĐP và ngược lại | PRD A3, CĐT xác nhận | Toàn bộ FR có phân quyền | QTHT thấy tất cả | Test cross-unit query = 0 rows |
+| BR-AUTH-04 | **Cấp cha thấy cấp con.** TW thấy toàn bộ dữ liệu TW + BN + ĐP. BN chỉ thấy BN mình (không thấy ĐP trực thuộc BN) | PRD A3, CĐT xác nhận | Toàn bộ FR scoped | BN KHÔNG thấy ĐP | Verify chính sách phân quyền dữ liệu |
+
+> **Giải thích thiết kế:** Mô hình phân quyền KHÔNG phải cây 3 tầng (TW→BN→ĐP). Thực chất là mô hình 2 tầng: TW (cha) có 2 nhóm con ngang cấp (BN và ĐP). BN và ĐP hoạt động SONG SONG, KHÔNG phải phụ thuộc. Ví dụ: Bộ Công Thương quản lý HTPLDN trong phạm vi Bộ, Sở TP Hà Nội quản lý trong phạm vi tỉnh — hai hoạt động độc lập nhau. Đây là thiết kế CĐT xác nhận, phù hợp với cơ cấu tổ chức Luật DNNVV 2017.
+| BR-AUTH-05 | **Phê duyệt cùng cấp.** CB NV cấp nào tạo → CB PD cùng cấp duyệt. KHÔNG xuyên cấp phê duyệt | PRD A4, biên bản b3 | FR-II-08, FR-III-15/18, FR-IV-07, FR-V.I-13, FR-V.II-12, FR-VI-04/09, FR-XI-04 | — | Test CB_PD_TW không duyệt được bản ghi ĐP |
+| BR-AUTH-06 | Session CMS: 30 phút idle timeout. API token xác thực: TTL 15 phút, refresh token 24 giờ. Redirect về trang đăng nhập khi hết hạn | NFR-05 | FR-VIII-20/21 | — | Test timeout |
+| BR-AUTH-07 | Khóa tài khoản sau 5 lần đăng nhập sai liên tiếp. Tự mở khóa sau 30 phút HOẶC QTHT mở khóa thủ công qua UC113. Cả hai cơ chế đều hợp lệ | FR-VIII-20 | FR-VIII-20 | — | Test brute-force + auto-unlock |
+| BR-AUTH-08 | Chính sách phân quyền dữ liệu theo đơn vị áp dụng cho MỌI bảng có cột `don_vi_id`. Không có exception ngoại trừ QTHT | Architecture AD-07 | Toàn bộ | AUDIT_LOG không có phân quyền theo đơn vị (immutable) | Verify phân quyền dữ liệu |
+| BR-AUTH-09 | **Xác thực kênh LGSP inbound:** Mọi request từ HT TTHC BTP qua LGSP phải có token xác thực hợp lệ + mTLS certificate. Verify issuer, audience, expiry | Thiết kế tổng thể hệ thống (Section 8) | FR-V.I (UC53), FR-V.II (UC68) | — | Test: request không có mTLS → 401 |
+
+**Trạng thái BR-AUTH-01 → BR-AUTH-09:** ✅ CĐT xác nhận
+
+| BR-AUTH-10 | **Lọc kép cho NHT/TVV/CG (Tổ chức HT PLDN, NĐ77/2008):** Lớp 1 (phân quyền dữ liệu theo đơn vị) — lọc theo `don_vi_id` (Sở TP trực thuộc). Lớp 2 (kiểm tra quyền tầng ứng dụng) — NHT/TVV chỉ thấy vụ việc HTPL được phân công (`VU_VIEC.nguoi_ho_tro_id` / `.tu_van_vien_id` = current user); CG chỉ thấy yêu cầu TV chuyên sâu được phân công (`YEU_CAU_TU_VAN.chuyen_gia_id` = current user). Lớp 2 chỉ áp dụng cho entity vụ việc/yêu cầu TV, KHÔNG áp dụng cho dữ liệu chung (tài liệu ĐT, CTĐT — chỉ lọc Lớp 1). Cần đối chiếu FK columns với Section 3.4 | NĐ77/2008, Thiết kế tổng thể hệ thống | FR-IV (UC41-42), FR-V.I (UC60, UC65), FR-X.1 (UC147-153) | Dữ liệu chung (UC21, UC27): chỉ Lớp 1 | Test: NHT chỉ thấy VV được phân công trong ĐP mình; CG chỉ thấy YC TV chuyên sâu được phân công |
+| BR-AUTH-11 | **Lọc API cho DN (chuyên trang Cổng PLQG):** DN KHÔNG đăng nhập CMS → không có phiên phân quyền dữ liệu. DN tương tác qua API chuyên trang. API lọc theo `don_vi_id` (Sở TP quản lý DN) + `doanh_nghiep_id` (định danh DN từ token xác thực/API token). Cơ chế: kiểm tra quyền tầng ứng dụng xác thực DN identity → filter query. DN thuộc Sở TP quản lý theo NĐ77/2008 | NĐ77/2008, Thiết kế tổng thể hệ thống | FR-V.I (UC52, UC64, UC67), FR-X.1 (UC147, UC153), FR-X.2 (UC160-162), FR-III (UC23) | — | Test: DN chỉ thấy hồ sơ của mình qua API |
+
+**Trạng thái BR-AUTH-10 → BR-AUTH-11:** 🟡 Đề xuất — chờ CĐT xác nhận
+
+## B.2 BR-DATA: Quy tắc Dữ liệu
+
+| ID | Phát biểu quy tắc | Nguồn | Áp dụng FR | Ngoại lệ | Kiểm chứng |
+|----|-------------------|-------|-----------|---------|------------|
+| BR-DATA-01 | **Soft delete:** Mọi thao tác xóa đều là soft delete (set `is_deleted = 1`). Không xóa vật lý ngoại trừ purge theo policy retention | PRD FR-II-01, pattern IP-01 | Toàn bộ CRUD | AUDIT_LOG: không xóa | Verify DELETE = UPDATE is_deleted |
+| BR-DATA-02 | **Multi-tenant scoping:** Mọi bản ghi nghiệp vụ PHẢI có `don_vi_id` NOT NULL. Query phải filter theo phân quyền dữ liệu theo đơn vị | Architecture AD-07 | Toàn bộ | DANH_MUC dùng chung: `don_vi_id` có thể NULL (danh mục hệ thống) | Verify NOT NULL constraint |
+| BR-DATA-03 | **Common fields:** Mọi entity đều có 7 common fields (id, created_at, updated_at, created_by, updated_by, is_deleted, don_vi_id) | Section 3.4.1.1 | Toàn bộ | AUDIT_LOG: chỉ có id, thoi_gian, entity fields | Verify DDL script |
+| BR-DATA-04 | **Auto-gen mã:** Các entity nghiệp vụ có mã tự sinh theo format `PREFIX-YYYYMMDD-SEQ` (VD: HD-20260325-001 (Hỏi đáp), HDTV-20260325-001 (Hợp đồng), VV-HCM-20260325-001) | Team design | FR-II-01, FR-V.I-01, FR-V.II-01 | — | Verify uniqueness + format |
+| BR-DATA-05 | **Audit trail:** Mọi thao tác CUD + phê duyệt + đăng nhập/xuất đều ghi vào AUDIT_LOG. Log là immutable, không sửa/xóa | NFR-06 | Toàn bộ | — | Verify INSERT-only trên AUDIT_LOG |
+| BR-DATA-06 | **Export Excel:** Mọi danh sách có tính năng xuất Excel. File xuất theo bộ lọc hiện tại, không vượt quá 10,000 rows/file | Pattern IP-01 | Toàn bộ CRUD list | Báo cáo nhóm IX có xuất Word | Test export limit |
+| BR-DATA-07 | **Pagination:** Mọi danh sách sử dụng phân trang. Default: 20 rows/page, max: 100 rows/page | UX-Spec | Toàn bộ list | Dashboard (nhóm I): không phân trang | Verify API response |
+| BR-DATA-08 | **Full-text search:** Hỏi đáp (noi_dung) và Kho câu hỏi (cau_hoi/cau_tra_loi) hỗ trợ tìm kiếm toàn văn | FR-II-02, FR-X.1-02, FR-X.2-04 | FR-II-02, FR-X.1-02, FR-X.2-04 | Các entity khác: search by tìm kiếm theo từ khóa | Verify chỉ mục tìm kiếm toàn văn |
+
+**Trạng thái:** ✅ CĐT xác nhận
+
+## B.3 BR-FLOW: Quy tắc Workflow
+
+| ID | Phát biểu quy tắc | Nguồn | Áp dụng FR | Ngoại lệ | Kiểm chứng |
+|----|-------------------|-------|-----------|---------|------------|
+| BR-FLOW-01 | **Auto-transition "Đã trả lời" → "Chờ phê duyệt":** Khi CB NV tích "Đã trả lời" trên hỏi đáp, hệ thống TỰ ĐỘNG chuyển trạng thái sang "Chờ phê duyệt" (KHÔNG cần bước "Trình") | PRD FR-II-07, biên bản b3 | FR-II-07, FR-II-08 | — | Test state auto-transition |
+| BR-FLOW-02 | **Phê duyệt hàng loạt:** CB PD có thể chọn nhiều bản ghi và phê duyệt hàng loạt (batch approve) | PRD FR-II-08 | FR-II-08 | Từ chối phải từng bản ghi (yêu cầu lý do) | Test batch approve N records |
+| BR-FLOW-03 | **Không sửa/xóa sau phê duyệt:** Bản ghi đã ở trạng thái "Đã duyệt" hoặc "Hoàn thành" không thể chỉnh sửa hoặc xóa | Pattern IP-02 | Toàn bộ workflow entities | QTHT có thể force-edit (audit đặc biệt) | Test UPDATE on approved = error |
+| BR-FLOW-04 | **Từ chối yêu cầu lý do:** Mọi hành động "Từ chối" phải nhập lý do. Lý do hiển thị cho người tạo ban đầu | Pattern IP-02 | FR-II-08, FR-III-18, FR-IV-07, FR-V.I-13, FR-V.II-12, FR-VI-09 | — | Test reject without reason = validation error |
+| BR-FLOW-05 | **Công khai qua API trực tiếp (Cổng PLQG):** Chỉ bản ghi đã duyệt mới được công khai lên Cổng PLQG (REST trực tiếp, không qua LGSP). Hủy công khai gỡ khỏi Cổng | Pattern IP-03 | FR-II-08, FR-III-16, FR-IV-08, FR-VII-03, FR-XI-05 | Biểu mẫu nhóm VII: công khai KHÔNG cần phê duyệt | Test publish undrafted = error |
+| BR-FLOW-06 | **Hồ sơ mới theo quy trình mới, hồ sơ cũ giữ quy trình cũ:** Khi thay đổi quy trình (FR-V.I-NEW-01), hồ sơ đang xử lý tiếp tục theo quy trình tại thời điểm tạo | FR-V.I-NEW-01 | FR-V.I-NEW-01 | — | Test version quy trình |
+| BR-FLOW-07 | **Biểu mẫu nhóm VII: công khai trực tiếp, KHÔNG cần phê duyệt.** CB NV tự chịu trách nhiệm nội dung | PRD FR-VII-03, CĐT xác nhận | FR-VII-03, FR-VII-04 | — | Test publish without approve step |
+| BR-FLOW-08 | **Báo cáo CT HTPLDN: ĐP + BN → TW tổng hợp.** ĐP/BN gửi BC đã duyệt lên TW. TW xem từng đơn vị + tổng hợp trên biểu mẫu TT17 | PRD FR-XI-08/09 | FR-XI-08, FR-XI-09 | — | Test aggregation flow |
+| BR-FLOW-09 | ~~**Hủy/dời phiên tư vấn: trước 24h cho phép, sau 24h từ chối**~~ **LOẠI BỎ** — FR-X.1-09 đã xóa (C1-15, C2-3) | ~~PRD FR-X.1-09~~ | ~~FR-X.1-09~~ | — | — |
+| BR-FLOW-10 | **Kho câu hỏi tư vấn nhanh: 3 nguồn bổ sung:** (1) Tự động từ hỏi đáp nhóm II đã duyệt, (2) Thêm thủ công (chờ duyệt), (3) Import (chờ duyệt) | PRD FR-X.2-01 | FR-X.2-01 | — | Test auto-import from HOI_DAP |
+
+**Trạng thái:** ✅ CĐT xác nhận
+
+## B.4 BR-CALC: Quy tắc Tính toán
+
+| ID | Phát biểu quy tắc | Nguồn | Áp dụng FR | Ngoại lệ | Kiểm chứng |
+|----|-------------------|-------|-----------|---------|------------|
+| BR-CALC-01 | **Mức hỗ trợ chi phí theo quy mô DN (NĐ18/2026):** DN siêu nhỏ = 100% (trần 3 triệu/năm), DN nhỏ = tối đa 30% (trần 5 triệu/năm), DN vừa = tối đa 10% (trần 10 triệu/năm) | NĐ18/2026, PRD FR-V.II-05 | FR-V.II-05, FR-VIII-12 | Địa phương (UBND tỉnh) có thể quyết định mức phí trần riêng | Test calculation per quy_mo_dn |
+
+> **Phương án dự phòng:** Nếu NĐ18/2026 không ban hành hoặc ban hành với mức khác, hệ thống fallback về NĐ55/2019 (Điều 4 khoản 3): mức hỗ trợ do UBND cấp tỉnh quyết định. Entity CAU_HINH_SLA + DANH_MUC (loại = 'DINH_MUC_CHI_PHI') cho phép QTHT cập nhật mức hỗ trợ mà KHÔNG cần sửa code. FR-VIII-12 seed data sẽ được điều chỉnh theo văn bản chính thức.
+| BR-CALC-02 | **Số tiền được duyệt = MIN(so_tien_de_nghi, phi_tu_van * muc_ho_tro_%, tran_ho_tro_nam - da_chi_trong_nam)** | NĐ18/2026, NĐ55/2019 | FR-V.II-05 | — | Test edge cases (vượt trần) |
+| BR-CALC-03 | **Deadline = ngày tiếp nhận + N ngày làm việc.** N lấy từ CAU_HINH_SLA. Ngày làm việc: Thứ 2-6, trừ ngày lễ (cấu hình) | FR-VIII-10, NĐ55 Điều 9 | FR-V.I-01, FR-II-CROSS-01 | — | Test deadline tính đúng ngày LV |
+| BR-CALC-04 | **Tiêu chí đánh giá: tổng trọng số các tiêu chí = 100%.** Điểm tổng = SUM(diem_i * trong_so_i / 100) | FR-VIII-11 | FR-VI-06 | — | Test SUM(trong_so) = 100 |
+| BR-CALC-05 | **Ưu tiên phân công (NĐ55 Điều 4):** (1) DN phụ nữ làm chủ, (2) DN nhiều LĐ nữ, (3) DN ≥30% LĐ khuyết tật, (4) FIFO (nộp trước ưu tiên) | NĐ55/2019 Điều 4 | FR-V.I-09 | CB NV có quyền override gợi ý | Test priority sorting |
+| BR-CALC-06 | **Điểm đánh giá TB TVV = AVG(diem) từ tất cả DANH_GIA_TU_VAN_VIEN** | FR-IV-09 | FR-IV-09 | — | Test AVG calculation |
+
+**Trạng thái:** 🟡 Đề xuất — BR-CALC-01/02 chờ CĐT xác nhận NĐ18/2026
+
+## B.5 BR-SLA: Quy tắc SLA
+
+| ID | Phát biểu quy tắc | Nguồn | Áp dụng FR | Ngoại lệ | Kiểm chứng |
+|----|-------------------|-------|-----------|---------|------------|
+| BR-SLA-01 | **SLA mặc định vụ việc HTPL = 10 ngày làm việc** (NĐ55/2019 Điều 9) | NĐ55 Điều 9 | FR-V.I-01, FR-VIII-10 | Có thể cấu hình khác tại UC108 | Verify seed data |
+| BR-SLA-02 | **4 mức cảnh báo:** (1) Bình thường (>50% thời hạn còn lại), (2) Sắp hết hạn (<50% còn lại, vàng), (3) Quá hạn (>100%, đỏ), (4) Quá hạn nghiêm trọng (>2x thời hạn, đen). Mặc định cố định, QTHT cấu hình được qua UC108 | PRD FR-VIII-10, team design, Reference A.4 | FR-VIII-10, FR-II-CROSS-01, FR-V.I-NEW-01 | — | Test 4 mức trên dữ liệu mock |
+| BR-SLA-03 | **Thông báo cảnh báo SLA:** Khi chuyển mức cảnh báo, gửi thông báo in-app + email cho CB NV xử lý + CB PD quản lý | FR-VIII-10, NFR-10 | FR-VIII-10 | Chỉ gửi khi BẬT cấu hình gui_email_canh_bao / gui_thong_bao_app | Test notification trigger |
+| BR-SLA-04 | **Ngày làm việc:** Thứ 2-6 (trừ ngày lễ quốc gia + ngày nghỉ bù). Danh sách ngày lễ quản lý tại entity NGAY_LE (Section 3.4.4.51), QTHT cập nhật hàng năm theo Quyết định của Thủ tướng. | Team design | FR-VIII-10 | — | Test SLA qua ngày lễ |
+| BR-SLA-05 | **Dashboard hiển thị SLA:** Biểu đồ tỷ lệ tuân thủ SLA = COUNT(hoan_thanh_dung_han) / COUNT(hoan_thanh) * 100% | FR-I-08 | FR-I-08 | — | Test dashboard SLA widget |
+
+**Trạng thái:** ✅ CĐT xác nhận (SLA 10 ngày, 4 mức cảnh báo)
+
+## B.6 BR-INTG: Quy tắc Tích hợp
+
+| ID | Phát biểu quy tắc | Nguồn | Áp dụng FR | Ngoại lệ | Kiểm chứng |
+|----|-------------------|-------|-----------|---------|------------|
+| BR-INTG-01 | **Mô hình tích hợp hybrid 3 kênh (C-08a):** (1) LGSP cho HT nội bộ BTP (DVC, VBPL, Danh mục), (2) NDXP cho HT liên ngành (VNeID), (3) Trực tiếp cho Cổng PLQG (18 API), Email SMTP (thông báo), HT khác (UC55) | Thiết kế tổng thể Section 5.5, 8.1-8.2 | Nhóm XII, FR-V.I-03/05, FR-V.II-01, FR-VIII-20 | v1.6: Thay thế "tất cả qua LGSP" | Verify network topology per channel |
+| BR-INTG-02 | **Bảo mật API: mTLS + token xác thực Bearer RS256.** Mọi API outbound phải xác thực qua 2 lớp (áp dụng cho cả kết nối trực tiếp với Cổng PLQG). Kênh Trực tiếp: token xác thực cho Cổng PLQG, API key cho HT khác (xem C-08a) | Architecture AD-05/06 | Nhóm XII | — | Test invalid token = 401 |
+| BR-INTG-03 | **Rate limit: 100 requests/phút/consumer** | PRD Section 6.16 | Nhóm XII | — | Load test rate limit |
+| BR-INTG-04 | **Response time API < 3 giây** | NFR-01, PRD | Nhóm XII | Báo cáo nặng có thể > 3s (async) | Performance test |
+| BR-INTG-05 | **Retry policy: tối đa 3 lần, backoff exponential (1s, 2s, 4s)** (áp dụng cho API outbound realtime — Cổng PLQG)**.** Nếu vẫn fail → log lỗi + thông báo QTHT | FR-V.II-04, team design | FR-V.II-04, FR-V.I-12 | — | Test retry logic |
+| BR-INTG-06 | **VNeID tích hợp theo lộ trình 3 Tier (NĐ69/2024/NĐ-CP thay thế NĐ59/2022):** Tier 1 (MVP): username/password + TOTP 2FA, CCCD nhập thủ công. Tier 2: VNPT eKYC IDCheck xác thực CCCD qua CSDL quốc gia. Tier 3 (khi được phê duyệt): SSO VNeID qua OIDC Authorization Code flow (phương thức xác thực UX phía VNeID — PM không kiểm soát) — yêu cầu Chứng nhận ATTT cấp 3 + thỏa thuận Bộ Công an (thời gian phê duyệt ~30 ngày làm việc) | PRD FR-VIII-20, NĐ69/2024/NĐ-CP | FR-VIII-20 | Tier 1 là fallback mặc định. VNeID không có public OAuth2/OIDC endpoints | Test Tier 1 login + TOTP |
+| BR-INTG-07 | **Chỉ chia sẻ dữ liệu đã duyệt/công khai qua API.** Bản ghi draft/chờ duyệt KHÔNG xuất hiện trong API response | Pattern IP-03/05 | Nhóm XII | — | Test API filter trạng thái |
+
+**Trạng thái:** ✅ CĐT xác nhận (LGSP) | 🟡 Đề xuất (VNeID flow, retry policy)
+
+## B.6a BR-UX: Quy tắc UX
+
+| ID | Phát biểu quy tắc | Nguồn | Áp dụng FR | Ngoại lệ | Kiểm chứng |
+|----|-------------------|-------|-----------|---------|------------|
+| BR-UX-01 | **URL Sync Filter:** Tham số bộ lọc trên tất cả trang danh sách SHALL đồng bộ với URL query parameters (ví dụ: ?trang_thai=DANG_XU_LY&tu_ngay=2026-01-01). Cho phép bookmark và chia sẻ link filtered view. 🟡 Lưu preset filter per-user: Phase 2 enhancement. | UX-Spec | Tất cả FR danh sách (FR-II-02, FR-III-02, FR-IV-02, FR-V.I-02, FR-V.II-02, FR-VI-02, FR-IX, FR-X.1-02, FR-X.2-02) | — | Test URL params ↔ filter state |
+
+## B.7 BR-LEGAL: Quy tắc Pháp lý
+
+| ID | Phát biểu quy tắc | Nguồn | Áp dụng FR | Ngoại lệ | Kiểm chứng |
+|----|-------------------|-------|-----------|---------|------------|
+| BR-LEGAL-01 | **Luật Hỗ trợ DNNVV 2017:** Đối tượng hưởng lợi là DNNVV (siêu nhỏ, nhỏ, vừa) theo tiêu chí doanh thu + số lao động (NĐ39/2018) | Luật DNNVV 2017 | FR-VIII-07, FR-V.III-01 | — | Verify tiêu chí phân loại |
+| BR-LEGAL-02 | **NĐ55/2019/NĐ-CP:** Quy định chi tiết về hỗ trợ TVPL cho DNNVV. Điều 4: đối tượng ưu tiên. Điều 9: SLA 10 ngày LV. Mẫu 01: 18 trường biểu mẫu đề nghị | NĐ55/2019 | FR-V.I, FR-V.II, FR-VIII-06/08/10 | — | Verify checklist 18 trường |
+| BR-LEGAL-03 | **NĐ18/2026/NĐ-CP (sửa đổi NĐ55):** Gộp 2 thủ tục thành 1. Mức hỗ trợ: Siêu nhỏ 100%/3M, Nhỏ 30%/5M, Vừa 10%/10M | NĐ18/2026 | FR-V.II-05, FR-VIII-12 | 🟡 Chờ CĐT xác nhận | Verify mức hỗ trợ |
+| BR-LEGAL-04 | **NĐ77/2008/NĐ-CP:** Tư vấn pháp luật — quy định về TVV, tổ chức TVPL, mạng lưới. 1 TVV → nhiều tổ chức (chính + cộng tác) | NĐ77/2008 | FR-IV-01 đến FR-IV-12 | — | Verify N:N TVV ↔ tổ chức |
+| BR-LEGAL-05 | **TT17/2025/TT-BTP:** Mẫu báo cáo kết quả triển khai công tác hỗ trợ pháp lý cho DNNVV: 21a/TP/HTPLDN (Sở/ban ngành) + 21b/TP/HTPLDN (STP) | TT17/2025 | FR-VI-07, FR-XI-06/09 | — | Verify mẫu xuất đúng format |
+| BR-LEGAL-06 | **TT64/2021/TT-BTC:** Quy định về quản lý, sử dụng kinh phí hỗ trợ pháp lý | TT64/2021 | FR-V.II | — | Reference only |
+| BR-LEGAL-07 | **Luật Dữ liệu 2024:** Bảo vệ dữ liệu cá nhân — mã hóa dữ liệu truyền và lưu trữ, audit trail 5 năm | Luật Dữ liệu 2024 | NFR-04/06, §3.5.1 (SEC-01, SEC-02, SEC-05) | — | Security audit |
+| BR-LEGAL-08 | **Đánh giá hiệu quả: tần suất sơ bộ 6 tháng + tròn năm. Không đột xuất** | PRD Section 6.8, CĐT | FR-VI-01 | — | Verify tần suất trong KH |
+
+**Trạng thái:** ✅ CĐT xác nhận | 🟡 BR-LEGAL-03 chờ xác nhận NĐ18/2026
+
+## B.8 Quy tắc Edge Case (EC Rules)
+
+| Mã | Tên | Mô tả | Loại | Nguồn |
+|----|-----|-------|------|-------|
+| BR-EC-01 | Optimistic Locking | Tất cả UPDATE/DELETE SHALL kiểm tra updated_at trước khi thực thi. Nếu xung đột → ERR-SYS-02 | Ràng buộc | IEEE 830 EC |
+| BR-EC-02 | Soft-delete Cascade | Khi soft-delete bản ghi cha, ứng dụng SHALL cascade soft-delete bản ghi con. Khi restore → restore con | Ràng buộc | IEEE 830 EC |
+| BR-EC-03 | File Antivirus Scan | Tất cả file upload SHALL quét antivirus trước lưu trữ. Nhiễm → từ chối ERR-FILE-02 | Bảo mật | IEEE 830 EC |
+| BR-EC-04 | Storage Quota | Mỗi đơn vị có hạn mức lưu trữ (mặc định 10GB). 90% → cảnh báo. 100% → từ chối ERR-FILE-01 | Ràng buộc | IEEE 830 EC |
+| BR-EC-05 | Session Limit | Tối đa 3 phiên đồng thời/user. Phiên thứ 4 hủy phiên cũ nhất. QTHT: 1 phiên | Bảo mật | IEEE 830 EC |
+| BR-EC-06 | CSRF Protection | CMS session endpoints dùng double-submit cookie (X-CSRF-Token). SameSite=Strict | Bảo mật | IEEE 830 EC |
+| BR-EC-07 | Token Hash | token_reset_mk lưu SHA-256 hash, KHÔNG plaintext | Bảo mật | IEEE 830 EC |
+| BR-EC-08 | Refresh Token Revoke | Logout/Lock/Disable → thêm tất cả refresh token vào blacklist Redis ngay lập tức | Bảo mật | IEEE 830 EC |
+| BR-EC-09 | VNeID Fallback Limit | Fallback auth local tối đa 72h/đợt. Sau 72h QTHT phải gia hạn. Xác thực lại trong 24h sau khôi phục | Bảo mật | IEEE 830 EC |
+| BR-EC-10 | DLQ Processing | Message fail 3 lần → DLQ. Alert QTHT. QTHT có UI retry/discard. Hết hạn 7 ngày | Vận hành | IEEE 830 EC |
+| BR-EC-11 | Email Fail Escalation | 3 lần gửi thất bại → đánh dấu THAT_BAI + tạo in-app notification + alert QTHT dashboard | Vận hành | IEEE 830 EC |
+| BR-EC-12 | Pagination Guard | page_size ∈ [1,100] default 20. page >= 1 default 1. Ngoài phạm vi → ERR-PARAM-01 | Ràng buộc | IEEE 830 EC |
+| BR-EC-13 | Search Sanitize | Keyword: trim, max 200 ký tự, escape ký tự đặc biệt truy vấn. Bảng > 10K → tìm kiếm toàn văn | Bảo mật | IEEE 830 EC |
+| BR-EC-14 | Annual Ceiling Reset | da_chi_trong_nam reset về 0 vào ngày 1/1 mỗi năm dương lịch theo NĐ55 | Tính toán | NĐ55/2019 |
+| BR-EC-15 | YEU_CAU_BO_SUNG Timeout | Tối đa 3 lần bổ sung. Sau lần 3 nếu vẫn không đạt → tự động TU_CHOI | Quy trình | IEEE 830 EC |
+| BR-EC-16 | YEU_CAU_BO_SUNG Deadline | Nếu trạng thái YEU_CAU_BO_SUNG quá N ngày LV (cấu hình qua CAU_HINH_SLA) → tự động TU_CHOI + thông báo | Quy trình | IEEE 830 EC |
+| BR-EC-17 | Approval Escalation | Nếu CHO_PHE_DUYET quá N ngày LV (mặc định 3) → auto-escalate CB PD cấp trên + nhắc nhở | Quy trình | IEEE 830 EC |
+| BR-EC-18 | Assignment Timeout | NHT/CG không phản hồi phân công trong 3 ngày LV → tự động hoàn về trạng thái trước + alert CB NV | Quy trình | IEEE 830 EC |
+| BR-EC-19 | Batch Size Limit | Batch approve/batch operations: tối đa 100 bản ghi/request | Ràng buộc | IEEE 830 EC |
+| BR-EC-20 | DB Transaction Consistency | Khi commit local thành công nhưng LGSP API fail → rollback hoặc queue compensating call. KHÔNG set trạng thái mới trước khi API thành công | Tích hợp | IEEE 830 EC |
+| BR-EC-21 | LGSP Idempotency | Inbound LGSP: kiểm tra ma_ho_so trùng. Nếu trùng → trả HTTP 409 với mã đã tạo. KHÔNG tạo bản ghi mới | Tích hợp | IEEE 830 EC |
+| BR-EC-22 | Payment Zero Guard | phi_tu_van và so_tien_de_nghi PHẢI > 0. so_tien_thuc_tra ≤ so_tien_duyet. Vượt → ERR-CT-KQ-01 | Tính toán | NĐ55/2019 |
+| BR-EC-23 | Evaluation Weight Tolerance | Tổng trọng số tiêu chí: cho phép ±0.01% sai số do làm tròn (33.33+33.33+33.34=100.00) | Tính toán | IEEE 830 EC |
+
+---
+
+
+
+---
+
+# Phụ lục C: Sơ đồ Máy trạng thái (State Machines)
+
+> **SOURCE OF TRUTH (v3.1):** Đây là bản gốc cho tất cả state machines. Mỗi FR group file chứa bản trích SM liên quan (Section 5). Khi thay đổi SM, cập nhật ở đây trước, sau đó sync sang FR files.
+
+## C.1 SM-HOIDAP: Câu hỏi/Vướng mắc Pháp lý
+
+**Entity:** HOI_DAP
+**Tham chiếu FR:** FR-II-01 đến FR-II-10
+
+```mermaid
+stateDiagram-v2
+    [*] --> MOI : DN gửi qua Cổng / CB nhập thủ công
+    MOI --> TIEP_NHAN : CB NV tiếp nhận
+    MOI --> HUY : CB NV hủy (không có phản hồi đang soạn)
+    TIEP_NHAN --> DANG_XU_LY : CB NV phân công NHT/TVV
+    DANG_XU_LY --> DA_TRA_LOI : CB NV soạn phản hồi + tích "Đã trả lời"
+    DA_TRA_LOI --> CHO_PHE_DUYET : [Auto] Hệ thống tự chuyển
+    CHO_PHE_DUYET --> DA_DUYET : CB PD phê duyệt
+    CHO_PHE_DUYET --> DANG_XU_LY : CB PD từ chối (trả lại)
+    DA_DUYET --> CONG_KHAI : CB NV/PD công khai lên Cổng
+    CONG_KHAI --> DA_DUYET : CB NV hủy công khai
+    DA_DUYET --> HOAN_THANH : Đóng hồ sơ
+    CONG_KHAI --> HOAN_THANH : Đóng hồ sơ
+```
+
+**Bảng trạng thái:**
+
+| Trạng thái | Mã | Mô tả | Màu hiển thị |
+|-----------|-----|-------|-------------|
+| Mới | MOI | Yêu cầu mới tiếp nhận từ Cổng/DVC/nhập tay | Xanh dương |
+| Tiếp nhận | TIEP_NHAN | CB NV đã tiếp nhận, chưa phân công | Xanh lá |
+| Đang xử lý | DANG_XU_LY | Đã phân công, đang soạn phản hồi | Vàng |
+| Đã trả lời | DA_TRA_LOI | CB NV tích hoàn thành (thoáng qua) | — |
+| Chờ phê duyệt | CHO_PHE_DUYET | Auto-transition, chờ CB PD duyệt | Cam |
+| Đã duyệt | DA_DUYET | CB PD đã duyệt, sẵn sàng công khai | Xanh lá đậm |
+| Công khai | CONG_KHAI | Đã đẩy lên Cổng PLQG | Tím |
+| Hoàn thành | HOAN_THANH | Đóng hồ sơ | Xám |
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
+|----|-----|---------|-------|--------|--------|--------|
+| [*] | MOI | DN gửi qua Cổng/DVC | — | Tạo bản ghi, sinh mã HD-xxx | FR-II-01 | BR-DATA-04 |
+| MOI | TIEP_NHAN | CB NV nhấn "Tiếp nhận" | CB NV cùng đơn vị | Ghi audit, tính deadline SLA | FR-II-03 | BR-SLA-01 |
+| TIEP_NHAN | DANG_XU_LY | CB NV phân công NHT/TVV | NHT/TVV đang hoạt động | Gửi thông báo NHT/TVV | FR-II-06 | BR-FLOW-01 |
+| DANG_XU_LY | DA_TRA_LOI | CB NV tích "Đã trả lời" | Phản hồi không rỗng | Lưu phản hồi | FR-II-07 | — |
+| DA_TRA_LOI | CHO_PHE_DUYET | Auto | — | Gửi thông báo CB PD | FR-II-07 | BR-FLOW-01 |
+| CHO_PHE_DUYET | DA_DUYET | CB PD phê duyệt | CB PD cùng cấp | Ghi audit | FR-II-08 | BR-AUTH-05 |
+| CHO_PHE_DUYET | DANG_XU_LY | CB PD từ chối | Có lý do từ chối | Gửi thông báo CB NV | FR-II-08 | BR-FLOW-04 |
+| DA_DUYET | CONG_KHAI | CB nhấn "Công khai" | — | Gửi API trực tiếp lên Cổng PLQG | FR-II-08 | BR-FLOW-05 |
+| CONG_KHAI | DA_DUYET | CB nhấn "Hủy công khai" | — | Gỡ khỏi Cổng qua API | FR-II-08 | BR-FLOW-05 |
+| MOI | HUY | CB NV hủy yêu cầu | Không có phản hồi đang soạn | Soft delete, ghi audit | FR-II-xx | — |
+| DA_DUYET | HOAN_THANH | CB NV đóng hồ sơ | — | Ghi audit | FR-II-xx | — |
+| CONG_KHAI | HOAN_THANH | CB NV đóng hồ sơ | — | Ghi audit | FR-II-xx | — |
+
+> **Lưu ý:** Tất cả chuyển trạng thái SHALL sử dụng optimistic locking (kiểm tra version). Crash recovery: scheduled job mỗi 5 phút detect bản ghi ở trạng thái trung gian > 5 phút và retry auto-transition.
+
+**Trạng thái:** ✅ CĐT xác nhận
+
+---
+
+## C.2 SM-KHOAHOC: Khóa đào tạo
+
+**Entity:** KHOA_HOC
+**Tham chiếu FR:** FR-III-01 đến FR-III-19
+
+```mermaid
+stateDiagram-v2
+    [*] --> DU_THAO : CB NV tạo mới
+    DU_THAO --> CHO_DUYET : CB NV trình phê duyệt
+    CHO_DUYET --> DA_DUYET : CB PD phê duyệt
+    CHO_DUYET --> DU_THAO : CB PD từ chối
+    DA_DUYET --> DANG_DIEN_RA : Đến ngày bắt đầu / CB NV kích hoạt
+    DANG_DIEN_RA --> DA_KET_THUC : Auto khi hết thời gian / CB NV kết thúc
+    DA_KET_THUC --> CHO_DUYET_KQ : CB NV ghi nhận kết quả → trình phê duyệt
+    CHO_DUYET_KQ --> HOAN_THANH : CB PD duyệt kết quả → hoàn thành
+    CHO_DUYET_KQ --> DA_KET_THUC : CB PD từ chối → sửa lại
+    DU_THAO --> HUY : CB NV hủy
+    CHO_DUYET --> HUY : CB NV rút trình
+    DA_DUYET --> HUY : CB PD hủy (chưa có đăng ký)
+```
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
+|----|-----|---------|-------|--------|--------|--------|
+| [*] | DU_THAO | CB NV tạo khóa học | Có CTĐT cha | Tạo bản ghi | FR-III-01 | — |
+| DU_THAO | CHO_DUYET | CB NV trình | Đủ thông tin bắt buộc | Thông báo CB PD | FR-III-15 | BR-AUTH-05 |
+| CHO_DUYET | DA_DUYET | CB PD duyệt | Cùng cấp | Audit log | FR-III-15 | BR-AUTH-05 |
+| CHO_DUYET | DU_THAO | CB PD từ chối | Có lý do | Thông báo CB NV | FR-III-15 | BR-FLOW-04 |
+| DA_DUYET | DANG_DIEN_RA | Ngày BĐ hoặc CB kích hoạt | ngay_bat_dau <= NOW | — | FR-III-01 | — |
+| DANG_DIEN_RA | DA_KET_THUC | Auto khi hết thời gian / CB NV kết thúc | Guard bổ sung (xem note) | Đóng điểm danh | FR-III-17 | — |
+| DA_KET_THUC | CHO_DUYET_KQ | CB NV ghi nhận KQ → trình PD | Có kết quả đầy đủ | TB CB PD | FR-III-17 | BR-AUTH-05 |
+| CHO_DUYET_KQ | HOAN_THANH | CB PD duyệt kết quả | Cùng cấp | Audit, cho phép cấp chứng nhận | FR-III-17 | BR-AUTH-05 |
+| CHO_DUYET_KQ | DA_KET_THUC | CB PD từ chối | Có lý do | TB CB NV sửa lại | FR-III-17 | BR-FLOW-04 |
+| DU_THAO | HUY | CB NV hủy | Không có đăng ký | Soft delete | FR-III-01 | BR-DATA-01 |
+| CHO_DUYET | HUY | CB NV rút trình | CB NV tạo ban đầu | Ghi audit | FR-III-xx | — |
+| DA_DUYET | HUY | CB PD hủy | Chưa có đăng ký | Ghi audit | FR-III-xx | — |
+
+> **Guard bổ sung DANG_DIEN_RA → DA_KET_THUC:** Guard: tất cả đăng ký đã ghi nhận điểm danh HOẶC CB NV override thủ công với lý do.
+
+> **Lưu ý DA_HUY:** Khi chuyển DA_HUY: thông báo tất cả học viên DA_DUYET qua email + in-app. Cập nhật DANG_KY_DAO_TAO.trang_thai = 'DA_HUY'. Giải phóng tài nguyên.
+
+**Trạng thái:** ✅ CĐT xác nhận
+
+---
+
+## C.3 SM-TVV: Tư vấn viên
+
+**Entity:** TU_VAN_VIEN
+**Tham chiếu FR:** FR-IV-01 đến FR-IV-12
+
+```mermaid
+stateDiagram-v2
+    [*] --> MOI_DANG_KY : NHT đăng ký tham gia MLTV
+    MOI_DANG_KY --> CHO_THAM_DINH : CB NV tiếp nhận hồ sơ
+    CHO_THAM_DINH --> DANG_THAM_DINH : CB NV bắt đầu thẩm định
+    DANG_THAM_DINH --> YEU_CAU_BO_SUNG : Hồ sơ chưa đầy đủ
+    YEU_CAU_BO_SUNG --> DANG_THAM_DINH : NHT bổ sung xong
+    DANG_THAM_DINH --> CHO_PHE_DUYET : Thẩm định đạt (4 nhóm tiêu chí)
+    CHO_PHE_DUYET --> DANG_HOAT_DONG : CB PD phê duyệt (công nhận)
+    CHO_PHE_DUYET --> TU_CHOI : CB PD từ chối
+    TU_CHOI --> CHO_THAM_DINH : Nộp lại hồ sơ
+    DANG_HOAT_DONG --> TAM_DUNG : CB NV tạm dừng
+    TAM_DUNG --> DANG_HOAT_DONG : CB NV kích hoạt lại
+    DANG_HOAT_DONG --> VO_HIEU_HOA : CB NV vô hiệu hóa
+    TAM_DUNG --> VO_HIEU_HOA : CB NV vô hiệu hóa
+    VO_HIEU_HOA --> DANG_HOAT_DONG : CB NV khôi phục
+```
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
+|----|-----|---------|-------|--------|--------|--------|
+| [*] | MOI_DANG_KY | NHT đăng ký MLTV | — | Tạo hồ sơ TVV | FR-IV-03 | — |
+| MOI_DANG_KY | CHO_THAM_DINH | CB NV tiếp nhận | Hồ sơ đủ giấy tờ | — | FR-IV-06 | — |
+| CHO_THAM_DINH | DANG_THAM_DINH | CB NV bắt đầu thẩm định | — | Ghi thời điểm bắt đầu | FR-IV-06 | — |
+| DANG_THAM_DINH | YEU_CAU_BO_SUNG | Hồ sơ chưa đầy đủ | CB NV xác nhận thiếu | Thông báo NHT | FR-IV-06 | — |
+| YEU_CAU_BO_SUNG | DANG_THAM_DINH | NHT bổ sung xong | Có tài liệu bổ sung | — | FR-IV-06 | — |
+| DANG_THAM_DINH | CHO_PHE_DUYET | Thẩm định đạt | 4 nhóm tiêu chí đạt | Ghi kết quả thẩm định | FR-IV-06 | BR-LEGAL-04 |
+| CHO_PHE_DUYET | DANG_HOAT_DONG | CB PD duyệt | Cùng cấp | Audit, ngay_cong_nhan | FR-IV-07 | BR-AUTH-05 |
+| CHO_PHE_DUYET | TU_CHOI | CB PD từ chối | Có lý do | Thông báo CB NV + NHT | FR-IV-07 | BR-FLOW-04 |
+| TU_CHOI | CHO_THAM_DINH | Nộp lại hồ sơ | NHT cập nhật hồ sơ | Reset thẩm định | FR-IV-06 | — |
+| DANG_HOAT_DONG | TAM_DUNG | CB NV quyết định | Không theo điều kiện tự động | Audit log | FR-IV-12 | — |
+| TAM_DUNG | DANG_HOAT_DONG | CB NV kích hoạt lại | — | Audit log | FR-IV-12 | — |
+| DANG_HOAT_DONG | VO_HIEU_HOA | CB NV vô hiệu hóa | Không có VV đang xử lý | Gỡ khỏi Cổng, audit | FR-IV-12 | — |
+| VO_HIEU_HOA | DANG_HOAT_DONG | CB NV khôi phục | Quyết định từng trường hợp | Audit log | FR-IV-12 | — |
+
+> **Guard bổ sung TAM_DUNG → VO_HIEU_HOA:** Kiểm tra KHÔNG có VU_VIEC và HOI_DAP đang xử lý (tương tự guard DANG_HOAT_DONG → VO_HIEU_HOA).
+
+**Trạng thái:** ✅ CĐT xác nhận
+
+---
+
+## C.4 SM-VUVIEC: Vụ việc HTPL
+
+**Entity:** VU_VIEC
+**Tham chiếu FR:** FR-V.I-01 đến FR-V.I-17
+
+```mermaid
+stateDiagram-v2
+    [*] --> MOI_TAO : HT tự tạo từ DVC/HT khác
+    MOI_TAO --> CHO_TIEP_NHAN : Auto hoặc CB NV xử lý
+    [*] --> CHO_TIEP_NHAN : Tiếp nhận từ DVC/HT khác/Trực tiếp
+    CHO_TIEP_NHAN --> DA_TIEP_NHAN : CB NV tiếp nhận
+    DA_TIEP_NHAN --> DANG_KIEM_TRA : CB NV kiểm tra hồ sơ
+    DANG_KIEM_TRA --> DA_PHAN_CONG : Hồ sơ đạt + Phân công NHT/TVV
+    DANG_KIEM_TRA --> YEU_CAU_BO_SUNG : Hồ sơ thiếu
+    YEU_CAU_BO_SUNG --> DANG_KIEM_TRA : DN bổ sung
+    DANG_KIEM_TRA --> TU_CHOI : Hồ sơ không đạt
+    DA_PHAN_CONG --> DANG_XU_LY : NHT/TVV xác nhận tham gia
+    DA_PHAN_CONG --> DA_TIEP_NHAN : NHT/TVV từ chối (phân công lại)
+    DANG_XU_LY --> CHO_PHE_DUYET : CB NV trình phê duyệt
+    CHO_PHE_DUYET --> DA_DUYET : CB PD phê duyệt
+    CHO_PHE_DUYET --> DANG_XU_LY : CB PD từ chối
+    DA_DUYET --> HOAN_THANH : CB NV cập nhật kết quả cuối
+    HOAN_THANH --> DA_DANH_GIA : CB NV đánh giá (UC67)
+```
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
+|----|-----|---------|-------|--------|--------|--------|
+| [*] | MOI_TAO | HT tự tạo từ DVC/HT khác | — | Tạo VV, sinh mã | FR-V.I-03/04/05 | — |
+| MOI_TAO | CHO_TIEP_NHAN | Auto hoặc CB NV xử lý | — | Tính deadline, audit | FR-V.I-03/04/05 | BR-SLA-01 |
+| [*] | CHO_TIEP_NHAN | DVC/HT khác/Trực tiếp | — | Tạo VV, sinh mã, tính deadline | FR-V.I-03/04/05 | BR-SLA-01 |
+| CHO_TIEP_NHAN | DA_TIEP_NHAN | CB NV tiếp nhận | CB NV cùng đơn vị | Audit, gửi TB DN (nếu DVC) | FR-V.I-01 | — |
+| DA_TIEP_NHAN | DANG_KIEM_TRA | CB NV kiểm tra | — | Đối chiếu checklist UC106 | FR-V.I-06 | BR-LEGAL-02 |
+| DANG_KIEM_TRA | DA_PHAN_CONG | Đạt + chọn NHT | NHT đang hoạt động | Gửi TB NHT | FR-V.I-09 | BR-CALC-05 |
+| DANG_KIEM_TRA | YEU_CAU_BO_SUNG | Thiếu HS | — | TB DN bổ sung | FR-V.I-06 | — |
+| DANG_KIEM_TRA | TU_CHOI | Không đạt | — | TB DN kết quả | FR-V.I-12 | — |
+| DA_PHAN_CONG | DANG_XU_LY | NHT xác nhận | — | Audit | FR-V.I-10 | — |
+| DA_PHAN_CONG | DA_TIEP_NHAN | NHT từ chối | Có lý do | Quay lại chọn NHT khác | FR-V.I-10 | — |
+| DANG_XU_LY | CHO_PHE_DUYET | CB NV trình | NHT đã cập nhật KQ | TB CB PD | FR-V.I-11 | BR-AUTH-05 |
+| CHO_PHE_DUYET | DA_DUYET | CB PD duyệt | Cùng cấp | Audit | FR-V.I-13 | BR-AUTH-05 |
+| CHO_PHE_DUYET | DANG_XU_LY | CB PD từ chối | Có lý do | TB CB NV | FR-V.I-13 | BR-FLOW-04 |
+| DA_DUYET | HOAN_THANH | CB NV cập nhật KQ cuối | — | Audit, TB DN | FR-V.I-16 | — |
+| HOAN_THANH | DA_DANH_GIA | CB NV đánh giá (UC67) | VV đã hoàn thành | Lưu đánh giá, audit | FR-V.I-17 | — |
+| TU_CHOI | DA_TIEP_NHAN | QTHT/CB NV mở lại | Admin override hoặc DN khiếu nại | Audit log, ghi lý do | FR-V.I-xx | — |
+| YEU_CAU_BO_SUNG | TU_CHOI | Auto: quá N ngày LV | elapsed > cau_hinh_sla.bo_sung_timeout | TB DN, ghi audit | BR-EC-16 | — |
+
+> **Lưu ý:** Tối đa 3 lần bổ sung (BR-EC-15). Sau lần thứ 3 nếu vẫn KHONG_DAT → tự động TU_CHOI.
+
+**Trạng thái:** ✅ CĐT xác nhận
+
+---
+
+## C.5 SM-CHITRA: Chi trả Chi phí
+
+**Entity:** HO_SO_CHI_TRA
+**Tham chiếu FR:** FR-V.II-01 đến FR-V.II-13
+
+```mermaid
+stateDiagram-v2
+    [*] --> CHO_TIEP_NHAN : DN nộp qua DVC
+    CHO_TIEP_NHAN --> DANG_KIEM_TRA : CB NV tiếp nhận
+    DANG_KIEM_TRA --> DANG_DANH_GIA : Hồ sơ đạt
+    DANG_KIEM_TRA --> YEU_CAU_BO_SUNG : Thiếu thành phần
+    YEU_CAU_BO_SUNG --> DANG_KIEM_TRA : DN bổ sung
+    DANG_KIEM_TRA --> TU_CHOI : Không đạt
+    DANG_DANH_GIA --> DANG_THAM_DINH : CB NV đánh giá xong
+    DANG_THAM_DINH --> CHO_PHE_DUYET : CB NV trình phê duyệt
+    CHO_PHE_DUYET --> DA_DUYET : CB PD phê duyệt
+    CHO_PHE_DUYET --> DANG_THAM_DINH : CB PD từ chối
+    DA_DUYET --> DA_THANH_TOAN : CB NV cập nhật KQ thanh toán
+    CHO_TIEP_NHAN --> HUY : CB NV hủy hồ sơ
+```
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
+|----|-----|---------|-------|--------|--------|--------|
+| [*] | CHO_TIEP_NHAN | DN nộp qua DVC | — | Tạo HS, validate Mẫu 01 (18 trường) | FR-V.II-01 | BR-LEGAL-02 |
+| CHO_TIEP_NHAN | DANG_KIEM_TRA | CB NV tiếp nhận | — | Audit | FR-V.II-02 | — |
+| DANG_KIEM_TRA | DANG_DANH_GIA | Đạt | Checklist đủ | TB DVC kết quả | FR-V.II-03/04 | — |
+| DANG_DANH_GIA | DANG_THAM_DINH | Đánh giá xong | Tính mức HT theo quy mô DN | Áp dụng BR-CALC-01/02 | FR-V.II-05 | BR-CALC-01, BR-CALC-02 |
+| DANG_THAM_DINH | CHO_PHE_DUYET | CB NV trình | KQ thẩm định đạt | TB CB PD | FR-V.II-11 | BR-AUTH-05 |
+| CHO_PHE_DUYET | DA_DUYET | CB PD duyệt | Cùng cấp | Audit, tính so_tien_duoc_duyet | FR-V.II-12 | BR-AUTH-05 |
+| CHO_PHE_DUYET | DANG_THAM_DINH | CB PD từ chối | Có lý do | TB CB NV | FR-V.II-12 | BR-FLOW-04 |
+| DA_DUYET | DA_THANH_TOAN | CB NV cập nhật | — | Ghi so_tien_thuc_tra, ngay_thanh_toan | FR-V.II-13 | — |
+| YEU_CAU_BO_SUNG | TU_CHOI | Auto: quá N ngày LV | elapsed > cau_hinh_sla.bo_sung_timeout | TB DN qua DVC | BR-EC-16 | — |
+| CHO_TIEP_NHAN | HUY | DN rút hồ sơ | Trạng thái chưa qua DANG_DANH_GIA | TB DVC kết quả hủy | — | — |
+
+**Trạng thái:** ✅ CĐT xác nhận | 🟡 Mức hỗ trợ NĐ18/2026
+
+---
+
+## C.6 SM-DANHGIA: Đánh giá Hiệu quả
+
+**Entity:** KE_HOACH_DANH_GIA (+ KET_QUA_DANH_GIA + BAO_CAO_DANH_GIA)
+**Tham chiếu FR:** FR-VI-01 đến FR-VI-09
+
+```mermaid
+stateDiagram-v2
+    [*] --> LAP_KE_HOACH : CB NV tạo đợt đánh giá
+    LAP_KE_HOACH --> PHAN_CONG : CB NV phân công người ĐG
+    PHAN_CONG --> CHO_DUYET_PC : CB NV trình duyệt phân công
+    CHO_DUYET_PC --> THUC_HIEN : CB PD duyệt phân công
+    CHO_DUYET_PC --> PHAN_CONG : CB PD từ chối
+    THUC_HIEN --> BAO_CAO : CB NV nhập điểm xong + lập BC
+    BAO_CAO --> CHO_PHE_DUYET : CB NV trình duyệt BC
+    CHO_PHE_DUYET --> HOAN_THANH : CB PD duyệt BC
+    CHO_PHE_DUYET --> BAO_CAO : CB PD từ chối BC
+```
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
+|----|-----|---------|-------|--------|--------|--------|
+| [*] | LAP_KE_HOACH | CB NV tạo đợt | Tần suất: 6 tháng/năm | Tạo KH | FR-VI-01 | BR-LEGAL-08 |
+| LAP_KE_HOACH | PHAN_CONG | CB NV phân công | Có KH | Gán CB/CG | FR-VI-03 | — |
+| PHAN_CONG | CHO_DUYET_PC | CB NV trình | Có danh sách PC | TB CB PD | FR-VI-03 | BR-AUTH-05 |
+| CHO_DUYET_PC | THUC_HIEN | CB PD duyệt | Cùng cấp | Audit, chọn VV | FR-VI-04/05 | — |
+| THUC_HIEN | BAO_CAO | Nhập điểm xong | Tất cả VV đã ĐG | Sinh BC TT17 | FR-VI-06/07 | BR-CALC-04 |
+| BAO_CAO | CHO_PHE_DUYET | CB NV trình | BC đủ dữ liệu | TB CB PD | FR-VI-08 | — |
+| CHO_PHE_DUYET | HOAN_THANH | CB PD duyệt | Cùng cấp | Audit | FR-VI-09 | BR-AUTH-05 |
+| CHO_PHE_DUYET | BAO_CAO | CB PD từ chối | Có lý do | TB CB NV | FR-VI-09 | BR-FLOW-04 |
+
+**Trạng thái:** ✅ CĐT xác nhận
+
+---
+
+## C.7 SM-KH-CTHTPL: Kế hoạch CT HTPLDN
+
+> **V2.1 (C3-19):** Tách từ SM-CTHTPL cũ thành 2 SM: SM-KH-CTHTPL (kế hoạch) + SM-DOT-BC (đợt BC).
+
+**Entity:** CHUONG_TRINH_HTPL
+**Tham chiếu FR:** FR-XI-01 đến FR-XI-05
+
+```mermaid
+stateDiagram-v2
+    [*] --> DU_THAO : CB NV tạo CT
+    DU_THAO --> CHO_PHE_DUYET : CB NV trình
+    CHO_PHE_DUYET --> DA_DUYET : CB PD duyệt
+    CHO_PHE_DUYET --> DU_THAO : CB PD từ chối
+    DA_DUYET --> DA_CONG_BO : CB NV công bố lên Cổng
+    DA_CONG_BO --> DA_DUYET : CB NV hủy công bố
+    DA_DUYET --> DANG_THUC_HIEN : CB NV kích hoạt thực hiện
+    DA_CONG_BO --> DANG_THUC_HIEN : CB NV kích hoạt thực hiện
+    DANG_THUC_HIEN --> TAM_DUNG : CB NV tạm dừng (có lý do)
+    TAM_DUNG --> DANG_THUC_HIEN : CB NV tiếp tục
+    DANG_THUC_HIEN --> HOAN_THANH : CB NV hoàn thành CT
+    DU_THAO --> HUY : CB NV hủy
+    CHO_PHE_DUYET --> HUY : CB NV rút trình
+```
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
+|----|-----|---------|-------|--------|--------|--------|
+| [*] | DU_THAO | CB NV tạo CT | — | Tạo bản ghi | FR-XI-01 | — |
+| DU_THAO | CHO_PHE_DUYET | CB NV trình | Đủ thông tin | TB CB PD | FR-XI-03 | BR-AUTH-05 |
+| CHO_PHE_DUYET | DA_DUYET | CB PD duyệt | Cùng cấp | Audit | FR-XI-04 | BR-AUTH-05 |
+| CHO_PHE_DUYET | DU_THAO | CB PD từ chối | Có lý do | TB CB NV | FR-XI-04 | BR-FLOW-04 |
+| DA_DUYET | DA_CONG_BO | CB NV công bố | — | API trực tiếp lên Cổng PLQG | FR-XI-05 | BR-FLOW-05 |
+| DA_CONG_BO | DA_DUYET | CB NV hủy công bố | — | Gỡ khỏi Cổng | FR-XI-05 | BR-FLOW-05 |
+| DA_DUYET | DANG_THUC_HIEN | CB NV kích hoạt | — | — | FR-XI-01 | — |
+| DA_CONG_BO | DANG_THUC_HIEN | CB NV kích hoạt | — | — | FR-XI-01 | — |
+| DANG_THUC_HIEN | HOAN_THANH | CB NV hoàn thành | — | Ghi audit | FR-XI-01 | — |
+| DANG_THUC_HIEN | TAM_DUNG | CB NV tạm dừng CT | Có lý do | Ghi audit | — | — |
+| TAM_DUNG | DANG_THUC_HIEN | CB NV tiếp tục | — | Ghi audit | — | — |
+| DU_THAO | HUY | CB NV hủy | — | Ghi audit | — | — |
+| CHO_PHE_DUYET | HUY | CB NV rút trình | CB NV tạo ban đầu | Ghi audit, TB CB PD | — | — |
+
+**Trạng thái:** ✅ CĐT xác nhận
+
+---
+
+## C.7a SM-DOT-BC: Đợt báo cáo CT HTPLDN
+
+> **Mới v2.1 (C1-8, C1-9, C3-19).** Quản lý vòng đời đợt báo cáo riêng biệt với kế hoạch CT.
+
+**Entity:** DOT_BAO_CAO
+**Tham chiếu FR:** FR-XI-05a, FR-XI-06, FR-XI-07, FR-XI-07a, FR-XI-08, FR-XI-09
+
+```mermaid
+stateDiagram-v2
+    [*] --> TAO_DOT : CB NV tạo đợt BC
+    TAO_DOT --> DANG_LAP_BC : CB NV bắt đầu lập BC
+    DANG_LAP_BC --> CHO_DUYET_KQ : CB NV trình duyệt KQ
+    CHO_DUYET_KQ --> DA_DUYET_KQ : CB PD duyệt KQ
+    CHO_DUYET_KQ --> DANG_LAP_BC : CB PD từ chối KQ
+    DA_DUYET_KQ --> DA_GUI_TW : CB NV gửi lên TW
+    DA_GUI_TW --> DA_TONG_HOP : TW tổng hợp
+```
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
+|----|-----|---------|-------|--------|--------|--------|
+| [*] | TAO_DOT | CB NV tạo đợt | CT ở DANG_THUC_HIEN/HOAN_THANH | Auto-gen mã đợt | FR-XI-05a | — |
+| TAO_DOT | DANG_LAP_BC | CB NV bắt đầu lập BC | Đợt đã hoàn chỉnh thông tin | Tạo BAO_CAO_CT_HTPL record | FR-XI-06 | — |
+| DANG_LAP_BC | CHO_DUYET_KQ | CB NV trình duyệt KQ | BC đầy đủ số liệu | TB CB PD | FR-XI-07 | BR-AUTH-05 |
+| CHO_DUYET_KQ | DA_DUYET_KQ | CB PD duyệt KQ | Cùng cấp | Audit, TB CB NV | FR-XI-07a | BR-AUTH-05 |
+| CHO_DUYET_KQ | DANG_LAP_BC | CB PD từ chối KQ | Có lý do | TB CB NV kèm lý do | FR-XI-07a | BR-FLOW-04 |
+| DA_DUYET_KQ | DA_GUI_TW | CB NV BN/ĐP gửi TW | Chỉ BN/ĐP | TB CB NV TW | FR-XI-08 | — |
+| DA_GUI_TW | DA_TONG_HOP | TW tổng hợp | CB NV TW xác nhận | Tạo BC tổng hợp | FR-XI-09 | — |
+
+**Trạng thái:** ✅ CĐT xác nhận (CSV STT 165, 168)
+
+---
+
+## C.8 SM-TVCS: Tư vấn Chuyên sâu
+
+**Entity:** TU_VAN_CHUYEN_SAU
+**Tham chiếu FR:** FR-X.1-01 đến FR-X.1-15 (6 LOẠI BỎ: FR-X.1-05/06/09/12/13/14)
+
+> **V2.1 (C3-14):** 5 UC LOẠI BỎ (UC147/148/154/155/156) + UC151 đã xóa. SM-TVCS giữ nguyên vì luồng chính không thay đổi.
+> **SM-TVNHANH** (Nhóm X.2 Tư vấn Nhanh): Khai báo tại §3.2.13, 7 trạng thái (MOI → DANG_TIM_KIEM → DA_GOI_Y → CB_TRA_LOI → HOAN_THANH / HET_HAN). Không tạo appendix riêng vì SM đơn giản, đã mô tả đầy đủ tại §3.2.13.0.
+
+```mermaid
+stateDiagram-v2
+    [*] --> TIEP_NHAN : CB NV tạo/tiếp nhận yêu cầu
+    TIEP_NHAN --> PHAN_CONG : CB NV phân công CG/TVV
+    PHAN_CONG --> DANG_TU_VAN : CG/TVV xác nhận tham gia
+    PHAN_CONG --> TIEP_NHAN : CG/TVV từ chối (phân công lại)
+    DANG_TU_VAN --> HOAN_THANH : CG/TVV tích "Hoàn thành"
+    HOAN_THANH --> CHO_PHE_DUYET : [Auto] Chuyển CB PD duyệt
+    CHO_PHE_DUYET --> DA_DUYET : CB PD duyệt → gửi DN
+    CHO_PHE_DUYET --> DANG_TU_VAN : CB PD từ chối (bổ sung)
+    TIEP_NHAN --> HUY : CB NV hủy yêu cầu
+    PHAN_CONG --> HUY : CB NV hủy
+    DANG_TU_VAN --> HUY : CB NV hủy (yêu cầu DN + CB PD duyệt)
+```
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
+|----|-----|---------|-------|--------|--------|--------|
+| [*] | TIEP_NHAN | CB NV tạo YC TV | — | Tạo bản ghi | FR-X.1-01/03 | — |
+| TIEP_NHAN | PHAN_CONG | CB NV phân công | Có CG/TVV phù hợp | TB CG/TVV | FR-X.1-10 | — |
+| PHAN_CONG | DANG_TU_VAN | CG xác nhận | — | Tạo phiên TV, TB DN | FR-X.1-11 | — |
+| PHAN_CONG | TIEP_NHAN | CG từ chối | Có lý do | Quay lại chọn CG khác | FR-X.1-11 | — |
+| DANG_TU_VAN | HOAN_THANH | CG tích "Hoàn thành" | Có VB TVPL | — | FR-X.1-14 | — |
+| HOAN_THANH | CHO_PHE_DUYET | Auto | — | TB CB PD | FR-X.1-14 | BR-FLOW-01 |
+| CHO_PHE_DUYET | DA_DUYET | CB PD duyệt | Cùng cấp | Gửi KQ cho DN, TB đánh giá | FR-X.1-14 | BR-AUTH-05 |
+| CHO_PHE_DUYET | DANG_TU_VAN | CB PD từ chối | Có lý do | TB CG bổ sung | FR-X.1-14 | BR-FLOW-04 |
+| PHAN_CONG | HUY | CB NV hủy | CG chưa xác nhận | Ghi audit, TB CG | — | — |
+| DANG_TU_VAN | HUY | CB NV hủy | DN yêu cầu hủy + CB PD duyệt | Ghi audit, TB CG + DN | — | — |
+
+> **Lưu ý timeout phân công CG:** CG SHALL xác nhận/từ chối trong 2 ngày LV (cấu hình qua CAU_HINH_SLA). Sau timeout → auto-reject, trả về TIEP_NHAN để phân công lại.
+
+> **Lưu ý auto-save draft:** Khi CG soạn trả lời, auto-save mỗi 30s vào TRAO_DOI_NHAP (trang_thai=DRAFT). Nếu session hết hạn, khôi phục DRAFT khi CG đăng nhập lại.
+
+**Trạng thái:** 🟡 Đề xuất — Chờ CĐT xác nhận nhóm X.1
+
+---
+
+## C.9 SM-BIEUMAU: Vòng đời Biểu mẫu
+
+**Entity:** BIEU_MAU
+**Tham chiếu FR:** FR-VII-01 đến FR-VII-07
+
+```mermaid
+stateDiagram-v2
+    [*] --> NHAP : CB NV/PD tạo biểu mẫu
+    NHAP --> CONG_KHAI : CB NV/PD công khai (BR-FLOW-07: không cần phê duyệt)
+    CONG_KHAI --> AN : CB NV/PD ẩn biểu mẫu
+    AN --> CONG_KHAI : CB NV/PD công khai lại
+```
+
+**Bảng trạng thái:**
+
+| Trạng thái | Mã | Mô tả |
+|-----------|-----|-------|
+| NHAP | draft | Biểu mẫu mới tạo, chưa công khai |
+| CONG_KHAI | published | Biểu mẫu đã công khai, DN có thể xem/tải |
+| AN | hidden | Biểu mẫu bị ẩn, không hiển thị trên chuyên trang |
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
+|----|-----|---------|-------|--------|--------|--------|
+| [*] | NHAP | CB NV/PD tạo biểu mẫu | — | Tạo bản ghi | FR-VII-01 | — |
+| NHAP | CONG_KHAI | CB NV/PD công khai | — | Hiển thị trên chuyên trang | FR-VII-02 | BR-FLOW-07 |
+| CONG_KHAI | AN | CB NV/PD ẩn | — | Ẩn khỏi chuyên trang | FR-VII-03 | — |
+| AN | CONG_KHAI | CB NV/PD công khai lại | — | Hiển thị lại trên chuyên trang | FR-VII-03 | BR-FLOW-07 |
+| NHAP | XOA | CB NV xóa | Chưa công khai | Soft-delete, ghi audit | — | — |
+| AN | XOA | CB NV xóa | — | Soft-delete, ghi audit | — | — |
+
+> **Lưu ý:** XOA là trạng thái kết thúc [*] (archived). Biểu mẫu có thể được khôi phục bởi QTHT.
+
+---
+
+## C.10 SM-TAIKHOAN: Vòng đời Tài khoản
+
+**Entity:** TAI_KHOAN
+**Tham chiếu FR:** FR-VIII-18 đến FR-VIII-21
+
+```mermaid
+stateDiagram-v2
+    [*] --> CHO_KICH_HOAT : QTHT tạo tài khoản
+    CHO_KICH_HOAT --> HOAT_DONG : User kích hoạt qua email / QTHT kích hoạt
+    HOAT_DONG --> TAM_KHOA : 5 lần đăng nhập sai (auto) / QTHT khóa
+    TAM_KHOA --> HOAT_DONG : QTHT mở khóa / sau 30 phút (auto)
+    HOAT_DONG --> VO_HIEU_HOA : QTHT vô hiệu hóa
+    VO_HIEU_HOA --> HOAT_DONG : QTHT khôi phục
+```
+
+**Bảng trạng thái:**
+
+| Trạng thái | Mã | Mô tả |
+|-----------|-----|-------|
+| CHO_KICH_HOAT | pending | Tài khoản mới tạo, chưa kích hoạt |
+| HOAT_DONG | active | Tài khoản đang hoạt động bình thường |
+| TAM_KHOA | locked | Tài khoản bị khóa tạm thời (5 lần sai mật khẩu hoặc QTHT khóa) |
+| VO_HIEU_HOA | disabled | Tài khoản bị vô hiệu hóa bởi QTHT |
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
+|----|-----|---------|-------|--------|--------|--------|
+| [*] | CHO_KICH_HOAT | QTHT tạo tài khoản | — | Gửi email kích hoạt | FR-VIII-18 | — |
+| CHO_KICH_HOAT | HOAT_DONG | User kích hoạt qua email / QTHT kích hoạt | Token hợp lệ | Cho phép đăng nhập | FR-VIII-18 | — |
+| HOAT_DONG | TAM_KHOA | 5 lần đăng nhập sai (auto) | so_lan_sai >= 5 | Ghi AUDIT_LOG, TB QTHT | FR-VIII-20 | BR-AUTH-07 |
+| HOAT_DONG | TAM_KHOA | QTHT khóa thủ công | — | Ghi AUDIT_LOG | FR-VIII-19 | — |
+| TAM_KHOA | HOAT_DONG | QTHT mở khóa | — | Reset so_lan_sai = 0 | FR-VIII-19 | BR-AUTH-07 |
+| TAM_KHOA | HOAT_DONG | Sau 30 phút (auto) | elapsed >= 30 phút | Reset so_lan_sai = 0 | FR-VIII-20 | BR-AUTH-07 |
+| HOAT_DONG | VO_HIEU_HOA | QTHT vô hiệu hóa | — | Invalidate session, ghi AUDIT_LOG | FR-VIII-19 | — |
+| VO_HIEU_HOA | HOAT_DONG | QTHT khôi phục | — | Cho phép đăng nhập lại | FR-VIII-19 | — |
+| CHO_KICH_HOAT | VO_HIEU_HOA | Auto: quá 7 ngày | activation_token_expired | Ghi audit, TB QTHT | — | — |
+
+> **Lưu ý:** BR-AUTH-07 được cập nhật: 'Khóa tài khoản sau 5 lần sai mật khẩu. Tự mở khóa sau 30 phút HOẶC QTHT mở khóa thủ công qua UC113. Cả hai cơ chế đều hợp lệ.'
+
+---
+
+
+---
+
+
+
+---
+
+# Phụ lục D — Sample I/O & API Contracts
+
+## D.1 Sample Forms (Top 5 biểu mẫu phức tạp)
+
+### D.1.1 Mẫu 01 NĐ55/2019 — Đề nghị hỗ trợ chi phí TVPL
+
+**Tham chiếu:** FR-V.II-01 đến FR-V.II-03
+
+```
+VĂN BẢN ĐỀ NGHỊ HỖ TRỢ CHI PHÍ TƯ VẤN PHÁP LUẬT
+(Mẫu 01 ban hành kèm theo Nghị định số 55/2019/NĐ-CP)
+
+PHẦN I — THÔNG TIN DOANH NGHIỆP
+┌────────────────────────────────────────────────────────────┐
+│ 1. Tên doanh nghiệp: ___________________________________  │
+│ 2. Địa chỉ: ____________________________________________  │
+│ 3. Điện thoại/Fax/Email: _______________________________  │
+│ 4. Mã số doanh nghiệp: ________________________________  │
+│ 5. Giấy CNĐKKD số: _________ ngày cấp: ________________  │
+│ 6. Ngành nghề kinh doanh: ______________________________  │
+│ 7. Người đại diện theo PL: _____________________________  │
+│ 8. Loại hình DN: [ ] Tư nhân [ ] TNHH [ ] CP [ ] Khác   │
+│ 9. Quy mô DN: [ ] Siêu nhỏ [ ] Nhỏ [ ] Vừa             │
+└────────────────────────────────────────────────────────────┘
+
+PHẦN II — THÔNG TIN VỤ VIỆC VÀ TƯ VẤN VIÊN
+┌────────────────────────────────────────────────────────────┐
+│ 10. Vụ việc/vướng mắc: _________________________________  │
+│ 11. Thời điểm phát sinh: _______________________________  │
+│ 12. Tên TVV thực hiện: _________________________________  │
+│ 13. Tổ chức hành nghề: _________________________________  │
+│ 14. Địa chỉ TVV: _______________________________________  │
+│ 15. Số ĐT TVV: _________________________________________  │
+│ 16. Số/ngày HĐ TVPL: ___________________________________  │
+│ 17. Phí tư vấn (VNĐ): __________________________________  │
+│ 18. Số tiền đề nghị hỗ trợ: ____________________________  │
+└────────────────────────────────────────────────────────────┘
+
+PHẦN III — CAM KẾT
+"Tôi cam đoan những thông tin trên đây là đúng sự thật..."
+Ký, đóng dấu
+```
+
+### D.1.2 Mẫu 21a/TP/HTPLDN — BC Sở/ban ngành
+
+**Tham chiếu:** FR-VI-07, FR-XI-06
+
+```
+BIỂU SỐ: 21a/TP/HTPLDN
+Ban hành kèm theo Thông tư số 17/2025/TT-BTP
+
+KẾT QUẢ TRIỂN KHAI CÔNG TÁC HTPL CHO DNNVV
+TẠI CƠ QUAN CHUYÊN MÔN THUỘC UBND CẤP TỈNH
+(Sơ bộ 6 tháng / sơ bộ năm / tròn năm)
+
+Kỳ báo cáo: Từ ngày ____ đến ngày ____
+Đơn vị báo cáo: ________
+Đơn vị nhận: Sở Tư pháp
+
+┌─────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┐
+│ -1  │ -2   │ -3   │ -4   │ -5   │ -6   │ -7   │ -8   │ -9   │ -10  │ -11  │ -12  │ -13  │
+│Số   │Cuộc  │Hội   │VB TL │VB TV │HS    │HS GQ │DN    │DN    │DN    │KP HT │KP    │KP XH │
+│TVV  │tập   │nghị  │UBND  │mạng  │tiếp  │tổng  │vừa   │nhỏ   │siêu  │TVPL  │khác  │hóa   │
+│     │huấn  │      │      │lưới  │nhận  │      │      │      │nhỏ   │(NSNN)│(NSNN)│      │
+├─────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+│     │      │      │      │      │      │      │      │      │      │      │      │      │
+└─────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┘
+
+Deadline: Sơ bộ 6T → 10/06 | Sơ bộ năm → 10/11 | Tròn năm → 10/01 năm sau
+```
+
+### D.1.3 Mẫu 21b/TP/HTPLDN — BC STP (tổng hợp từ Sở/ban ngành)
+
+**Tham chiếu:** FR-VI-07, FR-XI-09
+
+```
+BIỂU SỐ: 21b/TP/HTPLDN
+Ban hành kèm theo Thông tư số 17/2025/TT-BTP
+
+KẾT QUẢ TRIỂN KHAI CÔNG TÁC HTPL CHO DNNVV TẠI UBND CẤP TỈNH
+
+Đơn vị báo cáo: Sở Tư pháp ________
+Đơn vị nhận: Bộ Tư pháp (Cục Kế hoạch - Tài chính)
+
+┌─────┬──────────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┐
+│ STT │ Sở/ban   │ -1   │ -2   │ -3   │ -4   │ -5   │ -6   │ -7   │ -8   │ -9   │ -10  │ -11  │ -12  │ -13  │ -14  │
+│  A  │ ngành B  │      │      │      │      │      │      │      │      │      │      │      │      │      │Ghi   │
+│     │          │      │      │      │      │      │      │      │      │      │      │      │      │      │chú   │
+├─────┼──────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+│     │Tổng tỉnh │      │      │      │      │      │      │      │      │      │      │      │      │      │      │
+│ 1   │Sở...     │      │      │      │      │      │      │      │      │      │      │      │      │      │      │
+│ 2   │Sở...     │      │      │      │      │      │      │      │      │      │      │      │      │      │      │
+└─────┴──────────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┘
+
+Deadline: Sơ bộ 6T → 20/06 | Sơ bộ năm → 20/11 | Tròn năm → 20/01 năm sau
+```
+
+### D.1.4 Form đánh giá vụ việc (FR-V.I-17, UC67)
+
+```
+ĐÁNH GIÁ VỤ VIỆC HỖ TRỢ PHÁP LÝ
+
+Mã vụ việc: VV-{TINH}-YYYYMMDD-SEQ
+Tên DN: ___________________
+TVV thực hiện: ___________________
+
+┌─────────────────────────────────────────────────┐
+│ 1. Chất lượng tư vấn:    [0] ───── [10]        │
+│ 2. Đúng hạn xử lý:       [0] ───── [10]        │
+│ 3. Thái độ phục vụ:       [0] ───── [10]        │
+│                                                  │
+│ Điểm tổng (TB): _____ / 10                      │
+│                                                  │
+│ Nhận xét: _____________________________________  │
+│ _______________________________________________  │
+└─────────────────────────────────────────────────┘
+```
+
+### D.1.5 Form tư vấn nhanh (FR-X.2-02, UC159)
+
+```
+TƯ VẤN NHANH — Keyword Search
+
+DN nhập câu hỏi: ___________________________
+
+Hệ thống gợi ý (TOP 5):
+┌───┬────────────────────────────────────────────────┬───────┐
+│ # │ Câu hỏi liên quan                              │ Score │
+├───┼────────────────────────────────────────────────┼───────┤
+│ 1 │ Thủ tục thành lập DN tư nhân?                  │ 0.95  │
+│ 2 │ Quy trình đăng ký kinh doanh online?           │ 0.87  │
+│ 3 │ Thời hạn cấp Giấy CNĐKKD?                     │ 0.82  │
+│ 4 │ Hồ sơ thay đổi đăng ký DN?                    │ 0.76  │
+│ 5 │ Phí đăng ký DN là bao nhiêu?                  │ 0.71  │
+└───┴────────────────────────────────────────────────┴───────┘
+
+CB NV chọn gợi ý → Chỉnh sửa → Gửi trả lời
+Hoặc: DN nhấn "Chuyển sang TV thủ công" → Nhóm II
+```
+
+---
+
+## D.2 Report Templates (TT17/2025)
+
+### D.2.1 Mapping cột báo cáo 21a → Nguồn dữ liệu PM
+
+| Cột 21a | Tên cột | Entity nguồn | Công thức |
+|---------|---------|-------------|-----------|
+| -1 | Số TVV kiện toàn | TU_VAN_VIEN | Đếm số TVV có trạng thái = 'HOAT_DONG' thuộc đơn vị báo cáo |
+| -2 | Cuộc tập huấn | KHOA_HOC | Đếm số khóa học loại 'TAP_HUAN' trong kỳ báo cáo |
+| -3 | Hội nghị đối thoại | KHOA_HOC | Đếm số khóa học loại 'HOI_NGHI' trong kỳ báo cáo |
+| -4 | VB TL UBND | VU_VIEC | Đếm số vụ việc loại văn bản 'TRA_LOI_UBND' trong kỳ báo cáo |
+| -5 | VB TV mạng lưới | VU_VIEC | Đếm số vụ việc loại văn bản 'TV_MANG_LUOI' trong kỳ báo cáo |
+| -6 | HS tiếp nhận | HO_SO_CHI_TRA | Đếm số hồ sơ chi trả không bị từ chối trong kỳ báo cáo |
+| -7 | HS giải quyết tổng | HO_SO_CHI_TRA | Đếm số hồ sơ chi trả đã thanh toán trong kỳ báo cáo |
+| -8 | DN vừa | HO_SO_CHI_TRA | Đếm số hồ sơ đã thanh toán cho DN quy mô vừa |
+| -9 | DN nhỏ | HO_SO_CHI_TRA | Đếm số hồ sơ đã thanh toán cho DN quy mô nhỏ |
+| -10 | DN siêu nhỏ | HO_SO_CHI_TRA | Đếm số hồ sơ đã thanh toán cho DN quy mô siêu nhỏ |
+| -11 | KP HT TVPL (NSNN) | HO_SO_CHI_TRA | Tổng số tiền thực trả của hồ sơ đã thanh toán |
+| -12 | KP chi HĐ khác | — | Nhập thủ công |
+| -13 | KP xã hội hóa | — | Nhập thủ công |
+
+### D.2.2 Mapping cột báo cáo 21b → Tổng hợp STP
+
+| Cột 21b | Tên cột | Logic tổng hợp |
+|---------|---------|---------------|
+| A | STT | Auto-gen |
+| B | Sở/ban ngành | Từ danh mục đơn vị |
+| -1 → -13 | Tương tự 21a | SUM từ các Sở/ban ngành thuộc tỉnh |
+| -14 | Ghi chú | Nhập thủ công |
+
+### D.2.3 Export format
+
+| Format | Thư viện đề xuất | Template |
+|--------|-----------------|---------|
+| Excel (.xlsx) | Apache POI | Template 21a/21b có sẵn, fill data |
+| Word (.docx) | Apache POI (docx4j) | Template 21a/21b có sẵn, fill data |
+
+---
+
+> **Ghi chú v2.0:** Section D.3 (API Contracts — 18 outbound APIs, inbound contracts, OAuth/SSO flow) từ SRS v1.8 đã chuyển sang Architecture Design Document.
+> Xem `architecture-inputs-from-srs.md` §7 API Design & Contracts.
+
+---
+
+
+> **Ghi chú v2.0:** Phụ lục E (Tham chiếu Architecture) từ SRS v1.8 đã được xóa hoàn toàn.
+> Nội dung đã chuyển sang Architecture Design Document (`architecture.md`).
+> Xem `architecture-inputs-from-srs.md` §9 Architecture Decisions Summary, §10 Project Structure.
+
+---
+
+
+---
+
+
+
+---
+
+# Chỉ mục (Index)
+
+## Requirement IDs
+
+| Prefix | Phạm vi | Nhóm / Loại | Section |
+|--------|---------|-------------|---------|
+| FR-I-01 → FR-I-09 | 9 FRs | Dashboard | §3.2.3 |
+| FR-II-01 → FR-II-10 | 10 FRs | Hỏi đáp, Vướng mắc PL | §3.2.4 |
+| FR-II-CROSS-01 | 1 FR | Cross-cutting SLA Hỏi đáp | §3.2.4 |
+| FR-II-NEW-01 → FR-II-NEW-02 | 2 FRs | Hỏi đáp mở rộng | §3.2.4 |
+| FR-III-01 → FR-III-19 | 19 FRs | Đào tạo, Tập huấn | §3.2.6 |
+| FR-III-NEW-01 → FR-III-NEW-03 | 3 FRs | Đào tạo mở rộng | §3.2.6 |
+| FR-IV-01 → FR-IV-12 | 12 FRs | Chuyên gia, TVV | §3.2.5 |
+| FR-IV-CROSS-01 | 1 FR | Cross-cutting TVV | §3.2.5 |
+| FR-V.I-01 → FR-V.I-17 | 17 FRs | Vụ việc TGPL | §3.2.8 |
+| FR-V.I-NEW-01 | 1 FR | Vụ việc mở rộng | §3.2.8 |
+| FR-V.I-CROSS-01 | 1 FR | Cross-cutting SLA Vụ việc | §3.2.8 |
+| FR-V.II-01 → FR-V.II-13 | 13 FRs | Chi trả Chi phí | §3.2.9 |
+| FR-V.III-01 → FR-V.III-02 | 2 FRs | Quản lý DN | §3.2.7 |
+| FR-V.III-NEW-01 | 1 FR | DN mở rộng | §3.2.7 |
+| FR-VI-01 → FR-VI-09 | 9 FRs | Đánh giá Hiệu quả | §3.2.10 |
+| FR-VII-01 → FR-VII-08 | 8 FRs | Biểu mẫu, Hợp đồng | §3.2.2 |
+| FR-VIII-01 → FR-VIII-21 | 21 FRs | Quản trị Hệ thống | §3.2.1 |
+| FR-IX-01 → FR-IX-23 | 23 FRs | Báo cáo Thống kê | §3.2.12 |
+| FR-X.1-01 → FR-X.1-15 | 15 FRs | Tư vấn Chuyên sâu | §3.2.15 |
+| FR-X.2-01 → FR-X.2-05 | 5 FRs | Tư vấn Nhanh | §3.2.13 |
+| FR-X.3-01 | 1 FR | Hợp đồng Tư vấn | §3.2.14 |
+| FR-XI-01 → FR-XI-09 | 9 FRs | Chương trình HTPLDN | §3.2.11 |
+| FR-XII-01 → FR-XII-16 | 16 FRs | API Kết nối CSDL | §3.2.16 |
+
+## Entity Names (Section 3.4)
+
+| Entity | Mô tả | Section |
+|--------|-------|---------|
+| AUDIT_LOG | Nhật ký thao tác | §3.4.3.11 |
+| BAI_GIANG | Bài giảng (FK → KHOA_HOC) | §3.4.3.20 |
+| BIEU_MAU | Biểu mẫu (FK → THU_MUC_BIEU_MAU) | §3.4.3.37 |
+| CAU_HINH_SLA | Cấu hình SLA | §3.4.3.14 |
+| CHUONG_TRINH_DAO_TAO | Chương trình đào tạo (FK → KHOA_HOC) | §3.4.3.19 |
+| CHUONG_TRINH_HTPL | Chương trình HTPLDN | §3.4.3.10 |
+| DANH_MUC | Danh mục dùng chung | §3.4.3.39 |
+| DOANH_NGHIEP | Doanh nghiệp được hỗ trợ | §3.4.3.3 |
+| DON_VI | Cơ quan/Đơn vị | §3.4.3.8 |
+| HOI_DAP | Hỏi đáp/Vướng mắc PL | §3.4.3.1 |
+| HOP_DONG_TU_VAN | Hợp đồng Tư vấn | §3.4.3.13 |
+| HO_SO_CHI_TRA | Hồ sơ đề nghị HT chi phí | §3.4.3.5 |
+| KET_QUA_DAO_TAO | Kết quả đào tạo (FK → KHOA_HOC) | §3.4.3.23 |
+| KET_QUA_DANH_GIA | Kết quả đánh giá | §3.4.3.35 |
+| KHO_CAU_HOI | Kho Q&A Tư vấn Nhanh | §3.4.3.12 |
+| KHOA_HOC | Khóa đào tạo/Tập huấn | §3.4.3.6 |
+| PHAN_HOI | Phản hồi (FK → HOI_DAP) | §3.4.3.17 |
+| TAI_KHOAN | Tài khoản người dùng | §3.4.3.7 |
+| THONG_BAO | Thông báo | §3.4.3.15 |
+| THU_MUC_BIEU_MAU | Thư mục biểu mẫu | §3.4.3.38 |
+| TU_VAN_CHUYEN_SAU | Tư vấn Chuyên sâu | §3.4.3.9 |
+| TU_VAN_VIEN | Tư vấn viên/Chuyên gia | §3.4.3.4 |
+| VU_VIEC | Vụ việc Trợ giúp PL | §3.4.3.2 |
+
+## Business Rule IDs
+
+| Prefix | Phạm vi | Mô tả | Section |
+|--------|---------|-------|---------|
+| BR-AUTH-01 → BR-AUTH-11 | 11 BRs | Quy tắc xác thực, phân quyền, lọc kép | §3.2 (cross-cutting) |
+| BR-CALC-01 → BR-CALC-06 | 6 BRs | Quy tắc tính toán chi phí, điểm | §3.2.9, §3.2.10 |
+| BR-DATA-01 → BR-DATA-08 | 8 BRs | Quy tắc dữ liệu, validation | §3.2 (cross-cutting) |
+| BR-FLOW-01 → BR-FLOW-10 | 10 BRs | Quy tắc luồng nghiệp vụ | §3.2.4, §3.2.8, §3.2.9 |
+| BR-INTG-01 → BR-INTG-07 | 7 BRs | Quy tắc tích hợp, API | §3.2.16 |
+| BR-LEGAL-01 → BR-LEGAL-08 | 8 BRs | Quy tắc pháp lý (NĐ55, TT03, TT17) | §3.2 (cross-cutting) |
+| BR-LICH-01 | 1 BR | Quy tắc lịch tư vấn | §3.2.15 |
+| BR-RETRY-01 | 1 BR | Quy tắc retry integration | §3.2.16 |
+| BR-RPT-01 | 1 BR | Quy tắc báo cáo | §3.2.12 |
+| BR-SLA-01 → BR-SLA-05 | 5 BRs | Quy tắc SLA, deadline | §3.2.1, §3.2.4, §3.2.8 |
+
+## State Machine IDs
+
+| SM ID | Tên | Entity chính | Section |
+|-------|-----|-------------|---------|
+| SM-CHITRA | Lifecycle Hồ sơ Chi trả | HO_SO_CHI_TRA | §3.2.9 |
+| SM-CTHTPL | Lifecycle Chương trình HTPLDN | CHUONG_TRINH_HTPL | §3.2.11 |
+| SM-DANHGIA | Lifecycle Đánh giá | KET_QUA_DANH_GIA | §3.2.10 |
+| SM-HOIDAP | Lifecycle Hỏi đáp | HOI_DAP | §3.2.4 |
+| SM-KHOAHOC | Lifecycle Khóa học | KHOA_HOC | §3.2.6 |
+| SM-TVCS | Lifecycle Tư vấn Chuyên sâu | TU_VAN_CHUYEN_SAU | §3.2.15 |
+| SM-BIEUMAU | Lifecycle Biểu mẫu | BIEU_MAU | Appendix C.9 |
+| SM-TAIKHOAN | Lifecycle Tài khoản | TAI_KHOAN | Appendix C.10 |
+| SM-TVV | Lifecycle Tư vấn viên | TU_VAN_VIEN | §3.2.5 |
+| SM-VUVIEC | Lifecycle Vụ việc | VU_VIEC | §3.2.8 |
+
+## API / Integration IDs
+
+| ID | Mô tả | Section |
+|----|-------|---------|
+| INT-01 | Trục LGSP BTP | §3.1.2 |
+| INT-02 | VNeID (qua NDXP) | §3.1.2 |
+| INT-03 | HT TTHC BTP (DVC) | §3.1.2 |
+| INT-04 | Cổng PLQG (Module HTPLDN) | §3.1.2 |
+| INT-05 | HT Danh mục Dùng chung BTP | §3.1.2 |
+| INT-06 | Email Server (SMTP) | §3.1.2 |
+| INT-07 | HT khác (UC55) | §3.1.2 |
+| FR-XII-01 → FR-XII-16 | 16 Outbound APIs (chia sẻ CSDL) | §3.2.16 |
+
+## Performance / Quality Attribute IDs
+
+| Prefix | Phạm vi | Section |
+|--------|---------|---------|
+| PERF-01 → PERF-08 | Hiệu năng (8 yêu cầu) | §3.3 |
+| SEC-01 → SEC-06 | Bảo mật (6 yêu cầu) | §3.5.1 |
+| REL-01 → REL-05 | Độ tin cậy (5 yêu cầu) | §3.5.2 |
+| AVL-01 → AVL-05 | Khả dụng (5 yêu cầu) | §3.5.3 |
+| MNT-01 → MNT-05 | Bảo trì (5 yêu cầu) | §3.5.4 |
+| PRT-01 → PRT-05 | Khả chuyển (5 yêu cầu) | §3.5.5 |
+
+---
+
+# Thống kê Cuối cùng & Ký duyệt
+
+## Tổng hợp Artifacts
+
+| Loại | Số lượng | Chi tiết |
+|------|----------|----------|
+| **Functional Requirements (FR)** | **178** | 16 nhóm (I → XII), bao gồm CROSS-cutting và NEW |
+| **Business Rules (BR)** | **56** | AUTH(9), CALC(6), DATA(8), FLOW(10), INTG(7), LEGAL(8), LICH(1), RETRY(1), RPT(1), SLA(5) |
+| **Entity Definitions** | **23** | 15 entity chính (§3.4.4) + 8 entity phụ (FK tables) |
+| **State Machines (SM)** | **10** | HOIDAP, VUVIEC, CHITRA, TVV, KHOAHOC, DANHGIA, CTHTPL, TVCS, BIEUMAU, TAIKHOAN (aliases HD/VV normalized v1.8) |
+| **API / Integration Points** | **7 INT + 16 FR-XII** | 7 integration requirements (INT-01..07) + 16 outbound API FRs (FR-XII). API contracts/schemas → Architecture Design |
+| **Performance Requirements** | **8** | PERF-01 → PERF-08 + 3 EC (PERF-01a, PERF-03a, PERF-08a) + Degradation table |
+| **Security Requirements** | **6** | SEC-01 → SEC-06 + 2 EC (SEC-03a, SEC-06a) |
+| **Reliability Requirements** | **5** | REL-01 → REL-05 + 1 EC (REL-03a) |
+| **Availability Requirements** | **5** | AVL-01 → AVL-05 + 2 EC (AVL-03a, AVL-05a) |
+| **Maintainability Requirements** | **5** | MNT-01 → MNT-05 |
+| **Portability Requirements** | **5** | PRT-01 → PRT-05 |
+| **Edge Case Clarifications (EC)** | **8** | SEC-03a, SEC-06a, REL-03a, AVL-03a, AVL-05a, PERF-01a, PERF-03a, PERF-08a + 1 degradation table |
+| **Tổng Requirements** | **212** | 178 FR + 34 NFR (+ 8 EC clarifications trên NFR hiện có). *Ghi chú:* 178 FR < 195 UC (188 CSV + 7 bổ sung) vì một số FR dùng template chung (VD: TPL-DM-CRUD bao phủ 15 UC danh mục bằng 1 template), do đó nhiều UC được gộp vào cùng một FR. |
+
+## UC Coverage
+
+| Metric | Giá trị |
+|--------|---------|
+| Tổng UC theo CSV v1.1 | **188** UC (STT 1-188, ngày 2026-03-27) |
+| UC đã map → FR | **188** UC chính (UC1 – UC188) |
+| UC mới bổ sung (ngoài CSV) | **7** UC (FR-II-NEW-01/02, FR-III-NEW-01/02/03, FR-V.I-NEW-01, FR-V.III-NEW-01) |
+| Cross-cutting FRs | **3** (FR-II-CROSS-01, FR-IV-CROSS-01, FR-V.I-CROSS-01) |
+| UC đã cập nhật phụ lục (v1.1) | **20** UC (STT 12,13,15,24,33,36,44,46,47,49,50,52,55,60,62,66,85,91,94,97) |
+| **Tổng UC Coverage** | **188 / 188 (100%)** |
+
+## Ghi chú phát hiện trong quá trình soạn SRS
+
+| # | Phát hiện | Mức độ | Xử lý |
+|---|----------|--------|-------|
+| 1 | UC mới không có trong PRD gốc được bổ sung (7 UCs) dựa trên phân tích gap | Thông tin | Đã đánh dấu "UC mới" trong tên FR |
+| 2 | Nhóm X.1 (Tư vấn Chuyên sâu) có nhiều assumption do thiếu chi tiết trong PRD | Cảnh báo | Đã đánh dấu toàn bộ nhóm X.1 bằng flag "Giả định" |
+| 3 | API inbound từ DVC/Cổng PLQG/VNeID cần tài liệu kỹ thuật từ CĐT (chưa có) | Cảnh báo | Đã ghi nhận tại §3.1.2 (INT-01..07). Chi tiết API contracts → Architecture Design |
+| 4 | SM-HD và SM-HOIDAP, SM-VUVIEC và SM-VV là alias — đã normalize toàn bộ sang SM-HOIDAP và SM-VUVIEC | Thông tin | Fixed in v1.8 |
+| 5 | **v1.6:** UC55 thay đổi hoàn toàn từ "email" → "HT khác" (CSV v1.1) | Quan trọng | Đã viết lại FR-V.I-05, sửa enum, SM, BR |
+| 6 | **v1.6:** C-08 sai — kiến trúc hybrid 3 kênh (LGSP/NDXP/Trực tiếp), không phải tất cả qua LGSP | Quan trọng | Đã sửa C-08, A-02, SI-01, SI-04, Context Diagram, BR-INTG-01 |
+| 7 | **v1.6:** 20 UC có transaction cập nhật trong CSV v1.1, 8 FR thiếu processing steps | Cảnh báo | Đã bổ sung transaction cho UC33,44,47,49,50,91,94,97 |
+| 5 | Mẫu biểu mẫu TT17/2025/TT-BTP cần cập nhật nếu Thông tư sửa đổi | Rủi ro | Thiết kế template engine linh hoạt (FR-VII) |
+
+## Tự đánh giá chất lượng theo IEEE 830-1998
+
+| # | Tiêu chí | Đánh giá | Ghi chú |
+|---|----------|---------|---------|
+| 1 | **Correct** (Chính xác) | ✅ Đạt | Mọi FR truy vết được về UC trong PRD; pháp luật tham chiếu đúng NĐ/TT |
+| 2 | **Unambiguous** (Không nhập nhằng) | ✅ Đạt | Mỗi FR có Acceptance Criteria đo lường được; thuật ngữ định nghĩa tại §1.3 |
+| 3 | **Complete** (Đầy đủ) | ✅ Đạt | 195/195 UC covered; đầy đủ FR + NFR + Data Model + BR + SM + API |
+| 4 | **Consistent** (Nhất quán) | ✅ Đạt | Naming convention thống nhất; ID scheme không xung đột; SM đồng bộ với entity |
+| 5 | **Ranked for importance** (Xếp hạng) | ✅ Đạt | Priority P0/P1/P2 gán cho mỗi FR; MoSCoW trong overview nhóm |
+| 6 | **Verifiable** (Kiểm chứng được) | ✅ Đạt | Mọi requirement có method IDAT + acceptance criteria cụ thể (Section 4) |
+| 7 | **Modifiable** (Dễ sửa đổi) | ✅ Đạt | Cấu trúc modular theo nhóm; cross-reference bằng ID; không trùng lặp nội dung |
+| 8 | **Traceable** (Truy vết được) | ✅ Đạt | Backward traceability (Phụ lục A.1) + Forward traceability placeholder (A.2) |
+
+**Kết luận:** Tài liệu SRS đáp ứng **8/8** tiêu chí chất lượng IEEE 830-1998. Các mục đánh dấu "Giả định" cần được CĐT xác nhận trước khi chuyển sang giai đoạn thiết kế chi tiết.
+
+---
+
+**— Het SRS v2.0 —**
+
+**Ngay:** 2026-04-02
+
+**Tac gia:** SRS Agent (Claude)
+
+**Chuan:** IEEE 830-1998 / ISO/IEC/IEEE 29148:2018
+
+

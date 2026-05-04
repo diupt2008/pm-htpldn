@@ -1,0 +1,26 @@
+# Test Cases — FR-VIII-11: Quản lý danh mục Tiêu chí đánh giá hiệu quả (UC109)
+
+> **SRS Ref**: FR-VIII-11, loai_danh_muc = TIEU_CHI_DG_HIEU_QUA  
+> **Nguồn**: NotebookLM Session `a0fdcb5c`  
+> **Ngày tạo**: 2026-04-16  
+> **Đặc thù**: Bổ sung 3 trường: `trong_so` (0-100%, tổng = 100%), `thang_diem_min`, `thang_diem_max`  
+> **Quy tắc đặc biệt**: 
+> - Soft-validate: Tổng trọng số kiểm tra sau mỗi tạo/cập nhật, nếu ≠ 100% → WARNING (vẫn cho lưu)
+> - Hard-validate: Bắt buộc tổng = 100% khi chuyển trạng thái CHO_DUYET_PC tại SCR-VI-01
+
+---
+
+| ID | TraceID (Mã SRS) | Tên Test Case | Pre-conditions (Tiền đề) | Test Data (Dữ liệu) | Các bước thực hiện | Kết quả mong đợi | Type (Happy/Negative/Edge) |
+|----|-------------------|--------------|---------------------------|----------------------|-------------------|------------------|---------------------------|
+| TC-TCDG-001 | FR-VIII-11 / UC109 | Thêm mới tiêu chí đánh giá với trọng số hợp lệ | 1. User QTHT đã đăng nhập. 2. Đang ở tab "Tiêu chí đánh giá hiệu quả". 3. Chưa có tiêu chí nào (tổng hiện tại = 0%). | Mã: "TC_CHAT_LUONG", Tên: "Chất lượng tư vấn", trong_so: 40, thang_diem_min: 1, thang_diem_max: 10 | 1. Click [+ Thêm mới]. 2. Điền Mã, Tên, trong_so = 40%, thang_diem_min = 1, thang_diem_max = 10. 3. Click [Lưu]. | 1. Lưu thành công. 2. Bước 7 Processing: hệ thống kiểm tra tổng trọng số = 40% (≠ 100%). 3. Bước 8: Hiển thị WRN-TC-01: "Tổng trọng số hiện tại: 40%. Cần đảm bảo = 100% trước khi sử dụng". 4. VẪN CHO LƯU (soft-validate). | Happy |
+| TC-TCDG-002 | FR-VIII-11 / UC109 | Thêm tiêu chí để tổng trọng số đạt đúng 100% | 1. User QTHT đã đăng nhập. 2. Tổng trọng số hiện tại = 60% (2 tiêu chí: 40% + 20%). | Tiêu chí mới: trong_so = 40% | 1. Click [+ Thêm mới]. 2. Nhập trong_so = 40%. 3. Click [Lưu]. | 1. Lưu thành công. 2. Tổng trọng số = 40 + 20 + 40 = 100%. 3. KHÔNG hiển thị warning WRN-TC-01. | Happy |
+| TC-TCDG-003 | FR-VIII-11 / UC109 / WRN-TC-01 | Thêm tiêu chí khiến tổng trọng số vượt 100% | 1. User QTHT đã đăng nhập. 2. Tổng trọng số hiện tại = 80%. | Tiêu chí mới: trong_so = 30% (tổng sẽ = 110%) | 1. Click [+ Thêm mới]. 2. Nhập trong_so = 30%. 3. Click [Lưu]. | 1. Lưu thành công (soft-validate — VẪN CHO LƯU). 2. Hiển thị WRN-TC-01: "Tổng trọng số hiện tại: 110%. Cần đảm bảo = 100% trước khi sử dụng". | Edge |
+| TC-TCDG-004 | FR-VIII-11 / UC109 | Cập nhật trọng số tiêu chí thành công | 1. Tiêu chí "Chất lượng tư vấn" có trong_so = 40%. | trong_so mới: 35% | 1. Click [Sửa] trên tiêu chí "Chất lượng tư vấn". 2. Đổi trong_so = 35%. 3. Click [Lưu]. | 1. Cập nhật thành công. 2. Hệ thống re-check tổng trọng số sau cập nhật. 3. Nếu tổng ≠ 100% → warning. | Happy |
+| TC-TCDG-005 | FR-VIII-11 / UC109 | Nhập trong_so = 0 hoặc giá trị âm | 1. User QTHT đã đăng nhập. | trong_so: 0 hoặc -10 | 1. Click [+ Thêm mới]. 2. Nhập trong_so = 0 (hoặc -10). 3. Click [Lưu]. | 1. Kiểm tra: SRS quy định ràng buộc "0-100%" cho trong_so. 2. Giá trị 0 có nằm trong phạm vi hợp lệ? 3. Giá trị âm phải bị từ chối (ngoài 0-100%). | Negative |
+| TC-TCDG-006 | FR-VIII-11 / UC109 | Nhập trong_so > 100 cho 1 tiêu chí đơn lẻ | 1. User QTHT đã đăng nhập. | trong_so: 150 | 1. Click [+ Thêm mới]. 2. Nhập trong_so = 150. 3. Click [Lưu]. | 1. Hệ thống phải từ chối (vượt range 0-100%). 2. Ràng buộc: "0-100%, tổng tất cả tiêu chí = 100%". | Negative |
+| TC-TCDG-007 | FR-VIII-11 / SCR-VI-01 | Hard-validate: Chuyển CHO_DUYET_PC khi tổng ≠ 100% → chặn | 1. Tổng trọng số tiêu chí = 90% (thiếu 10%). 2. Đang ở màn hình Kế hoạch Đánh giá (SCR-VI-01). | — | 1. Tại SCR-VI-01, cố chuyển trạng thái sang CHO_DUYET_PC. | 1. Hệ thống CHẶN chuyển trạng thái. 2. Bắt buộc tổng trọng số = 100% (hard-validate). 3. Thông báo lỗi yêu cầu cấu hình tiêu chí đủ 100%. | Edge |
+| TC-TCDG-008 | FR-VIII-11 | Xóa tiêu chí khiến tổng trọng số giảm dưới 100% | 1. Tổng trọng số = 100% (3 tiêu chí: 40+30+30). 2. Xóa tiêu chí 30%. | — | 1. Click [Xóa] tiêu chí trong_so = 30% (không bị tham chiếu). 2. Xác nhận. | 1. Xóa thành công. 2. Tổng trọng số = 70%. 3. Hệ thống hiển thị WRN-TC-01: "Tổng trọng số hiện tại: 70%...". | Edge |
+| TC-TCDG-009 | FR-VIII-11 / UC109 | thang_diem_max ≤ thang_diem_min → lỗi validation | 1. User QTHT đã đăng nhập. | thang_diem_min: 10, thang_diem_max: 5 | 1. Click [+ Thêm mới]. 2. Nhập thang_diem_min=10, thang_diem_max=5. 3. Click [Lưu]. | 1. Hệ thống từ chối lưu. 2. SRS FR-VIII-11 Input: ràng buộc thang_diem_max = "phải > thang_diem_min". | Negative |
+| TC-TCDG-010 | FR-VIII-11 / UC109 | thang_diem_max = thang_diem_min (bằng nhau) → lỗi | 1. User QTHT đã đăng nhập. | thang_diem_min: 5, thang_diem_max: 5 | 1. Click [+ Thêm mới]. 2. Nhập thang_diem_min=5, thang_diem_max=5. 3. Click [Lưu]. | 1. Hệ thống từ chối: SRS ràng buộc "phải >" (strict greater than, không phải >=). 2. thang_diem_max = thang_diem_min vi phạm "phải >". | Edge |
+| TC-TCDG-011 | FR-VIII-11 / UC109 | Thiếu thang_diem_min hoặc thang_diem_max → lỗi (bắt buộc Y) | 1. User QTHT đã đăng nhập. | thang_diem_min: (trống), thang_diem_max: 10 | 1. Click [+ Thêm mới]. 2. Bỏ trống thang_diem_min. 3. Nhập thang_diem_max = 10. 4. Click [Lưu]. | 1. Hệ thống từ chối lưu. 2. SRS FR-VIII-11 Input: cả thang_diem_min và thang_diem_max đều bắt buộc (Y). | Negative |
+

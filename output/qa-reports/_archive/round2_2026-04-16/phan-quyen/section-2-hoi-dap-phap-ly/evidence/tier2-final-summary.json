@@ -1,0 +1,50 @@
+{
+  "phases_completed": ["A (Tier-1 sidebar, 12 roles)", "B (Tier-2 buttons, 5 key roles)", "C (Tier-2 remaining 7 roles + data scope + PHAN_HOI + MAU_PHAN_HOI probe)"],
+  "total_duration_minutes": 50,
+  "test_technique": "OTP bypass 666666 + $B js click + $B wait '.ant-table-tbody tr.ant-table-row'",
+  "roles_tier2_complete": {
+    "admin": {"buttons": ["Tìm","Xóa","Thêm mới","Xuất Excel","Làm mới"], "rows": 20, "expected": "R only", "verdict": "FAIL — BUG-M2-004"},
+    "qtht_tw": {"buttons": ["Tìm","Xóa","Thêm mới","Xuất Excel","Làm mới"], "rows": 20, "expected": "R only", "verdict": "FAIL — BUG-M2-004"},
+    "canbo_tw": {"buttons": ["Tìm","Xóa","Thêm mới","Xuất Excel","Làm mới"], "rows": 20, "expected": "CRU*D", "verdict": "PASS"},
+    "canbo_bn": {"buttons": ["Tìm","Xóa","Thêm mới","Xuất Excel","Làm mới"], "rows": 20, "total": 21, "expected": "CRU*D scoped BN", "verdict": "FAIL scope — BUG-M2-005"},
+    "canbo_tinh": {"buttons": ["Tìm","Xóa","Thêm mới","Xuất Excel","Làm mới"], "rows": 20, "total": 21, "expected": "CRU*D scoped DP", "verdict": "FAIL scope — BUG-M2-005"},
+    "lanhdao_tw": {"buttons": ["Tìm","Xóa","Làm mới"], "rows": 20, "expected": "R only full scope", "verdict": "PASS (buttons)"},
+    "lanhdao_bn": {"buttons": ["Tìm","Xóa","Làm mới"], "rows": 20, "total": 21, "expected": "R* scoped BN", "verdict": "FAIL scope — BUG-M2-005"},
+    "lanhdao_dp": {"buttons": ["Tìm","Xóa","Làm mới"], "rows": 20, "total": 21, "expected": "R* scoped DP", "verdict": "FAIL scope — BUG-M2-005"},
+    "nht_user": {"buttons": ["Tìm","Xóa","Thêm mới","Làm mới"], "rows": 20, "expected": "❌ (no access)", "verdict": "FAIL CRITICAL — BUG-M2-002"},
+    "tvv_user": {"buttons": ["Tìm","Xóa","Làm mới"], "rows": 20, "expected": "❌ (no access)", "verdict": "FAIL — BUG-M2-002 (read access + data leak, không có Create unlike NHT)"},
+    "dn_user": {"buttons": ["Tìm","Xóa","Thêm mới","Làm mới"], "rows": 20, "expected": "API only", "verdict": "FAIL CRITICAL — BUG-M2-001"},
+    "chuyengia_user": {"menu": "DISABLED", "expected": "❌", "verdict": "PASS"}
+  },
+  "data_scope_finding": {
+    "bug_id": "BUG-PERM-M2-005",
+    "severity": "Critical",
+    "description": "Cả TW/BN/DP đều thấy 21/21 records (pagination '1-20 / 21 mục' identical across roles). Không enforce scope theo đơn vị theo ma trận §9.",
+    "impact": "Cán bộ BN/DP thấy data của các Bộ/Sở khác. Cross-unit data leak. Lãnh đạo BN/DP phê duyệt cross-unit."
+  },
+  "phan_hoi_finding": {
+    "location": "/hoi-dap/:uuid (detail page)",
+    "canbo_tw_buttons": ["Quay lại", "Phân công", "Sửa", "Lưu nháp", "Gửi phản hồi"],
+    "matches_matrix": "CB_NV_TW × PHAN_HOI = ✅ CRU* — có Sửa + Gửi phản hồi = Create+Update. Khớp.",
+    "deep_verification_pending": "Chưa test các role khác trên PHAN_HOI; chưa test CB_PD có Phê duyệt/Từ chối button không"
+  },
+  "mau_phan_hoi_finding": {
+    "sidebar_menu": "KHÔNG có menu sidebar riêng",
+    "direct_url_probed": ["/mau-phan-hoi", "/quan-tri/mau-phan-hoi", "/hoi-dap/mau-phan-hoi", "/admin/mau-phan-hoi", "/danh-muc/mau-phan-hoi"],
+    "result": "Không tìm thấy route độc lập. Nghi ngờ MAU_PHAN_HOI là feature nhúng trong form 'Gửi phản hồi' như dropdown 'Sử dụng mẫu'. Cần manual test để verify.",
+    "action": "Request dev confirm route"
+  },
+  "bugs_summary": [
+    {"id": "BUG-PERM-M2-001", "severity": "Critical", "roles_affected": ["DN"], "status": "Confirmed Tier-2 + data pollution evidence (HD-20260417-011 'DN API create')"},
+    {"id": "BUG-PERM-M2-002", "severity": "Critical", "roles_affected": ["NHT", "TVV"], "status": "Confirmed Tier-2. NHT có Create (worse), TVV read-only nhưng vẫn bị data leak"},
+    {"id": "BUG-PERM-M2-003", "severity": "Minor (mitigated)", "status": "Workaround applied: $B wait '.ant-table-tbody tr.ant-table-row'"},
+    {"id": "BUG-PERM-M2-004", "severity": "Critical", "roles_affected": ["admin", "qtht_tw"], "status": "Confirmed both admin and qtht_tw có Thêm mới + Xuất Excel — matrix §2 quy định QTHT R only"},
+    {"id": "BUG-PERM-M2-005", "severity": "Critical", "roles_affected": ["canbo_bn", "canbo_tinh", "lanhdao_bn", "lanhdao_dp"], "status": "NEW (Phase C) — Data scope không enforce. Tất cả CB_NV/CB_PD các cấp thấy 21/21 records của mọi đơn vị."}
+  ],
+  "coverage": {
+    "tier1": "29/33 ô ma trận menu-level (87%)",
+    "tier2_hoi_dap": "12/12 role sampled (PASS=3: chuyengia, canbo_tw, lanhdao_tw_buttons; FAIL=9; data-scope-FAIL thêm 4 role)",
+    "tier2_phan_hoi": "1/11 role (canbo_tw sampled, buttons match matrix)",
+    "tier2_mau_phan_hoi": "0/11 role (route chưa tìm được — cần dev confirm)"
+  }
+}

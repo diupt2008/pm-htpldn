@@ -1,0 +1,90 @@
+{
+  "date": "2026-04-19",
+  "url": "http://103.172.236.130:3000/",
+  "section": "Section 7 — Permission Matrix (Báo cáo & Biểu mẫu)",
+  "healthScore": 42,
+  "entities": [
+    {
+      "name": "BAO_CAO",
+      "route": "/bao-cao",
+      "cells_passed": 10,
+      "cells_caveat": 1,
+      "cells_failed": 0,
+      "notes": "UI read-only aggregation; cannot distinguish CRU vs R from UI alone (caveat on CB_NV_TW)"
+    },
+    {
+      "name": "BIEU_MAU",
+      "route": "/bieu-mau/thu-muc",
+      "cells_passed": 2,
+      "cells_caveat": 0,
+      "cells_failed": 9,
+      "notes": "FE ability-rule blocks 8 roles (CB_NV/CB_PD/DN/NHT) despite matrix granting permissions; QTHT over-permissioned with CUD buttons"
+    },
+    {
+      "name": "THU_MUC_BIEU_MAU",
+      "route": "/bieu-mau/thu-muc (same page as BIEU_MAU)",
+      "cells_passed": 2,
+      "cells_caveat": 0,
+      "cells_failed": 9,
+      "notes": "Same as BIEU_MAU — UI ghép 2 entity cùng route"
+    }
+  ],
+  "issues": [
+    {
+      "id": "BUG-PERM-M7-001",
+      "severity": "Major",
+      "category": "authorization-over-permission",
+      "title": "QTHT có Thêm/Sửa/Xóa/Công khai trên BIEU_MAU + THU_MUC_BIEU_MAU — vi phạm 👁️ R",
+      "affected_roles": ["QTHT"],
+      "recurring_with": ["BUG-PERM-M5-001", "BUG-PERM-M6-001"]
+    },
+    {
+      "id": "BUG-PERM-M7-002",
+      "severity": "Blocker",
+      "duplicate_of": "smoke-test/bieu-mau/bug-report-smoke-test.md BUG-FE-M9-002",
+      "category": "authorization-under-permission",
+      "title": "BIEU_MAU menu disabled cho CB_NV_TW/BN/DP (mất quyền CRUD*)",
+      "affected_roles": ["CB_NV_TW", "CB_NV_BN", "CB_NV_DP"]
+    },
+    {
+      "id": "BUG-PERM-M7-003",
+      "severity": "Critical",
+      "category": "authorization-under-permission",
+      "title": "BIEU_MAU menu disabled cho CB_PD_TW/BN/DP (mất quyền 👁️ R*)",
+      "affected_roles": ["CB_PD_TW", "CB_PD_BN", "CB_PD_DP"]
+    },
+    {
+      "id": "BUG-PERM-M7-004",
+      "severity": "Critical",
+      "category": "authorization-under-permission",
+      "title": "BIEU_MAU menu disabled cho DN (mất quyền 👁️ R) hoặc matrix cần chỉnh 🔌 R†",
+      "affected_roles": ["DN"]
+    },
+    {
+      "id": "BUG-PERM-M7-005",
+      "severity": "Critical",
+      "category": "authorization-under-permission",
+      "title": "BIEU_MAU menu disabled cho NHT, click → /403 (mất quyền 👁️ R)",
+      "affected_roles": ["NHT"]
+    },
+    {
+      "id": "BUG-PERM-M7-006",
+      "severity": "Minor",
+      "category": "ux-information-disclosure",
+      "title": "Portal roles (DN, NHT) thấy full CMS sidebar render grayed menus",
+      "affected_roles": ["DN", "NHT"],
+      "recurring_with": ["BUG-PERM-M6-003"]
+    }
+  ],
+  "matrix_cells": {
+    "total": 33,
+    "passed": 14,
+    "caveat": 1,
+    "failed": 18
+  },
+  "verdict": "FAIL",
+  "summary": "18/33 ô FAIL (toàn bộ BIEU_MAU + THU_MUC_BIEU_MAU bị lỗi permission). 14/33 ô PASS (BAO_CAO hoạt động đúng cho 10/11 role, data scoping Đơn vị đúng). 1/33 caveat (CB_NV_TW CRU* trên BAO_CAO không testable qua UI). 6 bug mới (1 Major + 3 Critical + 1 Blocker dup + 1 Minor). Module Biểu mẫu FE ability-rule hoàn toàn sai — fix 1 file ability-rule unblock 8 role × 2 entity (16 ô quyền).",
+  "test_method": "Browse UI (gstack /browse Playwright headless) — atomic $B chain per role, no API testing",
+  "test_duration_minutes": 45,
+  "tester": "Claude Code Opus 4.7"
+}

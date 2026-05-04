@@ -1,0 +1,10 @@
+[
+  ["goto","http://103.172.236.130:3000/login"],
+  ["wait","input[placeholder=\"Nhập tên đăng nhập\"]"],
+  ["fill","input[placeholder=\"Nhập tên đăng nhập\"]","qtht_tw_4"],
+  ["fill","input[placeholder=\"Nhập mật khẩu\"]","Secret@123"],
+  ["click","button[type=\"submit\"]"],
+  ["wait","input[inputmode=\"numeric\"][maxlength=\"1\"]"],
+  ["type","666666"],
+  ["wait","aside button:has-text(\"Quản trị hệ thống\")"]
+]

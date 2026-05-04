@@ -1,0 +1,1 @@
+{"success":false,"error":{"code":"ERR-VAL-SYS-00-01","field":"noiDung","message":"noiDung must be shorter than or equal to 5000 characters","details":[{"field":"noiDung","message":"noiDung must be shorter than or equal to 5000 characters"}],"timestamp":"2026-04-17T07:50:33.396Z","requestId":"184af8cd-809c-4d71-b850-d36b6df95abb"}}

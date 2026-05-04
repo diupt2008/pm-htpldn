@@ -1,0 +1,14 @@
+Test: canbo_tw clicks TVV row "Congnt" (TVV-BTP-TW-0001, id=818fc074-2d27-4368-976b-d218113669e8)
+Date: 2026-04-19
+
+Network (key failures):
+GET /api/v1/tu-van-viens/818fc074-2d27-4368-976b-d218113669e8 → 500 (27ms, 177B)
+GET /api/v1/tu-van-viens/818fc074-2d27-4368-976b-d218113669e8 → 500 (65ms, 177B)
+GET /api/v1/tu-van-viens/818fc074-2d27-4368-976b-d218113669e8 → 500 (35ms, 177B)
+
+FE hiển thị toast "Internal server error" + modal "Không thể tải hồ sơ" + nút "Quay lại danh sách"
+
+Console errors:
+[error] Failed to load resource: the server responded with a status of 500 (Internal Server Error) (x3)
+
+Impact: KHÔNG test được HO_SO_TU_VAN_VIEN và DANH_GIA_TU_VAN_VIEN phân quyền vì detail page không load được.

@@ -1,0 +1,105 @@
+{
+  "ts": "2026-04-15T14:46:30.334Z",
+  "module": "Vụ việc HTPL",
+  "summary": {
+    "pass": 11,
+    "fail": 1,
+    "info": 1,
+    "total": 13,
+    "bugs": 1,
+    "jsErrors": 0
+  },
+  "testResults": [
+    {
+      "id": "VV-001",
+      "name": "Xem danh sách vụ việc",
+      "status": "PASS",
+      "detail": "URL: http://103.172.236.130:3000/vu-viec/danh-sach"
+    },
+    {
+      "id": "VV-001a",
+      "name": "Tabs SM-VUVIEC",
+      "status": "PASS",
+      "detail": "Tất cả, Chờ tiếp nhận, Đang xử lý, Chờ phê duyệt, Hoàn thành, Từ chối"
+    },
+    {
+      "id": "VV-001b",
+      "name": "Data present",
+      "status": "PASS",
+      "detail": "5 rows"
+    },
+    {
+      "id": "VV-001c",
+      "name": "Pagination",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "id": "VV-001d",
+      "name": "Search/Filter",
+      "status": "PASS",
+      "detail": "Inputs:4 Selects:5"
+    },
+    {
+      "id": "VV-022",
+      "name": "SLA column present",
+      "status": "FAIL",
+      "detail": "SLA column missing"
+    },
+    {
+      "id": "VV-002",
+      "name": "Tìm kiếm VV",
+      "status": "PASS",
+      "detail": "Search \"VV\" → 5 rows"
+    },
+    {
+      "id": "VV-003a",
+      "name": "Form tạo VV hiển thị",
+      "status": "PASS",
+      "detail": "20 fields, URL: http://103.172.236.130:3000/vu-viec/danh-sach?page=1"
+    },
+    {
+      "id": "VV-003",
+      "name": "Tạo VV mới",
+      "status": "PASS",
+      "detail": "Created"
+    },
+    {
+      "id": "VV-DETAIL",
+      "name": "Detail page",
+      "status": "INFO",
+      "detail": "No action button on rows"
+    },
+    {
+      "id": "VV-024",
+      "name": "Xuất Excel",
+      "status": "PASS",
+      "detail": "Button found"
+    },
+    {
+      "id": "VV-AUTH-BN",
+      "name": "canbo_bn sees VV list",
+      "status": "PASS",
+      "detail": "Rows: 5"
+    },
+    {
+      "id": "VV-AUTH-DP",
+      "name": "canbo_tinh sees VV list",
+      "status": "PASS",
+      "detail": "Rows: 5"
+    }
+  ],
+  "issues": [
+    {
+      "id": "VV-BUG-001",
+      "title": "SLA column missing from VV list",
+      "sev": "Medium",
+      "cat": "Functional",
+      "repro": "1. Navigate to /vu-viec/danh-sach\n2. Check table headers\n3. No SLA column",
+      "shots": [
+        "vv-001-list.png"
+      ]
+    }
+  ],
+  "jsErrors": []
+}

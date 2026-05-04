@@ -1,0 +1,7 @@
+=== TIER-2 lanhdao_tw @ 14:14:55 ===
+Landing: http://103.172.236.130:3000/403
+Menu state: {"exists":true,"disabled":false}
+Selector matched multiple elements. Be more specific or use @refs from 'snapshot'.
+URL after wait: http://103.172.236.130:3000/hoi-dap
+{"url":"/hoi-dap","is403":false,"rowCount":20,"headers":["Mã HD","Tiêu đề / Nội dung","Lĩnh vực PL","Người gửi","Kênh","Trạng thái","SLA / Thời hạn","Ngày tạo","Hành động"],"mainButtons":["Tìm kiếm","Xóa bộ lọc","Làm mới"],"firstRowClickables":[{"tag":"A","text":"HD-20260417-014","title":null,"aria":null}],"firstRowText":"HD-20260417-014\t\nQA-R2 HD-034 Use Mau\n\tHành chính\tQA\tTrực tiếp\tĐang xử lý\tCòn 10 ngày LV\t17/04/2026 15:05\t","filtersVisible":["Trực tiếp","Còn 10 ngày LV","Trực tiếp","Còn 10 ngày LV","Cổng PLQG","Còn 10 ngày LV","Cổng PLQG","Còn 10 ngày LV","Trực tiếp","Còn 10 ngày LV"],"hasCreate":false,"hasExport":false,"hasApproveBtn":false,"hasImport":false}
+--- done ---

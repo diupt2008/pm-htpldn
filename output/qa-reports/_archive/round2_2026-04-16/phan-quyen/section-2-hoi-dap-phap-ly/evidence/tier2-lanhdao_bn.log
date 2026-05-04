@@ -1,0 +1,6 @@
+=== TIER-2C lanhdao_bn @ 14:29:16 ===
+Landing: http://103.172.236.130:3000/403
+Menu state: {"exists":true,"disabled":false}
+Selector matched multiple elements. Be more specific or use @refs from 'snapshot'.
+{"url":"/hoi-dap","is403":false,"rowCount":20,"paginationTotal":"1-20 / 21 mục","headers":["Mã HD","Tiêu đề / Nội dung","Lĩnh vực PL","Người gửi","Kênh","Trạng thái","SLA / Thời hạn","Ngày tạo","Hành động"],"mainButtons":["Tìm kiếm","Xóa bộ lọc","Làm mới"],"first5Rows":["HD-20260417-014 QA-R2 HD-034 Use Mau Hành chính QA Trực tiếp Đang xử lý Còn 10 ngày LV 17/04/2026 15:05","HD-20260417-013 QA-R2 HD-031 Goi Y CB Hành chính QA Trực tiếp Mới Còn 10 ngày LV 17/04/2026 15:03","HD-20260417-012 QA-R2 HD-029 BUG: NHT creates Hành chính NHT Cổng PLQG Mới Còn 10 ngày LV 17/04/2026 15:03","HD-20260417-011 QA-R2 HD-027 DN API create Hành chính DN User Test Cổng PLQG Mới Còn 10 ngày LV 17/04/2026 15:03","HD-20260417-010 t Hành chính x Trực tiếp Mới Còn 10 ngày LV 17/04/2026 15:02"]}
+--- done ---

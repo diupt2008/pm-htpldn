@@ -1,0 +1,62 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-concise.py"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-coverage-tag.py"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-counts-sync.py"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-template-sections.py"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://103.172.236.130:*)",
+      "Bash(curl -sS http://103.172.236.130:*)",
+      "Bash(curl -s -o /dev/null -w * http://103.172.236.130:*)",
+      "Bash(curl -o /dev/null -w * http://103.172.236.130:*)",
+      "Bash(curl -s -m * -X POST http://103.172.236.130:3000/api/v1/auth/login *)",
+      "Bash(curl -s --max-time * http://103.172.236.130:*)",
+      "Bash(/Users/teamai/.claude/skills/gstack/browse/dist/browse *)",
+      "Bash(~/.claude/skills/gstack/browse/dist/browse *)",
+      "Bash(B=~/.claude/skills/gstack/browse/dist/browse*)",
+      "Bash(B=/Users/teamai/.claude/skills/gstack/browse/dist/browse*)",
+      "Bash(cat > /tmp/*)",
+      "Bash(cat /tmp/*)",
+      "Bash(source /tmp/*)",
+      "Bash(mkdir -p /Users/teamai/Downloads/antigravity/QA/*)",
+      "Bash(mkdir -p /tmp/*)",
+      "Bash(pkill -f browse-server)",
+      "Bash(pkill -f ms-playwright-go*)",
+      "Bash(pkill -f \"ms-playwright-go*)",
+      "Bash(pkill -f playwright*)",
+      "Bash(pkill -f \"playwright*)",
+      "Bash(pkill -f chromium*)",
+      "Bash(pkill -f \"chromium*)",
+      "Bash(pkill -9 -f bun*)",
+      "Bash(pkill -9 -f \"bun*)",
+      "Bash(pkill -9 -f browse*)",
+      "Bash(rm -f ~/.gstack/chromium-profile/Singleton*)",
+      "Bash(rm -f /Users/teamai/.gstack/chromium-profile/Singleton*)",
+      "Bash(ps -axo pid,rss,command *)",
+      "Bash(ps -axo rss,command *)",
+      "Bash(curl -s -X POST http://103.172.236.130:*)",
+      "Bash(curl -s \"http://103.172.236.130:*)"
+    ]
+  }
+}

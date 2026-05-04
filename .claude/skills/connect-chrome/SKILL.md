@@ -1,0 +1,1 @@
+/Users/teamai/Downloads/antigravity/QA/skilkk/.claude/skills/gstack/connect-chrome/SKILL.md

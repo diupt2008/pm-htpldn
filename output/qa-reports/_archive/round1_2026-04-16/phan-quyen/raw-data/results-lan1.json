@@ -1,0 +1,534 @@
+{
+  "ts": "2026-04-15T17:41:34.418Z",
+  "results": [
+    {
+      "user": "qtht_tw",
+      "name": "QTHT TW",
+      "level": "TW",
+      "login": true,
+      "menuCount": 13,
+      "menus": [
+        "Tổng quan",
+        "Quản lý hỏi đáp pháp lý",
+        "Quản lý đào tạo, tập huấn",
+        "Quản lý chuyên gia / tư vấn viên",
+        "Quản lý vụ việc hỗ trợ pháp lý",
+        "Quản lý chi trả chi phí",
+        "Quản lý doanh nghiệp được hỗ trợ",
+        "Đánh giá hiệu quả hỗ trợ pháp lý",
+        "Quản lý thư viện biểu mẫu",
+        "Quản lý tư vấn",
+        "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+        "Báo cáo thống kê",
+        "Quản trị hệ thống"
+      ],
+      "modules": {
+        "hoidap": {
+          "vis": true,
+          "rows": 21,
+          "add": true,
+          "appr": false
+        },
+        "tvv": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "vuviec": {
+          "vis": true,
+          "rows": 5,
+          "add": true,
+          "appr": false
+        },
+        "chitra": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "dn": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "quantri": {
+          "vis": true
+        }
+      },
+      "hasQTHT": true
+    },
+    {
+      "user": "lanhdao_tw",
+      "name": "Lãnh đạo TW",
+      "level": "TW",
+      "login": true,
+      "menuCount": 13,
+      "menus": [
+        "Tổng quan",
+        "Quản lý hỏi đáp pháp lý",
+        "Quản lý đào tạo, tập huấn",
+        "Quản lý chuyên gia / tư vấn viên",
+        "Quản lý vụ việc hỗ trợ pháp lý",
+        "Quản lý chi trả chi phí",
+        "Quản lý doanh nghiệp được hỗ trợ",
+        "Đánh giá hiệu quả hỗ trợ pháp lý",
+        "Quản lý thư viện biểu mẫu",
+        "Quản lý tư vấn",
+        "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+        "Báo cáo thống kê",
+        "Quản trị hệ thống"
+      ],
+      "modules": {
+        "hoidap": {
+          "vis": true,
+          "rows": 0,
+          "add": true,
+          "appr": false
+        },
+        "tvv": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "vuviec": {
+          "vis": true,
+          "rows": 5,
+          "add": true,
+          "appr": false
+        },
+        "chitra": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "dn": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "quantri": {
+          "vis": true
+        }
+      },
+      "hasQTHT": true
+    },
+    {
+      "user": "canbo_tw",
+      "name": "Cán bộ TW",
+      "level": "TW",
+      "login": true,
+      "menuCount": 13,
+      "menus": [
+        "Tổng quan",
+        "Quản lý hỏi đáp pháp lý",
+        "Quản lý đào tạo, tập huấn",
+        "Quản lý chuyên gia / tư vấn viên",
+        "Quản lý vụ việc hỗ trợ pháp lý",
+        "Quản lý chi trả chi phí",
+        "Quản lý doanh nghiệp được hỗ trợ",
+        "Đánh giá hiệu quả hỗ trợ pháp lý",
+        "Quản lý thư viện biểu mẫu",
+        "Quản lý tư vấn",
+        "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+        "Báo cáo thống kê",
+        "Quản trị hệ thống"
+      ],
+      "modules": {
+        "hoidap": {
+          "vis": true,
+          "rows": 21,
+          "add": true,
+          "appr": false
+        },
+        "tvv": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "vuviec": {
+          "vis": true,
+          "rows": 5,
+          "add": true,
+          "appr": false
+        },
+        "chitra": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "dn": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "quantri": {
+          "vis": true
+        }
+      },
+      "hasQTHT": true
+    },
+    {
+      "user": "qtht_bn",
+      "name": "QTHT BN",
+      "level": "BN",
+      "login": true,
+      "menuCount": 13,
+      "menus": [
+        "Tổng quan",
+        "Quản lý hỏi đáp pháp lý",
+        "Quản lý đào tạo, tập huấn",
+        "Quản lý chuyên gia / tư vấn viên",
+        "Quản lý vụ việc hỗ trợ pháp lý",
+        "Quản lý chi trả chi phí",
+        "Quản lý doanh nghiệp được hỗ trợ",
+        "Đánh giá hiệu quả hỗ trợ pháp lý",
+        "Quản lý thư viện biểu mẫu",
+        "Quản lý tư vấn",
+        "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+        "Báo cáo thống kê",
+        "Quản trị hệ thống"
+      ],
+      "modules": {
+        "hoidap": {
+          "vis": true,
+          "rows": 21,
+          "add": true,
+          "appr": false
+        },
+        "tvv": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "vuviec": {
+          "vis": true,
+          "rows": 5,
+          "add": true,
+          "appr": false
+        },
+        "chitra": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "dn": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "quantri": {
+          "vis": true
+        }
+      },
+      "hasQTHT": true
+    },
+    {
+      "user": "lanhdao_bn",
+      "name": "Lãnh đạo BN",
+      "level": "BN",
+      "login": true,
+      "menuCount": 13,
+      "menus": [
+        "Tổng quan",
+        "Quản lý hỏi đáp pháp lý",
+        "Quản lý đào tạo, tập huấn",
+        "Quản lý chuyên gia / tư vấn viên",
+        "Quản lý vụ việc hỗ trợ pháp lý",
+        "Quản lý chi trả chi phí",
+        "Quản lý doanh nghiệp được hỗ trợ",
+        "Đánh giá hiệu quả hỗ trợ pháp lý",
+        "Quản lý thư viện biểu mẫu",
+        "Quản lý tư vấn",
+        "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+        "Báo cáo thống kê",
+        "Quản trị hệ thống"
+      ],
+      "modules": {
+        "hoidap": {
+          "vis": true,
+          "rows": 21,
+          "add": true,
+          "appr": false
+        },
+        "tvv": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "vuviec": {
+          "vis": true,
+          "rows": 5,
+          "add": true,
+          "appr": false
+        },
+        "chitra": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "dn": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "quantri": {
+          "vis": true
+        }
+      },
+      "hasQTHT": true
+    },
+    {
+      "user": "canbo_bn",
+      "name": "Cán bộ BN",
+      "level": "BN",
+      "login": true,
+      "menuCount": 13,
+      "menus": [
+        "Tổng quan",
+        "Quản lý hỏi đáp pháp lý",
+        "Quản lý đào tạo, tập huấn",
+        "Quản lý chuyên gia / tư vấn viên",
+        "Quản lý vụ việc hỗ trợ pháp lý",
+        "Quản lý chi trả chi phí",
+        "Quản lý doanh nghiệp được hỗ trợ",
+        "Đánh giá hiệu quả hỗ trợ pháp lý",
+        "Quản lý thư viện biểu mẫu",
+        "Quản lý tư vấn",
+        "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+        "Báo cáo thống kê",
+        "Quản trị hệ thống"
+      ],
+      "modules": {
+        "hoidap": {
+          "vis": true,
+          "rows": 0,
+          "add": true,
+          "appr": false
+        },
+        "tvv": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "vuviec": {
+          "vis": true,
+          "rows": 5,
+          "add": true,
+          "appr": false
+        },
+        "chitra": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "dn": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "quantri": {
+          "vis": true
+        }
+      },
+      "hasQTHT": true
+    },
+    {
+      "user": "qtht_dp",
+      "name": "QTHT ĐP",
+      "level": "DP",
+      "login": true,
+      "menuCount": 13,
+      "menus": [
+        "Tổng quan",
+        "Quản lý hỏi đáp pháp lý",
+        "Quản lý đào tạo, tập huấn",
+        "Quản lý chuyên gia / tư vấn viên",
+        "Quản lý vụ việc hỗ trợ pháp lý",
+        "Quản lý chi trả chi phí",
+        "Quản lý doanh nghiệp được hỗ trợ",
+        "Đánh giá hiệu quả hỗ trợ pháp lý",
+        "Quản lý thư viện biểu mẫu",
+        "Quản lý tư vấn",
+        "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+        "Báo cáo thống kê",
+        "Quản trị hệ thống"
+      ],
+      "modules": {
+        "hoidap": {
+          "vis": true,
+          "rows": 21,
+          "add": true,
+          "appr": false
+        },
+        "tvv": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "vuviec": {
+          "vis": true,
+          "rows": 5,
+          "add": true,
+          "appr": false
+        },
+        "chitra": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "dn": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "quantri": {
+          "vis": true
+        }
+      },
+      "hasQTHT": true
+    },
+    {
+      "user": "lanhdao_dp",
+      "name": "Lãnh đạo ĐP",
+      "level": "DP",
+      "login": true,
+      "menuCount": 13,
+      "menus": [
+        "Tổng quan",
+        "Quản lý hỏi đáp pháp lý",
+        "Quản lý đào tạo, tập huấn",
+        "Quản lý chuyên gia / tư vấn viên",
+        "Quản lý vụ việc hỗ trợ pháp lý",
+        "Quản lý chi trả chi phí",
+        "Quản lý doanh nghiệp được hỗ trợ",
+        "Đánh giá hiệu quả hỗ trợ pháp lý",
+        "Quản lý thư viện biểu mẫu",
+        "Quản lý tư vấn",
+        "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+        "Báo cáo thống kê",
+        "Quản trị hệ thống"
+      ],
+      "modules": {
+        "hoidap": {
+          "vis": true,
+          "rows": 0,
+          "add": true,
+          "appr": false
+        },
+        "tvv": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "vuviec": {
+          "vis": true,
+          "rows": 5,
+          "add": true,
+          "appr": false
+        },
+        "chitra": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "dn": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "quantri": {
+          "vis": true
+        }
+      },
+      "hasQTHT": true
+    },
+    {
+      "user": "canbo_tinh",
+      "name": "Cán bộ ĐP",
+      "level": "DP",
+      "login": true,
+      "menuCount": 13,
+      "menus": [
+        "Tổng quan",
+        "Quản lý hỏi đáp pháp lý",
+        "Quản lý đào tạo, tập huấn",
+        "Quản lý chuyên gia / tư vấn viên",
+        "Quản lý vụ việc hỗ trợ pháp lý",
+        "Quản lý chi trả chi phí",
+        "Quản lý doanh nghiệp được hỗ trợ",
+        "Đánh giá hiệu quả hỗ trợ pháp lý",
+        "Quản lý thư viện biểu mẫu",
+        "Quản lý tư vấn",
+        "Quản lý chương trình hỗ trợ pháp lý doanh nghiệp",
+        "Báo cáo thống kê",
+        "Quản trị hệ thống"
+      ],
+      "modules": {
+        "hoidap": {
+          "vis": true,
+          "rows": 21,
+          "add": true,
+          "appr": false
+        },
+        "tvv": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "vuviec": {
+          "vis": true,
+          "rows": 5,
+          "add": true,
+          "appr": false
+        },
+        "chitra": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "dn": {
+          "vis": true,
+          "rows": 2,
+          "add": true,
+          "appr": false
+        },
+        "quantri": {
+          "vis": true
+        }
+      },
+      "hasQTHT": true
+    },
+    {
+      "user": "tvv_user",
+      "name": "TVV Portal",
+      "level": "Portal",
+      "login": false,
+      "error": "no_otp"
+    }
+  ]
+}

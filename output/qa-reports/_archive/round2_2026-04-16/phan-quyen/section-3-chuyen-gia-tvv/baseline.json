@@ -1,0 +1,99 @@
+{
+  "date": "2026-04-19",
+  "round": "round2_2026-04-16",
+  "section": "phan-quyen/section-3-chuyen-gia-tvv",
+  "url": "http://103.172.236.130:3000/",
+  "scope": "Module 3 — Chuyên gia / Tư vấn viên (3 entity × 11 role = 33 cells)",
+  "totalCells": 33,
+  "tested": 11,
+  "passed": 6,
+  "failed": 5,
+  "blocked": 22,
+  "coverage_pct": 33,
+  "bugs": [
+    {
+      "id": "BUG-PM3-R2-001",
+      "severity": "Critical",
+      "priority": "P0",
+      "category": "Permission",
+      "title": "QTHT thấy nút '+ Thêm TVV' và 'Xuất Excel' vi phạm TU_VAN_VIEN × QTHT = R",
+      "status": "Open (re-appear)",
+      "tcRef": "TVV-023"
+    },
+    {
+      "id": "BUG-PM3-R2-002",
+      "severity": "Critical",
+      "priority": "P0",
+      "category": "Permission (scope)",
+      "title": "Scope TW/BN/DP không enforce — canbo_bn/canbo_tinh/lanhdao_bn/lanhdao_dp đều thấy TVV-BTP-TW-0001",
+      "status": "Open (re-appear)",
+      "tcRef": "TVV-024, DI-02, DI-03, DI-04, DI-05"
+    },
+    {
+      "id": "BUG-PM3-R2-003",
+      "severity": "Critical",
+      "priority": "P0",
+      "category": "Data/API",
+      "title": "GET /api/v1/tu-van-viens/{id} trả 500 → detail page không load → blocks 22 cell tests",
+      "status": "Open (new)",
+      "tcRef": "TVV-007, TVV-017, TVV-018, TVV-019, TVV-020"
+    },
+    {
+      "id": "BUG-PM3-R2-004",
+      "severity": "Major",
+      "priority": "P1",
+      "category": "Data/Security",
+      "title": "Form login persist session cookie — user mới sau login thấy UI của user cũ nếu không clear cookies",
+      "status": "Open (new)",
+      "tcRef": "—"
+    }
+  ],
+  "cellResults": {
+    "TU_VAN_VIEN": {
+      "QTHT": "FAIL (BUG-R2-001)",
+      "CB_NV_TW": "PASS",
+      "CB_NV_BN": "FAIL scope (BUG-R2-002)",
+      "CB_NV_DP": "FAIL scope (BUG-R2-002)",
+      "CB_PD_TW": "PASS",
+      "CB_PD_BN": "FAIL scope (BUG-R2-002)",
+      "CB_PD_DP": "FAIL scope (BUG-R2-002)",
+      "DN": "PASS (403)",
+      "NHT": "PASS (403)",
+      "TVV": "PASS",
+      "CG": "PASS"
+    },
+    "HO_SO_TU_VAN_VIEN": {
+      "QTHT": "BLOCKED (BUG-R2-003)",
+      "CB_NV_TW": "BLOCKED",
+      "CB_NV_BN": "BLOCKED",
+      "CB_NV_DP": "BLOCKED",
+      "CB_PD_TW": "BLOCKED",
+      "CB_PD_BN": "BLOCKED",
+      "CB_PD_DP": "BLOCKED",
+      "DN": "INFERRED PASS (403 upstream)",
+      "NHT": "BLOCKED (need detail page)",
+      "TVV": "BLOCKED",
+      "CG": "BLOCKED"
+    },
+    "DANH_GIA_TU_VAN_VIEN": {
+      "QTHT": "BLOCKED (BUG-R2-003)",
+      "CB_NV_TW": "BLOCKED",
+      "CB_NV_BN": "BLOCKED",
+      "CB_NV_DP": "BLOCKED",
+      "CB_PD_TW": "BLOCKED",
+      "CB_PD_BN": "BLOCKED",
+      "CB_PD_DP": "BLOCKED",
+      "DN": "OUT_OF_SCOPE (API-only per user request)",
+      "NHT": "INFERRED PASS",
+      "TVV": "INFERRED PASS",
+      "CG": "INFERRED PASS"
+    }
+  },
+  "recommendation": [
+    "BE fix BUG-R2-003 TRƯỚC — unblock 22/33 cells",
+    "Seed ≥1 TVV DANG_HOAT_DONG cấp BN và ≥1 cấp DP để test scope đầy đủ",
+    "FE fix BUG-R2-001 và BUG-R2-004 song song (độc lập BE)",
+    "BE fix BUG-R2-002 row-level filter theo don_vi_id + cap",
+    "Re-test round 3 sau khi fix 4 bug"
+  ]
+}

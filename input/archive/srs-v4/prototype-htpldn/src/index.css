@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+/* ---------- Base reset (sync từ design-system/tokens.css) ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { margin: 0; padding: 0; min-height: 100%; }
+
+body {
+  font-family: "Be Vietnam Pro", "Segoe UI", -apple-system, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  color: #262626;
+  background: #f5f5f5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+code, pre, kbd, samp {
+  font-family: ui-monospace, "SF Mono", Consolas, monospace;
+}
+
+/* Tabular numerals cho table/KPI số */
+.t-tabular,
+.tabular,
+[data-tabular],
+.ant-statistic-content-value,
+.ant-table-cell-num,
+.ant-pagination {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Scrollbar mảnh, tinh tế */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+
+/* Antd margin reset để flex gap không bị collapse */
+.ant-card { margin-bottom: 0 !important; }
+.ant-tabs { margin-bottom: 0 !important; }
+
+/* Sidebar brand block — theo styles.css .brand-block specimen */
+.sidebar-brand {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  line-height: 1.3;
+  gap: 2px;
+}
+.sidebar-brand::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 14px; bottom: 14px;
+  width: 3px;
+  background: #faad14;
+}
+.sidebar-brand .cq {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+}
+.sidebar-brand .name {
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+.sidebar-brand .sys {
+  font-size: 9px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Antd Menu dark mode — active item có border-left accent gold (theo .nav-mini.active specimen) */
+.ant-menu-dark.ant-menu-inline .ant-menu-item-selected {
+  border-left: 3px solid #faad14;
+  padding-left: 21px !important;
+}
+
+/* KPI card — left rail 3px theo .kpi specimen */
+.kpi-card {
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: #0958d9;
+}
+.kpi-card.kpi-accent::before { background: #faad14; }
+.kpi-card.kpi-success::before { background: #52c41a; }
+.kpi-card.kpi-warn::before { background: #faad14; }
+.kpi-card.kpi-danger::before { background: #f5222d; }
+.kpi-card.kpi-muted::before { background: #d9d9d9; }
+
+.kpi-card.kpi-clickable {
+  cursor: pointer;
+  transition: border-color 200ms cubic-bezier(0.215, 0.61, 0.355, 1),
+              box-shadow 200ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.kpi-card.kpi-clickable:hover {
+  border-color: #0958d9;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03),
+              0 1px 6px -1px rgba(0,0,0,0.02),
+              0 2px 4px 0 rgba(0,0,0,0.02);
+}
+
+/* Global banner khi ≥50% widget fail */
+.global-fail-banner {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}

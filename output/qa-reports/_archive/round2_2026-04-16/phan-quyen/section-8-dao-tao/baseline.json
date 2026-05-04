@@ -1,0 +1,39 @@
+{
+  "section": "8.1 Đào tạo, Tập huấn",
+  "module": "FR-03",
+  "date": "2026-04-19",
+  "round": "round2_2026-04-16",
+  "url": "http://103.172.236.130:3000/",
+  "verdict": "FAIL",
+  "cells_total": 110,
+  "cells_testable_ui": 44,
+  "cells_pass": 27,
+  "cells_fail": 16,
+  "cells_blocked": 66,
+  "pass_rate_testable": 0.61,
+  "pass_rate_total": 0.245,
+  "bugs": [
+    { "id": "BUG-PERM-M8.1-001", "severity": "Major", "title": "QTHT có Them moi/Sua/Xoa trên CTDT/KH/GV (spec 👁️ R)", "category": "authz", "recurring": ["BUG-PERM-M5-001", "BUG-PERM-M6-001", "BUG-PERM-M7-001"] },
+    { "id": "BUG-PERM-M8.1-002", "severity": "Critical", "title": "Data isolation fail — CB_NV_BN/DP + CB_PD_BN/DP see TW CTDT", "category": "authz", "recurring": ["BUG-PERM-M3-002", "BUG-PERM-M4-002", "BUG-PERM-M5-002", "BUG-PERM-M6-002"] },
+    { "id": "BUG-PERM-M8.1-003", "severity": "Critical", "title": "TVV có sidebar Đào tạo enabled, read CTDT + KH list (spec ❌)", "category": "authz", "recurring": [] },
+    { "id": "BUG-PERM-M8.1-004", "severity": "Major", "title": "Sidebar NHCH disabled cho 7 role nội bộ (dup BUG-DT-03 mở rộng)", "category": "authz", "recurring": ["BUG-DT-03", "BUG-PERM-M7-002", "BUG-PERM-M7-003", "BUG-PERM-M7-004", "BUG-PERM-M7-005"] },
+    { "id": "BUG-PERM-M8.1-005", "severity": "Minor", "title": "Portal sidebar full CMS menu grayed", "category": "ux", "recurring": ["BUG-PERM-M6-003", "BUG-PERM-M7-006"] }
+  ],
+  "roles_tested": ["qtht_tw", "canbo_tw", "canbo_bn", "canbo_tinh", "lanhdao_tw", "lanhdao_bn", "lanhdao_dp", "dn_user", "nht_user", "tvv_user", "chuyengia_user"],
+  "entities_testable_ui": ["CHUONG_TRINH_DAO_TAO", "KHOA_HOC", "NGAN_HANG_CAU_HOI", "GIANG_VIEN"],
+  "entities_blocked_nested": ["BAI_GIANG", "DE_KIEM_TRA", "KET_QUA_DAO_TAO", "CHUNG_NHAN", "DANG_KY_DAO_TAO", "DE_XUAT_DAO_TAO"],
+  "blocked_reason": "6 entity nested trong detail của 4 entity top-level; CTDT detail crash (BUG-DT-02), KH tao-moi 404 (BUG-DT-01), NHCH disabled (BUG-DT-03); DXDT thiếu tab (BUG-DT-06); DKDT flow API out-of-scope per user request",
+  "results_per_role": {
+    "qtht_tw": { "pass": 0, "fail": 4, "cells_ui": 4, "note": "QTHT có write UI trên CTDT/KH/GV + mất quyền Read NHCH" },
+    "canbo_tw": { "pass": 3, "fail": 1, "cells_ui": 4, "note": "CRUD trên CTDT/KH/GV OK; mất NHCH" },
+    "canbo_bn": { "pass": 1, "fail": 3, "cells_ui": 4, "note": "Data isolation leak trên CTDT; mất NHCH" },
+    "canbo_tinh": { "pass": 1, "fail": 3, "cells_ui": 4, "note": "Data isolation leak trên CTDT; mất NHCH" },
+    "lanhdao_tw": { "pass": 3, "fail": 1, "cells_ui": 4, "note": "RU* enforced OK; mất NHCH" },
+    "lanhdao_bn": { "pass": 2, "fail": 2, "cells_ui": 4, "note": "Data isolation leak CTDT; mất NHCH" },
+    "lanhdao_dp": { "pass": 2, "fail": 2, "cells_ui": 4, "note": "Data isolation leak CTDT; mất NHCH" },
+    "dn_user": { "pass": 4, "fail": 0, "cells_ui": 4, "note": "Read-only match, NHCH/GV disabled match ❌" },
+    "nht_user": { "pass": 4, "fail": 0, "cells_ui": 4, "note": "Same as DN" },
+    "tvv_user": { "pass": 2, "fail": 2, "cells_ui": 4, "note": "Đọc được CTDT + KH — VIOLATION ❌" },
+    "chuyengia_user": { "pass": 4, "fail": 0, "cells_ui": 4, "note": "Sidebar Đào tạo disabled → match ❌" }
+  }
+}

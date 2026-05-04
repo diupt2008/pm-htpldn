@@ -1,0 +1,8 @@
+=== qtht_tw @ 12:26:16 ===
+OTP: 862450
+Landing: http://103.172.236.130:3000/dashboard
+--- Sidebar ---
+{"landing":"/dashboard","hoiDapEnabled":true,"allMenuState":[{"title":"Tổng quan","disabled":false},{"title":"Quản lý hỏi đáp pháp lý","disabled":false},{"title":"Quản lý đào tạo, tập huấn","disabled":false},{"title":"Chương trình đào tạo","disabled":false},{"title":"Khóa học","disabled":false},{"title":"Ngân hàng câu hỏi","disabled":false},{"title":"Giảng viên","disabled":false},{"title":"Quản lý chuyên gia / tư vấn viên","disabled":false},{"title":"Quản lý vụ việc hỗ trợ pháp lý","disabled":false},{"title":"Quản lý chi trả chi phí","disabled":false},{"title":"Quản lý doanh nghiệp được hỗ trợ","disabled":false},{"title":"Đánh giá hiệu quả hỗ trợ pháp lý","disabled":false},{"title":"Quản lý thư viện biểu mẫu","disabled":false},{"title":"Quản lý tư vấn","disabled":false},{"title":"Tư vấn chuyên sâu","disabled":false},{"title":"Tư vấn nhanh","disabled":false},{"title":"Hợp đồng tư vấn","disabled":false},{"title":"Quản lý chương trình hỗ trợ pháp lý doanh nghiệp","disabled":false},{"title":"Báo cáo thống kê","disabled":false},{"title":"Quản trị hệ thống","disabled":false},{"title":"Danh mục dùng chung","disabled":false},{"title":"Cấu hình SLA","disabled":false},{"title":"Cấu hình phân công","disabled":false},{"title":"Ngày lễ","disabled":false},{"title":"Tiêu chí đánh giá hiệu quả","disabled":false},{"title":"Tiêu chí đánh giá chi phí","disabled":false},{"title":"Tài khoản & phân quyền","disabled":false},{"title":"Quản lý API Consumer","disabled":false}],"userDisplay":"QT\nQT Hệ thống TW\nQTHT_TW"}
+Hỏi đáp state: {"has":true,"dis":false}
+1s URL: about:blank
+--- done ---

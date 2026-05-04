@@ -1,0 +1,43 @@
+# File USAGE GUIDE cho test MA TRẬN PHÂN QUYỀN (FR-10 §10 + isolation cells DI-04/DI-05).
+# KHÔNG chứa data tài khoản — mọi account lấy từ input/users.csv (single source of truth).
+#
+# === NGUYÊN TẮC: 1 BỘ TÀI KHOẢN DUY NHẤT (users.csv) ===
+# users.csv có 3 replica mỗi role+cấp (_01, _02, _03). Convention để test không đụng nhau:
+#   _01 → Smoke / Functional / Cross-module (primary)
+#   _02 → Fallback khi _01 lock (CLAUDE.md Rule 7 account-lock)
+#   _03 → DEDICATED cho test ma trận phân quyền + isolation
+#   → Lý do _03: CUD trong test scoping (* rules) KHÔNG pollute data _01/_02 vốn dùng cho functional test.
+#
+# === PAIR ISOLATION DI-04 (BN ngang cấp — khác Bộ, KHÔNG thấy nhau theo BR-AUTH-08) ===
+#   cb_nv_bn_01 (BKH) ↔ cb_nv_bn_02 (BTC) ↔ cb_nv_bn_03 (BCT)
+#   cb_pd_bn_01 (BKH) ↔ cb_pd_bn_02 (BTC) ↔ cb_pd_bn_03 (BCT)
+#   → Khuyến nghị cặp test: cb_nv_bn_03 (BCT) ↔ cb_nv_bn_02 (BTC) — primary _03 + cross-check _02
+#
+# === PAIR ISOLATION DI-05 (DP ngang cấp — khác Tỉnh, KHÔNG thấy nhau) ===
+#   cb_nv_dp_01 (AG) ↔ cb_nv_dp_02 (BG) ↔ cb_nv_dp_03 (BNI)
+#   cb_pd_dp_01 (AG) ↔ cb_pd_dp_02 (BG) ↔ cb_pd_dp_03 (BNI)
+#   → Khuyến nghị cặp test: cb_nv_dp_03 (BNI) ↔ cb_nv_dp_02 (BG)
+#
+# === SYNC RULE ===
+# File này KHÔNG duplicate data. Khi users.csv đổi username / đơn vị / role → KHÔNG cần sync file này.
+# Chỉ update khi convention _01/_02/_03 thay đổi, hoặc DI-04/DI-05 cần pair khác.
+#
+# === MẬT KHẨU & OTP ===
+# Password: Secret@123 cho mọi TK (trừ admin = Secret@123)
+# OTP login: 666666 (bypass tạm — dev confirm 2026-04-19)
+#
+# Tạo: 2026-04-20 | Rewrite: 2026-04-24 (sync với users.csv, single source of truth)
+
+role,username_for_permission_test,don_vi_ma,don_vi,ghi_chu
+QTHT,qtht_03,,,Root QTHT — test CRUD toàn bộ 9 entity quản trị (không có đơn vị scope)
+CB_NV_TW,cb_nv_tw_03,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,Cấp TW — scope toàn quốc
+CB_NV_BN,cb_nv_bn_03,BCT,Bộ Công Thương,Cấp BN — pair DI-04 với cb_nv_bn_02 (BTC)
+CB_NV_DP,cb_nv_dp_03,STP-BNI,Sở Tư pháp Bắc Ninh,Cấp ĐP — pair DI-05 với cb_nv_dp_02 (BG)
+CB_PD_TW,cb_pd_tw_03,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,Phê duyệt cấp TW
+CB_PD_BN,cb_pd_bn_03,BCT,Bộ Công Thương,Phê duyệt BN — pair DI-04 với cb_pd_bn_02 (BTC)
+CB_PD_DP,cb_pd_dp_03,STP-BNI,Sở Tư pháp Bắc Ninh,Phê duyệt ĐP — pair DI-05 với cb_pd_dp_02 (BG)
+DN,dn_03,STP-BNI,Sở Tư pháp Bắc Ninh,Portal DN — test quyền C† qua API inbound
+NHT,nht_03,STP-BNI,Sở Tư pháp Bắc Ninh,Portal NHT
+TVV,tvv_03,STP-BNI,Sở Tư pháp Bắc Ninh,Portal TVV
+CG,cg_03,STP-BNI,Sở Tư pháp Bắc Ninh,Portal CG
+root,admin,,,Root QTHT (không có đơn vị) — mật khẩu Secret@123 (khác convention Secret@123)

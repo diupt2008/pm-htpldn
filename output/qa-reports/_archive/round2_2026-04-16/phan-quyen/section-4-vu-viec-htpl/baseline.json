@@ -1,0 +1,110 @@
+{
+  "date": "2026-04-19",
+  "round": "round2_2026-04-16",
+  "section": "section-4-vu-viec-htpl",
+  "url": "http://103.172.236.130:3000/",
+  "module": "Vụ việc HTPL (Module 4)",
+  "scope": {
+    "entities": ["VU_VIEC", "HO_SO_VU_VIEC", "KET_QUA_VU_VIEC"],
+    "roles": ["QTHT", "CB_NV_TW", "CB_NV_BN", "CB_NV_DP", "CB_PD_TW", "CB_PD_BN", "CB_PD_DP", "DN", "NHT", "TVV", "CG"],
+    "total_cells": 33,
+    "tested_cells": 12,
+    "blocked_cells": 21
+  },
+  "results": {
+    "pass": 4,
+    "fail": 7,
+    "ambiguous": 1,
+    "blocked": 21
+  },
+  "verdict": "FAIL",
+  "healthScore": 30,
+  "test_method": "Browse UI only (Playwright via /browse) — NO API per user request",
+  "issues": [
+    {
+      "id": "BUG-PM4-R2-001",
+      "title": "QTHT (qtht_tw) có nút Nhập thủ công + Xuất Excel + icon Xóa trên VU_VIEC list, vi phạm VU_VIEC × QTHT = R",
+      "severity": "Critical",
+      "priority": "P0",
+      "category": "Permission",
+      "status": "Open (recurring from 2026-04-18)",
+      "linked_to": "BUG-VV-014"
+    },
+    {
+      "id": "BUG-PM4-R2-002",
+      "title": "Scope BN/DP không enforce — canbo_bn/canbo_tinh/lanhdao_bn/lanhdao_dp đều thấy 16 records VV-BTP-TW",
+      "severity": "Critical",
+      "priority": "P0",
+      "category": "Permission",
+      "status": "Open (recurring pattern from BUG-PM3-R2-002)",
+      "affected_accounts": ["canbo_bn", "canbo_tinh", "lanhdao_bn", "lanhdao_dp"]
+    },
+    {
+      "id": "BUG-PM4-R2-003",
+      "title": "NHT thấy tất cả 16 VV thay vì chỉ VV được phân công — vi phạm BR-AUTH-10",
+      "severity": "Critical",
+      "priority": "P0",
+      "category": "Permission",
+      "status": "Open (recurring from 2026-04-18)",
+      "linked_to": "BUG-VV-004"
+    },
+    {
+      "id": "BUG-PM4-R2-004",
+      "title": "TVV thấy danh sách VU_VIEC — authz leak, matrix TVV × VU_VIEC = ❌",
+      "severity": "Critical",
+      "priority": "P0",
+      "category": "Permission",
+      "status": "Open (recurring from 2026-04-18)",
+      "linked_to": "BUG-VV-015"
+    },
+    {
+      "id": "BUG-PM4-R2-005",
+      "title": "DN × VU_VIEC: matrix ghi R* nhưng UI enforce DI-09 (chặn CMS) — mâu thuẫn spec",
+      "severity": "Major",
+      "priority": "P1",
+      "category": "Spec/Matrix",
+      "status": "Open (needs SRS clarification)"
+    }
+  ],
+  "cellResults": {
+    "VU_VIEC": {
+      "QTHT": {"expected": "R", "actual": "CRUD", "status": "FAIL", "bug": "BUG-PM4-R2-001", "evidence": "12-qtht_tw-vv.png"},
+      "CB_NV_TW": {"expected": "CRUD*", "actual": "CRUD (all 16 TW records)", "status": "PASS", "evidence": "02-canbo_tw-vv-list.png"},
+      "CB_NV_BN": {"expected": "CRUD* scoped BN", "actual": "CRUD but sees TW data", "status": "FAIL", "bug": "BUG-PM4-R2-002", "evidence": "03-canbo_bn-vv-list.png"},
+      "CB_NV_DP": {"expected": "CRUD* scoped DP", "actual": "CRUD but sees TW data", "status": "FAIL", "bug": "BUG-PM4-R2-002", "evidence": "04-canbo_tinh-vv-list.png"},
+      "CB_PD_TW": {"expected": "RU* (TW)", "actual": "RU (view-only icon)", "status": "PASS", "evidence": "05-lanhdao_tw-vv-list.png"},
+      "CB_PD_BN": {"expected": "RU* scoped BN", "actual": "RU but sees TW data", "status": "FAIL", "bug": "BUG-PM4-R2-002", "evidence": "06-lanhdao_bn-vv-list.png"},
+      "CB_PD_DP": {"expected": "RU* scoped DP", "actual": "RU but sees TW data", "status": "FAIL", "bug": "BUG-PM4-R2-002", "evidence": "07-lanhdao_dp-vv-list.png"},
+      "DN": {"expected": "R*", "actual": "Menu grayed + /403 (consistent with DI-09)", "status": "AMBIGUOUS", "bug": "BUG-PM4-R2-005", "evidence": "08-dn_user-vv-try.png"},
+      "NHT": {"expected": "RU* assigned only", "actual": "Sees all 16 VV", "status": "FAIL", "bug": "BUG-PM4-R2-003", "evidence": "09-nht_user-vv.png"},
+      "TVV": {"expected": "❌", "actual": "Sees 16 VV list", "status": "FAIL", "bug": "BUG-PM4-R2-004", "evidence": "10-tvv_user-vv-try.png"},
+      "CG": {"expected": "❌", "actual": "Menu grayed + /403", "status": "PASS", "evidence": "11-chuyengia-vv-try.png"}
+    },
+    "HO_SO_VU_VIEC": {
+      "QTHT": {"expected": "R", "status": "BLOCKED", "reason": "Chain timeout khi click tab Hồ sơ"},
+      "CB_NV_TW": {"expected": "CRUD*", "status": "BLOCKED", "reason": "Chain timeout; partial evidence: drill OK, tab click fails"},
+      "CB_NV_BN": {"expected": "CRUD*", "status": "BLOCKED"},
+      "CB_NV_DP": {"expected": "CRUD*", "status": "BLOCKED"},
+      "CB_PD_TW": {"expected": "R*", "status": "BLOCKED"},
+      "CB_PD_BN": {"expected": "R*", "status": "BLOCKED"},
+      "CB_PD_DP": {"expected": "R*", "status": "BLOCKED"},
+      "DN": {"expected": "C†R*", "status": "INFERRED_PASS", "reason": "C† qua API (ngoài scope UI test), R* UI chặn"},
+      "NHT": {"expected": "CRU*", "status": "BLOCKED", "suspected": "Leak: NHT đã thấy list VU_VIEC"},
+      "TVV": {"expected": "❌", "status": "BLOCKED", "suspected": "Leak: TVV đã thấy list VU_VIEC"},
+      "CG": {"expected": "❌", "status": "INFERRED_PASS", "reason": "Menu grayed + /403"}
+    },
+    "KET_QUA_VU_VIEC": {
+      "QTHT": {"expected": "R", "status": "BLOCKED", "reason": "Tab Kết quả không render ở state Đã tiếp nhận; chặn bởi BUG-VV-006/BUG-VV-009"},
+      "CB_NV_TW": {"expected": "CRU*", "status": "BLOCKED"},
+      "CB_NV_BN": {"expected": "CRU*", "status": "BLOCKED"},
+      "CB_NV_DP": {"expected": "CRU*", "status": "BLOCKED"},
+      "CB_PD_TW": {"expected": "RU*", "status": "BLOCKED"},
+      "CB_PD_BN": {"expected": "RU*", "status": "BLOCKED"},
+      "CB_PD_DP": {"expected": "RU*", "status": "BLOCKED"},
+      "DN": {"expected": "R*", "status": "BLOCKED"},
+      "NHT": {"expected": "CRU*", "status": "BLOCKED"},
+      "TVV": {"expected": "❌", "status": "BLOCKED"},
+      "CG": {"expected": "❌", "status": "INFERRED_PASS"}
+    }
+  }
+}

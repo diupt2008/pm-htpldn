@@ -1,0 +1,145 @@
+{
+  "round": 2,
+  "location": "round2_2026-04-16/phan-quyen/section-2-hoi-dap-phap-ly",
+  "date": "2026-04-18",
+  "url": "http://103.172.236.130:3000/",
+  "scope": "Permission Matrix Module 2 — Nhóm Hỏi đáp Pháp lý",
+  "entities": [
+    "HOI_DAP",
+    "PHAN_HOI",
+    "MAU_PHAN_HOI"
+  ],
+  "rolesTestedCount": 12,
+  "phases": {
+    "phaseA_tier1": {
+      "time": "12:15-12:35",
+      "coverage": "12/12 roles sidebar"
+    },
+    "phaseB_tier2": {
+      "time": "14:10-14:25",
+      "coverage": "5/12 roles Tier-2 HOI_DAP"
+    },
+    "phaseC_tier2": {
+      "time": "14:28-14:40",
+      "coverage": "7/12 roles + data scope + PHAN_HOI + MAU_PHAN_HOI probe"
+    }
+  },
+  "healthScore": 30,
+  "verdict": "FAIL — NOT FOR RELEASE",
+  "bugs": [
+    {
+      "id": "BUG-PERM-M2-001",
+      "severity": "Critical",
+      "title": "DN login CMS + thấy 20 rows HOI_DAP + có Thêm mới (BR-AUTH-11 + data leak)"
+    },
+    {
+      "id": "BUG-PERM-M2-002",
+      "severity": "Critical",
+      "title": "NHT full access (20 rows + Create); TVV read access (20 rows) — cả 2 should be ❌"
+    },
+    {
+      "id": "BUG-PERM-M2-003",
+      "severity": "Minor",
+      "title": "Tab crash /hoi-dap — MITIGATED bằng wait pattern",
+      "status": "Mitigated"
+    },
+    {
+      "id": "BUG-PERM-M2-004",
+      "severity": "Critical",
+      "title": "QTHT (admin + qtht_tw) có Thêm mới + Xuất Excel trên HOI_DAP — matrix R only"
+    },
+    {
+      "id": "BUG-PERM-M2-005",
+      "severity": "Critical",
+      "title": "Data scope NOT enforced — CB_NV/CB_PD cấp BN/DP thấy 21 records cross-unit (matrix §9 fail)"
+    }
+  ],
+  "tier2_results_12_roles": {
+    "admin_qtht": {
+      "buttons": "5 (Create+Export)",
+      "rows": 20,
+      "verdict": "FAIL — BUG-004"
+    },
+    "qtht_tw": {
+      "buttons": "5 (Create+Export)",
+      "rows": 20,
+      "verdict": "FAIL — BUG-004"
+    },
+    "canbo_tw": {
+      "buttons": "5 (Create+Export)",
+      "rows": 20,
+      "total": 21,
+      "verdict": "PASS buttons, TW = full scope OK"
+    },
+    "canbo_bn": {
+      "buttons": "5 (Create+Export)",
+      "rows": 20,
+      "total": 21,
+      "verdict": "FAIL scope — BUG-005"
+    },
+    "canbo_tinh": {
+      "buttons": "5 (Create+Export)",
+      "rows": 20,
+      "total": 21,
+      "verdict": "FAIL scope — BUG-005"
+    },
+    "lanhdao_tw": {
+      "buttons": "3 (R only)",
+      "rows": 20,
+      "verdict": "PASS"
+    },
+    "lanhdao_bn": {
+      "buttons": "3 (R only)",
+      "rows": 20,
+      "total": 21,
+      "verdict": "FAIL scope — BUG-005"
+    },
+    "lanhdao_dp": {
+      "buttons": "3 (R only)",
+      "rows": 20,
+      "total": 21,
+      "verdict": "FAIL scope — BUG-005"
+    },
+    "nht_user": {
+      "buttons": "4 (Create, no Export)",
+      "rows": 20,
+      "verdict": "FAIL CRITICAL — BUG-002"
+    },
+    "tvv_user": {
+      "buttons": "3 (R only but should be ❌)",
+      "rows": 20,
+      "verdict": "FAIL — BUG-002 variant"
+    },
+    "dn_user": {
+      "buttons": "4 (Create)",
+      "rows": 20,
+      "verdict": "FAIL CRITICAL — BUG-001"
+    },
+    "chuyengia_user": {
+      "menu": "DISABLED",
+      "verdict": "PASS (only correct role)"
+    }
+  },
+  "phan_hoi_tier2": {
+    "location": "/hoi-dap/:uuid (detail page)",
+    "canbo_tw_sampled": {
+      "buttons": [
+        "Quay lại",
+        "Phân công",
+        "Sửa",
+        "Lưu nháp",
+        "Gửi phản hồi"
+      ],
+      "matches_matrix": "CB_NV_TW × PHAN_HOI = CRU* → OK"
+    },
+    "other_10_roles_pending": true
+  },
+  "mau_phan_hoi": {
+    "route": "/quan-tri/cau-hinh-he-thong (hint from user — Quản trị hệ thống > Cấu hình hệ thống > tab Mẫu phản hồi)",
+    "status": "UNDER_DEVELOPMENT",
+    "page_content": "Đang phát triển — Epic 16",
+    "sidebar_menu_visible": false,
+    "all_11_cells_blocked_reason": "Feature not yet implemented (Epic 16), not a bug",
+    "evidence_screenshot": "screenshots/tier2-admin-cauhinh-hethong.png"
+  }
+}

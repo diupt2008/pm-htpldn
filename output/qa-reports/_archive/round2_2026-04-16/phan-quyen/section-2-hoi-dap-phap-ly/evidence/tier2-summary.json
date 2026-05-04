@@ -1,0 +1,60 @@
+{
+  "phase": "B (5 key roles)",
+  "date": "2026-04-18",
+  "navigation_technique": "OTP bypass 666666 + $B js click + $B wait '.ant-table-tbody tr'",
+  "roles": {
+    "admin": {
+      "landing": "/dashboard",
+      "hoidap_url": "/hoi-dap",
+      "rowCount": 20,
+      "mainButtons": ["Tìm kiếm", "Xóa bộ lọc", "Thêm mới", "Xuất Excel", "Làm mới"],
+      "expectedMatrix": "👁️ R (QTHT = Read only on HOI_DAP)",
+      "verdict": "FAIL — Thêm mới/Xuất Excel visible, should be Read only",
+      "bugRef": "BUG-PERM-M2-004 (NEW)"
+    },
+    "canbo_tw": {
+      "landing": "/403",
+      "hoidap_url": "/hoi-dap",
+      "rowCount": 20,
+      "mainButtons": ["Tìm kiếm", "Xóa bộ lọc", "Thêm mới", "Xuất Excel", "Làm mới"],
+      "expectedMatrix": "✅ CRU*D",
+      "verdict": "PASS — Thêm mới visible matches Create. Edit/Delete likely in detail drawer (not tested)",
+      "bugRef": null
+    },
+    "lanhdao_tw": {
+      "landing": "/403",
+      "hoidap_url": "/hoi-dap",
+      "rowCount": 20,
+      "mainButtons": ["Tìm kiếm", "Xóa bộ lọc", "Làm mới"],
+      "expectedMatrix": "👁️ R (CB_PD on HOI_DAP = Read, approve happens on PHAN_HOI)",
+      "verdict": "PASS — NO Thêm mới/Xuất Excel = correct R-only UI",
+      "bugRef": null
+    },
+    "nht_user": {
+      "landing": "/403",
+      "hoidap_url": "/hoi-dap",
+      "rowCount": 20,
+      "mainButtons": ["Tìm kiếm", "Xóa bộ lọc", "Thêm mới", "Làm mới"],
+      "expectedMatrix": "❌ (No permission on HOI_DAP)",
+      "verdict": "FAIL CRITICAL — NHT sees 20 rows AND has Create button (completely unauthorized)",
+      "bugRef": "BUG-PERM-M2-002 (upgraded from Major to Critical)"
+    },
+    "dn_user": {
+      "landing": "/403",
+      "hoidap_url": "/hoi-dap",
+      "rowCount": 20,
+      "mainButtons": ["Tìm kiếm", "Xóa bộ lọc", "Thêm mới", "Làm mới"],
+      "expectedMatrix": "🔌 C† (API only, NOT CMS per BR-AUTH-11)",
+      "verdict": "FAIL CRITICAL — DN reach CMS + sees 20 rows + has Create (data leak + auth bypass)",
+      "bugRef": "BUG-PERM-M2-001 (confirmed Critical + additional evidence)"
+    }
+  },
+  "data_scope_not_yet_verified": "All roles see 20 rows — but need to test BN/DP scope separately (do canbo_bn/canbo_tinh see only their unit's rows?)",
+  "tier2_coverage": "5/12 roles, 5/33 cells (entity-role pairs): HOI_DAP only, PHAN_HOI + MAU_PHAN_HOI still blocked (need detail drawer)",
+  "bugs_found_tier2": 4,
+  "bugs_severity": {
+    "Critical": 3,
+    "Major": 1,
+    "Environment": 1
+  }
+}

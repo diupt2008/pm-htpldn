@@ -1,0 +1,18 @@
+# Test Cases — FR-VIII-04: Quản lý danh mục Tình trạng vụ việc (UC102)
+
+> **SRS Ref**: FR-VIII-04, loai_danh_muc = TINH_TRANG_VU_VIEC  
+> **Nguồn**: NotebookLM Session `a0fdcb5c`  
+> **Ngày tạo**: 2026-04-16  
+> **Đặc thù**: Bổ sung 2 trường: `thu_tu` (number, bắt buộc — thứ tự trong workflow), `mau_hien_thi` (text, không bắt buộc — mã màu HEX)
+
+---
+
+| ID | TraceID (Mã SRS) | Tên Test Case | Pre-conditions (Tiền đề) | Test Data (Dữ liệu) | Các bước thực hiện | Kết quả mong đợi | Type (Happy/Negative/Edge) |
+|----|-------------------|--------------|---------------------------|----------------------|-------------------|------------------|---------------------------|
+| TC-TTVV-001 | FR-VIII-04 / UC102 | Thêm mới Tình trạng vụ việc với mã màu HEX hợp lệ | 1. User QTHT đã đăng nhập. 2. Đang ở tab "Tình trạng vụ việc". | Mã: "MOI_TIEP_NHAN", Tên: "Mới tiếp nhận", thu_tu: 1, mau_hien_thi: "#FF0000" | 1. Click [+ Thêm mới]. 2. Điền Mã, Tên, thu_tu = 1, mau_hien_thi = "#FF0000". 3. Click [Lưu]. | 1. Lưu thành công. 2. Trạng thái hiển thị với màu đỏ (#FF0000) trên giao diện. 3. thu_tu = 1 xác định vị trí trong workflow. | Happy |
+| TC-TTVV-002 | FR-VIII-04 / UC102 | Thêm mới Tình trạng vụ việc không nhập mã màu | 1. User QTHT đã đăng nhập. | Mã: "DANG_XU_LY", Tên: "Đang xử lý", thu_tu: 2, mau_hien_thi: (trống) | 1. Click [+ Thêm mới]. 2. Điền Mã, Tên, thu_tu. 3. Bỏ trống mau_hien_thi. 4. Click [Lưu]. | 1. Lưu thành công. 2. mau_hien_thi = null (trường không bắt buộc). 3. Hệ thống hiển thị trạng thái với màu mặc định. | Happy |
+| TC-TTVV-003 | FR-VIII-04 | Nhập mã màu HEX sai định dạng | 1. User QTHT đã đăng nhập. | mau_hien_thi: "red" (không phải HEX), hoặc "#ZZZZZZ" | 1. Click [+ Thêm mới]. 2. Nhập mau_hien_thi = "red". 3. Click [Lưu]. | 1. **Lưu ý SRS**: Ràng buộc thiết kế là "Mã màu HEX (VD: #FF0000)" nhưng không có regex phức tạp nào khác được yêu cầu cụ thể. 2. Kiểm tra hệ thống có validate format HEX hay không → ghi nhận kết quả. | Negative |
+| TC-TTVV-004 | FR-VIII-04 | Hai trạng thái có cùng giá trị thu_tu → cho phép | 1. User QTHT đã đăng nhập. 2. Đã tồn tại trạng thái thu_tu = 1. | Trạng thái mới: thu_tu = 1 (trùng) | 1. Click [+ Thêm mới]. 2. Nhập thu_tu = 1 (trùng với trạng thái khác). 3. Click [Lưu]. | 1. Lưu thành công. 2. SRS KHÔNG quy định thu_tu là UNIQUE → có thể trùng giá trị. 3. Thứ tự hiển thị có thể bị trùng. | Edge |
+| TC-TTVV-005 | FR-VIII-04 | Chỉnh sửa thứ tự workflow thành công | 1. User QTHT đã đăng nhập. 2. Trạng thái "Đang xử lý" có thu_tu = 2. | thu_tu mới: 5 | 1. Click [Sửa] trên trạng thái "Đang xử lý". 2. Đổi thu_tu = 5. 3. Click [Lưu]. | 1. Cập nhật thành công. 2. Vị trí hiển thị trong workflow thay đổi. 3. AUDIT_LOG ghi UPDATE với giá trị cũ (2) → mới (5). | Happy |
+| TC-TTVV-006 | FR-VIII-04 | Nhập thu_tu là số âm hoặc số thập phân | 1. User QTHT đã đăng nhập. | thu_tu: -1 hoặc 2.5 | 1. Click [+ Thêm mới]. 2. Nhập thu_tu = -1 (hoặc 2.5). 3. Click [Lưu]. | 1. **Lưu ý SRS**: Tài liệu không quy định min/max cho thu_tu, kiểu là number. 2. Kiểm tra hệ thống có chấp nhận số âm/thập phân hay không → ghi nhận kết quả. | Edge |
+| TC-TTVV-007 | FR-VIII-04 / SCR-VIII-01 | Vô hiệu hóa trạng thái đang dùng trong workflow → bản ghi mới không chọn được | 1. Trạng thái "Đang xử lý" (trang_thai=1) đang được dùng trong VU_VIEC workflow. | Toggle "Đang xử lý" sang Không hoạt động | 1. Toggle trạng thái "Đang xử lý" = Không hoạt động trên danh sách (SRS SCR-VIII-01: "toggle → cập nhật"). 2. Tạo vụ việc mới, chọn tình trạng. | 1. Toggle cập nhật luôn (SCR-VIII-01). 2. Vụ việc MỚI: dropdown KHÔNG hiển thị "Đang xử lý" (SRS: "Validation: trang_thai = HOAT_DONG"). 3. Vụ việc CŨ đang ở trạng thái "Đang xử lý" vẫn giữ nguyên (toàn vẹn dữ liệu). | Edge |

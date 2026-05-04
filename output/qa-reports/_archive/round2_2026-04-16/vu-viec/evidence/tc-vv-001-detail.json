@@ -1,0 +1,74 @@
+{
+    "success": true,
+    "data": {
+        "id": "47810302-179e-4aad-96ae-b041c8017976",
+        "nguoiTaoId": "11111111-0001-4000-8000-000000000003",
+        "nguoiCapNhatId": null,
+        "ngayTao": "2026-04-18T04:49:30.566Z",
+        "ngayCapNhat": "2026-04-18T04:49:30.566Z",
+        "isDeleted": false,
+        "deletedAt": null,
+        "deletedBy": null,
+        "donViId": "00000000-0000-4000-8000-000000000001",
+        "seqId": "6",
+        "version": 1,
+        "trangThai": "DA_TIEP_NHAN",
+        "nguoiGuiDuyetId": null,
+        "ngayGuiDuyet": null,
+        "nguoiDuyetId": null,
+        "ngayDuyet": null,
+        "ghiChuPheDuyet": null,
+        "maVuViec": "VV-BTP-TW-20260418-001",
+        "tieuDe": "QA-R2 Seed VV #1",
+        "moTa": "Seed for CHO_TIEP_NHAN",
+        "doanhNghiepId": "6efe3b32-556a-40de-a58a-568fbb094e2a",
+        "linhVucId": "3b3e0735-a79b-4914-b05e-c94cd4fb484e",
+        "loaiHinhHtId": "6331c54d-b4f2-4aca-9294-bee0c789810e",
+        "kenhTiepNhan": "TRUC_TIEP",
+        "maHoSoDvc": null,
+        "heThongNguon": null,
+        "maHoSoNguon": null,
+        "nguoiTiepNhanId": "11111111-0001-4000-8000-000000000003",
+        "ngayTiepNhan": "2026-04-18T04:49:30.565Z",
+        "nguoiHoTroId": null,
+        "ngayPhanCong": null,
+        "deadline": "2026-05-02T04:49:30.565Z",
+        "mucDoCanhBao": "BINH_THUONG",
+        "ngayHoanThanh": null,
+        "ketQuaTomTat": null,
+        "diemDanhGia": null,
+        "uuTien": 3,
+        "lyDoUuTien": null,
+        "daYeuCauBoSung": false,
+        "boSungCount": 0,
+        "ngayYeuCauBoSung": null,
+        "vuViecVuongMac": null,
+        "ketQuaXuLy": null,
+        "linhVuc": {
+            "id": "3b3e0735-a79b-4914-b05e-c94cd4fb484e",
+            "ten": "D\u00e2n s\u1ef1"
+        },
+        "loaiHinh": {
+            "id": "6331c54d-b4f2-4aca-9294-bee0c789810e",
+            "ten": "T\u01b0 v\u1ea5n ph\u00e1p lu\u1eadt"
+        },
+        "doanhNghiep": {
+            "id": "6efe3b32-556a-40de-a58a-568fbb094e2a",
+            "ten": "QA Test DN M\u1edbi 001 - Updated",
+            "maSoThue": "9999900001",
+            "diaChi": "789 \u0110\u01b0\u1eddng QA Updated, Qu\u1eadn 3, TP.HCM"
+        },
+        "nguoiTiepNhan": {
+            "id": "11111111-0001-4000-8000-000000000003",
+            "hoTen": "C\u00e1n b\u1ed9 TW"
+        },
+        "nguoiHoTro": null,
+        "_links": {
+            "kiem-tra": {
+                "href": "/api/v1/vu-viecs/47810302-179e-4aad-96ae-b041c8017976/kiem-tra",
+                "method": "POST"
+            }
+        }
+    },
+    "meta": null
+}

@@ -1,0 +1,8 @@
+=== dn_user @ 12:29:52 ===
+OTP: 402544
+Landing: http://103.172.236.130:3000/403
+--- Sidebar ---
+{"landing":"/403","hoiDapEnabled":true,"allMenuState":[{"title":"Tổng quan","disabled":true},{"title":"Quản lý hỏi đáp pháp lý","disabled":false},{"title":"Quản lý đào tạo, tập huấn","disabled":false},{"title":"Chương trình đào tạo","disabled":false},{"title":"Khóa học","disabled":false},{"title":"Ngân hàng câu hỏi","disabled":true},{"title":"Giảng viên","disabled":true},{"title":"Quản lý chuyên gia / tư vấn viên","disabled":true},{"title":"Quản lý vụ việc hỗ trợ pháp lý","disabled":true},{"title":"Quản lý chi trả chi phí","disabled":false},{"title":"Quản lý doanh nghiệp được hỗ trợ","disabled":true},{"title":"Đánh giá hiệu quả hỗ trợ pháp lý","disabled":true},{"title":"Quản lý thư viện biểu mẫu","disabled":true},{"title":"Quản lý tư vấn","disabled":true},{"title":"Tư vấn chuyên sâu","disabled":true},{"title":"Tư vấn nhanh","disabled":true},{"title":"Hợp đồng tư vấn","disabled":true},{"title":"Quản lý chương trình hỗ trợ pháp lý doanh nghiệp","disabled":true},{"title":"Báo cáo thống kê","disabled":true},{"title":"Quản trị hệ thống","disabled":false},{"title":"Danh mục dùng chung","disabled":true},{"title":"Cấu hình SLA","disabled":true},{"title":"Cấu hình phân công","disabled":true},{"title":"Ngày lễ","disabled":false},{"title":"Tiêu chí đánh giá hiệu quả","disabled":false},{"title":"Tiêu chí đánh giá chi phí","disabled":false},{"title":"Tài khoản & phân quyền","disabled":true},{"title":"Quản lý API Consumer","disabled":true}],"userDisplay":"CT\nCông ty TNHH Test\nDOANH_NGHIEP"}
+Hỏi đáp state: {"has":true,"dis":false}
+1s URL: about:blank
+--- done ---

@@ -1,0 +1,7 @@
+[2026-04-21T03:54:56.002Z] [debug] [vite] connecting...
+[2026-04-21T03:54:56.093Z] [debug] [vite] connected.
+[2026-04-21T03:54:56.360Z] [info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2026-04-21T03:55:02.351Z] [debug] [vite] connecting...
+[2026-04-21T03:55:02.414Z] [debug] [vite] connected.
+[2026-04-21T03:55:02.444Z] [info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2026-04-21T03:55:02.472Z] [error] Warning: [antd: Spin] `tip` is deprecated. Please use `description` instead.

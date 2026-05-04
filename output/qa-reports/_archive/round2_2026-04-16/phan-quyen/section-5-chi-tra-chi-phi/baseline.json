@@ -1,0 +1,110 @@
+{
+  "date": "2026-04-19",
+  "round": "round2_2026-04-16",
+  "section": "section-5-chi-tra-chi-phi",
+  "url": "http://103.172.236.130:3000/",
+  "module": "Chi trả Chi phí (Module 5)",
+  "scope": {
+    "entities": ["HO_SO_CHI_TRA", "DANH_GIA_HO_SO_CHI_TRA"],
+    "roles": ["QTHT", "CB_NV_TW", "CB_NV_BN", "CB_NV_DP", "CB_PD_TW", "CB_PD_BN", "CB_PD_DP", "DN", "NHT", "TVV", "CG"],
+    "total_cells": 22,
+    "tested_cells": 11,
+    "blocked_cells": 11
+  },
+  "results": {
+    "pass": 2,
+    "pass_with_minor": 1,
+    "fail": 8,
+    "blocked": 11
+  },
+  "verdict": "FAIL",
+  "healthScore": 50,
+  "test_method": "Browse UI only (Playwright via /browse) — NO API per user request",
+  "issues": [
+    {
+      "id": "BUG-PERM-M5-001",
+      "title": "QTHT có nút \"Cập nhật TT\" + \"Kiểm tra\" trên list HS chi trả — vi phạm 👁️ R",
+      "severity": "Critical",
+      "priority": "P0",
+      "category": "Permission",
+      "status": "Open (mới phát hiện 2026-04-19)"
+    },
+    {
+      "id": "BUG-PERM-M5-002",
+      "title": "Data scope BN/ĐP không enforce — 4 role (canbo_bn, canbo_tinh, lanhdao_bn, lanhdao_dp) đều thấy 100 records TW",
+      "severity": "Critical",
+      "priority": "P0",
+      "category": "Permission",
+      "status": "Open (recurring pattern from BUG-PERM-M4-002 / BUG-PM3-R2-002)",
+      "affected_accounts": ["canbo_bn", "canbo_tinh", "lanhdao_bn", "lanhdao_dp"]
+    },
+    {
+      "id": "BUG-PERM-M5-003",
+      "title": "DN truy cập /chi-tra/danh-sach + xem 100 hồ sơ tài chính của TẤT CẢ DN khác (cross-tenant data leak)",
+      "severity": "Blocker",
+      "priority": "P0",
+      "category": "Permission / Data Leak / Privacy",
+      "status": "Open (mới phát hiện 2026-04-19)"
+    },
+    {
+      "id": "BUG-PERM-M5-004",
+      "title": "NHT click menu Chi trả vào được /chi-tra/danh-sach + thấy 100 records (spec ❌)",
+      "severity": "Critical",
+      "priority": "P0",
+      "category": "Permission",
+      "status": "Open (mới phát hiện)"
+    },
+    {
+      "id": "BUG-PERM-M5-005",
+      "title": "TVV /403 khi click menu mặc dù spec cho phép 👁️ R* (under-permission)",
+      "severity": "Major",
+      "priority": "P1",
+      "category": "Permission / Spec",
+      "status": "Open (cần clarify spec hoặc fix FE allowlist)"
+    },
+    {
+      "id": "BUG-PERM-M5-006",
+      "title": "Sidebar hiển thị \"Quản lý chi trả chi phí\" cho NHT/CG/DN khi không có quyền",
+      "severity": "Minor",
+      "priority": "P2",
+      "category": "UI / Permission",
+      "status": "Open (recurring pattern with section 4)"
+    },
+    {
+      "id": "BUG-PERM-M5-007",
+      "title": "Detail route /chi-tra/{uuid} = 404 cho mọi role — chặn test entity DANH_GIA_HO_SO_CHI_TRA (11 cells)",
+      "severity": "Blocker",
+      "priority": "P0",
+      "category": "Routing",
+      "status": "Open (mới phát hiện)"
+    }
+  ],
+  "cellResults": {
+    "HO_SO_CHI_TRA": {
+      "QTHT": {"expected": "R", "actual": "R + UPDATE buttons (Cập nhật TT + Kiểm tra)", "status": "FAIL", "bug": "BUG-PERM-M5-001", "evidence": "01-qtht_tw-ct-list.png"},
+      "CB_NV_TW": {"expected": "CRUD* (TW=all)", "actual": "100 records, full action UI", "status": "PASS", "evidence": "04-canbo_tw-ct-list.png", "note": "Scope verification limited — test data đồng nhất"},
+      "CB_NV_BN": {"expected": "CRUD* scoped BN", "actual": "100 records (no scope filter)", "status": "FAIL", "bug": "BUG-PERM-M5-002", "evidence": "05-canbo_bn-ct-list.png"},
+      "CB_NV_DP": {"expected": "CRUD* scoped DP", "actual": "100 records (no scope filter)", "status": "FAIL", "bug": "BUG-PERM-M5-002", "evidence": "06-canbo_tinh-ct-list.png"},
+      "CB_PD_TW": {"expected": "RU* (TW)", "actual": "100 records, RU buttons (no Create/Delete/Export)", "status": "PASS", "evidence": "07-lanhdao_tw-ct-list.png"},
+      "CB_PD_BN": {"expected": "RU* scoped BN", "actual": "100 records (no scope)", "status": "FAIL", "bug": "BUG-PERM-M5-002", "evidence": "08-lanhdao_bn-ct-list.png"},
+      "CB_PD_DP": {"expected": "RU* scoped DP", "actual": "100 records (no scope)", "status": "FAIL", "bug": "BUG-PERM-M5-002", "evidence": "09-lanhdao_dp-ct-list.png"},
+      "DN": {"expected": "C†R* (API only, scoped own DN)", "actual": "UI accessible, 100 cross-DN records exposed (financial PII)", "status": "FAIL_BLOCKER", "bug": "BUG-PERM-M5-003", "evidence": "10-dn_user-landing.png, 11-dn_user-ct-click.png, 12-dn_user-ct-data.png"},
+      "NHT": {"expected": "❌", "actual": "Menu visible + can navigate + 100 records", "status": "FAIL", "bug": "BUG-PERM-M5-004", "evidence": "13-nht_user-landing.png, 14-nht_user-ct-click.png"},
+      "TVV": {"expected": "R*", "actual": "/403 (under-permission)", "status": "FAIL", "bug": "BUG-PERM-M5-005", "evidence": "15-tvv_user-ct-click.png"},
+      "CG": {"expected": "❌", "actual": "/403 ✅ (sidebar UI leak only)", "status": "PASS_WITH_MINOR", "bug": "BUG-PERM-M5-006", "evidence": "16-chuyengia-ct-click.png"}
+    },
+    "DANH_GIA_HO_SO_CHI_TRA": {
+      "QTHT": {"expected": "R", "status": "BLOCKED", "reason": "Detail route /chi-tra/{uuid} = 404 — BUG-PERM-M5-007"},
+      "CB_NV_TW": {"expected": "CRU*", "status": "BLOCKED", "reason": "BUG-PERM-M5-007"},
+      "CB_NV_BN": {"expected": "CRU* scoped", "status": "BLOCKED", "reason": "BUG-PERM-M5-007"},
+      "CB_NV_DP": {"expected": "CRU* scoped", "status": "BLOCKED", "reason": "BUG-PERM-M5-007"},
+      "CB_PD_TW": {"expected": "RU*", "status": "BLOCKED", "reason": "BUG-PERM-M5-007"},
+      "CB_PD_BN": {"expected": "RU* scoped", "status": "BLOCKED", "reason": "BUG-PERM-M5-007"},
+      "CB_PD_DP": {"expected": "RU* scoped", "status": "BLOCKED", "reason": "BUG-PERM-M5-007"},
+      "DN": {"expected": "❌", "status": "BLOCKED", "reason": "BUG-PERM-M5-007 — likely PASS once detail accessible (consistent with DN role pattern)"},
+      "NHT": {"expected": "❌", "status": "BLOCKED", "reason": "BUG-PERM-M5-007"},
+      "TVV": {"expected": "❌", "status": "BLOCKED", "reason": "BUG-PERM-M5-007"},
+      "CG": {"expected": "❌", "status": "BLOCKED", "reason": "BUG-PERM-M5-007"}
+    }
+  }
+}
