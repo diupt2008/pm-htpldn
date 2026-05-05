@@ -255,7 +255,8 @@
 - ⏳ **R7.0.1** Verify BE deploy 3 SRS update — endpoint mới FR-VIII-22/26/28/29 + FR-IV-NHT/NEW available `[need: R7.0.0 ✅ + dev confirm version tag SRS update 2026-05-05 đã merge production]`
 - ⏳ **R7.0.2** Verify UI render menu mới — "Tư vấn viên / Chuyên gia" + sub-menu NHT + sub-menu Tổ chức tư vấn `[need: R7.0.1 ✅]`
 - ⏳ **R7.0.3** Verify users.csv có account `nht_01..03` + `qtht_01` login OK + 1 DN test (chưa active) `[need: R7.0.1 ✅]`
-- ⏳ **R7.0.5** Re-evaluate 5 R6 task liên quan SRS update — re-test hay obsolete `[need: R7.0.0 ✅ scenario xác định + BE deploy xong; tasks R6.5.1 (KPI-07 NHT tách → count giảm), R6.5.3 (SLA NGAY_LE), R6.7.2 CG/TVV (31 TC enum loai_tvv đổi), R6.7.4 DN (8 TC flow tạo đổi), R6.4.A1.5 (PC TVV — dropdown đổi). Output: mark từng task là retest-needed-R7 hoặc obsoleted-by-SRS-update]`
+- ⏳ **R7.0.5** Re-evaluate 9 R6 task liên quan SRS update + dev fix — re-test/unblock/obsolete `[need: R7.0.0 ✅ scenario xác định + BE deploy xong; 5 task SRS impact: R6.5.1 (KPI-07 NHT tách → count giảm), R6.5.3 (SLA NGAY_LE), R6.7.2 CG/TVV (31 TC enum loai_tvv đổi), R6.7.4 DN (8 TC flow tạo đổi), R6.4.A1.5 (PC TVV — dropdown đổi); 4 task dev fix kèm: R6.4.B2/B2.5/B7 (SM-CTDT mới giải quyết spec contradiction — UNBLOCK), R6.4.D2 (FR-08 phân công/chấm điểm — dev fix bug), R6.4.D3 (Kho QA — dev fix bug). Output: mark retest-needed-R7 / unblocked-by-SRS / obsoleted-by-SRS]`
+- ⏳ **R7.0.6** Verify 3 cross-cutting changes (hard delete + bỏ ClamAV + bỏ lưu nháp) `[need: R7.0.0 ✅; BA confirm scope item 9/10/11 trước test — đặc biệt item 11 lưu nháp hẹp/rộng (xem _DELTA-MAP-CROSS-CUTTING.md); chạy negative TC verify is_deleted=1 → fail (HARD), upload file độc → BE behavior, draft state behavior]`
 
 ### R7 Phase 1 — Tier 0 seed (NGAY_LE)
 
