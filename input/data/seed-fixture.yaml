@@ -1062,41 +1062,117 @@ tvv_variants:
 # Tracked: tasks/todo.md T1.B1c 🟢.
 # =============================================================================
 
-# Mẫu phản hồi (M2 Hỏi đáp — SCR-II-02 form soạn trả lời, FR-II-NEW MAU_PHAN_HOI)
+# Mẫu phản hồi (M2 Hỏi đáp — FR-II-NEW-02, Mô hình B Hybrid 2 tầng)
 # Filter dropdown: system-overview §5.2 line 612 "Chọn Mẫu phản hồi (HD soạn trả lời) — filter theo lĩnh vực HD".
-# Acceptance T1.B1c: ≥6 mẫu cover 6 lĩnh vực fixture.
-# Note SRS: chưa có FR-code cụ thể cho MAU_PHAN_HOI trong srs-fr-02-hoi-dap.md (UC56-65 không spec entity riêng) — pending BA confirm field schema chính xác.
+# Acceptance T1.B1c / R6.1.5: ≥6 mẫu TW khung quốc gia cover 6 lĩnh vực fixture.
+#
+# 🔄 UPDATE 2026-05-05 R12 — Vai trò seed:
+#   - Account seed = `cb_nv_tw_01` (KHÔNG phải QTHT). SRS §3.4.2 row MAU_PHAN_HOI: QTHT chỉ R, CB_NV_TW/BN/DP CRUD*.
+#   - Action-level: MPH_CREATE_TW (per srs-update-2026-5-4 §FR-II-NEW-02 row 1 Processing).
+#   - Field bổ sung `pham_vi_ap_dung`: variants dưới đây mặc định TW_QUOC_GIA (mẫu khung dùng chung 63 ĐP).
+#   - Optional Mô hình B test: seed thêm bằng `cb_nv_bn_01` cho `pham_vi=BN_RIENG` + `cb_nv_dp_01` cho `pham_vi=DP_RIENG`.
+# Spec đã chốt: srs-update-2026-5-4/srs-fr-02-hoi-dap.md §FR-II-NEW-02 (CĐT chốt 2026-05-02).
 mau_phan_hoi_variants:
   - index: 1
     ten_mau: "Mẫu phản hồi HD - Doanh nghiệp"
     linh_vuc_id: "DOANH_NGHIEP"
     noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nTrả lời câu hỏi của Quý DN về [chủ đề Doanh nghiệp], chúng tôi xin thông tin như sau:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Luật Doanh nghiệp 2020 + Nghị định số 01/2021/NĐ-CP.\n\nTrân trọng."
-    state_target: "HOAT_DONG"
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "TW_QUOC_GIA"
+    loai: "MAU_PHAN_HOI"
   - index: 2
     ten_mau: "Mẫu phản hồi HD - Hợp đồng/KDTM"
     linh_vuc_id: "HOP_DONG"
     noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nVề câu hỏi liên quan đến hợp đồng/kinh doanh thương mại, chúng tôi xin trả lời:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Bộ luật Dân sự 2015 + Luật Thương mại 2005.\n\nTrân trọng."
-    state_target: "HOAT_DONG"
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "TW_QUOC_GIA"
+    loai: "MAU_PHAN_HOI"
   - index: 3
     ten_mau: "Mẫu phản hồi HD - Lao động"
     linh_vuc_id: "LAO_DONG"
     noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nVề câu hỏi liên quan đến pháp luật lao động, chúng tôi xin trả lời:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Bộ luật Lao động 2019 + các nghị định hướng dẫn.\n\nTrân trọng."
-    state_target: "HOAT_DONG"
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "TW_QUOC_GIA"
+    loai: "MAU_PHAN_HOI"
   - index: 4
     ten_mau: "Mẫu phản hồi HD - Thuế"
     linh_vuc_id: "THUE"
     noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nVề câu hỏi liên quan đến pháp luật thuế, chúng tôi xin trả lời:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Luật Quản lý Thuế 2019 + Luật Thuế GTGT/TNDN.\n\nTrân trọng."
-    state_target: "HOAT_DONG"
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "TW_QUOC_GIA"
+    loai: "MAU_PHAN_HOI"
   - index: 5
     ten_mau: "Mẫu phản hồi HD - Sở hữu trí tuệ"
     linh_vuc_id: "SHTT"
     noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nVề câu hỏi liên quan đến sở hữu trí tuệ, chúng tôi xin trả lời:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Luật Sở hữu trí tuệ 2005 (sửa đổi 2022).\n\nTrân trọng."
-    state_target: "HOAT_DONG"
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "TW_QUOC_GIA"
+    loai: "MAU_PHAN_HOI"
   - index: 6
     ten_mau: "Mẫu phản hồi HD - Đất đai"
     linh_vuc_id: "DAT_DAI"
     noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nVề câu hỏi liên quan đến pháp luật đất đai, chúng tôi xin trả lời:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Luật Đất đai 2024 + các nghị định hướng dẫn.\n\nTrân trọng."
-    state_target: "HOAT_DONG"
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "TW_QUOC_GIA"
+    loai: "MAU_PHAN_HOI"
+
+# 🆕 BN_RIENG variants (added 2026-05-05 R12 sau khi FE fix BUG-FUNC-MPH-002)
+# Mỗi cấp BN đăng nhập bằng `cb_nv_bn_01..03` để seed mẫu BN_RIENG cho đơn vị mình.
+# BE auto-fill `cap_tao=BN` + `don_vi_id=user.don_vi_id` (không cho user override qua UI).
+# Note schema BE: response trả `capTao` (TW/BN/DP) thay vì `phamViApDung` (TW_QUOC_GIA/BN_RIENG/DP_RIENG).
+mau_phan_hoi_bn_variants:
+  - index: 7
+    account_seed: "cb_nv_bn_01"  # Bộ KH-ĐT
+    ten_mau: "Mẫu phản hồi BN-BKH - Doanh nghiệp"
+    linh_vuc_id: "DOANH_NGHIEP"
+    noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nMẫu phản hồi cấp Bộ ngành (BKH-ĐT) — chuyên ngành kế hoạch đầu tư doanh nghiệp:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Luật Doanh nghiệp 2020 + Luật Đầu tư 2020.\n\nTrân trọng."
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "BN_RIENG"
+    loai: "MAU_PHAN_HOI"
+  - index: 8
+    account_seed: "cb_nv_bn_02"  # Bộ Tài chính
+    ten_mau: "Mẫu phản hồi BN-BTC - Thuế"
+    linh_vuc_id: "THUE"
+    noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nMẫu phản hồi cấp Bộ ngành (BTC) — chuyên ngành thuế tài chính:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Luật Quản lý Thuế 2019.\n\nTrân trọng."
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "BN_RIENG"
+    loai: "MAU_PHAN_HOI"
+  - index: 9
+    account_seed: "cb_nv_bn_03"  # Bộ Công Thương
+    ten_mau: "Mẫu phản hồi BN-BCT - Lao động"
+    linh_vuc_id: "LAO_DONG"
+    noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nMẫu phản hồi cấp Bộ ngành (BCT) — chuyên ngành công thương lao động:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Bộ luật Lao động 2019.\n\nTrân trọng."
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "BN_RIENG"
+    loai: "MAU_PHAN_HOI"
+
+# 🆕 DP_RIENG variants (added 2026-05-05 R12)
+# Mỗi cấp ĐP đăng nhập bằng `cb_nv_dp_01..03` (AG/BG/BNI) để seed mẫu DP_RIENG cho đơn vị mình.
+mau_phan_hoi_dp_variants:
+  - index: 10
+    account_seed: "cb_nv_dp_01"  # Sở Tư pháp An Giang
+    ten_mau: "Mẫu phản hồi DP-AG - Hợp đồng"
+    linh_vuc_id: "HOP_DONG"
+    noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nMẫu phản hồi cấp Địa phương (Sở Tư pháp An Giang) — chuyên ngành hợp đồng/KDTM:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Bộ luật Dân sự 2015 + Luật Thương mại 2005.\n\nTrân trọng."
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "DP_RIENG"
+    loai: "MAU_PHAN_HOI"
+  - index: 11
+    account_seed: "cb_nv_dp_02"  # Sở Tư pháp Bắc Giang
+    ten_mau: "Mẫu phản hồi DP-BG - Sở hữu trí tuệ"
+    linh_vuc_id: "SHTT"
+    noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nMẫu phản hồi cấp Địa phương (Sở Tư pháp Bắc Giang) — chuyên ngành sở hữu trí tuệ:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Luật Sở hữu trí tuệ 2005 (sửa đổi 2022).\n\nTrân trọng."
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "DP_RIENG"
+    loai: "MAU_PHAN_HOI"
+  - index: 12
+    account_seed: "cb_nv_dp_03"  # Sở Tư pháp Bắc Ninh
+    ten_mau: "Mẫu phản hồi DP-BNI - Đất đai"
+    linh_vuc_id: "DAT_DAI"
+    noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nMẫu phản hồi cấp Địa phương (Sở Tư pháp Bắc Ninh) — chuyên ngành đất đai:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Luật Đất đai 2024.\n\nTrân trọng."
+    state_target: "KICH_HOAT"
+    pham_vi_ap_dung: "DP_RIENG"
+    loai: "MAU_PHAN_HOI"
 
 # [REMOVED 2026-05-01] Block `danh_muc_ly_do_variants` đã xóa.
 # Lý do: SRS FR-VIII-01 chỉ định 14 loại DM dùng chung — không có LY_DO_TU_CHOI/LY_DO_BO_SUNG.

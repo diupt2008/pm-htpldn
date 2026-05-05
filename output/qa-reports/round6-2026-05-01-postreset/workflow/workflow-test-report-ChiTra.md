@@ -1,25 +1,94 @@
 # Workflow Test Report — Chi trả chi phí (R6.6.1)
 
-> **Module:** Quản lý Chi trả chi phí (FR-06) · **SRS:** [`02-thu-tu-module.md §⑪ FR-06 SM-CHITRA`](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md#L697-L713) · **Round:** R16 · **Date:** 2026-05-04 · **Tester:** QA Automation (Claude Code via MCP Chrome DevTools)
+> **Module:** Quản lý Chi trả chi phí (FR-06) · **SRS:** [`srs-fr-06-chi-tra.md FR-V.II-* + SCR-V.II-02`](../../../../input/srs-v3/srs-fr-06-chi-tra.md) + NotebookLM HTPLDN `2160bfb1-2020-4199-90a6-d607b298bb42` (source `e23b5d2a`) · **Round:** R19 (LATEST) · **Date:** 2026-05-05 · **Tester:** QA Automation (Claude Code via MCP Chrome DevTools)
+> **Accounts:** `cb_nv_tw_01` (CT-NV-R19 isolated context) + `cb_pd_tw_01` (CT-PD-R19 isolated context). Cache cleared trước test (sessionStorage + localStorage + cookies + reload ignoreCache).
 > **Bug:** [`bug-report-flow-chi-tra.md`](../bug-reports/bug-report-flow-chi-tra.md)
 
 ---
 
 ## Kết luận
 
-❌ **FAIL — 0/8 transition CMS PASS**. **7 BUG Critical** (6 FE + 1 BE) + **1 OBS spec inconsistency** (FR-V.II-09 lệch SCR + UC76 về enum `CAN_BO_SUNG`, cần BA chốt). 5 transition còn lại (1, 2, 6, 7, 13) **out-of-scope CMS** (DVC/LGSP/Cron auto/DN rút hồ sơ qua DVC) — bỏ test, không phải FAIL.
+⚠️ **PASS-WITH-NOTE — 6/8 CMS transition PASS** (R19 sau dev fix lần 3 deployed). **6/7 BUG Closed** (CT-001/002/003/004/006/007). **1 BUG Open scope shift** (CT-005-BE: BE accept field, FE thêm input contradicting SCR-V.II-02 — cần BA chốt design). **2 OBS mới** (OBS-R19-A perm scope cross-DV, OBS-R19-B button "Trình phê duyệt" mis-wire endpoint). 5 transition còn lại (1, 2, 6, 7, 13) **out-of-scope CMS**.
 
-> **Workflow Chi trả CMS-side hoàn toàn không thể vận hành** từ Bước 3 đến Bước 12 — mọi POST từ FE đều trả 422 ERR-VAL hoặc UI không submit. State 100 record HSCT seed sẵn KHÔNG advance được state nào qua UI.
+> **Major progress:** Workflow Chi trả CMS-side đã chạy được Bước 3 → Bước 12 cho HSCT cùng cấp DonVi. Field naming mismatch FE/BE đã align cho 5 endpoints. UI thêm input phiTuVanThucTe + radio CAN_BO_SUNG + spinbutton valuemax đúng. Còn 1 spec mismatch (CT-005-BE) cần BA decide.
 >
 > **3-source verify (2026-05-04):**
-> - **NotebookLM HTPLDN** (id `e3a2681b-fdd6-4a24-917c-9ed636e8a110`) — query SM-CHITRA + API field naming + UI SCR-V.II-02. Source: `615dcbf0` (SRS v2.1 FR-V.II-*) + `98e8d0a4` (Architecture Doc).
-> - **SRS local** [02-thu-tu-module.md §⑪](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md#L697-L713) — match cho 13 transition.
+> - **NotebookLM HTPLDN** (id `2160bfb1-2020-4199-90a6-d607b298bb42`) — query SM-CHITRA + API field naming + UI SCR-V.II-02. Source: `e23b5d2a` (SRS v2.1 FR-V.II-*) + `98e8d0a4` (Architecture Doc).
+> - **SRS local** [srs-fr-06-chi-tra.md FR-V.II-* + SCR-V.II-02](../../../../input/srs-v3/srs-fr-06-chi-tra.md) — match cho 13 transition.
 > - **Tài liệu BA gốc** [`input/Input/Danh sách transaction_v1.1.csv`](../../../../input/Input/Danh sách transaction_v1.1_2026-03-27.csv) UC68-UC80 phần V.II Chi trả — verify lần 2: UC72/UC76/UC79 phân định 2 OBS lên BUG (CT-003 UI thiếu input, CT-005-BE require thừa field) + 1 OBS giữ nguyên (CT-B FR-V.II-09 lệch chuẩn về enum).
 > - **Phát hiện quan trọng:** SRS không quy định endpoint API URL (thuộc Architecture Doc) — chỉ chốt logical field name (snake_case `checklist_items`/`ket_qua_tham_dinh`/`ly_do_tu_choi`/`so_tien_thuc_tra`). FE gửi tên khác = FE bug rõ ràng.
 
 ---
 
-## R16 (LATEST) — 2026-05-04 21:40-21:50 — Test 8 transition CMS
+## R19 (LATEST) — 2026-05-05 11:23-11:33 — Retest sau dev fix lần 3 deployed
+
+### Verdict R19
+
+⚠️ **PASS-WITH-NOTE — 6/8 CMS transition PASS, 6/7 BUG Closed, 1 BUG Open scope shift, 2 OBS mới**. Lần đầu sau R17 + R18 (2 lần dev claim fix nhưng không deploy), R19 dev đã thực sự deploy: FE bundle mới + BE schema mới — bằng chứng request body đổi field name + endpoint /tiep-nhan tồn tại + spinbutton attribute đổi.
+
+### Bảng retest R19
+
+| # | Bước | Endpoint | HSCT | Request body R19 | Response R19 | Status R19 vs R18 | Bug verdict |
+|:-:|---|---|---|---|---|:-:|---|
+| 3 | CHO_TIEP_NHAN → DANG_KIEM_TRA | POST /tiep-nhan | 049 | `{version:1}` | 200, state advanced | ✅ R19 PASS (R18 404) | CT-001 Closed |
+| 4 | DANG_KIEM_TRA → DANG_DANH_GIA | POST /kiem-tra | 050 | `{ketQua,checklistItems[5],version}` | 200, state advanced + auto /tinh-muc-ho-tro | ✅ R19 PASS (R18 422) | CT-002 Closed |
+| 5 | DANG_KIEM_TRA → YEU_CAU_BO_SUNG | POST /kiem-tra | (cùng endpoint Bước 4) | — | — | ✅ Implicit PASS (cùng endpoint) | CT-002 Closed cover |
+| 8 | DANG_DANH_GIA → DANG_THAM_DINH | POST /danh-gia | 045 | `{phiTuVanThucTe:"3250000.00",version}` | 200, state advanced, BR-CALC-02 đúng | ✅ R19 PASS (R18 422) | CT-003 Closed |
+| 9 | DANG_THAM_DINH → CHO_PHE_DUYET | POST /tham-dinh | 046 | `{ketQuaThamDinh:"DAT",version}` | 200, thamDinh saved nhưng state KHÔNG advance | ⚠️ R19 PARTIAL (field name fix, button mis-wire) | CT-004 Closed + OBS-R19-B mới |
+| 10 | CHO_PHE_DUYET → DA_DUYET | POST /phe-duyet | 047 | `{soTienDuyet:5760000,version}` | 403 ERR-CT-PD-05 perm scope | ⚠️ R19 SCOPE-SHIFT | CT-005-BE Open scope shift + OBS-R19-A mới |
+| 11 | CHO_PHE_DUYET → DANG_THAM_DINH | POST /tu-choi | 041 | `{lyDoTuChoi:"R19...",version}` | 403 ERR-CT-PD-05 perm scope | ✅ R19 field name PASS (perm scope = OBS-R19-A) | CT-006 Closed |
+| 12 | DA_DUYET → DA_THANH_TOAN | POST /cap-nhat-thanh-toan | 098 | `{ketQuaCuoi:"DA_THANH_TOAN",soTienThucTra:7872000,ngayThanhToan:"2026-05-05",soBienNhan:"BN-R19-098",version}` | 200, state advanced | ✅ R19 PASS (R18 không POST) | CT-007 Closed |
+
+### Phát hiện R19
+
+**Tích cực — 6 bug fix verified:**
+- 5 endpoint API (`/tiep-nhan`, `/kiem-tra`, `/danh-gia`, `/tham-dinh`, `/cap-nhat-thanh-toan`) trả 200, state machine advance đúng SM-CHITRA.
+- FE bundle mới gửi đúng field name spec: `checklistItems`, `phiTuVanThucTe`, `ketQuaThamDinh`, `lyDoTuChoi` (R18 sai 4 field này).
+- UI thêm:
+  - Button [Tiếp nhận] + popover confirm trong detail page state CHO_TIEP_NHAN.
+  - Spinbutton "Phí tư vấn thực tế" trong form Đánh giá (default = phí TV).
+  - Radio "Cần bổ sung" trong form Thẩm định → giải quyết OBS-CT-B (FR-V.II-09 enum 3 giá trị giờ render đủ).
+  - Spinbutton "Số tiền thực trả" valuemax = soTienDuyet, valuemin = 1 (R18 valuemax="0" chặn cứng).
+- BR-CALC-02 chạy đúng: HSCT000045 (SIEU_NHO, phí TV 3.250.000, mức 100%, trần 3.000.000) → soTienDuocDuyet = 3.000.000 ₫ (capped trần năm).
+
+**Còn lại — 1 BUG scope shift + 2 OBS mới:**
+
+| ID | Vị trí | Chi tiết |
+|----|--------|----------|
+| CT-005-BE (Open) | Bước 10 | BE giờ accept `soTienDuyet` (không 422), nhưng FE thêm input contradicting SCR-V.II-02 (cb_pd phải có modal confirm only, không nhập số). Spinbutton lại render `valuemax="0" valuemin="1" value="0"` (inconsistent). Cần BA chốt design A hoặc B. |
+| OBS-R19-A | Bước 10/11 | cb_pd_tw_01 (BTP-TW) gọi /phe-duyet hoặc /tu-choi cho HSCT của Sở Tư pháp ĐP → BE 403 `ERR-CT-PD-05`. FE list "Chờ phê duyệt" hiện 8/8 record nhưng cb_pd TW chỉ có quyền duyệt record TW. Cần BA xác nhận scope rule + log bug FE list filter. |
+| OBS-R19-B | Bước 9 | Sau khi save tham-dinh đầu tiên, button đổi label "Trình phê duyệt" nhưng vẫn POST /tham-dinh thay vì /trinh-phe-duyet. Response `_links.trinhPheDuyet` có nhưng FE không dùng → state không advance qua UI. |
+
+### Bằng chứng R19
+
+**CT-001 R19 — button [Tiếp nhận] render:**
+![CT-001 R19 button](../bug-reports/image/r6-r661-r19-bug001-HSCT000049-button-tiep-nhan.png)
+
+**CT-002 R19 — POST /kiem-tra 200 với checklistItems:**
+![CT-002 R19](../bug-reports/image/r6-r661-r19-bug002-HSCT000050-kiem-tra-200.png)
+
+**CT-003 R19 — form Đánh giá có input phiTuVanThucTe:**
+![CT-003 R19](../bug-reports/image/r6-r661-r19-bug003-HSCT000045-form-danh-gia-input.png)
+
+**CT-004 R19 — form Thẩm định 3 radio (Đạt/Không đạt/Cần bổ sung):**
+![CT-004 R19](../bug-reports/image/r6-r661-r19-bug004-HSCT000046-form-tham-dinh-3radio.png)
+
+**CT-005 R19 — form Phê duyệt vẫn có input (FE thêm contradicting SCR-V.II-02):**
+![CT-005 R19](../bug-reports/image/r6-r661-r19-bug005-HSCT000047-form-phe-duyet-still-input.png)
+
+**CT-007 R19 — spinbutton valuemax=7872000 (= soTienDuyet):**
+![CT-007 R19](../bug-reports/image/r6-r661-r19-bug007-HSCT000098-spinbutton-fixed.png)
+
+```text
+POST /api/v1/ho-so-chi-tras/e3000000-0000-4000-8000-000000000098/cap-nhat-thanh-toan
+Date: 2026-05-05T04:33:26Z (R19)
+Request body: {"ketQuaCuoi":"DA_THANH_TOAN","version":1,"soTienThucTra":7872000,"ngayThanhToan":"2026-05-05","soBienNhan":"BN-R19-098"}
+Response 200: state DA_DUYET → DA_THANH_TOAN, soTienThucTra=7872000, soBienNhan=BN-R19-098
+```
+
+---
+
+## R16 — 2026-05-04 21:40-21:50 — Test 8 transition CMS
 
 ### Bảng kiểm tra workflow (13 transition theo SRS)
 
@@ -132,7 +201,60 @@ SRS yêu cầu (Bước 12): so_tien_thuc_tra phải ≤ so_tien_duyet (ví dụ
 
 ---
 
-## R17 (LATEST) — 2026-05-04 23:45-23:55 — Retest sau dev claim "đã fix"
+## R18 — 2026-05-05 08:50-09:05 — Retest sau dev confirm fix (lần 2)
+
+### Verdict R18
+
+❌ **REGRESSION FAIL — 0/7 bug closed lần 2**. Dev confirm "đã fix" lần 2 nhưng retest tất cả 7 bug đều FAIL với cùng error code, cùng request body, cùng response. Đây là lần thứ 2 (R17 + R18) dev claim fix nhưng không có evidence trên hệ thống.
+
+### Bảng retest R18
+
+| Bug ID | Bước | Endpoint | Request body R18 | Response R18 | Verdict |
+|---|---|---|---|---|---|
+| BUG-FUNC-CT-001 | 3 | (UI) | — | Detail page CHO_TIEP_NHAN vẫn KHÔNG có nút [Tiếp nhận] | ❌ FAIL same |
+| BUG-FUNC-CT-002 | 4-5 | POST /kiem-tra | `{ketQua:"DAT",danhSachTaiLieu:[...],version:1}` | 422 `checklistItems must be an array` | ❌ FAIL same |
+| BUG-FUNC-CT-003 | 8 | POST /danh-gia | `{version:1}` | 422 `phiTuVanThucTe must be a positive number` | ❌ FAIL same |
+| BUG-FUNC-CT-004 | 9 | POST /tham-dinh | `{danhSachKiemTra:[...],ketQua:"DAT",version:1}` | 422 `ketQuaThamDinh must be one of: DAT, KHONG_DAT, CAN_BO_SUNG` | ❌ FAIL same |
+| BUG-FUNC-CT-005-BE | 10 | POST /phe-duyet | `{version:1}` | 422 `soTienDuyet must be a positive number` | ❌ FAIL same |
+| BUG-FUNC-CT-006 | 11 | POST /tu-choi | `{lyDo:"R18 retest...",version:1}` | 422 `lyDoTuChoi must be longer than or equal to 10 characters` | ❌ FAIL same |
+| BUG-FUNC-CT-007 | 12 | (UI) | — | Spinbutton vẫn `valuemax="0" valuemin="0" value="0"` chặn nhập | ❌ FAIL same |
+
+### Phát hiện R18
+
+- **2 lần dev claim fix (R17 ngày 04/05 23:45 + R18 ngày 05/05 08:55) — KHÔNG có thay đổi nào trên hệ thống**: cùng request body, cùng response error code, cùng UI state.
+- **JWT token mới R18 (`iat: 1777945965`) → API call hoàn toàn fresh**, không phải cache. BE schema validate vẫn require `checklistItems`/`ketQuaThamDinh`/`soTienDuyet`/`lyDoTuChoi`/`phiTuVanThucTe` — tức BE chưa thay đổi.
+- **FE vẫn gửi field name sai** (`danhSachTaiLieu`/`ketQua`/`lyDo`) → tức FE chưa deploy bundle mới.
+- **Pool 100 record HSCT vẫn nguyên** ngày 05/05 08:52: 26 Chờ xử lý + 16 Đang đánh giá + 8 Chờ phê duyệt + 50 Đã xử lý — không record nào advance state qua UI từ R16.
+
+### Khuyến nghị escalate (lần 2)
+
+1. **STOP — không retest tiếp** cho đến khi dev cung cấp evidence thực:
+   - Commit hash + branch của FE/BE đã deploy
+   - Deploy log chứng minh môi trường QA `103.172.236.130:3000` đã update
+   - Curl probe BE schema endpoint `/api/v1/ho-so-chi-tras/{id}/kiem-tra` với field name mới (PASS được)
+2. Nếu dev claim fix lần 3 mà không có evidence → escalate PM/SA để verify deploy pipeline.
+3. R6.6.1 + R6.6.5 + R6.7.12 vẫn block cascade.
+
+### Bằng chứng R18
+
+**BUG-FUNC-CT-007 R18 — spinbutton vẫn `valuemax="0"` (cùng state R17):**
+
+![BUG-FUNC-CT-007 R18 — HSCT000098 spinbutton valuemax=0 chưa fix lần 2](../bug-reports/image/r6-r661-r17-bug007-spinbutton-still-valuemax0.png)
+
+**API request/response R18 (mẫu CT-002):**
+
+```text
+POST /api/v1/ho-so-chi-tras/e3000000-0000-4000-8000-000000000050/kiem-tra
+Date: 2026-05-05T01:53:13Z (R18)
+Request: {"ketQua":"DAT","danhSachTaiLieu":[{"tenTaiLieu":"Mẫu 01 NĐ55","daTaiLen":true},...],"version":1}
+Response 422: {"error":{"code":"ERR-VAL-SYS-00-01","field":"checklistItems","message":"checklistItems must be an array"}}
+```
+
+Identical với R17 (date 2026-05-04T16:45:14Z) → FE/BE không có thay đổi nào.
+
+---
+
+## R17 — 2026-05-04 23:45-23:55 — Retest sau dev claim "đã fix"
 
 ### Verdict R17
 
@@ -172,9 +294,11 @@ SRS yêu cầu (Bước 12): so_tien_thuc_tra phải ≤ so_tien_duyet (ví dụ
 
 | Round | Date | Kết quả tóm tắt (1 dòng) |
 |---|---|---|
+| R19 | 05/05 11:23 | Retest lần 3 sau dev deploy thật — 6/7 closed (CT-001/002/003/004/006/007), 1 Open scope shift (CT-005-BE), 2 OBS mới. PASS-WITH-NOTE. |
+| R18 | 05/05 08:55 | Retest lần 2 sau dev confirm fix — 0/7 closed, all 7 vẫn FAIL same. Identical R17 → dev chưa deploy lần 2. |
 | R17 | 04/05 23:45 | Retest sau dev claim "đã fix" — 0/7 bug closed, all 7 vẫn FAIL same error. Regression: dev chưa thực sự deploy fix. |
 | R16 | 04/05 21:40 | Test full workflow — 0/8 CMS transition PASS, 7 BUG Critical FE/BE contract mismatch. |
 
 ---
 
-*R16 | QA Automation via Claude Code (MCP Chrome DevTools)*
+*R19 | 2026-05-05 | QA Automation via Claude Code (MCP Chrome DevTools)*

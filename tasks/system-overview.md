@@ -203,7 +203,7 @@ Mỗi tab CRUD chuẩn: Mã / Tên / Mô tả / Thứ tự / Trạng thái + tì
 #### SCR-VIII-06 Cấu hình Hệ thống — **4 tab**
 - **Tab 1 SLA:** Bảng 4 loại yêu cầu (Hỏi đáp/Vụ việc/Hồ sơ HT/Hồ sơ TT) × thời hạn (ngày) + 4 mức cảnh báo % + toggle Email/TB app
 - **Tab 2 Phân công mặc định:** Mapping Lĩnh vực PL → CB/TVV phụ trách + Mức ưu tiên + [Thêm mapping]
-- **Tab 3 Mẫu phản hồi:** Mẫu câu hỏi/phản hồi theo lĩnh vực (Tên / Lĩnh vực / Nội dung / Trạng thái)
+- **Tab 3 Mẫu phản hồi:** Mẫu câu hỏi/phản hồi theo lĩnh vực + phạm vi Mô hình B (Tên / Lĩnh vực / Nội dung / Trạng thái / Phạm vi áp dụng / Đơn vị). **Quyền:** QTHT chỉ R; CB_NV CRUD theo cấp (TW_QUOC_GIA/BN_RIENG/DP_RIENG) per srs-v3 §3.4.2 + srs-update-2026-5-4 §FR-II-NEW-02.
 - **Tab 4 Quy trình hỗ trợ:** Bảng bước (Thứ tự / Tên / SLA per-step / Phân công auto)
 
 #### SCR-VIII-07 Đăng nhập
@@ -775,7 +775,7 @@ Khi mở 1 màn hình mà thấy trống → tra bảng này trước khi log bu
 - **2026-04-25 v1.1** — Bổ sung chi tiết SCR + tab cho 17 module sau khi đọc thêm 14 file SRS-v3:
   - SCR-VIII có 10 màn hình (trước chỉ liệt kê 7)
   - SCR-VIII-01 có 14 tab danh mục (trước chỉ ghi "14 tab" không liệt kê)
-  - SCR-VIII-06 có 4 tab (SLA/Phân công/Mẫu phản hồi/Quy trình hỗ trợ)
+  - SCR-VIII-06 có 4 tab (SLA/Phân công/Mẫu phản hồi/Quy trình hỗ trợ). **Note 2026-05-05 R12:** Tab "Mẫu phản hồi" — QTHT chỉ Read; CB_NV CRUD theo Mô hình B Hybrid (`pham_vi_ap_dung` IN TW_QUOC_GIA/BN_RIENG/DP_RIENG) per srs-v3 §3.4.2 + srs-update-2026-5-4 §FR-II-NEW-02.
   - SCR-IV-03 chi tiết TVV có 5 tab (trước chỉ ghi 2)
   - SCR-V.I-03 chi tiết VV có 8 accordion + stepper 10 bước
   - SCR-V.III-02 chi tiết DN có 4 tab + 28 trường ở Tab 1

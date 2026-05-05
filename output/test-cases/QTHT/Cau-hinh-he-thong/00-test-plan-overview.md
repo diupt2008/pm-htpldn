@@ -69,10 +69,12 @@
 |--------|------|-------|-------|----|-----|-----|-----|
 | CAU_HINH_SLA | **CRUD** | — | — | — | — | — | — |
 | CAU_HINH_PHAN_CONG | **CRUD** | — | — | — | — | — | — |
-| MAU_PHAN_HOI | **CRUD** | — | — | — | — | — | — |
+| MAU_PHAN_HOI | **R only** | **CRUD\*** (TW/BN/DP theo Mô hình B) | R\* | — | — | — | — |
 | QUY_TRINH_HO_TRO | **CRUD** | — | — | — | — | — | — |
 
 > **Ghi chú**: Các vai trò khác chỉ tiêu thụ gián tiếp dữ liệu cấu hình (hệ thống tính SLA, gợi ý phân công) nhưng KHÔNG truy cập UI.
+>
+> **Update 2026-05-05 R12 — MAU_PHAN_HOI:** Theo `srs-v3.md §3.4.2 row MAU_PHAN_HOI` + `srs-update-2026-5-4/srs-fr-02-hoi-dap.md §FR-II-NEW-02` (Mô hình B Hybrid 2 tầng): QTHT chỉ R; CB_NV_TW/BN/DP CRUD\* theo phạm vi (`pham_vi_ap_dung` IN `TW_QUOC_GIA`/`BN_RIENG`/`DP_RIENG`); CB_PD R\*. **UI vẫn ở SCR-VIII-06 Tab 3** (Quản trị hệ thống → Cấu hình hệ thống), KHÔNG di chuyển sang module Hỏi đáp. **Actor CRUD đổi từ QTHT → CB_NV**: TC CRUD/Edge precondition đăng nhập bằng `cb_nv_tw_01` (TW khung) / `cb_nv_bn_01` (BN_RIENG) / `cb_nv_dp_01` (DP_RIENG). TC negative permission bổ sung: QTHT vượt UI gọi API CRUD → 403.
 
 ### 2.5 UI Layout (SCR-VIII-06 / MH-10.7)
 - **Breadcrumb**: "Trang chủ > Quản trị > Cấu hình"
@@ -102,10 +104,11 @@ Cau-hinh-he-thong/
 |------|-------|----------|------|------|--------|
 | 01 - SLA (Tab 1) | 6 | 6 | 11 | **23** | +6 edge từ Edge Case Hunter, +1 UI Verify |
 | 02 - Phân công (Tab 2) | 5 | 4 | 9 | **18** | +5 edge từ Edge Case Hunter, +1 UI Verify |
-| 03 - Mẫu phản hồi (Tab 3) | 6 | 4 | 9 | **19** | +5 edge từ Edge Case Hunter, +3 Quality Review, +1 UI Verify |
+| 03 - Mẫu phản hồi (Tab 3, base TC-MPH-001..019) | 6 | 4 | 9 | **19** | TC gốc (actor đổi QTHT→CB_NV); 1 TC Happy là TC-MPH-019 UI verify |
+| 03b - Mẫu phản hồi Mô hình B + QTHT R/perm (TC-MPH-MB-001..005 + TC-MPH-QTHT-001..004) | 3 | 6 | 0 | **9** | +5 Mô hình B (MB-001/002 Happy BN/DP create + MB-003/004/005 Negative scope) +1 QTHT R-only Happy (QTHT-001) +3 Negative perm QTHT (QTHT-002/003/004) |
 | 04 - Quy trình (Tab 4) | 5 | 4 | 10 | **19** | +5 edge từ Edge Case Hunter, +2 Quality Review, +1 UI Verify |
 | Cross-cutting (Chung) | 1 | 0 | 2 | **3** | Pagination + Browser nav + UI Layout |
-| **TỔNG** | **23** | **18** | **41** | **82** | +23 edge, +5 Quality Review, +5 UI Verify |
+| **TỔNG** | **26** | **24** | **41** | **91** | +9 TC mới (Mô hình B + QTHT perm) so với baseline 82 |
 
 ---
 

@@ -54,9 +54,11 @@ GET /api/v1/kho-cau-hois?nguon=TU_DONG
 
 ## Observations (không log thành bug)
 
-### OBS-D3-001 — UI route Kho QA thiếu cho cb_nv_tw_01
+### OBS-D3-001 — UI route Kho QA thiếu cho cb_nv_tw_01 → **promoted BUG-KHOQA-001 Critical 2026-05-05**
 
-Sidebar `Quản lý tư vấn` chỉ render 2 submenu: `Tư vấn chuyên sâu` (`/tv-chuyen-sau/danh-sach`) + `Tư vấn nhanh` (`/tv-nhanh/danh-sach` = quản lý phiên FR-X.2-02). Navigate trực tiếp `/tv-nhanh/kho-cau-hoi` → app redirect về `/tv-nhanh/danh-sach`. SRS spec MH-13.1 SCR-X.2-01 (FR-X.2-01) — nếu app deferred FE, BA cần confirm scope release. KHÔNG log bug vì BE đầy đủ + JWT có 7 permissions Kho QA (`read/create/update/delete/approve/import/export _kho_cau_hoi`).
+Sidebar `Quản lý tư vấn` chỉ render 2 submenu: `Tư vấn chuyên sâu` (`/tv-chuyen-sau/danh-sach`) + `Tư vấn nhanh` (`/tv-nhanh/danh-sach` = quản lý phiên FR-X.2-02). Navigate trực tiếp `/tv-nhanh/kho-cau-hoi` → app redirect về `/tv-nhanh/danh-sach`. SRS spec MH-13.1 SCR-X.2-01 (FR-X.2-01) Priority `Essential` — NotebookLM query 2026-05-05 confirm KHÔNG có quy định defer FE. BE đầy đủ + JWT có 7 permissions Kho QA → gap FE đơn thuần.
+
+→ **Đã log [BUG-KHOQA-001](../bug-reports/bug-report-flow-kho-qa.md) Critical P0** (2026-05-05) cover toàn bộ 12 thành phần SCR-X2-01 thiếu UI (toolbar 3 nút + tab phân loại + filter + bảng + modal form + modal Import + duyệt inline).
 
 ### OBS-D3-002 — Auto-feed BR-FLOW-10 chưa trigger
 

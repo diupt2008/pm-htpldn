@@ -28,10 +28,10 @@ Phân hệ Quản lý Hỏi đáp, Vướng mắc Pháp lý tiếp nhận, xử 
 | 9 | FR-II-09 | UC18 | Quản lý câu hỏi đã xử lý (Read-only) | `04-TC-quan-ly-tiep-nhan.md` (gộp §B) |
 | 10 | FR-II-10 | UC19 | Tìm kiếm câu hỏi đã xử lý | `02-TC-tim-kiem-tong-hop.md` (gộp §C) |
 | 11 | FR-II-NEW-01 | — | Cấu hình lĩnh vực ↔ phân công xử lý | Xem `QTHT/Cau-hinh-he-thong/02-TC-phan-cong.md` |
-| 12 | FR-II-NEW-02 | — | Quản lý mẫu câu hỏi/phản hồi | Xem `QTHT/Cau-hinh-he-thong/03-TC-mau-phan-hoi.md` |
+| 12 | FR-II-NEW-02 | — | Quản lý mẫu câu hỏi/phản hồi (UI ở SCR-VIII-06 Tab 3) — actor CRUD = CB_NV; QTHT R only | Xem [`QTHT/Cau-hinh-he-thong/03-TC-mau-phan-hoi.md`](../QTHT/Cau-hinh-he-thong/03-TC-mau-phan-hoi.md). Hỏi đáp chỉ dùng dropdown chèn mẫu (read) ở [`06-TC-phan-hoi-cau-hoi.md TC-PH-002 + TC-PH-015`](06-TC-phan-hoi-cau-hoi.md) |
 | 13 | FR-II-CROSS-01 | — | Cấu hình SLA thời gian xử lý hỏi đáp | Xem `QTHT/Cau-hinh-he-thong/01-TC-SLA.md` |
 
-> **Ghi chú**: FR-II-NEW-01, FR-II-NEW-02, FR-II-CROSS-01 đã được kiểm thử trong module Cấu hình hệ thống (QTHT). Test plan này tập trung vào luồng chính **UC10–UC19** (7 file TC).
+> **Ghi chú**: FR-II-NEW-01, FR-II-NEW-02, FR-II-CROSS-01 đã được kiểm thử trong module Cấu hình hệ thống (QTHT) — UI nằm ở SCR-VIII-06 (MH-10.7). Riêng FR-II-NEW-02: actor CRUD = CB_NV (theo srs-v3 §3.4.2 + Mô hình B Hybrid 2 tầng), QTHT chỉ R. Test plan này tập trung vào luồng chính **UC10–UC19** (7 file TC); dropdown chèn mẫu khi soạn phản hồi đã cover ở [`06-TC-phan-hoi-cau-hoi.md`](06-TC-phan-hoi-cau-hoi.md) TC-PH-002 + TC-PH-015.
 
 ### 1.3 Màn hình liên quan (SCR)
 

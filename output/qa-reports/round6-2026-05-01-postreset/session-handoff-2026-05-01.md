@@ -29,12 +29,12 @@
 - R6.0.3 QTHT login OK
 - R6.0.4 SCR-VIII-02 button [Thêm mới] visible
 
-### Phase 1 — 4 ✅ + 1 ⚠️ + 1 removed
+### Phase 1 — 4 ✅ + 1 🟢 re-execute + 1 removed
 - R6.1.1 LINH_VUC_PL ✅ — 13 records (seeded HOP_DONG)
 - R6.1.2 LOAI_DN ✅ — 7 records (seeded TNHH/CP/DNTN/HKD)
 - R6.1.3 DON_VI ✅ — 7 đơn vị pre-existing
 - R6.1.4 SLA ✅ — 4 record pre-existing match fixture
-- R6.1.5 MAU_PHAN_HOI ⚠️ — UI thiếu nút [Thêm mới], log `BUG-FUNC-MPH-001` Major
+- R6.1.5 MAU_PHAN_HOI 🟢 — re-execute bằng `cb_nv_tw_01` theo SRS §3.4.2 (QTHT chỉ R, CB_NV CRUD); `BUG-FUNC-MPH-001` Closed/Invalid
 - ~~R6.1.6 LY_DO~~ — REMOVED (fixture extension non-SRS, app dùng textarea inline)
 
 ### Phase 2 — partial
@@ -85,11 +85,11 @@ QTHT đã có sẵn 34 TK (verified ở R6.0.4) gồm cb_nv_tw_01..03, cb_pd_tw_
 
 ## 4. Bug đã log
 
-### BUG-FUNC-MPH-001 (Major P1)
+### ~~BUG-FUNC-MPH-001~~ [CLOSED — Invalid 2026-05-05 R12]
 - File: [bug-report-seed-qtht.md](bug-reports/bug-report-seed-qtht.md)
-- Tóm tắt: Tab "Mẫu phản hồi" (`/quan-tri/cau-hinh?tab=mau-phan-hoi`) thiếu nút [Thêm mới]
-- Tác động: chỉ chặn Phase 4 HD response Bước 5 (chọn template), B1-B4 + B6-B12 vẫn chạy được
-- Status: Open, đợi dev fix
+- Tóm tắt: Tab "Mẫu phản hồi" (`/quan-tri/cau-hinh?tab=mau-phan-hoi`) thiếu nút [Thêm mới] khi login QTHT
+- Re-classify: ❌ INVALID — FE đúng theo SRS §3.4.2 (QTHT chỉ R, không CRUD MAU_PHAN_HOI). Test sai vai trò: phải seed bằng `cb_nv_tw_01` theo Mô hình B (FR-II-NEW-02).
+- Status: Closed (Invalid)
 
 ### BUG-FUNC-TVV-001 (Major P1)
 - File: [bug-report-seed-tvv.md](bug-reports/bug-report-seed-tvv.md)
@@ -177,7 +177,7 @@ Nếu A1 PASS → confident seed thêm 4 CG + 3 NHT (R6.2.5 + 2.6).
 ### Bước 4 — Smoke workflow A4 (Hỏi đáp) với DN pre-existing + 1 HD entry
 
 - Login `cb_nv_tw_01` → tạo 1 HD entry (chọn DN từ 50 pre-existing)
-- Advance qua A4 12 transition: Tiếp nhận → Phân công CB → Soạn phản hồi (skip B5 chọn template do BUG-MPH-001) → Phê duyệt → Công khai → Đóng
+- Advance qua A4 12 transition: Tiếp nhận → Phân công CB → Soạn phản hồi (skip B5 chọn template do R6.1.5 chưa re-execute bằng `cb_nv_tw_01`) → Phê duyệt → Công khai → Đóng
 - Verify HD ở state cuối CONG_KHAI/DA_DONG
 
 Nếu A4 PASS với pool hiện tại → kết thúc smoke, mark milestone Phase 4 unblock.
@@ -195,7 +195,7 @@ Nếu A4 PASS với pool hiện tại → kết thúc smoke, mark milestone Phas
 ## 8. File output đã tạo trong session này
 
 - [seed-checklist-QTHT.md](seed/seed-checklist-QTHT.md) — Phase 0+1
-- [bug-report-seed-qtht.md](bug-reports/bug-report-seed-qtht.md) — BUG-FUNC-MPH-001
+- [bug-report-seed-qtht.md](bug-reports/bug-report-seed-qtht.md) — BUG-FUNC-MPH-001 (Closed/Invalid 2026-05-05 R12)
 - [bug-report-seed-tvv.md](bug-reports/bug-report-seed-tvv.md) — BUG-FUNC-TVV-001 + 002
 - 3 screenshots evidence trong `screenshots/`
 

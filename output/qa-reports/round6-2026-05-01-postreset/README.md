@@ -28,7 +28,7 @@
 | 1.2 | Seed 4 loại DN | QTHT → DM → LOAI_DN | 4 | `tier_0_prerequisite.loai_dn` |
 | 1.3 | Seed 5 đơn vị (1 TW + 4 ĐP) | QTHT → Cơ cấu tổ chức | 5 | `tier_0_prerequisite.don_vi` |
 | 1.4 | Seed cấu hình SLA | QTHT → Cấu hình HT → SLA | 1 | `tier_0_prerequisite.cau_hinh_sla` |
-| 1.5 | Seed 6 mẫu phản hồi (cover 6 LV) | QTHT → DM → MAU_PHAN_HOI | 6 | `mau_phan_hoi_variants` |
+| 1.5 | Seed 6 mẫu phản hồi TW khung (cover 6 LV) | **CB_NV_TW** → MPH (`pham_vi=TW_QUOC_GIA`) | 6 | `mau_phan_hoi_variants` |
 | 1.6 | Seed 12 lý do từ chối/bổ sung | QTHT → DM → LY_DO_TU_CHOI/BO_SUNG | 12 | `danh_muc_ly_do_variants` |
 
 **Verify gate:** `GET /api/v1/danh-muc/tree` trả ≥6 LV + `GET /api/v1/don-vi` trả 5 row. Tick checkbox `seed/seed-checklist-QTHT.md` (lazy create khi seed).

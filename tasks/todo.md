@@ -1,7 +1,7 @@
 # TODO — QA PM HTPLDN (Round 5 frozen + Round 6 active)
 
 **Plan:** [plan.md](plan.md) v2.5 · **Overview:** [system-overview.md](system-overview.md) · **R5 Permission Plan:** [_archive/round5/plan.md](_archive/round5/plan.md) · **R6 Post-reset README:** [`output/qa-reports/round6-2026-05-01-postreset/README.md`](../output/qa-reports/round6-2026-05-01-postreset/README.md)
-**Window:** TBD · **Today:** 2026-05-04 (R17 A5 PARTIAL 3/11 — TVCS-002 button [Hủy yêu cầu] FIXED + B10 transition PASS. FK gap còn → B3/B4/B6/B11 giữ BLOCKED.)
+**Window:** TBD · **Today:** 2026-05-05 (Deep review dependency: 7 task fake-block đã unblock — R6.6.4 ✅ + R6.5.1/2/4/5 + R6.7.7/13. R6.6.4 PASS 11/11 transitions 2026-05-05.)
 
 > 🔄 **DEV RESET DB 2026-05-01:** Toàn bộ data R1-R10 (Round 5) mất.
 > - **Round 5 (R1-R10):** FROZEN — section "Tiến độ Round 5" + chi tiết task dưới đây giữ nguyên làm reference (lịch sử bug 5 tuần dev iterate, lessons learned). KHÔNG động status pre-reset.
@@ -18,15 +18,15 @@
 | Phase | Việc | Tổng | ✅ | 🟢 | 🔵 | ⚠️ | 🚫 | ⏳ | Time est |
 |---|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | 0 | Tiền điều kiện (app + MailHog + QTHT login) | 4 | 4 | - | - | - | - | - | 5' |
-| 1 | Tier 0 prerequisite (LV/loại DN/đơn vị/SLA/MPH) | 5 | 4 | - | - | 1 | - | - | ~30' |
+| 1 | Tier 0 prerequisite (LV/loại DN/đơn vị/SLA/MPH) | 5 | 5 | - | - | - | - | - | ~30' |
 | 2 | Tier 1 actor (DN/TVV-CG-NHT/account/CAU_HINH_PC Đợt 1 + R6.2.7-TW backfill) | 10 | 10 | - | - | - | - | - | ~45' |
 | 3 | Tier 2 transactional entry state (R6.3.6 moved → P4.B2.5) | 10 | 10 | - | - | - | - | - | ~60' |
-| 4 | Workflow E2E (11 trụ + R6.4.A1.5 + R6.4.A1-CG + R6.4.B2.5 moved here) | 14 | 7 | - | - | 3 | 3 | 1 | ~3h |
-| 5 | Verification (KPI + cross-module + audit) | 5 | - | - | - | - | - | 5 | ~30' |
-| 6 | Workflow đầu ra hậu kỳ (Chi trả/TV nhanh/CT HTPLDN GĐ1+GĐ2) | 5 | - | - | - | 1 | - | 4 | ~1 tuần |
-| 7 | Functional 17 module (T4.1-T4.17 negative + edge + 40 TC perm) | 17 | 3 | 2 | - | 4 | 3 | 5 | ~1 tuần |
-| Trụ E | Monitor unblock (xuyên suốt R6, không gate) | 4 | 2 | 2 | - | - | - | - | daily |
-| **Tổng Round 6** | | **74** | **40** | **4** | **0** | **9** | **6** | **15** | **~2 tuần + 6h** |
+| 4 | Workflow E2E (11 trụ + R6.4.A1.5 + R6.4.A1-CG + R6.4.B2.5 moved here) | 14 | 8 | - | - | 2 | 3 | 1 | ~3h |
+| 5 | Verification (KPI + cross-module + audit) | 5 | - | 4 | - | - | - | 1 | ~30' |
+| 6 | Workflow đầu ra hậu kỳ (Chi trả/TV nhanh/CT HTPLDN GĐ1+GĐ2) | 5 | 1 | - | - | 1 | - | 3 | ~1 tuần |
+| 7 | Functional 17 module (T4.1-T4.17 negative + edge + 40 TC perm) | 17 | 3 | 3 | - | 5 | 3 | 3 | ~1 tuần |
+| Trụ E | Monitor unblock (xuyên suốt R6, không gate) | 4 | 3 | 1 | - | - | - | - | daily |
+| **Tổng Round 6** | | **74** | **44** | **8** | **0** | **8** | **6** | **8** | **~2 tuần + 6h** |
 
 **Icon column meaning:** ✅ xong · 🟢 sẵn sàng làm · 🔵 đang làm · ⚠️ partial · 🚫 block · ⏳ chờ upstream
 
@@ -49,7 +49,9 @@
 - ✅ **R6.1.2** DM LOAI_DN — seed 4 mới TNHH/CP/DNTN/HKD (existing 3 quy mô giữ) → 7 records
 - ✅ **R6.1.3** DON_VI — 7 đơn vị pre-existing (TW + 3 BN + AG/BG/BNI). Convention app khác fixture (AG/BG/BNI thay HN/HP/DN) — adapt downstream
 - ✅ **R6.1.4** SLA — 4 pre-existing match fixture (HOI_DAP 10d, HO_SO_HT 15d, HO_SO_TT 10d, VU_VIEC 10d, hệ số 2.0)
-- ⚠️ **R6.1.5** MAU_PHAN_HOI `[~0% — UI thiếu nút Thêm mới, log BUG-FUNC-MPH-001 Major, đợi dev fix]` — [bug-report-seed-qtht.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-seed-qtht.md)
+- ✅ **R6.1.5** MAU_PHAN_HOI — seed 12 mẫu Mô hình B Hybrid 2 tầng qua UI
+  - **Kết quả:** PASS 12/12 qua UI (6 TW + 3 BN + 3 DP). Cover 6 LV × 2 mẫu/LV. [seed-checklist-MPH.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-MPH.md)
+  - **Bug:** [bug-report-seed-qtht.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-seed-qtht.md) — 2/3 đóng (MPH-001 Invalid + MPH-002 Fixed) + 1 Open (MPH-003 Major scope MPH_READ)
 - ~~**R6.1.6** Seed 12 lý do từ chối/bổ sung~~ — REMOVED 2026-05-01: fixture extension non-SRS, app dùng textarea inline khi từ chối. Đã xóa `danh_muc_ly_do_variants` khỏi seed-fixture.yaml
 
 ### Phase 2 — Tier 1 actor
@@ -113,8 +115,9 @@
 #### 🟦 Trụ A — TVV → PC → VV → HD → TVCS
 - ✅ **R6.4.A1** A1 Workflow TVV (12 bước) — cb_nv_tw_01 → cb_pd_tw_01
   - **Kết quả:** PASS 10/10 CMS-scope. B7+B8 (FR-IV-11) ngoài scope — qua Portal chuyên trang. [workflow-test-report-TVV.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-TVV.md)
-- ⚠️ **R6.4.A1.5** Đợt 2 PC TVV backfill `[~50% — 6 cg_tw mapping POST OK, BE limit save HD]`
-  - **Kết quả:** PARTIAL. BE reject NHT (ERR-CH-03) + hardcode loaiYeuCau=HOI_DAP. Pivot 6 cg_tw_xx mapping → saved như HD config. 2 BE bug escalate. [bug-report-flow-vuviec.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-vuviec.md)
+- ✅ **R6.4.A1.5** Đợt 2 PC TVV backfill — surfaced 2 BE bug
+  - **Kết quả:** Done — 2 BE bug logged (NHT reject + hardcode HOI_DAP, vi phạm SRS §3.4.3.48). A3/A4 không cần unblock. Defer regression sau dev fix.
+  - **Bug:** [bug-report-flow-vuviec.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-vuviec.md) — 0/2 đóng (BUG-FUNC-CHPC-001 + BUG-FUNC-CHPC-002 Open)
 - ✅ **R6.4.A1-CG** Advance state 6 CG (TVV-0009..0014) → DANG_HOAT_DONG
   - **Kết quả:** PASS 6/6 CG (4 + 2 bonus seed LĐ/Thuế). Pool 12/12. Cover 6/6 LV. [workflow-test-report-CG.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-CG.md)
 - ✅ **R6.4.A3** A3 Workflow Vụ việc
@@ -139,41 +142,44 @@
 - ✅ **R6.4.C1** C1 Workflow Biểu mẫu `Nháp → Công khai → Ẩn`
   - **Kết quả:** PASS 3/3 transition SM-BIEUMAU. Sample thư mục "Biểu mẫu Doanh nghiệp" cover NHAP→CK→AN→CK re-publish. Sync "Đã đồng bộ" verified. [workflow-test-report-BieuMau.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-BieuMau.md)
 
-#### 🟧 Trụ D — Đánh giá HQ
+#### 🟧 Trụ D — Đánh giá HQ (FR-VI) **+ Kho QA standalone (FR-X.2-01)**
+> ⚠️ Note 2026-05-05: D2 (Đánh giá HQ) và D3 (Kho QA) là 2 module entity riêng (`DOT_DANH_GIA` vs `KHO_CAU_HOI`), KHÔNG có ràng buộc nhân quả. Để chung vì lịch sử đánh số, không phải dependency.
+
 - ✅ **R6.4.D1** D1 Tạo kỳ Đánh giá HQ entry `Lập kế hoạch`
   - **Kết quả:** PASS 1/1. `DG-20260502-0001` state Lập kế hoạch. Tần suất Sơ bộ 6 tháng × Tổng hợp. Unblock D2. [seed-checklist-DanhGiaHQ.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-DanhGiaHQ.md)
 - 🚫 **R6.4.D2** D2 Workflow Đánh giá HQ (11 bước) `[block: 5 bug FE chặn từ B1 — form Tạo thiếu trường tiêu chí + tab Tiêu chí không có nút thêm + 3 dropdown phân công 404/empty]`
   - **Kết quả:** R14 BLOCKED 1/11 PASS B1. Back-fill tiêu chí FAIL + B2-B11 cascade. Tạo `DG-20260502-0002` test seed. [workflow-test-report-DanhGiaHQ.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-DanhGiaHQ.md)
   - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-danhgia.md) — 0/5 đóng (3 Critical + 2 Major)
-- ⚠️ **R6.4.D3** D3 Tạo Kho QA + verify auto-feed `Tự động` `[~50% — re-verify R14 không đổi: THU_CONG OK, auto-feed TU_DONG=0, UI route thiếu]`
-  - **Kết quả:** PARTIAL R14 re-verify cùng status: THU_CONG `QA-20260502-0001` còn, TU_DONG total=0, UI route vẫn thiếu submenu. [seed-checklist-KhoQA.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-KhoQA.md)
+- ⚠️ **R6.4.D3** D3 Tạo Kho QA — module riêng FR-X.2-01, KHÔNG thuộc Đánh giá HQ `[~50% — UI route Kho QA bị defer FE, không seed thêm THU_CONG qua UI; auto-feed TU_DONG BE chưa trigger BR-FLOW-10. Block thật cho UI-only QA]`
+  - **Kết quả:** PARTIAL R14 re-verify cùng status: THU_CONG 1 record `QA-20260502-0001` (BE OK qua API), TU_DONG total=0, UI route vẫn thiếu submenu. [seed-checklist-KhoQA.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-KhoQA.md)
+  - **Bug:** [bug-report-flow-kho-qa.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-kho-qa.md) — 0/1 đóng (BUG-KHOQA-001 Critical P0 UI SCR-X2-01 chưa build)
 
 ### Phase 5 — Verification
 
-- ⏳ **R6.5.1** Dashboard KPI counter > 0 cho HD/VV/TVCS/CT `[need: ≥1 record state cuối mỗi module — HD ✅ A4, VV ⏳ A3, TVCS ⏳ A5, CT ⏳ B2]`
-- ⏳ **R6.5.2** Cross-module link DN: Tab #2 HSPL + Tab #3 KPI + Tab #4 Chi trả ≥1 record/tab `[need: DN000001 ≥1 HSPL ✅ R6.3.4 + ≥1 KPI từ A3 + ≥1 Chi trả từ E3]`
-- ⏳ **R6.5.3** SLA cảnh báo banner hiện khi HD/VV quá hạn `[need: ≥1 HD/VV deadline qua 70-90% — phải tạo record với ngày tạo cũ]`
-- ⏳ **R6.5.4** BC04 export Excel có data `[need: ≥1 HD CONG_KHAI ✅ A4 + ≥1 VV HOAN_THANH ⏳ A3]`
-- ⏳ **R6.5.5** Audit log ≥100 entry `[need: ≥100 entry trong AUDIT_LOG — accumulate qua Phase 4]`
+- 🟢 **R6.5.1** Dashboard KPI counter > 0 cho HD/VV (TVCS/CT defer) `[~0% — partial unblock: HD ✅ A4 + VV ✅ A3 đủ test 2 module ngay; TVCS chờ A5 ⚠️ unblock, CT chờ R6.6.4 ✅ chạy xong → test ngay]`
+- 🟢 **R6.5.2** Cross-module link DN: Tab #2 HSPL + Tab #3 KPI + Tab #4 Chi trả ≥1 record/tab `[~0% — full ready: DN000001 HSPL ✅ R6.3.4 + KPI từ A3 ✅ + 100 chi trả từ E3 ✅. Test ngay]`
+- ⏳ **R6.5.3** SLA cảnh báo banner hiện khi HD/VV quá hạn `[need: ≥1 HD/VV deadline qua 70-90% — reset 2026-05-01 mới 4/10 ngày (40%), chờ thời gian hoặc dev seed lùi ngày]`
+- 🟢 **R6.5.4** BC04 export Excel có data `[~0% — full ready: HD CONG_KHAI ✅ A4 + VV HOAN_THANH ✅ A3]`
+- 🟢 **R6.5.5** Audit log ≥100 entry `[~0% — full ready: accumulate qua Phase 4 đã đủ — verify counter ngay qua Nhật ký HT page]`
 
 ### Phase 6 — Workflow đầu ra hậu kỳ (mapping R5 P3)
 
 > Chạy sau Phase 4 workflow E2E + Trụ E unblock. Cascade-block khi upstream chưa state cuối. Mapping R5 P3.1-P3.4 — xem chi tiết kế hoạch trong [`plan.md` §1.3 P3](plan.md).
 
-- ⚠️ **R6.6.1** Workflow Chi trả (P3.1, 13 bước — [§⑪](../input/quy-trinh-nghiep-vu/02-thu-tu-module.md#L697-L713))
-  - **Kết quả:** R17 retest sau dev claim fix — 0/7 đóng, all 7 BUG vẫn FAIL same. Regression — dev chưa deploy. [workflow-test-report-ChiTra.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-ChiTra.md)
-  - **Bug:** [bug-report-flow-chi-tra.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-chi-tra.md) — 0/7 đóng (CT-001/002/003/004/005-BE/006/007) + 1 OBS-CT-B
-- ⏳ **R6.6.2** Workflow TV nhanh nhập tay (P3.2, 5 trạng thái — verify `srs-fr-13-tv-nhanh.md`) `[need: R6.4.D3 auto-feed TU_DONG ≥3 QA (hiện ⚠️ partial total=0) + R6.E4 record từ Cổng PLQG hoặc QA THU_CONG ≥3]`
-  - **Cần có sẵn:** R6.4.D3 ⚠️ partial + R6.E4 🟢 monitor
+- ⚠️ **R6.6.1** Workflow Chi trả (P3.1, 13 bước — [§⑪](../input/quy-trinh-nghiep-vu/02-thu-tu-module.md#L697-L713)) `[~75% — R19 PASS 6/8 transition, 6/7 bug closed, 1 Open scope shift]`
+  - **Kết quả:** R19 PASS-WITH-NOTE 6/8 CMS transition sau dev deploy lần 3 (Bước 3-5/8/12 ✅, Bước 9 partial, Bước 10/11 perm scope). [workflow-test-report-ChiTra.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-ChiTra.md)
+  - **Bug:** [bug-report-flow-chi-tra.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-chi-tra.md) — 6/7 đóng R19 (CT-001/002/003/004/006/007 Closed); CT-005-BE Open scope shift + 2 OBS mới (R19-A perm cross-DV, R19-B button mis-wire)
+- ⏳ **R6.6.2** Workflow TV nhanh nhập tay (P3.2, 5 trạng thái — verify `srs-fr-13-tv-nhanh.md`) `[need: ≥1 KHO_CAU_HOI cho keyword search (per SRS FR-X.2-02 line 179). KHÔNG cần D2. Block thật do D3 ⚠️ UI route Kho QA defer FE → không seed thêm Q&A qua UI]`
+  - **Cần có sẵn:** R6.4.D3 ⚠️ (UI route thiếu — không phải D2)
   - **Output dự kiến:** 6 phiên TV nhanh `Kết thúc` + 1 phiên `Hết hạn` auto.
-- ⏳ **R6.6.3** Workflow TV nhanh PUBLIC — DN gửi qua Cổng PLQG (1 bước) `[need: R6.E4 ≥1 record source=CONG_PLQG + R6.7.16 API test PASS]`
+- ⏳ **R6.6.3** Workflow TV nhanh PUBLIC — DN gửi qua Cổng PLQG (1 bước) `[need: R6.E4 ≥1 record source=CONG_PLQG + R6.7.16 API test PASS — external integration, không UI nội bộ]`
   - **Cần có sẵn:** R6.E4 🟢 monitor + R6.7.16 ⏳
   - **Output dự kiến:** ≥1 phiên TV nhanh PUBLIC từ DN qua Cổng PLQG.
-- ⏳ **R6.6.4** Workflow CT HTPLDN GĐ1 (P3.3, 11 bước — [§⑤](../input/quy-trinh-nghiep-vu/02-thu-tu-module.md#L328-L342)) `[need: tạo CT đầu tiên — menu OK 2026-05-04 nhưng data=0]`
-  - **Cần có:** R6.E2 🟢
-  - **Output:** ≥1 CT GĐ1 state DANG_THUC_HIEN.
-- ⏳ **R6.6.5** Workflow CT HTPLDN GĐ2 Đợt BC (P3.4, 7 bước — [02-thu-tu-module.md §⑭-bis](../input/quy-trinh-nghiep-vu/02-thu-tu-module.md#L839-L849)) `[need: R6.6.4 ≥1 CT GĐ1 DANG_THUC_HIEN + R6.6.1 ≥6 Chi trả DA_THANH_TOAN (block do 7 BUG R6.6.1) + R6.4.A3 ≥6 VV HOAN_THANH ✅]`
-  - **Cần có sẵn:** R6.6.4 ⏳ + R6.6.1 ⚠️ FAIL (dev fix 7 BUG before unblock) + R6.4.A3 ✅
+- ✅ **R6.6.4** Workflow CT HTPLDN GĐ1 (P3.3, 11 bước — [§⑤](../input/quy-trinh-nghiep-vu/02-thu-tu-module.md#L328-L342))
+  - **Kết quả:** PASS 11/11 transitions. CT-001 Hoàn thành, CT-002 Dự thảo, CT-003 Đã hủy. [workflow-test-report-CTHTPLDN-GD1.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-CTHTPLDN-GD1.md)
+  - **Output:** unblock R6.6.5 + R6.7.15. 2 obs UI/perm note trong report.
+- ⏳ **R6.6.5** Workflow CT HTPLDN GĐ2 Đợt BC (P3.4, 7 bước — [02-thu-tu-module.md §⑭-bis](../input/quy-trinh-nghiep-vu/02-thu-tu-module.md#L839-L849)) `[need: R6.6.4 ✅ + R6.6.1 ≥6 Chi trả DA_THANH_TOAN (block do 7 BUG R6.6.1) + R6.4.A3 ≥6 VV HOAN_THANH ✅]`
+  - **Cần có sẵn:** R6.6.4 ✅ + R6.6.1 ⚠️ ~75% (R19 6/7 closed, 1 HSCT đã DA_THANH_TOAN — cần seed thêm ≥5 nữa cùng cấp DonVi) + R6.4.A3 ✅
   - **Output dự kiến:** Đợt BC tổng hợp ĐP/BN → TW.
 
 ### Phase 7 — Functional 17 module (mapping R5 P4)
@@ -201,7 +207,7 @@
   - **Cần có sẵn:** R6.4.B2 🚫 + R6.4.B2.5 🚫 + R6.4.B7 ⏳
 
 #### Ngày 3
-- ⏳ **R6.7.7** Dashboard (34 TC) `[need: ≥3 record state cuối/module VV/TVCS/HD/Chi trả/TV nhanh — accumulate Phase 4-6]`
+- 🟢 **R6.7.7** Dashboard (34 TC) `[~0% — partial ready: HD ✅ A4 + VV ✅ A3 + Chi trả 100 record E3 ✅ + CT R6.6.4 ✅ → test phần lớn TC ngay; TVCS defer khi A5 unblock]`
 - ✅ **R6.7.8** Quản trị HT (8/32 TC effective Phase 7)
   - **Kết quả:** PASS 8/8 (QT-010 unique mã + QT-017 14 tab + QT-025/026 audit log + QT-027 SLA + QT-029-032 perm). 0 bug mới. [functional-test-report-QTHT.md](../output/qa-reports/round6-2026-05-01-postreset/functional/functional-test-report-QTHT.md)
 - 🚫 **R6.7.9** Đánh giá HQ (40 TC) `[block: cascade R6.4.D2 🚫 — workflow ĐG HQ chặn từ B1 (5 bug FE), không thể test perm/edge cho phần workflow. Negative + permission của riêng tab Lập KH có thể chạy partial khi dev fix tối thiểu BUG-DG-001 (form thiếu tiêu chí)]`
@@ -211,19 +217,17 @@
 - ⚠️ **R6.7.10** Biểu mẫu (7/40 TC effective Phase 7) `[~71% — 5/7 PASS, 1 DEFER (BM-026 cần thư mục rỗng), 1 obs UI count]`
   - **Kết quả:** PASS 5/7 (BM-013 required + BM-032/034/035/036 perm + BM-039 LV). DEFER 1 (BM-026). [functional-test-report-BieuMau.md](../output/qa-reports/round6-2026-05-01-postreset/functional/functional-test-report-BieuMau.md)
   - **Bug obs:** BUG-BM-001 Minor — UI cột "Số biểu mẫu" hiển thị 0 sai (BE đúng, FE display bug)
-- ⏳ **R6.7.11** TV nhanh (39 TC) `[need: R6.6.2 ≥6 phiên + R6.4.D3 auto-feed ≥3 — menu OK nhưng data=0]`
+- ⏳ **R6.7.11** TV nhanh (39 TC) `[need: R6.6.2 ≥6 phiên + R6.4.D3 UI route — cùng cascade D3 UI defer FE]`
   - **Cần có:** R6.6.2 ⏳ + R6.4.D3 ⚠️
 - 🟢 **R6.7.12** Chi trả (30 TC) `[~0% — 100 record sẵn, 30 TC negative/perm/edge chưa run]`
 
 #### Ngày 5
-- ⏳ **R6.7.13** Báo cáo (38 TC) `[need: data state cuối — page OK + 8+ loại BC, test partial 4-5 BC HD/VV được ngay]`
-- 🟢 **R6.7.14** HĐ tư vấn (UC163, sub-resource v2.1) `[~0% — verified 2-source 2026-05-04, location đã map]`
-  - **Spec v2.1** ([srs-fr-14:241](../input/srs-v3/srs-fr-14-hop-dong-tv.md#L241) + NotebookLM): KHÔNG có menu riêng. Vào từ (1) VV detail → section "HĐ tư vấn liên kết", (2) TVV detail → tab "Lịch sử" → HĐ. Render modal/drawer.
-  - **App 2026-05-04:** VV ✅ khớp · DN ✅ không có (khớp) · TVV ⚠️ tab "HĐ tư vấn" RIÊNG thay vì sub-section trong "Lịch sử" → cần BA confirm.
-  - **Cần có:** 100 VV ✅ + 11 TVV/CG ✅
-  - **Test:** 29 TC CRUD + 5 error code (ERR-HDTV-01..05) + N:M link VV + permission.
-- ⏳ **R6.7.15** CT HTPLDN (42 TC) `[need: R6.6.4 + R6.6.5 — menu OK (7 tab) nhưng data=0]`
-  - **Cần có:** R6.6.4 ⏳ + R6.6.5 ⏳
+- 🟢 **R6.7.13** Báo cáo (38 TC) `[~0% — partial ready: HD ✅ A4 + VV ✅ A3 → test 4-5 BC HD/VV ngay (BC04/BC05 có data); BC liên quan TVCS/CT/Đào tạo defer khi upstream unblock]`
+- ⚠️ **R6.7.14** HĐ tư vấn (UC163, sub-resource v2.1) `[~55% — Path 1 OK + BE validate đúng + Permission OK; FE bug + thiếu FK link]`
+  - **Kết quả:** PASS-WITH-NOTE 5/9. Path 1 OK, ERR-HDTV-03 BE đúng. 4 bug Active. [workflow-test-report-HopDongTuVan.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-HopDongTuVan.md)
+  - **Bug:** [bug-report-flow-hop-dong.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-hop-dong.md) — 0/4 đóng (3 Major + 1 Medium)
+- ⏳ **R6.7.15** CT HTPLDN (42 TC) `[need: R6.6.4 ✅ → unblock partial; R6.6.5 ⏳ vẫn chờ. 3 CT đa state HOAN_THANH/DU_THAO/HUY sẵn để test]`
+  - **Cần có:** R6.6.4 ✅ + R6.6.5 ⏳
 - ⏳ **R6.7.16** API kết nối (42 TC) `[need: data upstream state cuối từ HD/VV/TVCS/Chi trả/CT HTPLDN/TV nhanh + 8 API inbound mock LGSP/DVC/Cổng PLQG]`
 - ⚠️ **R6.7.17** Edge BR-EC-01..23 (4/23 BR effective) `[~17% — 4 PASS (BR-EC-12 + 3 gián tiếp), 19 DEFER infra/wait/integration]`
   - **Kết quả:** PASS 4 (BR-EC-12 pagination strict, BR-EC-08/18/19 gián tiếp). 0 bug. [functional-test-report-Edge-BR-EC.md](../output/qa-reports/round6-2026-05-01-postreset/functional/functional-test-report-Edge-BR-EC.md)
@@ -231,7 +235,7 @@
 ### 🟥 Trụ E — Theo dõi unblock (xuyên suốt R6, không gate)
 
 - ✅ **R6.E1** HĐ tư vấn (FR-X3-01) — sub-resource trong VV/TVV detail, không phải module riêng. URL `/hop-dong-tu-van/danh-sach` 404 đúng spec v2.1. Test scope chuyển R6.7.14.
-- 🟢 **R6.E2** CT HTPLDN GĐ1 (FR-15) `[~0% — menu render OK 2026-05-04, 7 tab, data=0. Tạo CT đầu tiên ở R6.6.4]`
+- ✅ **R6.E2** CT HTPLDN GĐ1 (FR-15) — 3 CT data tồn tại sau R6.6.4 PASS 2026-05-05 (CT-001 Hoàn thành, CT-002 Dự thảo, CT-003 Đã hủy). Module data=0 → ≥3.
 - ✅ **R6.E3** Chi trả (FR-06) — 100 record HSCT000001..100 sẵn (3 states), verified 2026-05-04. Unblock R6.6.1 + R6.7.12.
 - 🟢 **R6.E4** TV nhanh (FR-13.A) `[~0% — menu render OK 2026-05-04, data=0. Nhập tay 1 phiên ở R6.6.2 / chờ Cổng PLQG cho R6.6.3]`
 

@@ -1,38 +1,114 @@
-# Bug Report — Workflow Vụ việc (R6.4.A3)
+# Bug Report — Workflow Vụ việc (R6.4.A3 + R6.4.A1.5)
 
 | Thông tin | Giá trị |
 |-----------|---------|
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Claude Code via MCP Chrome DevTools) |
-| **Ngày** | 2026-05-02 (R7) · 2026-05-01 (R6) |
-| **Loại test** | Workflow E2E |
-| **Round** | Round 7 (latest) — Round 6 archived |
-| **Tài liệu tham chiếu** | [workflow-test-report-VuViec.md](../workflow/workflow-test-report-VuViec.md) · SRS FR-05 SM-VUVIEC §UC59 |
+| **Ngày** | 2026-05-05 (R12 promote 2 BE bug A1.5) · 2026-05-02 (R7-R9) · 2026-05-01 (R6) |
+| **Loại test** | Workflow E2E + CAU_HINH_PHAN_CONG endpoint |
+| **Round** | Round 12 (latest) — promote BUG-FUNC-CHPC-001/002 từ OBS-006 |
+| **Tài liệu tham chiếu** | [workflow-test-report-VuViec.md](../workflow/workflow-test-report-VuViec.md) · SRS FR-05 SM-VUVIEC §UC59 · SRS §3.4.3.48 CAU_HINH_PHAN_CONG |
 
 ---
 
 ## Tổng hợp
 
-**0 bug có SRS reference cụ thể** trong session test R6.4.A3 (cả R6 + R7).
-
-> **Rule log bug (feedback 2026-04-23):** Bug chỉ log khi có SRS reference cụ thể. R7 phát hiện 3 quan sát (1 từ R6 vẫn còn, 2 mới) — KHÔNG log bug vì:
-> 1. Hai trong 3 quan sát là **data setup gap** + **BE behavior cần BA verify**, không phải code bug rõ ràng.
-> 2. Một quan sát R6 đã được R7 chứng minh là **expected behavior** (filter `trangThai=DANG_HOAT_DONG` đúng SRS).
->
-> Đã ghi vào section "Observations" dưới + workflow-test-report.
+**2 bug có SRS reference cụ thể** trong session R6.4.A1.5 (CAU_HINH_PHAN_CONG endpoint), promoted từ OBS-FLOW-VUVIEC-006 ngày 2026-05-05.
 
 ### Severity breakdown
 
 | Tổng | Critical | Major | Medium | Minor | Trivial |
 |------|----------|-------|--------|-------|---------|
-| 0    | 0        | 0     | 0      | 0     | 0       |
+| 2    | 1        | 1     | 0      | 0     | 0       |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| — | — | — | — | — | — | (Không có bug log trong session R6+R7 A3) | — |
+| BUG-FUNC-CHPC-001 | Major | P1 | Negative | R6.4.A1.5 | `§3.4.3.48 row 3 nguoi_xu_ly_id` | BE reject vai trò NHT khi POST `/cau-hinh-phan-congs` (ERR-CH-03) — SRS không quy định role constraint trên FK TAI_KHOAN | Open |
+| BUG-FUNC-CHPC-002 | Critical | P0 | Data | R6.4.A1.5 | `§3.4.3.48 row 4 loai_yeu_cau` | BE hardcode `loaiYeuCau=HOI_DAP`, ignore enum `VU_VIEC/TU_VAN_CS/TAT_CA` từ request body | Open |
+
+---
+
+## BUG-FUNC-CHPC-001 — BE reject vai trò NHT khi POST `/cau-hinh-phan-congs` (ERR-CH-03)
+
+### Mô tả
+
+QTHT POST tạo cấu hình phân công với `nguoiXuLyId` là tài khoản vai trò `NHT` (`tvv_tw_01..06`) tại endpoint `/api/v1/cau-hinh-phan-congs` → BE trả `HTTP 400 ERR-CH-03 "Tài khoản '...' không có vai trò xử lý hỏi đáp (chỉ chấp nhận CB nghiệp vụ, TVV hoặc CG)"`. SRS §3.4.3.48 row 3 chỉ quy định `nguoi_xu_ly_id` là FK → TAI_KHOAN(id), KHÔNG ràng buộc role.
+
+### Các bước tái hiện
+
+1. Login `qtht_01 / Secret@123 / OTP 666666`.
+2. POST `/api/v1/cau-hinh-phan-congs` với body `{"linhVucId":"<LĐ>","nguoiXuLyId":"<id của tvv_tw_01 vai trò NHT>","loaiYeuCau":"VU_VIEC","uuTien":2,"donViId":"<BTP-TW>"}`.
+3. Quan sát: HTTP 400 ERR-CH-03.
+
+### Kết quả mong đợi
+
+- Theo SRS §3.4.3.48 row 3: `nguoi_xu_ly_id identifier Y FK → TAI_KHOAN(id)` — không có constraint role.
+- POST với bất kỳ `TAI_KHOAN` valid nào (kể cả NHT) phải HTTP 201.
+
+### Kết quả thực tế
+
+- HTTP 400 ERR-CH-03 — BE filter cứng accepted roles = `[CB_NV_*, TVV, CG]`, loại NHT.
+- Mâu thuẫn nội tại: cùng tài khoản NHT này đã được endpoint `goi-y-tvv` cho VU_VIEC accept (verify R8/R9 12/12 PASS).
+
+### Bằng chứng
+
+![BUG-FUNC-CHPC-001 — Dropdown Người xử lý search "Nguyễn Văn Tư Vấn" trống cho 6 TVV TW vai trò NHT](../screenshots/r6-4-a1-5-dropdown-no-tvv-tw.png)
+
+```json
+// Request
+POST /api/v1/cau-hinh-phan-congs
+{"linhVucId":"...","nguoiXuLyId":"<tvv_tw_01 NHT>","loaiYeuCau":"VU_VIEC","uuTien":2,"donViId":"<BTP-TW>"}
+
+// Response
+HTTP 400
+{"success":false,"error":{"code":"ERR-CH-03","message":"Tài khoản 'Tư vấn viên TW 01' không có vai trò xử lý hỏi đáp (chỉ chấp nhận CB nghiệp vụ, TVV hoặc CG)"}}
+```
+
+---
+
+## BUG-FUNC-CHPC-002 — BE hardcode `loaiYeuCau=HOI_DAP`, ignore enum khác từ request body
+
+### Mô tả
+
+POST `/api/v1/cau-hinh-phan-congs` với `loaiYeuCau` ∈ `{VU_VIEC, TU_VAN_CS, TAT_CA}` → BE silent override response thành `HOI_DAP`. Mọi record lưu DB đều `loai_yeu_cau=HOI_DAP`. SRS §3.4.3.48 row 4 quy định enum 4 giá trị `(HOI_DAP/VU_VIEC/TU_VAN_CS/TAT_CA)`, default `TAT_CA`.
+
+### Các bước tái hiện
+
+1. Login `qtht_01`.
+2. POST `/cau-hinh-phan-congs` với `loaiYeuCau=VU_VIEC` (nguoiXuLyId là cg_tw_01 để pass role filter của BUG-001).
+3. Đọc response: `data.loaiYeuCau === "HOI_DAP"` — KHÔNG phải VU_VIEC như request.
+4. GET `/cau-hinh-phan-congs?loaiYeuCau=VU_VIEC` → trả 0 records.
+5. GET `/cau-hinh-phan-congs?pageSize=100` → mọi record có `loaiYeuCau=HOI_DAP`.
+6. Lặp với `loaiYeuCau=TAT_CA` → cũng save HOI_DAP. Với `TU_VAN_CS` → reject `ERR-CH-01 "đã tồn tại"` (vì BE coi như duplicate HD record).
+
+### Kết quả mong đợi
+
+- Theo SRS §3.4.3.48 row 4: `loai_yeu_cau text N CHECK IN ('HOI_DAP','VU_VIEC','TU_VAN_CS','TAT_CA') default 'TAT_CA'`.
+- POST với `loaiYeuCau=VU_VIEC` → response + DB persist đúng `VU_VIEC`.
+- Endpoint phải support đủ 4 enum + default `TAT_CA`.
+
+### Kết quả thực tế
+
+- BE hardcode override `loaiYeuCau=HOI_DAP` cho mọi request, ignore field từ body.
+- UI tab "Phân công mặc định" call GET `?loaiYeuCau=HOI_DAP` only → BE chỉ implement HD scope.
+- Hệ quả: KHÔNG seed được PC cho VU_VIEC / TU_VAN_CS / TAT_CA → block test phân công đa loại yêu cầu.
+
+### Bằng chứng
+
+![BUG-FUNC-CHPC-002 — Bảng Phân công mặc định chỉ hiện 6 record Đợt 1 CB-only loaiYeuCau=HOI_DAP, không có record loaiYeuCau=VU_VIEC](../screenshots/r6-4-a1-5-pc-table-only-dot1.png)
+
+```json
+// Request
+POST /api/v1/cau-hinh-phan-congs
+{"linhVucId":"bbbbbbbb-...000013","nguoiXuLyId":"<cg_tw_01>","loaiYeuCau":"VU_VIEC","uuTien":1,"donViId":"<BTP-TW>"}
+
+// Response (HTTP 201) — BE silent override
+{"success":true,"data":{"id":"7a8a3821-...","loaiYeuCau":"HOI_DAP","linhVuc":{"ten":"Lao động"},"nguoiXuLy":{"hoTen":"Chuyên gia TW 01"}}}
+//                                              ^^^^^^^^^^^^^^^^^^^^^^^^ override
+```
 
 ---
 
@@ -45,59 +121,6 @@
 **R6 hiện tượng cũ:** Modal "Phân công TVV" mở dropdown rỗng dù DB có 9 profile (6 TVV + 2 CG + 1 NHT). API `GET /vu-viecs/{id}/goi-y-tvv?limit=20` trả `data:[]` vì pool toàn `MOI_DANG_KY`.
 
 **R7 verify:** API call sau A1 PASS → `data:[2]`. Behavior correct.
-
----
-
-### OBS-FLOW-VUVIEC-006 — [NEW R9 2026-05-02 14:15] BE limit `CAU_HINH_PHAN_CONG` chỉ work cho HOI_DAP, ignore VU_VIEC/TU_VAN_CS
-
-**Hiện tượng:** Tại R6.4.A1.5 (cấu hình PC TVV cho VV), phát hiện 2 BE limitation:
-
-**Bug 1 — Vai trò NHT bị reject (ERR-CH-03):**
-```
-POST /api/v1/cau-hinh-phan-congs
-Body: {"linhVucId":"...","nguoiXuLyId":"<tvv_tw_01 ID>","loaiYeuCau":"VU_VIEC",...}
-→ HTTP 400 ERR-CH-03 "Tài khoản 'Tư vấn viên TW 01' không có vai trò xử lý hỏi đáp (chỉ chấp nhận CB nghiệp vụ, TVV hoặc CG)"
-```
-- tvv_tw_01..06 hiện vai trò **NHT** (đặt R8 để pass A3 Bước 4 — NHT có sidebar Quản lý vụ việc, TVV/CG không có).
-- BE filter accepted roles = [CB_NV_*, TVV, CG] → exclude NHT.
-- **Mâu thuẫn**: A3 dropdown `goi-y-tvv` LẠI accept NHT (đã verify R8/R9 12/12 PASS với tvv_tw_xx vai trò NHT).
-- **Cần BA verify**: SRS quy định role nào valid cho `nguoiXuLyId` trong CAU_HINH_PHAN_CONG?
-
-**Bug 2 — Hardcode `loaiYeuCau=HOI_DAP` (silent BE override):**
-```
-POST /api/v1/cau-hinh-phan-congs
-Body: {"linhVucId":"...","nguoiXuLyId":"<cg_tw_01>","loaiYeuCau":"VU_VIEC",...}
-→ HTTP 201 success, response.data.loaiYeuCau = "HOI_DAP" (KHÔNG phải VU_VIEC như request)
-```
-- Tested với enum VU_VIEC + TAT_CA → cả 2 đều save thành HOI_DAP.
-- Tested TU_VAN_CS → reject ERR-CH-01 "đã tồn tại" (vì record HOI_DAP duplicate).
-- → **BE đã hardcode** loaiYeuCau=HOI_DAP, ignore field từ request body.
-- UI tab "Phân công mặc định" GET `?loaiYeuCau=HOI_DAP` only — confirm chỉ implement HD scope.
-
-**Vi phạm SRS:**
-- §3.4.3.48 entity `CAU_HINH_PHAN_CONG` field `loai_yeu_cau` enum 4 giá trị (HOI_DAP/VU_VIEC/TU_VAN_CS/TAT_CA).
-- Dòng 105: "Khi CB NV phân công cho yêu cầu thuộc FR-02 Hỏi đáp / FR-05 Vụ việc / FR-12 Tư vấn chuyên sâu, hệ thống đọc bảng này".
-- → BE chưa implement đa loại như SRS.
-
-**Repro steps:**
-1. Login `qtht_01` → SCR-VIII-06 Tab "Phân công mặc định" → tab chỉ hiện HD configs.
-2. POST `/cau-hinh-phan-congs` với `loaiYeuCau=VU_VIEC` → response saved HOI_DAP.
-3. Verify GET `?loaiYeuCau=VU_VIEC` → trả 0 records.
-4. Verify GET `?pageSize=100` → tất cả records loaiYeuCau=HOI_DAP.
-
-**Bằng chứng:**
-```json
-// POST request
-{"linhVucId":"bbbbbbbb-...000013","nguoiXuLyId":"<cg_tw_01>","loaiYeuCau":"VU_VIEC","uuTien":1,"donViId":"<BTP-TW>"}
-
-// Response (HTTP 201)
-{"success":true,"data":{"id":"7a8a3821-...","loaiYeuCau":"HOI_DAP","linhVuc":{"ten":"Lao động"},"nguoiXuLy":{"hoTen":"Chuyên gia TW 01"}}}
-                              ^^^^^^^^^^^^^^^^^^^^^^ ← BE override
-
-// NHT role test
-POST + nguoiXuLyId=tvv_tw_01 NHT
-→ HTTP 400 {"error":{"code":"ERR-CH-03","message":"Tài khoản '...' không có vai trò xử lý hỏi đáp (chỉ chấp nhận CB nghiệp vụ, TVV hoặc CG)"}}
-```
 
 ---
 

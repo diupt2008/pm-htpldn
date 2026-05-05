@@ -14,9 +14,9 @@
 
 ## Tổng hợp
 
-**0 bug mới** trong session test R6.4.A4 (R11). Workflow E2E PASS 11/11 transition manual. 1 observation chuyển reference đến bug đã log:
+**0 bug mới** trong session test R6.4.A4 (R11). Workflow E2E PASS 11/11 transition manual. 1 observation về dropdown MPH thiếu data — cause: R6.1.5 chưa re-execute (chuyển vai trò seed sang `cb_nv_tw_01` theo SRS §3.4.2 + FR-II-NEW-02 Mô hình B). KHÔNG log thành bug.
 
-> **Rule log bug (feedback 2026-04-23):** Bug chỉ log khi có SRS reference cụ thể + chưa được log ở file khác. Observation #1 dưới đã có bug ID đang Open ở bug-report-seed-qtht.md (BUG-FUNC-MPH-001) — KHÔNG log lại trong file này.
+> **Rule log bug (feedback 2026-04-23):** Bug chỉ log khi có SRS reference cụ thể + chưa được log ở file khác. Observation #1 dưới đây là gap data (DM rỗng), không phải bug FE — sau khi R6.1.5 re-execute bằng `cb_nv_tw_01` xong sẽ retest. BUG-FUNC-MPH-001 ở bug-report-seed-qtht.md đã Closed/Invalid 2026-05-05 R12 (log sai vai trò QTHT).
 
 ### Severity breakdown
 
@@ -36,14 +36,16 @@
 
 ### OBS-FLOW-HOIDAP-001 — Khối "Nội dung phản hồi" thiếu dropdown chọn Mẫu phản hồi
 
-> **Status:** Already tracked as **BUG-FUNC-MPH-001** Major Open ở [bug-report-seed-qtht.md](bug-report-seed-qtht.md). Cause cùng root: tab MPH `/quan-tri/cau-hinh?tab=mau-phan-hoi` toolbar chỉ 4 button (Tìm kiếm/Xóa bộ lọc/Làm mới/clear input), KHÔNG có [Thêm mới] → DM `MAU_PHAN_HOI` rỗng → dropdown UI không có option.
+> **Status (update 2026-05-05 R12):** Root cause là **DM `MAU_PHAN_HOI` rỗng** vì R6.1.5 chưa seed (chuyển vai trò seed sang `cb_nv_tw_01` theo SRS §3.4.2 + FR-II-NEW-02 Mô hình B). KHÔNG còn link tới BUG-FUNC-MPH-001 (đã Closed/Invalid — log sai vai trò QTHT). Sau khi R6.1.5 re-execute xong → retest dropdown.
 
 **Hiện tượng R11 (Workflow A4):** Khi HD ở `DANG_XU_LY`, khối "Soạn phản hồi" hiển thị 3 textarea freeform (Nội dung phản hồi `*` / Văn bản pháp luật / Gợi ý cho doanh nghiệp). KHÔNG có dropdown `Mẫu phản hồi` như SRS line 450 quy định.
 
-**SRS reference:** `02-thu-tu-module.md` line 450:
-> "Khối 'Nội dung phản hồi' (tĩnh, không thuộc accordion) | Cột `noi_dung_phan_hoi` trong `HOI_DAP` | Rich Text editor để soạn phản hồi + dropdown chọn **Mẫu phản hồi** (`MAU_PHAN_HOI` — do QTHT cấu hình ở FR-10)"
+**SRS reference:** `02-thu-tu-module.md` line 450 (legacy v3):
+> "Khối 'Nội dung phản hồi' (tĩnh, không thuộc accordion) | Cột `noi_dung_phan_hoi` trong `HOI_DAP` | Rich Text editor để soạn phản hồi + dropdown chọn **Mẫu phản hồi** (`MAU_PHAN_HOI`)"
 
-**Verify lại sau khi BUG-FUNC-MPH-001 closed.**
+**Updated spec:** [`srs-update-2026-5-4/srs-fr-02-hoi-dap.md` row 19](../../../../input/srs-update-2026-5-4/srs-fr-02-hoi-dap.md) — Mô hình B Hybrid: dropdown filter `linh_vuc_id = câu hỏi` AND `trang_thai = KICH_HOAT` AND scope MPH_READ; nhóm 2 nhóm "Mẫu khung quốc gia (TW)" + "Mẫu của đơn vị bạn".
+
+**Verify lại sau khi R6.1.5 re-execute xong (cb_nv_tw_01 seed ≥6 mẫu TW khung).**
 
 ### OBS-FLOW-HOIDAP-002 — Modal "Bạn không phải người được phân công"
 
