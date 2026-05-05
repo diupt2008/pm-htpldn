@@ -91,7 +91,8 @@
 #     2885-3007 linkage_assertions (cross-module verify)
 # =============================================================================
 
-fixture_version: "2.6.3-2026-05-02-dn-seed-actual"  # 2.6.3 (2/5): post-seed adapt notes. Seed 15 DN variants thực tế qua API direct (workaround JWT bug). MST gen checksum-valid (prefix 5*) thay fixture spec MST `01001..04004` (BE bắt buộc checksum NĐ Việt Nam). loaiDoanhNghiepId variant 14/15 đổi `CO_PHAN/TU_NHAN` → `CP/DNTN` khớp DM seed. Variant 8/12 BVA above-bound NĐ39 lưu thành công với flag ignoreWarning=true (BR-CALC-05 cảnh báo WRN-DN-01 nhưng không block). 4 bug Open: BUG-AUTH-JWT-001 (Critical), BUG-DM-LOAI-DN-001 (Major), BUG-FILTER-DN-001 (Major), BUG-API-DN-001 (Medium). Tham chiếu: output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-fixture-seed-dn.md.
+fixture_version: "2.7.0-2026-05-05-srs-update-2026-5-5"  # 2.7.0 (5/5): apply 3 SRS update từ srs-update-2026-5-5/ (FR-04 + FR-07 + FR-10). Thêm 3 entity mới: ngay_le_variants (Tier 0, FR-VIII-29 GAP-VIII-05), to_chuc_tu_van_variants (Tier 1, FR-IV-NEW-01 CR-02), nht_variants (Tier 1, FR-IV-NHT-01 phương án B+). Mark DEPRECATED 3 NHT cũ trong tvv_variants[19-21] (giữ lại để R6 chạy, R7+ migrate sang nht_variants riêng). Note method seed DN: FR-VIII-22 self-reg DN-only — CB NV bỏ Create. Note breaking change: TVV.dia_ban_ids[] đã bỏ (NĐ 77/2008 Đ.19 — TVV scope toàn quốc, filter bằng don_vi_id). Tham chiếu: input/srs-update-2026-5-5/_DELTA-MAP-FR04.md, _DELTA-MAP-FR07.md, _DELTA-MAP-FR10.md.
+                                     # 2.6.3 (2/5): post-seed adapt notes. Seed 15 DN variants thực tế qua API direct (workaround JWT bug). MST gen checksum-valid (prefix 5*) thay fixture spec MST `01001..04004` (BE bắt buộc checksum NĐ Việt Nam). loaiDoanhNghiepId variant 14/15 đổi `CO_PHAN/TU_NHAN` → `CP/DNTN` khớp DM seed. Variant 8/12 BVA above-bound NĐ39 lưu thành công với flag ignoreWarning=true (BR-CALC-05 cảnh báo WRN-DN-01 nhưng không block). 4 bug Open: BUG-AUTH-JWT-001 (Critical), BUG-DM-LOAI-DN-001 (Major), BUG-FILTER-DN-001 (Major), BUG-API-DN-001 (Medium). Tham chiếu: output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-fixture-seed-dn.md.
                                      # 2.6.2 (1/5): dev reset toàn DB → re-seed full A→Z. Confirm cap_tai_khoan_cg_nht_r5 đủ data A5/A3 NHT. Bổ sung WARNING coverage DN cấp ĐP: 12 DN hiện cover TW/BN/DN/HN/HP, THIẾU AG/BG/BNI (3 đơn vị có account ĐP cg_01/02/03 + cb_nv_dp_01/02/03). Khi seed lại, QTHT cần tạo thêm ≥3 DN ở 3 đơn vị này nếu test scope ĐP toàn cấp. Spec đề xuất xem block `dn_variants_dp_extension` cuối M1. Master plan: tasks/post-reset-seed-plan.md. — 2.6.1 (1/5): thêm cap_tai_khoan_cg_nht_r5 (9 cặp TAI_KHOAN login). — 2.6.0 (28/4): split loai_tvv CG/NHT + add mau_phan_hoi/danh_muc_ly_do/hoc_vien.
                                      # 2.5.2: bỏ state_target khỏi bai_giang_variants (SRS FR-III-07 không có field state); rename file_path/link_video/linh_vuc_id → file_bai_giang/url_youtube/linh_vuc_ids[] khớp SRS Inputs row 4-6. Tra changelog: git log input/data/seed-fixture.yaml
 tier_strategy: "Y"
@@ -217,9 +218,30 @@ tier_0_prerequisite:
       (2) Mỗi TVV có `tai_khoan_id != null` (QTHT cấp TK qua SCR-VIII-02 sau khi TVV được duyệt — KHÔNG auto, theo SRS srs-fr-04 line 1057 field N).
       Khi seed UI MH-10.7: dropdown "Người xử lý" sẽ list TAI_KHOAN của TVV active. Tìm theo họ tên (Nguyễn Văn Tư Vấn, Trần Thị Tư Vấn, ...) hoặc maTvv. UUID dùng để verify hậu seed qua API/DB.
 
+  # =============================================================================
+  # NGAY_LE — Quản lý ngày lễ (FR-VIII-29 / Entity NGAY_LE) `[NEW 2026-05-05 — GAP-VIII-05]`
+  # Source: srs-update-2026-5-5/srs-fr-10-quan-tri.md FR-VIII-29 line 1376-1436
+  # Màn hình: SCR-VIII-06 hoặc DM con (CRUD QTHT only)
+  # Mục đích: hỗ trợ BR-CALC-03 — tính SLA trừ ngày lễ khi tính ngày làm việc
+  # Field schema: ten_ngay_le (Y), ngay_bat_dau (Y), ngay_ket_thuc (Y, >= ngay_bat_dau), mo_ta (N), lap_lai_hang_nam (Y, default true)
+  # Tier 0 prereq cho 4 module có SLA: VV (FR-05), Hỏi đáp (FR-02), TV CS (FR-12), Chi trả (FR-06).
+  # ⚠️ Open issue: SRS không cover ai cấp danh sách 2026 — defer đến lúc test SLA mới hỏi BA.
+  # Test: chỉ seed ≥3 ngày lễ chính 2026 đủ để verify BR-CALC-03 (deadline tính skip ngày lễ).
+  ngay_le_variants:
+    - { index: 1, ten_ngay_le: "Tết Dương lịch",       ngay_bat_dau: "2026-01-01", ngay_ket_thuc: "2026-01-01", mo_ta: "Tết Dương lịch 2026",            lap_lai_hang_nam: true }
+    - { index: 2, ten_ngay_le: "Tết Nguyên đán",       ngay_bat_dau: "2026-02-16", ngay_ket_thuc: "2026-02-22", mo_ta: "Tết Âm lịch Bính Ngọ 2026 (7 ngày)", lap_lai_hang_nam: true }
+    - { index: 3, ten_ngay_le: "Giỗ Tổ Hùng Vương",    ngay_bat_dau: "2026-04-26", ngay_ket_thuc: "2026-04-26", mo_ta: "10/3 Âm lịch — Giỗ Tổ Hùng Vương",   lap_lai_hang_nam: true }
+    - { index: 4, ten_ngay_le: "Giải phóng + Quốc tế Lao động", ngay_bat_dau: "2026-04-30", ngay_ket_thuc: "2026-05-03", mo_ta: "30/4 + 1/5 + nghỉ bù", lap_lai_hang_nam: true }
+    - { index: 5, ten_ngay_le: "Quốc khánh",           ngay_bat_dau: "2026-09-01", ngay_ket_thuc: "2026-09-02", mo_ta: "Quốc khánh 2/9 + nghỉ bù",       lap_lai_hang_nam: true }
+  ngay_le_prereq: |
+    Account QTHT (qtht_01) đã login OK. Truy cập SCR-VIII-06 hoặc DM con [Quản lý ngày lễ] (FR-VIII-29).
+    Có thể nhập thủ công hoặc Import Excel theo template.
+    Verify hậu seed: GET /api/v1/ngay-le?nam=2026 → response array ≥5 records.
+    Sau đó test BR-CALC-03: tạo VV ngày 2026-04-29 với SLA 5 ngày → deadline NOT 2026-05-04 (rơi vào nghỉ lễ 30/4-3/5) mà phải skip → 2026-05-07 hoặc 2026-05-08.
+
 # =============================================================================
 # TIER 1 — MASTER ACTOR (BƯỚC 2 MASTER DATA)
-# Gồm: M1 Doanh nghiệp, M2 Tư vấn viên
+# Gồm: M1 Doanh nghiệp, M2 Tư vấn viên, M2-NHT Người hỗ trợ pháp lý (NEW 2026-05-05), M2-TCTV Tổ chức tư vấn (NEW 2026-05-05)
 # =============================================================================
 
 # M1 — Hồ sơ Doanh nghiệp (FR-V.III-01, CRUD thuần, 6 records)
@@ -549,6 +571,32 @@ dn_variants_actual_seed_2026_05_02:
     VUA_x_CONG_NGHIEP: 2       # 0 pre + 2 fixture (Gamma + Theta) ✅ NEW
     VUA_x_THUONG_MAI: 20       # 17 pre + 3 fixture (Epsilon + Mu + BG) ✅ NEW
 
+# =============================================================================
+# M2-TCTV — Tổ chức Tư vấn (FR-IV-NEW-01, SM-TCTV 6 state, 6 records) `[NEW 2026-05-05 — CR-02 + GAP-IV-07/09/10]`
+# Source: srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md FR-IV-NEW-01 line 1080-1188 + entity TO_CHUC_TU_VAN line 2254-2298
+# Screen: SCR-IV-NEW-01 (list), SCR-IV-NEW-02 (form), SCR-IV-NEW-03 (chi tiết)
+# Entry state: MOI_DANG_KY (CB NV thêm mới)
+# Workflow advance: MOI_DANG_KY → CHO_PHE_DUYET → HOAT_DONG (qua FR-IV-NEW-04 phê duyệt CB PD cùng cấp) → workflow phase, KHÔNG làm ở seed
+# loai_hinh enum: CONG_TY_LUAT / VP_LUAT_SU / TT_TVPL / KHAC
+# Bắt buộc: ten_to_chuc, loai_hinh, nguoi_dai_dien, dia_chi, linh_vuc_ids[] (≥1), Giấy ĐKHĐ Sở TP (so_giay_dkhd + ngay_cap_dkhd theo NĐ 77/2008 Đ.13)
+# 6 variant cover 4 loại hình × scope TW/BN/ĐP. Sau khi seed → TVV chọn TC chính (to_chuc_chinh_id) khi tạo hồ sơ.
+to_chuc_tu_van_variants:
+  - { index: 1, ten_to_chuc: "Công ty Luật TNHH Alpha Hà Nội",   loai_hinh: "CONG_TY_LUAT", nguoi_dai_dien: "Nguyễn Văn A", chuc_vu_dai_dien: "Giám đốc",     so_giay_dkhd: "DKHD-HN-001/2024",  ngay_cap_dkhd: "2024-03-15", linh_vuc_ids: ["LAO_DONG", "HOP_DONG", "DOANH_NGHIEP"], so_lao_dong: 25, dia_chi: "Số 5 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội", dien_thoai: "0241000101", email: "alpha-law@test.htpldn.vn", website: "https://alpha-law.vn", ghi_chu: "TC TV cấp ĐP Hà Nội — chính cho TVV variant 1-3", don_vi_quan_ly: "DP-HN", state_target: "MOI_DANG_KY" }
+  - { index: 2, ten_to_chuc: "Văn phòng Luật sư Beta Hải Phòng", loai_hinh: "VP_LUAT_SU",   nguoi_dai_dien: "Trần Thị B",  chuc_vu_dai_dien: "Trưởng VP",    so_giay_dkhd: "DKHD-HP-002/2023",  ngay_cap_dkhd: "2023-06-20", linh_vuc_ids: ["THUE", "DOANH_NGHIEP"],                  so_lao_dong: 8,  dia_chi: "Số 12 Lạch Tray, Ngô Quyền, Hải Phòng",         dien_thoai: "0241000102", email: "beta-law@test.htpldn.vn",  website: null,                       ghi_chu: "TC TV cấp ĐP Hải Phòng",  don_vi_quan_ly: "DP-HP", state_target: "MOI_DANG_KY" }
+  - { index: 3, ten_to_chuc: "Trung tâm TVPL Gamma Đà Nẵng",     loai_hinh: "TT_TVPL",      nguoi_dai_dien: "Lê Văn C",    chuc_vu_dai_dien: "Giám đốc TT",  so_giay_dkhd: "DKHD-DN-003/2024",  ngay_cap_dkhd: "2024-01-10", linh_vuc_ids: ["HOP_DONG", "SHTT", "DAT_DAI"],          so_lao_dong: 15, dia_chi: "Số 88 Bạch Đằng, Hải Châu, Đà Nẵng",            dien_thoai: "0241000103", email: "gamma-tvpl@test.htpldn.vn", website: "https://gamma-tvpl.vn",   ghi_chu: "TC TV cấp ĐP Đà Nẵng",     don_vi_quan_ly: "DP-DN", state_target: "MOI_DANG_KY" }
+  - { index: 4, ten_to_chuc: "Đoàn Luật sư Hà Nội",              loai_hinh: "VP_LUAT_SU",   nguoi_dai_dien: "Phạm Thị D",  chuc_vu_dai_dien: "Chủ nhiệm",    so_giay_dkhd: "DKHD-HN-004/2020",  ngay_cap_dkhd: "2020-09-05", linh_vuc_ids: ["LAO_DONG", "HOP_DONG", "DAT_DAI", "SHTT"], so_lao_dong: 200, dia_chi: "Số 25 Trần Phú, Ba Đình, Hà Nội",              dien_thoai: "0241000104", email: "doanluatsu-hn@test.htpldn.vn", website: "https://doanluatsuhanoi.vn", ghi_chu: "TC TV cấp ĐP HN — đoàn luật sư lớn", don_vi_quan_ly: "DP-HN", state_target: "MOI_DANG_KY" }
+  - { index: 5, ten_to_chuc: "Tổ chức TVPL Khác Delta",          loai_hinh: "KHAC",         nguoi_dai_dien: "Hoàng Văn E", chuc_vu_dai_dien: "Đại diện",     so_giay_dkhd: null,                ngay_cap_dkhd: null,         linh_vuc_ids: ["DOANH_NGHIEP"],                          so_lao_dong: 5,  dia_chi: "Số 100 Lê Lai, Quận 1, TP.HCM",                 dien_thoai: "0241000105", email: "delta-tvpl@test.htpldn.vn", website: null,                     ghi_chu: "TC TV loại Khác — KHÔNG có Giấy ĐKHĐ → expect ERR-TCTV-* khi save (BVA edge)",  don_vi_quan_ly: "TW-CUC", state_target: "MOI_DANG_KY", scenario: "BVA — thiếu Giấy ĐKHĐ Sở TP NĐ 77/2008 Đ.13, expect block save" }
+  - { index: 6, ten_to_chuc: "Công ty Luật TW Epsilon",          loai_hinh: "CONG_TY_LUAT", nguoi_dai_dien: "Vũ Thị F",    chuc_vu_dai_dien: "Tổng Giám đốc", so_giay_dkhd: "DKHD-TW-006/2024", ngay_cap_dkhd: "2024-11-30", linh_vuc_ids: ["LAO_DONG", "THUE", "HOP_DONG"],          so_lao_dong: 50, dia_chi: "Số 1 Nguyễn Trãi, Hà Đông, Hà Nội",            dien_thoai: "0241000106", email: "epsilon-law@test.htpldn.vn", website: "https://epsilon-law.vn", ghi_chu: "TC TV cấp TW (BTP công bố MLTV)",  don_vi_quan_ly: "TW-CUC", state_target: "MOI_DANG_KY" }
+to_chuc_tu_van_prereq: |
+  Cần đạt 3 điều kiện trước khi seed:
+  (1) Tier 0 ngay_le + cau_hinh_sla + don_vi đủ (TW-CUC + 3 ĐP HN/HP/DN).
+  (2) Account CB NV cùng cấp (cb_nv_dp_01 cho ĐP-HN, ...) đã login OK.
+  (3) DM `linh_vuc_phap_ly` đã đủ 6 LV chính (LAO_DONG/THUE/HOP_DONG/DOANH_NGHIEP/SHTT/DAT_DAI).
+  Verify hậu seed: GET /api/v1/to-chuc-tu-vans?trangThai=MOI_DANG_KY → ≥6 records (5 OK + 1 edge).
+  Variant 5 (KHAC, thiếu Giấy ĐKHĐ) — expect ERR-TCTV-* khi save → coi là BVA negative test, KHÔNG counter pass.
+  Workflow advance: 5 variant valid sang CHO_PHE_DUYET (CB NV trình duyệt) → CB PD cùng cấp công bố HOAT_DONG (FR-IV-NEW-04). Đó là phase test workflow, KHÔNG làm ở seed.
+
+# =============================================================================
 # M2 — Tư vấn viên (FR-IV-01, SM-TVV, 6 records at ENTRY state)
 # Screen: SCR-IV-02
 # Entry state: MỚI ĐĂNG KÝ (CB NV thêm mới, chưa tiếp nhận)
@@ -560,6 +608,13 @@ dn_variants_actual_seed_2026_05_02:
 # 6 LV adapted dùng tạm cho R6 cho đến khi dev fix:
 #   - LAO_DONG, THUE, HOP_DONG, KINH_DOANH_TM (thay DOANH_NGHIEP), DAT_DAI, HON_NHAN_GIA_DINH (thay SHTT)
 # Sau dev fix BUG-002 → revert dùng codes original (DOANH_NGHIEP, SHTT) cho fixture v2.7.
+#
+# ⚠️ BREAKING CHANGE 2026-05-05 (v2.7.0):
+#   - Field `dia_ban_ids[]` đã BỎ trong SRS update FR-04 (NĐ 77/2008 Đ.19 — TVV scope toàn quốc).
+#     Variant cũ vẫn ghi dia_ban_ids[] để giữ compatibility — khi seed thực tế qua API mới, BỎ field này.
+#     Filter "địa bàn" trong UI giờ dùng `don_vi_id` (đơn vị công nhận TVV).
+#   - Enum `loai_tvv` chỉ còn `('TVV','CG')` — BỎ `'NHT'`. 3 NHT cũ (index 19-21) ĐÃ MIGRATE sang block riêng `nht_variants` (xem dưới).
+#     Giữ lại 3 NHT trong tvv_variants[19-21] để R6 không break — R7+ migrate hoàn toàn sang nht_variants.
 tvv_variants:
   - index: 1
     ho_ten: "Nguyễn Văn Tư Vấn"
@@ -1017,7 +1072,7 @@ tvv_variants:
     anh_chan_dung: null
     kinh_nghiem: "3 năm hỗ trợ pháp lý DN tại Hải Phòng"
     file_bang_cap: null
-    ghi_chu: "NHT cấp ĐP — A3 VV phân công NHT scope ĐP-HP"
+    ghi_chu: "NHT cấp ĐP — A3 VV phân công NHT scope ĐP-HP. ⚠️ DEPRECATED v2.7.0: NHT đã migrate sang nht_variants riêng — giữ tạm để R6 chạy."
     state_target: "MỚI ĐĂNG KÝ"
     loai_tvv: "NHT"
     workflow_advance: "DANG_HOAT_DONG"
@@ -1053,6 +1108,37 @@ tvv_variants:
     (2) 9 TVV/CG/NHT profile (variant 13-21) đã ở state DANG_HOAT_DONG (advance từ MOI_DANG_KY qua thẩm định + duyệt — task T1.B3b/B3c).
     (3) Sau khi cấp TK + link FK xong, verify: GET /api/v1/tu-van-viens/{id} response field `taiKhoanId != null` cho mỗi TVV. Login bằng cg_tw_01 → list TVCS phải hiện TVCS-0001 trong inbox "Việc của tôi".
     Nếu có ít nhất 1 fail trong 3 điều kiện trên → A5 Bước 4-12 + A3 VV Phân công NHT vẫn BLOCK.
+
+# =============================================================================
+# M2-NHT — Người hỗ trợ pháp lý (FR-IV-NHT-01, SM-NHT 4 state, 3 records) `[NEW 2026-05-05 — F-FR04-NEW-02 phương án B+]`
+# Source: srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md FR-IV-NHT-01 line 1260-1325 + entity NGUOI_HO_TRO line 2108-2150
+# Pháp lý: NĐ 55/2019/NĐ-CP Điều 7 (bồi dưỡng người làm công tác HTPL DNNVV)
+# Screen: SCR-IV-NHT-01 (list), SCR-IV-NHT-02 (form), SCR-IV-NHT-03 (chi tiết)
+# Entry state: CHO_KICH_HOAT (QTHT/CB NV tạo NHT đồng thời tạo TAI_KHOAN role NHT, gửi mail kích hoạt vĩnh viễn)
+# Workflow advance: CHO_KICH_HOAT → HOAT_DONG (qua FR-VIII-26 NHT bấm link mail + đặt mật khẩu lần đầu) → workflow phase, KHÔNG làm ở seed
+# 4 state: CHO_KICH_HOAT / HOAT_DONG / TAM_DUNG / VO_HIEU_HOA. KHÔNG cần workflow thẩm định 4 tiêu chí như TVV cá nhân.
+# Phân biệt với TU_VAN_VIEN: NHT là cán bộ HTPL nội bộ (Sở TP/Bộ ngành), KHÔNG phải cá nhân ngoài hành nghề.
+# 3 variant cover 3 cấp đơn vị (1 ĐP An Giang + 1 ĐP Đà Nẵng + 1 ĐP Hải Phòng), match users.csv `nht_01/02/03`.
+# Field schema: ho_ten, email, username, don_vi_id, linh_vuc_ids[] (≥1), chuc_vu (N), chung_chi_htpl (N — JSON array), ngay_tham_gia_mang_luoi (N).
+# Tạo NHT đồng thời tạo TAI_KHOAN — 1:1 với TAI_KHOAN qua tai_khoan_id UNIQUE.
+# =============================================================================
+nht_variants:
+  - { index: 1, ho_ten: "Phùng Thị NHT An Giang",   email: "nht_01@htpldn.test", username: "nht_01", don_vi_id: "STP-AG", chuc_vu: "Chuyên viên",         linh_vuc_ids: ["DOANH_NGHIEP", "LAO_DONG"], chung_chi_htpl: '[{"ten_khoa":"Bồi dưỡng HTPL DNNVV 2022","ngay":"2022-06-15","noi_to_chuc":"Bộ Tư pháp"}]',     ngay_tham_gia_mang_luoi: "2022-07-01", state_target: "CHO_KICH_HOAT", note: "NHT cấp ĐP An Giang — match users.csv nht_01. Sau kích hoạt → xuất hiện trong dropdown UC59 phân công VV scope ĐP-AG." }
+  - { index: 2, ho_ten: "Lương Văn NHT Đà Nẵng",    email: "nht_02@htpldn.test", username: "nht_02", don_vi_id: "STP-DN", chuc_vu: "Trưởng phòng",       linh_vuc_ids: ["HOP_DONG", "THUE"],          chung_chi_htpl: '[{"ten_khoa":"Bồi dưỡng HTPL DNNVV 2021","ngay":"2021-09-20","noi_to_chuc":"Sở Tư pháp Đà Nẵng"}]', ngay_tham_gia_mang_luoi: "2021-10-15", state_target: "CHO_KICH_HOAT", note: "NHT cấp ĐP Đà Nẵng — match users.csv nht_02. NHT có 📝 RU* trên VU_VIEC + ✅ CRU* trên HO_SO_VU_VIEC scope ĐP-DN." }
+  - { index: 3, ho_ten: "Đào Thị NHT Hải Phòng",    email: "nht_03@htpldn.test", username: "nht_03", don_vi_id: "STP-HP", chuc_vu: "Chuyên viên cao cấp", linh_vuc_ids: ["SHTT", "DAT_DAI"],          chung_chi_htpl: '[{"ten_khoa":"Bồi dưỡng HTPL DNNVV 2023","ngay":"2023-04-10","noi_to_chuc":"Bộ Tư pháp"}]',     ngay_tham_gia_mang_luoi: "2023-05-05", state_target: "CHO_KICH_HOAT", note: "NHT cấp ĐP Hải Phòng — match users.csv nht_03." }
+nht_prereq: |
+  Cần đạt 3 điều kiện trước khi seed:
+  (1) Tier 0 đủ: don_vi (STP-AG/STP-DN/STP-HP), DM linh_vuc_phap_ly đủ 6 LV.
+  (2) Account QTHT (qtht_01) hoặc CB NV cùng cấp đã login OK.
+  (3) Email + username chưa tồn tại trong hệ thống — verify trước seed: GET /api/v1/tai-khoans?username=nht_01 → 404.
+  Flow seed (UI): SCR-IV-NHT-02 [+ Thêm mới NHT] → nhập 5 trường bắt buộc (ho_ten, email, username, don_vi_id, linh_vuc_ids ≥1) → Lưu.
+  Hệ thống tự tạo TAI_KHOAN role NHT ở CHO_KICH_HOAT + gửi mail link kích hoạt vĩnh viễn (1 lần dùng).
+  Verify hậu seed:
+    - GET /api/v1/nguoi-ho-tros?trangThai=CHO_KICH_HOAT → ≥3 records.
+    - GET /api/v1/tai-khoans?vai_tro=NHT → ≥3 records (tai_khoan_id của NHT).
+    - GET /api/v1/nguoi-ho-tros/{id} response field `tai_khoan_id != null`.
+  Workflow advance: NHT bấm link mail (Mailhog test inbox 103.172.236.130:8025) → đặt mật khẩu lần đầu → TAI_KHOAN + NGUOI_HO_TRO đồng thời chuyển HOAT_DONG (FR-VIII-26 step 11-12).
+  Sau khi NHT HOAT_DONG → xuất hiện trong dropdown UC59 modal Phân công NHT (SCR-V.I-03), filter theo linh_vuc_pl khớp + don_vi_id (BR-AUTH-08).
 
 # =============================================================================
 # TIER 0/1 — MASTER TÀI LIỆU PHỤ TRỢ (BỔ SUNG v2.6.0 R5 28/4)

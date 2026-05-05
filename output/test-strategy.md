@@ -2,11 +2,19 @@
 
 ## Phần mềm Hỗ trợ Pháp lý Doanh nghiệp (PM HTPLDN)
 
-**Ngày lập:** 2026-04-15 (refactor 2026-04-17, A1-A5 patch 2026-04-20, Dashboard 7.1 2026-04-20, **v3.0 seed-workflow-functional 2026-04-23**)
-**Phiên bản:** 3.0
-**Dựa trên:** SRS v3.1 (2026-04-03) + flow-module.md + seed-fixture.yaml v2.2
+**Ngày lập:** 2026-04-15 (refactor 2026-04-17, A1-A5 patch 2026-04-20, Dashboard 7.1 2026-04-20, **v3.0 seed-workflow-functional 2026-04-23**, **v3.1 SRS update 2026-05-05**)
+**Phiên bản:** 3.1
+**Dựa trên:** SRS v3.1 (2026-04-03) + **3 SRS update từ srs-update-2026-5-5/** (FR-04/FR-07/FR-10) + flow-module.md + seed-fixture.yaml **v2.7.0**
 
 > **Breaking change v3.0 (2026-04-23):** Đảo thứ tự phase test — tách **Seed fixture** (pure, entry state only) khỏi **Workflow test** (walk full lifecycle). Thứ tự mới: **Smoke → Seed → Workflow → Functional → Auth → Edge**. Xóa công thức Min count A1 + schema Data Readiness 8-cột (A2/A3) — không còn cần vì seed dùng 6 variant cố định/entity trong `input/data/seed-fixture.yaml`.
+
+> **Update v3.1 (2026-05-05) — apply 3 SRS update:**
+> - **Scope mở rộng từ 46 → 49 entity:** thêm NGUOI_HO_TRO (FR-04), TO_CHUC_TU_VAN (FR-04), NGAY_LE (FR-10).
+> - **3 FR mới (FR-10):** FR-VIII-26 (Quên MK / Kích hoạt TK lần đầu), FR-VIII-28 (Nhật ký HT), FR-VIII-29 (Quản lý ngày lễ).
+> - **7 FR mới (FR-04):** FR-IV-13 (Tiếp nhận TVV), FR-IV-NEW-01/02/04 (TC TV CRUD + State + Phê duyệt), FR-IV-NHT-01/02/03 (NHT CRUD + Tìm kiếm + Xem hồ sơ).
+> - **1 FR bỏ (FR-07):** FR-V.III-NEW-01 Import DN từ Excel — DN tự đăng ký TK-first qua FR-VIII-22.
+> - **Run order test thay đổi:** FR-10 (TK + kích hoạt) test TRƯỚC FR-04 (NHT/TVV/TCTV) + FR-07 (DN self-reg) — vì self-reg + kích hoạt là nền tảng.
+> - **Tham chiếu chi tiết:** [`../input/srs-update-2026-5-5/_DELTA-MAP-FR04.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR04.md), [`_DELTA-MAP-FR07.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR07.md), [`_DELTA-MAP-FR10.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR10.md).
 
 ---
 
@@ -28,11 +36,14 @@
 | §12 | [Kế hoạch](#12-kế-hoạch-thực-hiện) |
 
 **Tài liệu liên quan:**
-- **Seed + Workflow input (v3.0):**
-  - [input/flow-module.md](../input/flow-module.md) — State machine 14 module + Hub Tier + Phụ lục 2 seed presets + Phụ lục 3 troubleshooting
-  - [input/data/seed-fixture.yaml](../input/data/seed-fixture.yaml) — 6 variants/entity × 18 entity (pure seed, entry state)
-  - [input/data/entity-map.md](../input/data/entity-map.md) — 18 entity × "Tạo tại / Đọc tại" cross-map
-- [permission-matrix.md](permission-matrix.md) — Ma trận phân quyền CRUD chi tiết (Tầng 2)
+- **Seed + Workflow input (v3.1 — update 2026-05-05):**
+  - [input/quy-trinh-nghiep-vu/flow-module.md](../input/quy-trinh-nghiep-vu/flow-module.md) — State machine 14 module + Hub Tier + §2a SM-NHT + §2b SM-TCTV (NEW 2026-05-05) + Phụ lục 2 seed presets + Phụ lục 3 troubleshooting
+  - [input/data/seed-fixture.yaml](../input/data/seed-fixture.yaml) — v2.7.0 — 6 variants/entity × 21 entity (pure seed, entry state). NEW 2026-05-05: ngay_le_variants, to_chuc_tu_van_variants, nht_variants
+  - [input/data/entity-map.md](../input/data/entity-map.md) — 26 entity (23 cũ + 3 mới: E24 NGUOI_HO_TRO, E25 TO_CHUC_TU_VAN, E26 NGAY_LE) × "Tạo tại / Đọc tại" cross-map
+  - [input/srs-update-2026-5-5/_DELTA-MAP-FR04.md](../input/srs-update-2026-5-5/_DELTA-MAP-FR04.md) — Delta map FR-04 (CG/TVV/NHT/TCTV)
+  - [input/srs-update-2026-5-5/_DELTA-MAP-FR07.md](../input/srs-update-2026-5-5/_DELTA-MAP-FR07.md) — Delta map FR-07 (DN self-reg)
+  - [input/srs-update-2026-5-5/_DELTA-MAP-FR10.md](../input/srs-update-2026-5-5/_DELTA-MAP-FR10.md) — Delta map FR-10 (Self-reg + Quên MK + Ngày lễ)
+- [permission-matrix.md](permission-matrix.md) — Ma trận phân quyền CRUD chi tiết (Tầng 2) — **49 entity** (cập nhật 2026-05-05)
 - [scaling-test-strategy.md](scaling-test-strategy.md) — Chiến lược mở rộng khi thêm module
 - [funtion/](funtion/) — Test case chi tiết từng module
 - [smoke/](smoke/) — State Machine paths từng module

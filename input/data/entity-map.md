@@ -1,6 +1,6 @@
 # Entity Map — HTPLDN Cross-Module Data Dependencies
 
-> **Nguồn:** NotebookLM query 2026-04-22 trên SRS v3 + review `flow-module.md`.
+> **Nguồn:** NotebookLM query 2026-04-22 trên SRS v3 + review `flow-module.md`. **Update 2026-05-05:** thêm 3 entity từ srs-update-2026-5-5/ (NGUOI_HO_TRO + TO_CHUC_TU_VAN + NGAY_LE). Xem [`../srs-update-2026-5-5/_DELTA-MAP-FR04.md`](../srs-update-2026-5-5/_DELTA-MAP-FR04.md), [`_DELTA-MAP-FR07.md`](../srs-update-2026-5-5/_DELTA-MAP-FR07.md), [`_DELTA-MAP-FR10.md`](../srs-update-2026-5-5/_DELTA-MAP-FR10.md).
 > **Liên kết:**
 > - [`../flow-module.md`](../flow-module.md) — flow tạo data + state machine 14 module + troubleshooting seed
 > - [`./seed-fixture.yaml`](./seed-fixture.yaml) — giá trị nhập cụ thể (6 variants/entity theo tier Y)
@@ -23,8 +23,8 @@ Bảng này dùng khi:
 | E01 | `DANH_MUC` | 0 | M0 QTHT / SCR-VIII-01 | TẤT CẢ (dropdown: lĩnh vực, loại DN, ngành nghề, trạng thái VV, nguồn hỏi đáp, …) | — |
 | E02 | `DON_VI` | 0 | M0 QTHT / SCR-VIII-13/14 | TẤT CẢ (phân quyền scope TW/BN/ĐP, filter danh sách theo `don_vi_id`) | 1:N cán bộ |
 | E03 | `TAI_KHOAN` | 0 | M0 QTHT / SCR-VIII-02/03/04 | TẤT CẢ (author `nguoi_tao_id`, assignee `nguoi_xu_ly_id`, approver `nguoi_duyet_id`) | — |
-| E04 | `DOANH_NGHIEP` | 1 | M1 / SCR-V.III-02 | M3 VV (`SCR-V.I-02`), M4 Hỏi đáp (`SCR-II-01`), M5 TV CS (`SCR-X1-02`), M7 HĐ (`SCR-X3-01`), M8 Chi trả (`SCR-V.II-01`), SCR-V.III-02 tab #2/#3/#4 | 1:N → VV, Chi trả, HĐ, Hỏi đáp |
-| E05 | `TU_VAN_VIEN` | 1 | M2 / SCR-IV-02 | M3 (phân công VV), M4 (phân công Hỏi đáp), M5 (CG TV CS), M7 (Bên B HĐ), SCR-IV-02 tab "Lịch sử hỗ trợ" | 1:N → VV, HĐ |
+| E04 | `DOANH_NGHIEP` | 1 | **DN tự đăng ký qua SCR-VIII-08 (FR-VIII-22 self-reg, login page button "Đăng ký dành cho doanh nghiệp")**. ⚠️ Update 2026-05-05: CB NV không còn quyền tạo DN qua SCR-V.III-02 (FR-V.III-NEW-01 Import Excel BỎ — BA chốt). | M3 VV (`SCR-V.I-02`), M4 Hỏi đáp (`SCR-II-01`), M5 TV CS (`SCR-X1-02`), M7 HĐ (`SCR-X3-01`), M8 Chi trả (`SCR-V.II-01`), SCR-V.III-02 tab #2/#3/#4 | 1:N → VV, Chi trả, HĐ, Hỏi đáp |
+| E05 | `TU_VAN_VIEN` | 1 | M2 / SCR-IV-02 (chỉ TVV/CG cá nhân ngoài). ⚠️ Update 2026-05-05: NHT đã tách entity riêng → xem **E24 NGUOI_HO_TRO**. `loai_tvv` enum giờ chỉ `('TVV','CG')`, BỎ `'NHT'`. Field `dia_ban_ids[]` đã bỏ — TVV scope toàn quốc theo NĐ 77/2008 Đ.19 (filter dùng `don_vi_id`). | M3 (phân công VV), M4 (phân công Hỏi đáp), M5 (CG TV CS), M7 (Bên B HĐ), SCR-IV-02 tab "Lịch sử hỗ trợ" | 1:N → VV, HĐ |
 | E06 | `VU_VIEC` | 2 | M3 / SCR-V.I-02 | M7 HĐ (N:N `vu_viec_ids`), M8 Chi trả (prereq), M9 Đánh giá (mẫu chấm điểm), SCR-V.III-02 tab #3 KPI (`Tổng VV`, `Hoàn thành`), SCR-IV-02 tab LS TVV | 1:N VV bước, N:N với HĐ |
 | E07 | `HO_SO_PHAP_LY_DN` | 2 | M5 TV CS / UC150 | SCR-V.III-02 tab #2 "Hồ sơ PL doanh nghiệp" | 1:N per DN (GIAY_PHEP / HOP_DONG / GIAY_CN / QUYET_DINH / KHAC) |
 | E08 | `HOP_DONG_TV` | 3 | M7 / SCR-X3-01 | — (không có reader downstream, chỉ xem trong chính module) | N:N với VV qua `vu_viec_ids` |
@@ -43,6 +43,9 @@ Bảng này dùng khi:
 | E21 | `CAU_HINH_SLA` | 0 | M0 QTHT / SCR-VIII-06 Tab "SLA" (FR-VIII-10) | M3 VV (tính `deadline` BR-CALC-03), M4 Hỏi đáp (deadline), M5 TV CS (deadline), M8 Chi trả (deadline). 4 row mặc định: VU_VIEC=10, HO_SO_HT=15, HO_SO_TT=10, HOI_DAP=5 ngày LV (FR-VIII-10 Seed Data) | 1:N → tất cả entity transactional có `deadline` |
 | E22 | `CAU_HINH_PHAN_CONG` | 0/1 mixed | M0 QTHT / MH-10.7 Tab "Phân công mặc định" (FR-II-NEW-01) — **2 đợt**: Đợt 1 CB-only 6 row (Tier 0); Đợt 2 backfill TVV 6 row đủ 6 LV PL (sau T3.1 SM-TVV PASS + QTHT cấp TK cho TVV) | Modal Phân công Hỏi đáp (SCR-II-03), Phân công VV (FR-V.I-09): bảng gợi ý `nguoi_xu_ly_id` sort `uu_tien ASC → workload ASC` (rỗng nếu chưa map) | UNIQUE(linh_vuc_id + nguoi_xu_ly_id + don_vi_id). 1 cột `nguoi_xu_ly_id` (KHÔNG phải 2 dropdown CB/TVV — verified UI 2026-04-25) |
 | E23 | `TIEU_CHI_DANH_GIA` (DM mở rộng) | 0 | M0 QTHT / SCR-VIII-01 mở rộng (FR-VIII-11, `loai_danh_muc='TIEU_CHI_DG_HIEU_QUA'`) — ⚠️ **M2 mâu thuẫn SRS**: FR-VIII-11 + logic-data + plan-review coi là DM (3 nguồn); DDL `srs-fr-08-danh-gia.md §3.4.3 line 1017` tách entity riêng (1 nguồn) — đi theo FR-VIII-11 chờ BA confirm | M9 Đánh giá HQ (input chấm điểm — FR-VI-02/06 reference), Báo cáo TT17 (BR-CALC-04: Σ trọng số = 100%) | 4 tiêu chí seed: TC-PL/TC-NL/TC-HQ/TC-ML |
+| E24 | `NGUOI_HO_TRO` (NHT) **`[NEW 2026-05-05 — F-FR04-NEW-02 phương án B+]`** | 1 | M2 / **SCR-IV-NHT-02** (QTHT hoặc CB NV tạo qua FR-IV-NHT-01). Tạo NHT đồng thời tạo TAI_KHOAN gán role `NHT` ở `CHO_KICH_HOAT` → NHT bấm link mail (FR-VIII-26) → `HOAT_DONG`. | M3 VV (phân công NHT — UC59 — modal SCR-V.I-03), M4 Hỏi đáp (phân công NHT/TVV/CB), SCR-IV-NHT-03 hồ sơ NHT | 1:1 với TAI_KHOAN; N:N với DANH_MUC qua junction NGUOI_HO_TRO_LINH_VUC (≥1 lĩnh vực PL chuyên môn) |
+| E25 | `TO_CHUC_TU_VAN` (TC TV) **`[NEW 2026-05-05 — CR-02 + GAP-IV-07/09/10]`** | 1 | M2 / **SCR-IV-NEW-02** (CB NV tạo qua FR-IV-NEW-01). Trạng thái mới `MOI_DANG_KY` → CB NV trình duyệt → CB PD công bố vào MLTV (NĐ 55/2019 Đ.9, FR-IV-NEW-04) → `HOAT_DONG`. | TVV chọn TC chính khi đăng ký (`TVV_TO_CHUC.to_chuc_id` FK), Cổng PLQG (khi `cong_khai=1`), SCR-IV-NEW-01 list, SCR-IV-NEW-03 chi tiết | 1:N TVV (qua junction TVV_TO_CHUC); N:N với DANH_MUC qua junction lĩnh vực |
+| E26 | `NGAY_LE` **`[NEW 2026-05-05 — GAP-VIII-05]`** | 0 | M0 QTHT / **FR-VIII-29** SCR-VIII-06 hoặc DM con (CRUD QTHT only). Hỗ trợ import Excel danh sách năm. | M3 VV (BR-CALC-03 tính SLA trừ ngày lễ), M4 Hỏi đáp (SLA), M5 TV CS (SLA), M8 Chi trả (SLA), Dashboard FR-01 KPI-04 SLA | 1:N tham chiếu từ mọi entity transactional có `deadline` |
 
 ---
 

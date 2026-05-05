@@ -62,33 +62,93 @@ Trước khi seed data cho bất kỳ module nào, nắm thứ tự tạo data h
 
 **Seed data presets** (preset P1/P2/P3/P4 để cover happy path): xem [Phụ lục 2](#phụ-lục-2-seed-data-presets--happy-path-e2e) cuối file này.
 
+> **⚠️ CẬP NHẬT 2026-05-05 — apply 3 SRS update từ srs-update-2026-5-5/:**
+> - **Tier 0 thêm entity NGAY_LE** (FR-VIII-29 mới) — QTHT seed danh sách ngày lễ trước khi test SLA (BR-CALC-03 trừ ngày lễ khi tính ngày làm việc). Ảnh hưởng 4 module SLA: VV/Hỏi đáp/TV CS/Chi trả. Seed fixture: xem `seed-fixture.yaml > tier_0_prerequisite > ngay_le_variants`.
+> - **Tier 1 thêm 2 entity:** NGUOI_HO_TRO (NHT — xem §2a) + TO_CHUC_TU_VAN (TC TV — xem §2b). NHT/TC TV là master cho phân công VV/Hỏi đáp + dropdown TVV chọn TC chính.
+> - **Trigger SM-TAIKHOAN ↔ SM-TVV/SM-NHT:** FR-VIII-26 mới (Quên MK / Kích hoạt TK lần đầu) trigger update đồng thời SM-TVV/SM-NHT khi user bấm link kích hoạt → hai SM cùng chuyển `CHO_KICH_HOAT` → `HOAT_DONG`.
+> - **DN: bỏ luồng CB NV tạo, chuyển sang FR-VIII-22 self-reg** — xem §1 đã cập nhật.
+
 ---
 
 ## [BƯỚC 2 — MASTER DATA]
 
-### 1. FLOW LUỒNG "HỒ SƠ DOANH NGHIỆP" (FR-V.III-01) — Nhóm V.III
-Module master data — KHÔNG có state machine. CB NV thêm/sửa/xóa mềm trực tiếp (thuần CRUD). Không có phê duyệt.
+### 1. FLOW LUỒNG "HỒ SƠ DOANH NGHIỆP" (FR-V.III-01 + FR-VIII-22) — Nhóm V.III + Nhóm VIII
+
+> **⚠️ CẬP NHẬT 2026-05-05 (apply SRS update srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md + srs-fr-10-quan-tri.md):**
+> - **BỎ chức năng "Thêm mới DN" trên CMS** — CB NV KHÔNG còn quyền tạo DN qua SCR-V.III-02 (FR-V.III-NEW-01 Import Excel cũng BỎ).
+> - **DN tự đăng ký TK-first qua FR-VIII-22** (login page button "Đăng ký dành cho doanh nghiệp" → SCR-VIII-08 form 22 trường).
+> - SCR-V.III-02 chỉ còn xem/sửa/xóa (CB NV quyền 📝 RU\*D, không C).
+> - Tham chiếu: [`_DELTA-MAP-FR07.md`](../srs-update-2026-5-5/_DELTA-MAP-FR07.md), [`_DELTA-MAP-FR10.md`](../srs-update-2026-5-5/_DELTA-MAP-FR10.md).
+
+Module master data — KHÔNG có state machine cho DN. Tài khoản DN có SM-TAIKHOAN (CHO_KICH_HOAT → HOAT_DONG qua FR-VIII-26).
 
 | Bước | Account thao tác | Trạng thái chuyển | Thao tác thực hiện trên màn hình |
 | :--- | :--- | :--- | :--- |
-| **1 (Thủ công — tạo master data)** | **Cán bộ Nghiệp vụ** (CB NV) — cấp TW/BN/ĐP | *Không có SM* (tạo bản ghi mới) | Truy cập danh sách DN (`SCR-V.III-01`), click nút **[+ Thêm mới]**. Hệ thống auto-gen Mã DN (`DN-{TINH}-{SEQ}`) và mở form (`SCR-V.III-02`). |
-| **2** | **Cán bộ Nghiệp vụ** (CB NV) | *Không có SM* | Nhập các field bắt buộc: Tên DN, MST, Địa chỉ, Tỉnh thành, Loại DN, Ngành nghề, Người đại diện. Nhập *Số lao động* và *Doanh thu* → hệ thống **tự động gợi ý (auto-suggest) Quy mô** theo NĐ39/2018 (Siêu nhỏ/Nhỏ/Vừa). |
-| **3** | **Cán bộ Nghiệp vụ** (CB NV) | *Không có SM* | Nhấn **[Lưu]**. Hệ thống validate: MST unique (báo `ERR-DN-02` nếu trùng), quy mô khớp NĐ39 (warning `WRN-DN-01` nếu lệch). Lưu CSDL + Audit Log. |
+| **1 (Self-reg)** | **Doanh nghiệp** chưa có TK | (Tạo mới TAI_KHOAN + DOANH_NGHIEP) ➔ TK ở `CHO_KICH_HOAT` | Mở login page (`/login`), click **[Đăng ký dành cho doanh nghiệp]** → mở SCR-VIII-08 form 22 trường (19 thông tin DN + 3 TK: username/password/đồng ý điều khoản). Nhập đủ thông tin DN (giống Inputs FR-V.III-01) + Tên TK + MK ≥ 8 ký tự. Submit → hệ thống auto-pass (KHÔNG validate với cơ quan ngoài). Tạo TAI_KHOAN role 'DN' ở `CHO_KICH_HOAT` + DOANH_NGHIEP với MST làm khóa định danh. Mail link kích hoạt vĩnh viễn được gửi về email DN khai (qua Mailhog test inbox 103.172.236.130:8025). |
+| **2 (Kích hoạt)** | **Doanh nghiệp** | TK `CHO_KICH_HOAT` ➔ `HOAT_DONG` | DN kiểm mail (Mailhog), bấm link kích hoạt → mở form đặt mật khẩu mới (FR-VIII-26). Nhập MK ≥ 8 ký tự + xác nhận → Lưu. Hệ thống verify token (1 lần dùng) + chuyển TK sang `HOAT_DONG`. DN có thể login + dùng đầy đủ chức năng. |
+| **3 (CB NV xem/sửa)** | **Cán bộ Nghiệp vụ** (CB NV) | *Không có SM cho DN* | CB NV truy cập `SCR-V.III-01`, xem danh sách DN scope theo BR-AUTH-08. Click DN → SCR-V.III-02 chi tiết. Có thể **Sửa** thông tin DN (📝 RU\*D) + xem lịch sử hỗ trợ + hồ sơ PL DN + hồ sơ chi trả. **KHÔNG có nút [+ Thêm mới] hoặc [Import Excel]**. |
 | *(Phụ)* | CB NV | — | Xóa mềm: chỉ cho phép xóa khi DN không còn VV đang xử lý (nếu có → `ERR-DN-03`). |
 
 ---
 
-### 2. FLOW LUỒNG "HỒ SƠ TƯ VẤN VIÊN" (SM-TVV) - Nhóm IV
-Luồng thẩm định và kết nạp Chuyên gia/Tư vấn viên (TVV) vào mạng lưới. Luồng chuẩn yêu cầu TVV tự đăng ký từ chuyên trang ngoài → **hiện chưa test được do chưa có chuyên trang public**. Tester dùng luồng thủ công ở Bước 1 để tạo hồ sơ thẳng lên `CHỜ THẨM ĐỊNH`.
+### 2. FLOW LUỒNG "HỒ SƠ TƯ VẤN VIÊN / CHUYÊN GIA" (SM-TVV) - Nhóm IV
+
+> **⚠️ CẬP NHẬT 2026-05-05 (apply SRS update srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md):**
+> - **NHT đã TÁCH entity riêng** (NGUOI_HO_TRO, NĐ 55/2019 Đ.7) — xem **§2a flow mới**. Module này chỉ còn TVV/CG cá nhân ngoài (NĐ 77/2008).
+> - `loai_tvv` enum giờ chỉ `('TVV','CG')`, BỎ `'NHT'`.
+> - Field `dia_ban_ids[]` BỎ — TVV scope toàn quốc theo NĐ 77/2008 Đ.19.
+> - SM-TVV thêm state mới `CHO_KICH_HOAT` sau phê duyệt → TVV bấm link mail (FR-VIII-26) → `HOAT_DONG`. **Hệ thống tự cấp TK** ở bước phê duyệt (gọi FR-VIII-15).
+> - Thang điểm thẩm định đổi 0-10 → **1-5** DECIMAL(3,1).
+> - Bỏ cooldown 6 tháng khi nộp lại sau TU_CHOI.
+> - Tham chiếu: [`_DELTA-MAP-FR04.md`](../srs-update-2026-5-5/_DELTA-MAP-FR04.md).
+
+Luồng thẩm định và kết nạp Chuyên gia/Tư vấn viên (TVV/CG) vào mạng lưới. Luồng chuẩn yêu cầu TVV tự đăng ký từ chuyên trang ngoài → **hiện chưa test được do chưa có chuyên trang public**. Tester dùng luồng thủ công ở Bước 1 để tạo hồ sơ thẳng lên `CHỜ THẨM ĐỊNH`.
 
 | Bước | Account thao tác | Trạng thái chuyển | Thao tác thực hiện trên màn hình |
 | :--- | :--- | :--- | :--- |
-| **1 (Thủ công — thay cho "TVV tự đăng ký từ chuyên trang")** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `MỚI ĐĂNG KÝ` | CB NV vào danh sách TVV, click **[+ Thêm mới]** → mở form `SCR-IV-02`. Nhập hộ TVV: họ tên, chứng chỉ hành nghề, bằng cấp, đơn vị công tác, upload file đính kèm. Lưu → bản ghi tạo với trạng thái `MOI_DANG_KY`. |
+| **1 (Thủ công — thay cho "TVV tự đăng ký từ chuyên trang")** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `MỚI ĐĂNG KÝ` | CB NV vào danh sách TVV (menu **"Tư vấn viên / Chuyên gia"** — đổi tên 2026-05-05), click **[+ Thêm mới]** → mở form `SCR-IV-02`. Nhập hộ TVV: họ tên, chứng chỉ hành nghề, bằng cấp, đơn vị công tác (`don_vi_id`), upload file đính kèm. **`loai_tvv` chỉ TVV hoặc CG** (KHÔNG còn NHT). Lưu → bản ghi tạo với trạng thái `MOI_DANG_KY`. |
 | **2** | **Cán bộ Nghiệp vụ** (CB NV) | `MỚI ĐĂNG KÝ` ➔ `CHỜ THẨM ĐỊNH` | Đăng nhập CMS, mở danh sách, nhấn nút **[Tiếp nhận]** hồ sơ. |
 | **3** | **Cán bộ Nghiệp vụ** (CB NV) | `CHỜ THẨM ĐỊNH` ➔ `ĐANG THẨM ĐỊNH` | Mở hồ sơ, chọn tab Thẩm định, bắt đầu tiến hành chấm điểm. |
 | *(Phụ)* | CB NV | `ĐANG THẨM ĐỊNH` ➔ `YÊU CẦU BỔ SUNG` | Nếu thiếu giấy tờ, CB NV chọn kết luận Yêu cầu bổ sung và nhập lý do. Hồ sơ trả về cho TVV cập nhật lại. |
-| **4** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG THẨM ĐỊNH` ➔ `CHỜ PHÊ DUYỆT` | CB NV chấm điểm 4 nhóm tiêu chí (Pháp lý, Năng lực, Hiệu quả, Mạng lưới). Khi nhóm Pháp lý ĐẠT, chọn kết luận Đạt và nhấn **[Trình duyệt]**. |
-| **5** | **Cán bộ Phê duyệt** (CB PD cùng cấp) | `CHỜ PHÊ DUYỆT` ➔ `ĐANG HOẠT ĐỘNG` | Log out CB NV. **Đăng nhập CB PD**. Mở danh sách chờ duyệt, kiểm tra và nhấn **[Phê duyệt]**. Lúc này TVV chính thức được vào mạng lưới và có thể được phân công làm Vụ việc. |
+| **4** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG THẨM ĐỊNH` ➔ `CHỜ PHÊ DUYỆT` | CB NV chấm điểm 4 nhóm tiêu chí (Pháp lý, Năng lực, Hiệu quả, Mạng lưới) — **thang 1-5** (đổi từ 0-10). Khi nhóm Pháp lý ĐẠT, chọn kết luận Đạt và nhấn **[Trình duyệt]**. |
+| **5** | **Cán bộ Phê duyệt** (CB PD cùng cấp) | `CHỜ PHÊ DUYỆT` ➔ `CHỜ KÍCH HOẠT` | Log out CB NV. **Đăng nhập CB PD**. Mở danh sách chờ duyệt, kiểm tra và nhấn **[Phê duyệt]**. Hệ thống tự động: (a) chuyển TVV `CHO_KICH_HOAT`; (b) tạo TAI_KHOAN role TVV/CG ở `CHO_KICH_HOAT`; (c) gửi mail link kích hoạt vĩnh viễn. |
+| **6 (Kích hoạt)** | **TVV/CG** (chủ hồ sơ) | `CHỜ KÍCH HOẠT` ➔ `ĐANG HOẠT ĐỘNG` | TVV bấm link mail (Mailhog) → form đặt mật khẩu lần đầu (FR-VIII-26). Nhập MK + xác nhận → Lưu. TAI_KHOAN + TU_VAN_VIEN đồng thời chuyển `HOAT_DONG`. TVV có thể login + được phân công vụ việc. |
+
+---
+
+### 2a. FLOW LUỒNG "HỒ SƠ NGƯỜI HỖ TRỢ PHÁP LÝ" (SM-NHT) — Nhóm IV `[NEW 2026-05-05]`
+
+Module mới — entity NGUOI_HO_TRO (NĐ 55/2019 Đ.7). NHT là **cán bộ HTPL nội bộ** (Sở TP/Bộ ngành/UBND/tổ chức đại diện DN), KHÔNG phải cá nhân ngoài hành nghề. KHÔNG cần workflow thẩm định 4 tiêu chí như TVV — chỉ cần kích hoạt TK lần đầu.
+
+**4 state SM-NHT:** `CHO_KICH_HOAT` → `HOAT_DONG` → `TAM_DUNG` → `VO_HIEU_HOA` (back-loop được).
+
+Account cần chuẩn bị: `Quản trị HT (qtht_01)` HOẶC `Cán bộ Nghiệp vụ` (cùng đơn vị với NHT muốn tạo).
+
+| Bước | Account thao tác | Trạng thái chuyển | Thao tác thực hiện trên màn hình |
+| :--- | :--- | :--- | :--- |
+| **1 (Thủ công)** | **QTHT** hoặc **CB NV** | (Tạo mới NHT + TAI_KHOAN) ➔ `CHO_KICH_HOAT` | Truy cập sub-menu **"Người hỗ trợ pháp lý"** (NHT) → click **[+ Thêm mới]** trên `SCR-IV-NHT-02`. Nhập 5 trường bắt buộc: ho_ten, email, username, don_vi_id (CB NV mặc định = đơn vị mình, lock; QTHT chọn tự do), linh_vuc_ids (≥1, FK → DANH_MUC). Lưu → hệ thống **đồng thời tạo TAI_KHOAN role 'NHT'** ở CHO_KICH_HOAT + gửi mail link kích hoạt vĩnh viễn (1 lần dùng). |
+| **2 (Kích hoạt)** | **NHT** (chủ hồ sơ) | `CHO_KICH_HOAT` ➔ `HOAT_DONG` | NHT kiểm mail (Mailhog), bấm link → form đặt MK lần đầu (FR-VIII-26). Submit → TAI_KHOAN + NGUOI_HO_TRO đồng thời chuyển `HOAT_DONG`. NHT login được + xuất hiện trong dropdown UC59 modal Phân công NHT (SCR-V.I-03), filter theo linh_vuc_pl khớp + don_vi_id (BR-AUTH-08). |
+| *(Phụ)* | CB NV | `HOAT_DONG` ⟷ `TAM_DUNG` | Tạm dừng/kích hoạt lại NHT khi cần (vd nghỉ phép dài). |
+| *(Phụ)* | CB NV | `HOAT_DONG/TAM_DUNG` ➔ `VO_HIEU_HOA` | Vô hiệu hóa NHT (vd nghỉ việc). NHT KHÔNG thể login + KHÔNG xuất hiện dropdown phân công. |
+
+---
+
+### 2b. FLOW LUỒNG "TỔ CHỨC TƯ VẤN" (SM-TCTV) — Nhóm IV `[NEW 2026-05-05]`
+
+Module mới — entity TO_CHUC_TU_VAN nâng cấp từ danh mục thành entity riêng (NĐ 77/2008 + NĐ 55/2019 Đ.10). Workflow tương tự SM-TVV nhưng đơn giản hơn (KHÔNG có thẩm định 4 tiêu chí, chỉ phê duyệt công bố theo NĐ 55/2019 Đ.9).
+
+**6 state SM-TCTV:** `MOI_DANG_KY` → `CHO_PHE_DUYET` → `HOAT_DONG` ⟷ `TAM_DUNG` → `VO_HIEU_HOA`. Còn `TU_CHOI` ⟷ `CHO_PHE_DUYET` (loop).
+
+Account cần chuẩn bị: `Cán bộ Nghiệp vụ` + `Cán bộ Phê duyệt` cùng cấp (BR-AUTH-05 — KHÔNG xuyên cấp).
+
+| Bước | Account thao tác | Trạng thái chuyển | Thao tác thực hiện trên màn hình |
+| :--- | :--- | :--- | :--- |
+| **1 (Thủ công — tạo TC TV)** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `MOI_DANG_KY` | CB NV truy cập sub-menu **"Tổ chức tư vấn"** → click **[+ Thêm mới]** trên `SCR-IV-NEW-02`. Nhập: ten_to_chuc, loai_hinh (CONG_TY_LUAT/VP_LUAT_SU/TT_TVPL/KHAC), nguoi_dai_dien, **so_giay_dkhd + ngay_cap_dkhd** (Giấy ĐKHĐ Sở TP — bắt buộc theo NĐ 77/2008 Đ.13), linh_vuc_ids (≥1), dia_chi. Lưu → bản ghi tạo trạng thái `MOI_DANG_KY`. |
+| **2** | **Cán bộ Nghiệp vụ** (CB NV) | `MOI_DANG_KY` ➔ `CHO_PHE_DUYET` | CB NV mở chi tiết TC TV (`SCR-IV-NEW-03`), nhấn nút **[Trình duyệt]**. Hệ thống thông báo CB PD cùng cấp. |
+| **3** | **Cán bộ Phê duyệt** (CB PD cùng cấp — BR-AUTH-05) | `CHO_PHE_DUYET` ➔ `HOAT_DONG` | Log out CB NV. **Đăng nhập CB PD**. Mở danh sách chờ duyệt → mở chi tiết TC TV → nhấn **[Phê duyệt]** + nhập **so_quyet_dinh** (bắt buộc, format `QĐ-{số}/QĐ-{đơn_vị}`). Hệ thống set `ngay_cong_nhan = NOW()`. TC TV được phép tham gia phân công VV + công khai lên Cổng PLQG (FR-IV-08). |
+| *(Phụ)* | CB PD | `CHO_PHE_DUYET` ➔ `TU_CHOI` | Nếu thiếu/sai → từ chối + nhập lý do ≥10 ký tự. CB NV nhận thông báo, sửa lại + trình lại (TU_CHOI ➔ CHO_PHE_DUYET). |
+| *(Phụ)* | CB NV | `HOAT_DONG` ⟷ `TAM_DUNG` | CB NV tạm dừng/kích hoạt lại TC TV khi cần (FR-IV-NEW-02). |
+| *(Phụ)* | CB NV | `HOAT_DONG/TAM_DUNG` ➔ `VO_HIEU_HOA` | Vô hiệu hóa TC TV — **GUARD**: KHÔNG có TVV đang liên kết hoạt động (`TVV_TO_CHUC.trang_thai='KICH_HOAT' AND TU_VAN_VIEN.trang_thai='HOAT_DONG'` count = 0). Nếu có → ERR-TT-TC-02. Đã công khai → tự động gỡ Cổng PLQG. |
 
 ---
 

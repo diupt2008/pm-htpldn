@@ -1,9 +1,10 @@
 # Ma trận phân quyền CRUD — Role × Entity
 
 > **Nguồn:** SRS v3.1 §3.4.2 — Ma trận phân quyền CRUD (Permission Matrix)
-> **Ngày trích:** 2026-04-16 | **Refactor:** 2026-04-19 — sắp xếp theo FR-01 → FR-16 | **Refactor 2026-04-21** — xoay 90° thành Role × Entity (view theo từng role) + bổ sung Dashboard (FR-01) cho CB_NV/CB_PD + đổi nhãn KHO_CAU_HOI FR-12 → FR-13 (xác nhận qua NotebookLM SRS §3.2.13)
+> **Ngày trích:** 2026-04-16 | **Refactor:** 2026-04-19 — sắp xếp theo FR-01 → FR-16 | **Refactor 2026-04-21** — xoay 90° thành Role × Entity (view theo từng role) + bổ sung Dashboard (FR-01) cho CB_NV/CB_PD + đổi nhãn KHO_CAU_HOI FR-12 → FR-13 (xác nhận qua NotebookLM SRS §3.2.13) | **Update 2026-05-05** — apply 3 SRS update: thêm 3 entity (NGUOI_HO_TRO + TO_CHUC_TU_VAN + NGAY_LE), bỏ quyền Create của CB NV trên DOANH_NGHIEP (FR-VIII-22 self-reg), thêm quyền Create qua API self-reg cho DN.
 > **Dùng cho:** [test-strategy.md](test-strategy.md) §5.1
-> **Tổng entity SRS §3.4.2:** 46 entity | **Role:** 11
+> **Tổng entity:** **49 entity** (SRS §3.4.2 baseline 46 + 3 entity mới từ srs-update-2026-5-5/) | **Role:** 11
+> **Tham chiếu update:** [`../input/srs-update-2026-5-5/_DELTA-MAP-FR04.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR04.md), [`_DELTA-MAP-FR07.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR07.md), [`_DELTA-MAP-FR10.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR10.md).
 
 ---
 
@@ -47,6 +48,8 @@
 | FR-04 | TU_VAN_VIEN | 👁️ R |
 | FR-04 | HO_SO_TU_VAN_VIEN | 👁️ R |
 | FR-04 | DANH_GIA_TU_VAN_VIEN | 👁️ R |
+| FR-04 | NGUOI_HO_TRO `[NEW]` | ✅ CRUD |
+| FR-04 | TO_CHUC_TU_VAN `[NEW]` | 👁️ R |
 | FR-05 | VU_VIEC | 👁️ R |
 | FR-05 | HO_SO_VU_VIEC | 👁️ R |
 | FR-05 | KET_QUA_VU_VIEC | 👁️ R |
@@ -68,6 +71,7 @@
 | FR-10 | AUDIT_LOG | 👁️ R |
 | FR-10 | THONG_BAO | 👁️ R |
 | FR-10 | CAU_HINH_PHAN_CONG | ✅ CRUD |
+| FR-10 | NGAY_LE `[NEW]` | ✅ CRUD |
 | FR-11 | BAO_CAO | 👁️ R |
 | FR-12 | TU_VAN_CHUYEN_SAU | 👁️ R |
 | FR-12 | PHIEN_TU_VAN | 👁️ R |
@@ -78,7 +82,7 @@
 | FR-15 | KE_HOACH_CT_HTPL | 👁️ R |
 | FR-15 | BAO_CAO_CT_HTPL | 👁️ R |
 
-> QTHT có quyền trên **toàn bộ 46 entity** — Read nghiệp vụ + CRUD các entity hệ thống (TIEU_CHI_DANH_GIA + 7 entity QTHT trừ AUDIT_LOG/THONG_BAO là Read).
+> QTHT có quyền trên **49 entity** — Read nghiệp vụ + CRUD các entity hệ thống (TIEU_CHI_DANH_GIA + 8 entity QTHT trừ AUDIT_LOG/THONG_BAO là Read). **Update 2026-05-05:** thêm CRUD trên NGUOI_HO_TRO (FR-IV-NHT-01 actor) + NGAY_LE (FR-VIII-29 QTHT only); Read TO_CHUC_TU_VAN (CB NV CRUD theo FR-IV-NEW-01).
 
 ---
 
@@ -103,12 +107,14 @@
 | FR-04 | TU_VAN_VIEN | ✅ CRUD* |
 | FR-04 | HO_SO_TU_VAN_VIEN | ✅ CRU* |
 | FR-04 | DANH_GIA_TU_VAN_VIEN | ✅ CRU* |
+| FR-04 | NGUOI_HO_TRO `[NEW]` | ✅ CRUD* |
+| FR-04 | TO_CHUC_TU_VAN `[NEW]` | ✅ CRUD* |
 | FR-05 | VU_VIEC | ✅ CRUD* |
 | FR-05 | HO_SO_VU_VIEC | ✅ CRUD* |
 | FR-05 | KET_QUA_VU_VIEC | ✅ CRU* |
 | FR-06 | HO_SO_CHI_TRA | ✅ CRUD* |
 | FR-06 | DANH_GIA_HO_SO_CHI_TRA | ✅ CRU* |
-| FR-07 | DOANH_NGHIEP | ✅ CRUD* |
+| FR-07 | DOANH_NGHIEP | 📝 RU\*D `[CHANGED 2026-05-05]` |
 | FR-08 | KE_HOACH_DANH_GIA | ✅ CRUD* |
 | FR-08 | KET_QUA_DANH_GIA | ✅ CRU* |
 | FR-08 | TIEU_CHI_DANH_GIA | 👁️ R |
@@ -134,6 +140,7 @@
 | FR-15 | BAO_CAO_CT_HTPL | ✅ CRU* |
 
 > CB_NV_TW **KHÔNG** có quyền trên FR-10 TAI_KHOAN.
+> **Update 2026-05-05:** DOANH_NGHIEP đổi từ ✅ CRUD* → 📝 RU\*D — CB NV bỏ quyền **C**reate (FR-VIII-22 self-reg DN-only). Thêm 2 entity FR-04: NGUOI_HO_TRO (FR-IV-NHT-01) + TO_CHUC_TU_VAN (FR-IV-NEW-01).
 
 ---
 
@@ -158,12 +165,14 @@
 | FR-04 | TU_VAN_VIEN | ✅ CRUD* |
 | FR-04 | HO_SO_TU_VAN_VIEN | ✅ CRU* |
 | FR-04 | DANH_GIA_TU_VAN_VIEN | ✅ CRU* |
+| FR-04 | NGUOI_HO_TRO `[NEW]` | ✅ CRUD* |
+| FR-04 | TO_CHUC_TU_VAN `[NEW]` | ✅ CRUD* |
 | FR-05 | VU_VIEC | ✅ CRUD* |
 | FR-05 | HO_SO_VU_VIEC | ✅ CRUD* |
 | FR-05 | KET_QUA_VU_VIEC | ✅ CRU* |
 | FR-06 | HO_SO_CHI_TRA | ✅ CRUD* |
 | FR-06 | DANH_GIA_HO_SO_CHI_TRA | ✅ CRU* |
-| FR-07 | DOANH_NGHIEP | ✅ CRUD* |
+| FR-07 | DOANH_NGHIEP | 📝 RU\*D `[CHANGED 2026-05-05]` |
 | FR-08 | KE_HOACH_DANH_GIA | ✅ CRUD* |
 | FR-08 | KET_QUA_DANH_GIA | ✅ CRU* |
 | FR-08 | TIEU_CHI_DANH_GIA | 👁️ R |
@@ -189,6 +198,7 @@
 | FR-15 | BAO_CAO_CT_HTPL | ✅ CRU* |
 
 > Khác CB_NV_TW: FR-03 DE_XUAT_DAO_TAO = 👁️ R* (scoped) thay vì 👁️ R (all).
+> **Update 2026-05-05:** giống CB_NV_TW — DOANH_NGHIEP bỏ Create + thêm 2 entity FR-04 mới (NGUOI_HO_TRO + TO_CHUC_TU_VAN).
 
 ---
 
@@ -213,12 +223,14 @@
 | FR-04 | TU_VAN_VIEN | ✅ CRUD* |
 | FR-04 | HO_SO_TU_VAN_VIEN | ✅ CRU* |
 | FR-04 | DANH_GIA_TU_VAN_VIEN | ✅ CRU* |
+| FR-04 | NGUOI_HO_TRO `[NEW]` | ✅ CRUD* |
+| FR-04 | TO_CHUC_TU_VAN `[NEW]` | ✅ CRUD* |
 | FR-05 | VU_VIEC | ✅ CRUD* |
 | FR-05 | HO_SO_VU_VIEC | ✅ CRUD* |
 | FR-05 | KET_QUA_VU_VIEC | ✅ CRU* |
 | FR-06 | HO_SO_CHI_TRA | ✅ CRUD* |
 | FR-06 | DANH_GIA_HO_SO_CHI_TRA | ✅ CRU* |
-| FR-07 | DOANH_NGHIEP | ✅ CRUD* |
+| FR-07 | DOANH_NGHIEP | 📝 RU\*D `[CHANGED 2026-05-05]` |
 | FR-08 | KE_HOACH_DANH_GIA | ✅ CRUD* |
 | FR-08 | KET_QUA_DANH_GIA | ✅ CRU* |
 | FR-08 | TIEU_CHI_DANH_GIA | 👁️ R |
@@ -244,6 +256,7 @@
 | FR-15 | BAO_CAO_CT_HTPL | ✅ CRU* |
 
 > Giống CB_NV_BN, data scope giới hạn đơn vị ĐP của mình.
+> **Update 2026-05-05:** giống CB_NV_TW/BN — DOANH_NGHIEP bỏ Create + thêm 2 entity FR-04 mới.
 
 ---
 
@@ -268,6 +281,8 @@
 | FR-04 | TU_VAN_VIEN | 📝 RU* |
 | FR-04 | HO_SO_TU_VAN_VIEN | 👁️ R* |
 | FR-04 | DANH_GIA_TU_VAN_VIEN | ✅ CRU* |
+| FR-04 | NGUOI_HO_TRO `[NEW]` | 👁️ R* |
+| FR-04 | TO_CHUC_TU_VAN `[NEW]` | 📝 RU* |
 | FR-05 | VU_VIEC | 📝 RU* |
 | FR-05 | HO_SO_VU_VIEC | 👁️ R* |
 | FR-05 | KET_QUA_VU_VIEC | 📝 RU* |
@@ -299,6 +314,7 @@
 | FR-15 | BAO_CAO_CT_HTPL | 📝 RU* |
 
 > Quyền Update (📝 RU*) của CB_PD = hành động **phê duyệt/từ chối** trong workflow.
+> **Update 2026-05-05:** thêm 2 entity FR-04 — NGUOI_HO_TRO 👁️ R* (CB PD chỉ xem, không có workflow phê duyệt NHT theo SM-NHT đơn giản); TO_CHUC_TU_VAN 📝 RU* (FR-IV-NEW-04 phê duyệt TC TV cùng cấp BR-AUTH-05).
 
 ---
 
@@ -323,6 +339,8 @@
 | FR-04 | TU_VAN_VIEN | 📝 RU* |
 | FR-04 | HO_SO_TU_VAN_VIEN | 👁️ R* |
 | FR-04 | DANH_GIA_TU_VAN_VIEN | ✅ CRU* |
+| FR-04 | NGUOI_HO_TRO `[NEW]` | 👁️ R* |
+| FR-04 | TO_CHUC_TU_VAN `[NEW]` | 📝 RU* |
 | FR-05 | VU_VIEC | 📝 RU* |
 | FR-05 | HO_SO_VU_VIEC | 👁️ R* |
 | FR-05 | KET_QUA_VU_VIEC | 📝 RU* |
@@ -354,6 +372,7 @@
 | FR-15 | BAO_CAO_CT_HTPL | 📝 RU* |
 
 > Khác CB_PD_TW: FR-02 HOI_DAP = 👁️ R* (scoped), FR-03 DE_XUAT_DAO_TAO = 👁️ R* (scoped).
+> **Update 2026-05-05:** giống CB_PD_TW — thêm NGUOI_HO_TRO 👁️ R* + TO_CHUC_TU_VAN 📝 RU* (FR-IV-NEW-04 phê duyệt cùng cấp BN).
 
 ---
 
@@ -378,6 +397,8 @@
 | FR-04 | TU_VAN_VIEN | 📝 RU* |
 | FR-04 | HO_SO_TU_VAN_VIEN | 👁️ R* |
 | FR-04 | DANH_GIA_TU_VAN_VIEN | ✅ CRU* |
+| FR-04 | NGUOI_HO_TRO `[NEW]` | 👁️ R* |
+| FR-04 | TO_CHUC_TU_VAN `[NEW]` | 📝 RU* |
 | FR-05 | VU_VIEC | 📝 RU* |
 | FR-05 | HO_SO_VU_VIEC | 👁️ R* |
 | FR-05 | KET_QUA_VU_VIEC | 📝 RU* |
@@ -409,6 +430,7 @@
 | FR-15 | BAO_CAO_CT_HTPL | 📝 RU* |
 
 > Giống CB_PD_BN, data scope giới hạn đơn vị ĐP của mình.
+> **Update 2026-05-05:** giống CB_PD_TW/BN — thêm NGUOI_HO_TRO 👁️ R* + TO_CHUC_TU_VAN 📝 RU* (FR-IV-NEW-04 phê duyệt cùng cấp ĐP).
 
 ---
 
@@ -425,11 +447,12 @@
 | FR-03 | DANG_KY_DAO_TAO | 🔌 C†R* |
 | FR-03 | DE_XUAT_DAO_TAO | 🔌 C†RU* |
 | FR-04 | DANH_GIA_TU_VAN_VIEN | 🔌 C†R* |
+| FR-04 | TO_CHUC_TU_VAN `[NEW]` | 👁️ R |
 | FR-05 | VU_VIEC | 👁️ R* |
 | FR-05 | HO_SO_VU_VIEC | 🔌 C†R* |
 | FR-05 | KET_QUA_VU_VIEC | 👁️ R* |
 | FR-06 | HO_SO_CHI_TRA | 🔌 C†R* |
-| FR-07 | DOANH_NGHIEP | 📝 RU* |
+| FR-07 | DOANH_NGHIEP | 🔌 C†RU* `[CHANGED 2026-05-05]` |
 | FR-09 | BIEU_MAU | 👁️ R |
 | FR-09 | THU_MUC_BIEU_MAU | 👁️ R |
 | FR-10 | DANH_MUC | 👁️ R |
@@ -441,6 +464,7 @@
 | FR-13 | KHO_CAU_HOI | 👁️ R |
 
 > DN **KHÔNG truy cập CMS trực tiếp** — các quyền 🔌 C† / C†R* / C†RU* thực hiện qua **API inbound** từ Cổng PLQG (SI-04, Nhóm XII). Quyền Read CMS (👁️ R / R*) là các entity DN xem qua portal doanh nghiệp.
+> **Update 2026-05-05:** DOANH_NGHIEP đổi từ 📝 RU* → 🔌 C†RU* — thêm Create qua FR-VIII-22 self-reg API (DN tự đăng ký từ login page button). Thêm TO_CHUC_TU_VAN 👁️ R public (TC TV `cong_khai=1` hiển thị trên Cổng PLQG cho DN tra cứu khi chọn TC).
 
 ---
 
@@ -456,6 +480,7 @@
 | FR-03 | DANG_KY_DAO_TAO | 🔌 C†R* |
 | FR-03 | DE_XUAT_DAO_TAO | 🔌 C†RU* |
 | FR-04 | HO_SO_TU_VAN_VIEN | ✅ CRU* |
+| FR-04 | NGUOI_HO_TRO `[NEW]` | 📝 RU* (own) |
 | FR-05 | VU_VIEC | 📝 RU* |
 | FR-05 | HO_SO_VU_VIEC | ✅ CRU* |
 | FR-05 | KET_QUA_VU_VIEC | ✅ CRU* |
@@ -466,6 +491,7 @@
 | FR-10 | THONG_BAO | 👁️ R* |
 
 > NHT là role duy nhất (ngoài CB_NV) có quyền 📝 RU* trên VU_VIEC và ✅ CRU* trên HO_SO_VU_VIEC / KET_QUA_VU_VIEC.
+> **Update 2026-05-05:** NHT giờ là entity nội bộ riêng (NGUOI_HO_TRO, NĐ 55/2019 Đ.7) — NHT có 📝 RU* trên hồ sơ NHT của chính mình (own scope, FR-IV-NHT-03 xem hồ sơ + cập nhật chứng chỉ HTPL). KHÔNG có quyền CRUD NHT khác — đó là quyền của QTHT/CB_NV.
 
 ---
 
@@ -475,6 +501,7 @@
 |----|--------|-------|
 | FR-04 | TU_VAN_VIEN | 👁️ R* |
 | FR-04 | HO_SO_TU_VAN_VIEN | 👁️ R* |
+| FR-04 | TO_CHUC_TU_VAN `[NEW]` | 👁️ R |
 | FR-06 | HO_SO_CHI_TRA | 👁️ R* |
 | FR-10 | DANH_MUC | 👁️ R |
 | FR-10 | DON_VI | 👁️ R |
@@ -484,6 +511,7 @@
 | FR-14 | HOP_DONG_TU_VAN | 👁️ R* |
 
 > ⚠️ TVV **KHÔNG** có quyền trên 3 entity Vụ việc (VU_VIEC / HO_SO_VU_VIEC / KET_QUA_VU_VIEC). Đừng nhầm với NHT.
+> **Update 2026-05-05:** thêm TO_CHUC_TU_VAN 👁️ R — TVV xem dropdown TC TV khi chọn `to_chuc_chinh_id` lúc đăng ký + xem TC TV công khai.
 
 ---
 
@@ -493,6 +521,7 @@
 |----|--------|-------|
 | FR-04 | TU_VAN_VIEN | 👁️ R* |
 | FR-04 | HO_SO_TU_VAN_VIEN | 👁️ R* |
+| FR-04 | TO_CHUC_TU_VAN `[NEW]` | 👁️ R |
 | FR-10 | DANH_MUC | 👁️ R |
 | FR-10 | DON_VI | 👁️ R |
 | FR-10 | THONG_BAO | 👁️ R* |
@@ -501,6 +530,7 @@
 | FR-12 | LICH_SU_TRAO_DOI_TV | ✅ CRU* |
 
 > CG tập trung vào FR-12 (Tư vấn Chuyên sâu) với quyền CRU* trên TU_VAN_CHUYEN_SAU và LICH_SU_TRAO_DOI_TV.
+> **Update 2026-05-05:** thêm TO_CHUC_TU_VAN 👁️ R (giống TVV).
 
 ---
 
