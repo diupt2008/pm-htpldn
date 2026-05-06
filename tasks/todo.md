@@ -114,12 +114,16 @@
 
 > **Dependency:** TC TV → TVV/CG (FK to_chuc_chinh_id phải HOAT_DONG); NHT seed → activate; account login → FK link.
 
-- 🟢 <a id="r7-2-1"></a>**R7.2.1** 🔄 Seed 12 mẫu phản hồi (cover 6 LV × 2 mẫu/LV) `[~0% — ready, re-seed]`
+- 🚫 **R7.2.1** 🔄 Seed 12 mẫu phản hồi (cover 6 LV × 2 mẫu/LV) `[block: R7.1.1 DM LV mismatch SRS — BUG-DM-LVPL-001]`
+  - **Kết quả:** 🚫 BLOCK 0/12 — modal MPH dropdown LV thiếu DOANH_NGHIEP/THUONG_MAI → 3 variants không seed được. Fixture đã v2.7.2.
   - **R6:** ✅ R6.1.5 — PASS 12/12 qua UI (6 TW + 3 BN + 3 DP). [seed-checklist-MPH.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-MPH.md)
-  - **Bug R6:** [bug-report-seed-qtht.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-seed-qtht.md) — 3/3 đóng (MPH-001/002/003)
-- 🟢 <a id="r7-2-2"></a>**R7.2.2** 🆕 Seed 6 Tổ chức tư vấn qua UI hoặc API `[~0% — ready, **UI sub-menu "Tổ chức tư vấn" đã deploy** (R7.0.6 audit verified với cb_nv_tw_01, uid 34_1); nguồn to_chuc_tu_van_variants v2.7.1]`
-- 🟢 <a id="r7-2-3"></a>**R7.2.3** 🆕 Phê duyệt TC TV → HOAT_DONG (FR-IV-NEW-04, CB PD cùng cấp) `[~0% — ready, sau R7.2.2 ✅]`
-- 🟢 <a id="r7-2-4"></a>**R7.2.4** ✏️ Seed 15 DN qua FR-VIII-22 self-reg `[~0% — ready, flow đổi từ CB NV sang DN tự đăng ký; verify dev đã re-seed 30 record DN000001..030]`
+  - **Bug:** [bug-report-r7-1-1-dm-linh-vuc-pl-mismatch.md](../output/qa-reports/round7-2026-05-06/bug-reports/bug-report-r7-1-1-dm-linh-vuc-pl-mismatch.md) — 0/1 đóng (cùng bug R7.1.1)
+  - **Cần có sẵn:** R7.1.1 ✅ (DM LV đủ 10 SRS)
+- 🟢 **R7.2.2** 🆕 Seed 6 Tổ chức tư vấn qua API trực tiếp `[~0% — ready, UI sub-menu chưa có; nguồn to_chuc_tu_van_variants v2.7.1]`
+- 🟢 **R7.2.3** 🆕 Phê duyệt TC TV → HOAT_DONG (FR-IV-NEW-04, CB PD cùng cấp) `[~0% — ready, sau R7.2.2 ✅]`
+- ⚠️ **R7.2.4** ✏️ Seed 15 DN qua FR-VIII-22 self-reg `[~40% — 6/15 PASS qua UI, 3 BLOCKED throttle, 6 SKIP option C]`
+  - **Kết quả:** ⚠️ 6/15 PASS (DN1/2/3/8/10/13). DN total trong DB = 36 (30 dev pre-seed + 6 mới). Cover 4/5 edge case critical (BVA cận biên VUA + Nữ làm chủ + DP-AG ext). [seed-checklist-r7-2-4-dn.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-4-dn.md)
+  - **Bug:** [bug-report-r7-2-4-throttle-self-reg.md](../output/qa-reports/round7-2026-05-06/bug-reports/bug-report-r7-2-4-throttle-self-reg.md) — 0/2 đóng (BUG-THROTTLE-001 Major + BUG-DM-LOAI-DN-002 Medium)
   - **R6:** ✅ R6.2.1+2.2+2.3 — 50 pre-existing + 12 fixture v2.6.2 + 3 ĐP extension. [bug-report-fixture-seed-dn.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-fixture-seed-dn.md)
   - **Bug R6:** 0/4 đóng (JWT Critical, DM polluted Major, Search Major, API schema Medium) — verify còn không sau dev deploy
 - 🟢 <a id="r7-2-5"></a>**R7.2.5** ✏️ Seed 6 TVV TW (bỏ dia_ban_ids, MOI_DANG_KY) `[~0% — ready, fixture v2.7.1 bỏ dia_ban_ids; need R7.2.3 ✅ TC TV HOAT_DONG cho FK]`
@@ -211,12 +215,16 @@
 
 ### 🟧 Trụ D — Đánh giá HQ + Kho QA
 
-- 🟢 <a id="r7-4-d1"></a>**R7.4.D1** 🔄 Tạo kỳ Đánh giá HQ entry LAP_KE_HOACH `[~0% — ready]`
+- ✅ **R7.4.D1** 🔄 Tạo kỳ Đánh giá HQ entry LAP_KE_HOACH
+  - **Kết quả:** PASS 1/1 — `DG-20260506-0001` state Lập kế hoạch. POST 201. Bonus verify R6 BUG-FUNC-DG-001 + DG-002 ✅ FIXED. [seed-checklist-r7-4-d1-danhgiahq.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-4-d1-danhgiahq.md)
   - **R6:** ✅ R6.4.D1 — PASS 1/1 DG-20260502-0001. [seed-checklist-DanhGiaHQ.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-DanhGiaHQ.md)
-- ⏳ <a id="r7-4-d2"></a>**R7.4.D2** ✏️ Workflow Đánh giá HQ 11 bước `[need: R7.4.D1 ✅; UNBLOCKED — dev item 2 fix bug FR-08 5 bug FE]`
+- ⚠️ **R7.4.D2** ✏️ Workflow Đánh giá HQ 11 bước
+  - **Kết quả:** ⚠️ 5/11 PASS + back-fill tiêu chí PASS (B1+B2+B3+B4+tiêu chí). B6 ❌ FAIL → B7-B10 🚫 cascade. 5/5 R6 bug FE Closed verified. **2 bug mới R7 (DG-006 Major + DG-007 Medium).** [workflow-test-report-DanhGiaHQ.md](../output/qa-reports/round7-2026-05-06/workflow/workflow-test-report-DanhGiaHQ.md)
+  - **Bug R7:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/bug-report-flow-danhgia.md) — 5/5 R6 bug đóng + **0/2 R7 mới đóng** (DG-006 filter VV eligible empty + DG-007 dashboard KPI VV hoàn thành mismatch)
+  - **Cần có sẵn:** dev fix BUG-FUNC-DG-006 + ≥1 VV HOAN_THANH match đợt scope cho B6-B11 retest
   - **R6:** 🚫 R6.4.D2 — R14 BLOCKED 1/11 PASS B1 do 5 bug FE. [workflow-test-report-DanhGiaHQ.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-DanhGiaHQ.md)
-  - **Bug R6:** [bug-report-flow-danhgia.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-danhgia.md) — 0/5 đóng — verify dev item 2 fix kèm có đóng không
-- ⏳ <a id="r7-4-d3"></a>**R7.4.D3** ✏️ Tạo Kho QA `[need: dev item 4 fix bug R6.4.D3]`
+  - **Bug R6:** [bug-report-flow-danhgia.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-danhgia.md) — 5/5 đóng R7 dev fix verify
+- ⏳ **R7.4.D3** ✏️ Tạo Kho QA `[need: dev item 4 fix bug R6.4.D3]`
   - **R6:** ⚠️ R6.4.D3 ~50% — UI route block FE. THU_CONG 1 record qua API, TU_DONG=0. [seed-checklist-KhoQA.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-KhoQA.md)
   - **Bug R6:** [bug-report-flow-kho-qa.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-kho-qa.md) — 0/1 đóng (BUG-KHOQA-001 Critical)
 

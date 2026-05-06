@@ -2,6 +2,29 @@
 
 Project này chứa tài liệu QA cho Phần mềm Hỗ trợ Pháp lý Doanh nghiệp (PM HTPLDN).
 
+## 🔴 Tool routing — BẮT BUỘC (enforced từ 2026-05-05)
+
+**Mọi QA test / browse / smoke / functional / workflow / regression trên project này PHẢI dùng Chrome DevTools MCP làm tool MẶC ĐỊNH.**
+
+| Trigger từ user | Tool dùng | Cấm dùng |
+|---|---|---|
+| `/qa`, `/qa-only`, `/gstack-qa-only`, `/gstack-qa`, `/browse`, `/investigate` | **Chrome DevTools MCP** (`mcp__chrome-devtools__*`) | gstack `$B` / browse-server / Playwright direct |
+| "test [module/page]", "QA [feature]", "kiểm thử...", "chạy smoke...", "verify..." | **Chrome DevTools MCP** | gstack `$B` |
+| Auth flow (login + OTP) | MCP-Template login (xem section "Chrome DevTools MCP — PATTERNS BẮT BUỘC" §Template login) | gstack atomic chain |
+
+**Lý do:** Smoke test 2026-04-21 chứng minh MCP 3/3 PASS, gstack crash rate 50%→20% chỉ sau 3 fix R3.1. MCP có `list_network_requests` + `list_console_messages` native, gstack không có. 1 lần login/session vs gstack re-login mỗi bash do `$PPID` reset.
+
+**Khi nào fallback gstack `$B`:**
+1. MCP server crash thật + restart không recover (hiếm).
+2. User explicit yêu cầu `--use-gstack` hoặc "dùng gstack" / "dùng `$B`".
+3. CSS-selector-exact-match cần Playwright low-level (vd verify class custom). Vẫn ưu tiên `evaluate_script` của MCP trước.
+
+**Khi skill template (vd `/gstack-qa-only`) yêu cầu `$B`:** ADAPT — giữ workflow Phase 1-6, thay command theo bảng map ở section "MCP-Rule 6: Phân loại lỗi" trong file này. Output report theo template project ([output/template/](output/template/)), KHÔNG dùng `.gstack/qa-reports/`.
+
+**Khi nào hỏi user trước khi chạy:**
+- Skill workflow generic conflict với task cụ thể trong [tasks/todo.md](tasks/todo.md) → confirm scope task ID.
+- User chưa nói rõ module/account → hỏi 1 lần rồi chạy.
+
 ## Quick reference
 
 - **App URL:** http://103.172.236.130:3000/
