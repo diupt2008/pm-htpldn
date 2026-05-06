@@ -251,7 +251,10 @@
 
 ### R7 Phase 0 — Pre-test verify (gate)
 
-- ⏳ **R7.0.0** Hỏi dev confirm scenario reset DB + verify thực tế bằng 3 curl `[need: dev confirm A/B/C trước deploy; sau deploy QA chạy 3 lệnh verify schema + entity NGUOI_HO_TRO + count DN. A=no reset (resume R6 + start R7 song song) | B=reset DB (frozen R6 + gộp unfinished vào R7) | C=partial (STOP escalate dev)]`
+- ✅ **R7.0.0** Verify scenario reset DB + deploy status (DONE 2026-05-06)
+  - **Kết quả:** Scenario MIX — partial reset + partial deploy 10/18. [plan-r7-trigger.md](plan-r7-trigger.md)
+- ⏳ **R7.0.0.1** Log 8 bug deploy gap (UI sub-menu NHT/TCTV/Đào tạo + tab Ngày lễ + filter Địa bàn + tab Chờ kích hoạt + entity NGUOI_HO_TRO/HOC_VIEN) `[need: gửi dev fix song song chạy P1+P2 — chi tiết plan-r7-trigger.md §5]`
+- ⏳ **R7.0.0.2** API direct seed workaround UI gap (NGAY_LE + TC TV qua POST API) `[need: R7.0.0.1 ✅ — bug log xong; QTHT login + Authorization Bearer token]`
 - ⏳ **R7.0.1** Verify BE deploy 3 SRS update — endpoint mới FR-VIII-22/26/28/29 + FR-IV-NHT/NEW available `[need: R7.0.0 ✅ + dev confirm version tag SRS update 2026-05-05 đã merge production]`
 - ⏳ **R7.0.2** Verify UI render menu mới — "Tư vấn viên / Chuyên gia" + sub-menu NHT + sub-menu Tổ chức tư vấn `[need: R7.0.1 ✅]`
 - ⏳ **R7.0.3** Verify users.csv có account `nht_01..03` + `qtht_01` login OK + 1 DN test (chưa active) `[need: R7.0.1 ✅]`
