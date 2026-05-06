@@ -14,26 +14,38 @@
 
 ## Tổng hợp
 
-Phát hiện **1** lỗi Major mới (gap scope MPH_READ giữa các đơn vị cùng cấp). 1 lỗi Critical Closed sau dev fix. 1 entry cũ Closed/Invalid.
+0 lỗi Open. Tất cả 3 entry MPH (001/002/003) đã Closed sau dev fix + QA verify.
 
 ### Severity breakdown
 
 | Tổng | Critical | Major | Medium | Minor | Trivial |
 |------|----------|-------|--------|-------|---------|
-| 1    | 0        | 1     | 0      | 0     | 0       |
+| 0    | 0        | 0     | 0      | 0     | 0       |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-FUNC-MPH-003 | Major | P1 | Permission / Data | R6.1.5 | `srs-update-2026-5-4/srs-fr-02-hoi-dap.md §FR-II-NEW-02 row 1006` (Mô hình B Hybrid: BN/DP user thấy mẫu TW + đơn vị mình, KHÔNG thấy đơn vị khác) | Tab Mẫu phản hồi: BN/DP user list table thấy mẫu BN_RIENG/DP_RIENG đơn vị khác (vi phạm scope MPH_READ) | Open |
+| ~~BUG-FUNC-MPH-003~~ [CLOSED] | ~~Major~~ | ~~P1~~ | ~~Permission / Data~~ | R6.1.5 | `srs-update-2026-5-4/srs-fr-02-hoi-dap.md §FR-II-NEW-02 row 1006` (Mô hình B Hybrid: BN/DP user thấy mẫu TW + đơn vị mình, KHÔNG thấy đơn vị khác) | ~~Tab Mẫu phản hồi: BN/DP user list table thấy mẫu BN_RIENG/DP_RIENG đơn vị khác (vi phạm scope MPH_READ)~~ | Closed (Fixed 2026-05-05 R12) |
 | ~~BUG-FUNC-MPH-002~~ [CLOSED] | ~~Critical~~ | ~~P0~~ | ~~Permission / UI~~ | R6.1.5 | `srs-v3.md §3.4.2 row MAU_PHAN_HOI` (CB_NV_TW/BN/DP=CRUD\*) + `srs-update-2026-5-4/srs-fr-02-hoi-dap.md §FR-II-NEW-02 row 1 Processing` (action-level MPH_CREATE_TW/BN/DP) | ~~CB_NV bị FE chặn route `/quan-tri/cau-hinh` (sidebar không có entry + direct URL → /403) — không có UI nào để CRUD mẫu phản hồi~~ | Closed (Fixed 2026-05-05 R12) |
 | ~~BUG-FUNC-MPH-001~~ [CLOSED] | ~~Major~~ | ~~P1~~ | ~~UI/UX~~ | R6.1.5 | `srs-v3.md §3.4.2 row MAU_PHAN_HOI` (QTHT=R, CB_NV_TW/BN/DP=CRUD*) + `srs-update-2026-5-4/srs-fr-02-hoi-dap.md §FR-II-NEW-02` (action-level MPH_CREATE_TW/BN/DP) | ~~Tab "Mẫu phản hồi" thiếu nút [Thêm mới] → không CRUD được mẫu~~ | Closed (Invalid) |
 
 ---
 
-## BUG-FUNC-MPH-003 — BN/DP user thấy mẫu BN_RIENG/DP_RIENG của đơn vị khác trong Tab list (vi phạm scope MPH_READ Mô hình B)
+## ~~BUG-FUNC-MPH-003~~ [CLOSED — Fixed 2026-05-05 R12] — BN/DP user thấy mẫu BN_RIENG/DP_RIENG của đơn vị khác trong Tab list (vi phạm scope MPH_READ Mô hình B)
 
+> **Re-test 2026-05-05 15:30 R12:** ✅ PASS sau dev fix BE filter scope MPH_READ.
+> - `cb_nv_bn_01` (BKH): list 7 mục (1 BN-BKH + 6 TW). KHÔNG leak BN-BTC/BCT. ✅
+> - `cb_nv_bn_02` (BTC): list 7 mục (1 BN-BTC + 6 TW). KHÔNG leak BN-BKH/BCT. ✅
+> - `cb_nv_bn_03` (BCT): list 7 mục (1 BN-BCT + 6 TW). KHÔNG leak BN-BKH/BTC. ✅
+> - `cb_nv_dp_01` (AG): list 7 mục (1 DP-AG + 6 TW). KHÔNG leak DP-BG/BNI. ✅
+> - `cb_nv_dp_02` (BG): list 7 mục (1 DP-BG + 6 TW). KHÔNG leak DP-AG/BNI. ✅
+> - `cb_nv_dp_03` (BNI): list 7 mục (1 DP-BNI + 6 TW). KHÔNG leak DP-AG/BG. ✅
+> - `cb_nv_tw_01` (TW): list 12 mục cross-view (6 TW + 3 BN + 3 DP) — đúng SRS row 1006 "TW user thấy tất cả". UI hành động: chỉ có nút [Sửa]/[Xóa] cho 6 mẫu TW (đơn vị mình), KHÔNG có cho BN/DP — đúng MPH_UPDATE/DELETE scope. ✅
+> - QTHT cross-view 12 mục (verified prior 14:18). ✅
+>
+> Tổng 6/6 user CB_NV verify scope đúng + TW cross-view đúng + QTHT cross-view đúng. BE filter `WHERE capTao='TW' OR (capTao IN ('BN','DP') AND donViId = user.donViId)` hoạt động chuẩn.
+>
 > **Meta:** Severity, Priority, Type, Status, TC Ref, SRS Reference đã có ở Bug Summary Table trên.
 >
 > **Nguồn spec (verify với Input gốc 2026-05-05 14:30):** Entity MAU_PHAN_HOI + Mô hình B Hybrid 2 tầng + scope MPH_READ **KHÔNG có trong Input/ folder** (Mô tả dự án / Thiết kế cơ sở / Danh sách transaction CSV chỉ có UC16 "Phản hồi câu hỏi" — actor CB_NV TW/BN/ĐP soạn thảo, không spec template entity). Spec hiện tại **chỉ tồn tại trong `srs-update-2026-5-4/srs-fr-02-hoi-dap.md §FR-II-NEW-02` line 1492** với note "CĐT chốt 2026-05-02 Mô hình B Hybrid". Per `Mô tả dự án.md` đầu vào: "Tài liệu SRS do team sản xuất thực hiện và cần CĐT review, phê duyệt" → SRS update là spec hợp lệ trong scope project. Dev khi fix nên verify lại với BA/CĐT trước khi sửa BE filter.

@@ -19,13 +19,26 @@
 
 ---
 
-## Kết quả: ✅ XONG 12/12 qua UI (verified QTHT cross-view)
+## Kết quả: ✅ XONG 12/12 qua UI + scope MPH_READ verify đầy đủ (6/6 user PASS)
 
 Seed thành công 12 mẫu phản hồi qua UI Tab 3 (SCR-VIII-06) bằng 7 tài khoản CB_NV (1 TW + 3 BN + 3 DP). Cover **đầy đủ Mô hình B Hybrid 2 tầng** + 6 LV × 2 mẫu/LV.
 
-**BUG-FUNC-MPH-002 verify Closed:** FE đã fix route guard cho CB_NV; sidebar có entry "Quản trị hệ thống"; CRUD button hiện đầy đủ trên Tab 3 cho user đơn vị sở hữu mẫu.
+**BUG-FUNC-MPH-002 + BUG-FUNC-MPH-003 đều Closed (Fixed 2026-05-05 R12):**
+- MPH-002: FE fix route guard cho CB_NV — sidebar entry + CRUD button hiển thị đúng cho user thuộc đơn vị sở hữu mẫu.
+- MPH-003: BE fix filter scope MPH_READ — verified 6/6 user CB_NV chỉ thấy mẫu TW + đơn vị mình (BN/DP không leak cross-đơn vị). TW user thấy 12 cross-view; QTHT cross-view 12.
 
-**Observation phụ (không block, đã ghi bug-report):** Khi user BN/DP login Tab 3, table list **hiển thị mẫu BN_RIENG/DP_RIENG của đơn vị khác** (vd: `cb_nv_bn_02` BTC thấy mẫu BN-BKH; `cb_nv_dp_02` BG thấy mẫu DP-AG/BNI). Theo `srs-update-2026-5-4 row 1006` Mô hình B: BN/DP user chỉ được thấy mẫu TW + mẫu đơn vị mình. → **gap scope MPH_READ**, log `BUG-FUNC-MPH-003` Major.
+### Scope MPH_READ verify table (R12 retest 15:30)
+
+| User | Đơn vị | Expected | Actual | Status |
+|---|---|:---:|:---:|:---:|
+| `cb_nv_tw_01` | TW (Cục BTP) | 12 (6 TW + 3 BN + 3 DP cross-view) | 12 | ✅ |
+| `cb_nv_bn_01` | BKH-ĐT | 7 (6 TW + 1 BN-BKH) | 7 | ✅ |
+| `cb_nv_bn_02` | BTC | 7 (6 TW + 1 BN-BTC) | 7 | ✅ |
+| `cb_nv_bn_03` | BCT | 7 (6 TW + 1 BN-BCT) | 7 | ✅ |
+| `cb_nv_dp_01` | Sở TP AG | 7 (6 TW + 1 DP-AG) | 7 | ✅ |
+| `cb_nv_dp_02` | Sở TP BG | 7 (6 TW + 1 DP-BG) | 7 | ✅ |
+| `cb_nv_dp_03` | Sở TP BNI | 7 (6 TW + 1 DP-BNI) | 7 | ✅ |
+| `qtht_01` | (cross-view) | 12 (full) | 12 | ✅ |
 
 ---
 
@@ -99,10 +112,12 @@ GET /api/v1/mau-phan-hois?page=1&size=50  →  HTTP 200, total=12
 
 ## Ảnh chụp
 
-- [TW final 6 mẫu (cb_nv_tw_01 view)](../screenshots/r6-1-5-mph-tw-6-mau-via-ui.png)
-- [DP-BNI seed flow final 9 mục view của BNI](../screenshots/r6-1-5-mph-final-12-mau-mo-hinh-b.png)
+- [TW final 6 mẫu (cb_nv_tw_01 view trước fix MPH-003)](../screenshots/r6-1-5-mph-tw-6-mau-via-ui.png)
+- [DP-BNI seed flow final 9 mục view của BNI (trước fix MPH-003 — leak cross-đơn vị)](../screenshots/r6-1-5-mph-final-12-mau-mo-hinh-b.png)
 - [QTHT cross-view 12 mẫu Mô hình B](../screenshots/r6-1-5-mph-qtht-cross-view-12-mau.png)
 - [BUG-FUNC-MPH-002 evidence cũ (FE chặn route — đã fix)](../screenshots/r6-1-5-mph-cb-nv-tw-403-route-block.png)
+- 🆕 [MPH-003 retest PASS: DP-BNI scope đúng 7 mục (1 DP-BNI + 6 TW)](../screenshots/r6-1-5-mph-003-fixed-dp-bni-scope-7mau.png)
+- 🆕 [MPH-003 retest PASS: TW cross-view đầy đủ 12 mục (6 TW có Sửa/Xóa, 3 BN + 3 DP read-only)](../screenshots/r6-1-5-mph-003-fixed-tw-cross-view-12.png)
 
 ---
 
