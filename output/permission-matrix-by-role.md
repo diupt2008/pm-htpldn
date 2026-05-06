@@ -7,6 +7,8 @@
 > - Test accounts: `input/users.csv`
 
 > **Cross-reference:** [permission-matrix.md](permission-matrix.md) (FR-first entity table) | [srs-v3-3.4.2-permission-matrix.md](srs-v3-3.4.2-permission-matrix.md) (raw SRS)
+>
+> **Update 2026-05-06 (SRS update FR-04):** Thêm 7 FR mới × 11 role cho Nhóm IV: `FR-IV-CROSS-01` (Tổng hợp điểm ĐG), `FR-IV-NEW-01/02/04` (TC TV), `FR-IV-NHT-01/02/03` (NHT). Mỗi role block FR-04 giờ có **19 row** (12 cũ + 7 mới). Cite: `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md`.
 
 > **Generate:** 2026-04-21 | Roles: 11 | Entities: 46 | Functions: 198
 
@@ -164,6 +166,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 10 | `FR-IV-10` | Xem lịch sử hỗ trợ | UC48 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 11 | `FR-IV-11` | NHT cập nhật hồ sơ | UC49 | SCR-IV-02: Them moi / Chinh sua TVV | `TU_VAN_VIEN` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 12 | `FR-IV-12` | Cập nhật trạng thái TVV | UC50 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `TU_VAN_VIEN` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 13 | `FR-IV-CROSS-01` | Tổng hợp điểm ĐG TVV `[NEW 05-05]` | — | SCR-IV-03 tab Đánh giá | `TU_VAN_VIEN` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 14 | `FR-IV-NEW-01` | Quản lý TC TV `[NEW 05-05]` | — | SCR-IV-NEW-01/02/03 | `TO_CHUC_TU_VAN` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 15 | `FR-IV-NEW-02` | Cập nhật TT TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 16 | `FR-IV-NEW-04` | Phê duyệt TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 17 | `FR-IV-NHT-01` | Quản lý NHT `[NEW 05-05]` | — | SCR-IV-NHT-01/02 | `NGUOI_HO_TRO` | `CRUD` | ✅ | ✓C+R+U+D / ✗— |
+| 18 | `FR-IV-NHT-02` | Tìm kiếm NHT `[NEW 05-05]` | — | SCR-IV-NHT-01 | `NGUOI_HO_TRO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 19 | `FR-IV-NHT-03` | Xem hồ sơ NHT `[NEW 05-05]` | — | SCR-IV-NHT-03 | `NGUOI_HO_TRO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-05 — Vụ việc HTPL
 
@@ -452,6 +461,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 10 | `FR-IV-10` | Xem lịch sử hỗ trợ | UC48 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 11 | `FR-IV-11` | NHT cập nhật hồ sơ | UC49 | SCR-IV-02: Them moi / Chinh sua TVV | `TU_VAN_VIEN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 12 | `FR-IV-12` | Cập nhật trạng thái TVV | UC50 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `TU_VAN_VIEN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 13 | `FR-IV-CROSS-01` | Tổng hợp điểm ĐG TVV `[NEW 05-05]` | — | SCR-IV-03 tab Đánh giá | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* (computed view) / ✗POST/PUT/DELETE→403 |
+| 14 | `FR-IV-NEW-01` | Quản lý TC TV `[NEW 05-05]` | — | SCR-IV-NEW-01/02/03 | `TO_CHUC_TU_VAN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 15 | `FR-IV-NEW-02` | Cập nhật TT TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `U*` | 📝 | ✓U* / ✗POST/DELETE→403 |
+| 16 | `FR-IV-NEW-04` | Phê duyệt TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `—` | ❌ | CB NV KHÔNG phê duyệt — quyền CB PD (BR-AUTH-05) |
+| 17 | `FR-IV-NHT-01` | Quản lý NHT `[NEW 05-05]` | — | SCR-IV-NHT-01/02 | `NGUOI_HO_TRO` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 18 | `FR-IV-NHT-02` | Tìm kiếm NHT `[NEW 05-05]` | — | SCR-IV-NHT-01 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 19 | `FR-IV-NHT-03` | Xem hồ sơ NHT `[NEW 05-05]` | — | SCR-IV-NHT-03 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-05 — Vụ việc HTPL
 
@@ -740,6 +756,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 10 | `FR-IV-10` | Xem lịch sử hỗ trợ | UC48 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 11 | `FR-IV-11` | NHT cập nhật hồ sơ | UC49 | SCR-IV-02: Them moi / Chinh sua TVV | `TU_VAN_VIEN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 12 | `FR-IV-12` | Cập nhật trạng thái TVV | UC50 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `TU_VAN_VIEN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 13 | `FR-IV-CROSS-01` | Tổng hợp điểm ĐG TVV `[NEW 05-05]` | — | SCR-IV-03 tab Đánh giá | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* (computed view) / ✗POST/PUT/DELETE→403 |
+| 14 | `FR-IV-NEW-01` | Quản lý TC TV `[NEW 05-05]` | — | SCR-IV-NEW-01/02/03 | `TO_CHUC_TU_VAN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 15 | `FR-IV-NEW-02` | Cập nhật TT TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `U*` | 📝 | ✓U* / ✗POST/DELETE→403 |
+| 16 | `FR-IV-NEW-04` | Phê duyệt TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `—` | ❌ | CB NV KHÔNG phê duyệt — quyền CB PD (BR-AUTH-05) |
+| 17 | `FR-IV-NHT-01` | Quản lý NHT `[NEW 05-05]` | — | SCR-IV-NHT-01/02 | `NGUOI_HO_TRO` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 18 | `FR-IV-NHT-02` | Tìm kiếm NHT `[NEW 05-05]` | — | SCR-IV-NHT-01 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 19 | `FR-IV-NHT-03` | Xem hồ sơ NHT `[NEW 05-05]` | — | SCR-IV-NHT-03 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-05 — Vụ việc HTPL
 
@@ -1028,6 +1051,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 10 | `FR-IV-10` | Xem lịch sử hỗ trợ | UC48 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 11 | `FR-IV-11` | NHT cập nhật hồ sơ | UC49 | SCR-IV-02: Them moi / Chinh sua TVV | `TU_VAN_VIEN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 12 | `FR-IV-12` | Cập nhật trạng thái TVV | UC50 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `TU_VAN_VIEN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 13 | `FR-IV-CROSS-01` | Tổng hợp điểm ĐG TVV `[NEW 05-05]` | — | SCR-IV-03 tab Đánh giá | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* (computed view) / ✗POST/PUT/DELETE→403 |
+| 14 | `FR-IV-NEW-01` | Quản lý TC TV `[NEW 05-05]` | — | SCR-IV-NEW-01/02/03 | `TO_CHUC_TU_VAN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 15 | `FR-IV-NEW-02` | Cập nhật TT TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `U*` | 📝 | ✓U* / ✗POST/DELETE→403 |
+| 16 | `FR-IV-NEW-04` | Phê duyệt TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `—` | ❌ | CB NV KHÔNG phê duyệt — quyền CB PD (BR-AUTH-05) |
+| 17 | `FR-IV-NHT-01` | Quản lý NHT `[NEW 05-05]` | — | SCR-IV-NHT-01/02 | `NGUOI_HO_TRO` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 18 | `FR-IV-NHT-02` | Tìm kiếm NHT `[NEW 05-05]` | — | SCR-IV-NHT-01 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 19 | `FR-IV-NHT-03` | Xem hồ sơ NHT `[NEW 05-05]` | — | SCR-IV-NHT-03 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-05 — Vụ việc HTPL
 
@@ -1316,6 +1346,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 10 | `FR-IV-10` | Xem lịch sử hỗ trợ | UC48 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 11 | `FR-IV-11` | NHT cập nhật hồ sơ | UC49 | SCR-IV-02: Them moi / Chinh sua TVV | `TU_VAN_VIEN` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 12 | `FR-IV-12` | Cập nhật trạng thái TVV | UC50 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `TU_VAN_VIEN` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 13 | `FR-IV-CROSS-01` | Tổng hợp điểm ĐG TVV `[NEW 05-05]` | — | SCR-IV-03 tab Đánh giá | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* (computed view) / ✗POST/PUT/DELETE→403 |
+| 14 | `FR-IV-NEW-01` | Quản lý TC TV `[NEW 05-05]` | — | SCR-IV-NEW-01/02/03 | `TO_CHUC_TU_VAN` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 15 | `FR-IV-NEW-02` | Cập nhật TT TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `—` | ❌ | CB PD KHÔNG cập nhật state — quyền CB NV |
+| 16 | `FR-IV-NEW-04` | Phê duyệt TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `U*` | 📝 | ✓U* (phê duyệt cùng cấp BR-AUTH-05) / ✗POST/DELETE→403 |
+| 17 | `FR-IV-NHT-01` | Quản lý NHT `[NEW 05-05]` | — | SCR-IV-NHT-01/02 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* (CB PD chỉ xem NHT, không workflow phê duyệt — SM-NHT đơn giản) / ✗POST/PUT/DELETE→403 |
+| 18 | `FR-IV-NHT-02` | Tìm kiếm NHT `[NEW 05-05]` | — | SCR-IV-NHT-01 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 19 | `FR-IV-NHT-03` | Xem hồ sơ NHT `[NEW 05-05]` | — | SCR-IV-NHT-03 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-05 — Vụ việc HTPL
 
@@ -1604,6 +1641,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 10 | `FR-IV-10` | Xem lịch sử hỗ trợ | UC48 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 11 | `FR-IV-11` | NHT cập nhật hồ sơ | UC49 | SCR-IV-02: Them moi / Chinh sua TVV | `TU_VAN_VIEN` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 12 | `FR-IV-12` | Cập nhật trạng thái TVV | UC50 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `TU_VAN_VIEN` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 13 | `FR-IV-CROSS-01` | Tổng hợp điểm ĐG TVV `[NEW 05-05]` | — | SCR-IV-03 tab Đánh giá | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* (computed view) / ✗POST/PUT/DELETE→403 |
+| 14 | `FR-IV-NEW-01` | Quản lý TC TV `[NEW 05-05]` | — | SCR-IV-NEW-01/02/03 | `TO_CHUC_TU_VAN` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 15 | `FR-IV-NEW-02` | Cập nhật TT TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `—` | ❌ | CB PD KHÔNG cập nhật state — quyền CB NV |
+| 16 | `FR-IV-NEW-04` | Phê duyệt TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `U*` | 📝 | ✓U* (phê duyệt cùng cấp BR-AUTH-05) / ✗POST/DELETE→403 |
+| 17 | `FR-IV-NHT-01` | Quản lý NHT `[NEW 05-05]` | — | SCR-IV-NHT-01/02 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* (CB PD chỉ xem NHT, không workflow phê duyệt — SM-NHT đơn giản) / ✗POST/PUT/DELETE→403 |
+| 18 | `FR-IV-NHT-02` | Tìm kiếm NHT `[NEW 05-05]` | — | SCR-IV-NHT-01 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 19 | `FR-IV-NHT-03` | Xem hồ sơ NHT `[NEW 05-05]` | — | SCR-IV-NHT-03 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-05 — Vụ việc HTPL
 
@@ -1892,6 +1936,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 10 | `FR-IV-10` | Xem lịch sử hỗ trợ | UC48 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 11 | `FR-IV-11` | NHT cập nhật hồ sơ | UC49 | SCR-IV-02: Them moi / Chinh sua TVV | `TU_VAN_VIEN` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 12 | `FR-IV-12` | Cập nhật trạng thái TVV | UC50 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `TU_VAN_VIEN` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 13 | `FR-IV-CROSS-01` | Tổng hợp điểm ĐG TVV `[NEW 05-05]` | — | SCR-IV-03 tab Đánh giá | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* (computed view) / ✗POST/PUT/DELETE→403 |
+| 14 | `FR-IV-NEW-01` | Quản lý TC TV `[NEW 05-05]` | — | SCR-IV-NEW-01/02/03 | `TO_CHUC_TU_VAN` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 15 | `FR-IV-NEW-02` | Cập nhật TT TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `—` | ❌ | CB PD KHÔNG cập nhật state — quyền CB NV |
+| 16 | `FR-IV-NEW-04` | Phê duyệt TC TV `[NEW 05-05]` | — | SCR-IV-NEW-03 | `TO_CHUC_TU_VAN` | `U*` | 📝 | ✓U* (phê duyệt cùng cấp BR-AUTH-05) / ✗POST/DELETE→403 |
+| 17 | `FR-IV-NHT-01` | Quản lý NHT `[NEW 05-05]` | — | SCR-IV-NHT-01/02 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* (CB PD chỉ xem NHT, không workflow phê duyệt — SM-NHT đơn giản) / ✗POST/PUT/DELETE→403 |
+| 18 | `FR-IV-NHT-02` | Tìm kiếm NHT `[NEW 05-05]` | — | SCR-IV-NHT-01 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 19 | `FR-IV-NHT-03` | Xem hồ sơ NHT `[NEW 05-05]` | — | SCR-IV-NHT-03 | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-05 — Vụ việc HTPL
 
@@ -2180,6 +2231,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 10 | `FR-IV-10` | Xem lịch sử hỗ trợ | UC48 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 11 | `FR-IV-11` | NHT cập nhật hồ sơ | UC49 | SCR-IV-02: Them moi / Chinh sua TVV | `TU_VAN_VIEN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 12 | `FR-IV-12` | Cập nhật trạng thái TVV | UC50 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `TU_VAN_VIEN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 13 | `FR-IV-CROSS-01` | Tổng hợp điểm ĐG TVV `[NEW 05-05]` | — | — | `TU_VAN_VIEN` | `—` | ❌ | DN không xem điểm ĐG nội bộ |
+| 14 | `FR-IV-NEW-01` | Quản lý TC TV `[NEW 05-05]` | — | Cổng PLQG (cong_khai=1) | `TO_CHUC_TU_VAN` | `R` | 👁️ | ✓R public TC TV cong_khai / ✗POST/PUT/DELETE→403 |
+| 15 | `FR-IV-NEW-02` | Cập nhật TT TC TV `[NEW 05-05]` | — | — | `TO_CHUC_TU_VAN` | `—` | ❌ | DN không cập nhật state TC TV |
+| 16 | `FR-IV-NEW-04` | Phê duyệt TC TV `[NEW 05-05]` | — | — | `TO_CHUC_TU_VAN` | `—` | ❌ | DN không phê duyệt |
+| 17 | `FR-IV-NHT-01` | Quản lý NHT `[NEW 05-05]` | — | — | `NGUOI_HO_TRO` | `—` | ❌ | NHT là cán bộ nội bộ — DN không truy cập |
+| 18 | `FR-IV-NHT-02` | Tìm kiếm NHT `[NEW 05-05]` | — | — | `NGUOI_HO_TRO` | `—` | ❌ | DN không tìm kiếm NHT |
+| 19 | `FR-IV-NHT-03` | Xem hồ sơ NHT `[NEW 05-05]` | — | — | `NGUOI_HO_TRO` | `—` | ❌ | DN không xem NHT |
 
 ### ✅ FR-05 — Vụ việc HTPL
 
@@ -2468,6 +2526,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 10 | `FR-IV-10` | Xem lịch sử hỗ trợ | UC48 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 11 | `FR-IV-11` | NHT cập nhật hồ sơ | UC49 | SCR-IV-02: Them moi / Chinh sua TVV | `TU_VAN_VIEN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 12 | `FR-IV-12` | Cập nhật trạng thái TVV | UC50 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `TU_VAN_VIEN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 13 | `FR-IV-CROSS-01` | Tổng hợp điểm ĐG TVV `[NEW 05-05]` | — | — | `TU_VAN_VIEN` | `—` | ❌ | NHT không xem điểm ĐG TVV |
+| 14 | `FR-IV-NEW-01` | Quản lý TC TV `[NEW 05-05]` | — | — | `TO_CHUC_TU_VAN` | `—` | ❌ | TC TV là quyền CB NV/CB PD |
+| 15 | `FR-IV-NEW-02` | Cập nhật TT TC TV `[NEW 05-05]` | — | — | `TO_CHUC_TU_VAN` | `—` | ❌ | — |
+| 16 | `FR-IV-NEW-04` | Phê duyệt TC TV `[NEW 05-05]` | — | — | `TO_CHUC_TU_VAN` | `—` | ❌ | — |
+| 17 | `FR-IV-NHT-01` | Quản lý NHT `[NEW 05-05]` | — | SCR-IV-NHT-02/03 (own) | `NGUOI_HO_TRO` | `RU*` | 📝 | ✓R*+U own scope (FR-IV-NHT-03 xem hồ sơ + cập nhật chứng chỉ HTPL) / ✗POST/DELETE→403 — KHÔNG CRUD NHT khác |
+| 18 | `FR-IV-NHT-02` | Tìm kiếm NHT `[NEW 05-05]` | — | — | `NGUOI_HO_TRO` | `—` | ❌ | NHT không tìm kiếm NHT khác |
+| 19 | `FR-IV-NHT-03` | Xem hồ sơ NHT `[NEW 05-05]` | — | SCR-IV-NHT-03 (own) | `NGUOI_HO_TRO` | `R*` | 👁️ | ✓R* own profile / ✗xem NHT khác = 403 |
 
 ### ✅ FR-05 — Vụ việc HTPL
 
@@ -2756,6 +2821,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 10 | `FR-IV-10` | Xem lịch sử hỗ trợ | UC48 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 11 | `FR-IV-11` | NHT cập nhật hồ sơ | UC49 | SCR-IV-02: Them moi / Chinh sua TVV | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 12 | `FR-IV-12` | Cập nhật trạng thái TVV | UC50 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 13 | `FR-IV-CROSS-01` | Tổng hợp điểm ĐG TVV `[NEW 05-05]` | — | SCR-IV-03 tab Đánh giá (own) | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* own profile / ✗POST/PUT/DELETE→403 |
+| 14 | `FR-IV-NEW-01` | Quản lý TC TV `[NEW 05-05]` | — | Cổng PLQG / dropdown to_chuc_chinh_id | `TO_CHUC_TU_VAN` | `R` | 👁️ | ✓R public TC TV cong_khai (xem dropdown khi đăng ký) / ✗POST/PUT/DELETE→403 |
+| 15 | `FR-IV-NEW-02` | Cập nhật TT TC TV `[NEW 05-05]` | — | — | `TO_CHUC_TU_VAN` | `—` | ❌ | TVV/CG không cập nhật state TC TV |
+| 16 | `FR-IV-NEW-04` | Phê duyệt TC TV `[NEW 05-05]` | — | — | `TO_CHUC_TU_VAN` | `—` | ❌ | — |
+| 17 | `FR-IV-NHT-01` | Quản lý NHT `[NEW 05-05]` | — | — | `NGUOI_HO_TRO` | `—` | ❌ | NHT là cán bộ nội bộ — TVV/CG không truy cập |
+| 18 | `FR-IV-NHT-02` | Tìm kiếm NHT `[NEW 05-05]` | — | — | `NGUOI_HO_TRO` | `—` | ❌ | — |
+| 19 | `FR-IV-NHT-03` | Xem hồ sơ NHT `[NEW 05-05]` | — | — | `NGUOI_HO_TRO` | `—` | ❌ | — |
 
 ### ✅ FR-05 — Vụ việc HTPL
 
@@ -3044,6 +3116,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 10 | `FR-IV-10` | Xem lịch sử hỗ trợ | UC48 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 11 | `FR-IV-11` | NHT cập nhật hồ sơ | UC49 | SCR-IV-02: Them moi / Chinh sua TVV | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 12 | `FR-IV-12` | Cập nhật trạng thái TVV | UC50 | SCR-IV-03: Ho so Chi tiet TVV (toan bo workflow) | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 13 | `FR-IV-CROSS-01` | Tổng hợp điểm ĐG TVV `[NEW 05-05]` | — | SCR-IV-03 tab Đánh giá (own) | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* own profile / ✗POST/PUT/DELETE→403 |
+| 14 | `FR-IV-NEW-01` | Quản lý TC TV `[NEW 05-05]` | — | Cổng PLQG / dropdown to_chuc_chinh_id | `TO_CHUC_TU_VAN` | `R` | 👁️ | ✓R public TC TV cong_khai (xem dropdown khi đăng ký) / ✗POST/PUT/DELETE→403 |
+| 15 | `FR-IV-NEW-02` | Cập nhật TT TC TV `[NEW 05-05]` | — | — | `TO_CHUC_TU_VAN` | `—` | ❌ | TVV/CG không cập nhật state TC TV |
+| 16 | `FR-IV-NEW-04` | Phê duyệt TC TV `[NEW 05-05]` | — | — | `TO_CHUC_TU_VAN` | `—` | ❌ | — |
+| 17 | `FR-IV-NHT-01` | Quản lý NHT `[NEW 05-05]` | — | — | `NGUOI_HO_TRO` | `—` | ❌ | NHT là cán bộ nội bộ — TVV/CG không truy cập |
+| 18 | `FR-IV-NHT-02` | Tìm kiếm NHT `[NEW 05-05]` | — | — | `NGUOI_HO_TRO` | `—` | ❌ | — |
+| 19 | `FR-IV-NHT-03` | Xem hồ sơ NHT `[NEW 05-05]` | — | — | `NGUOI_HO_TRO` | `—` | ❌ | — |
 
 ### ✅ FR-05 — Vụ việc HTPL
 

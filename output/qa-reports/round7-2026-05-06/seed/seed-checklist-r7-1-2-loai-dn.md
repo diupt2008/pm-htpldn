@@ -20,9 +20,11 @@
 
 ## Kết quả: ⚠️ MỘT PHẦN 3/7
 
-Pre-existing 3 record `DN_SIEU_NHO/DN_NHO/DN_VUA` (đây là **quy mô doanh nghiệp**, không phải **loại hình**). 4 record fixture cần seed (`TNHH/CP/DNTN/HKD`) bị BE chặn — cả `POST /api/v1/danh-muc` (status 422) và UI modal "Thêm mới" (toast "Dữ liệu không hợp lệ"). Lý do: BE hardcode validator `Chỉ chấp nhận: DN_SIEU_NHO, DN_NHO, DN_VUA` cho `loaiDanhMuc=LOAI_DOANH_NGHIEP` — nhầm scope `quy_mo` (SRS FR-VII-01 row 8) sang DM `LOAI_DOANH_NGHIEP` (FR-VII-01 row 7).
+Pre-existing 3 record `DN_SIEU_NHO/DN_NHO/DN_VUA` (đây là **quy mô doanh nghiệp**, không phải **loại hình**). 4 record fixture cần seed (`TNHH/CP/DNTN/HKD`) bị BE chặn — cả `POST /api/v1/danh-muc` lẫn UI modal "Thêm mới".
 
-**Bug:** [`BUG-LOAI-DN-002`](../bug-reports/bug-report-r7-1-2-loai-dn-be-enum-guard.md) — 0/1 đóng (BE enum guard nhầm field — Major).
+> **Re-test 2026-05-06 16:14 (sau dev claim "đã fix với separation quy_mo / loại doanh nghiệp"):** ❌ FAIL — fix nửa chừng. Dev đã bỏ enum guard 422 nhưng BE giờ trả **500 Internal server error** cho mọi POST mới vào DM `LOAI_DOANH_NGHIEP` (kể cả pattern cũ `DN_LON`). Sanity `LINH_VUC_PL` POST `TEST_LV` → 201 OK ⇒ chỉ DM `LOAI_DOANH_NGHIEP` 500. Vẫn 3/3 record. Hiểu nghiệp vụ của dev (TNHH/CP/DNTN/HKD ≠ DN_SIEU_NHO/NHO/VUA) ĐÚNG, nhưng triển khai mâu thuẫn SRS FR-VIII-07 line 393, 397, 399 (DM `LOAI_DOANH_NGHIEP` SRS chỉ định = quy_mo). Cần BA xử lý spec contradiction trước khi đóng bug.
+
+**Bug:** [`BUG-LOAI-DN-002`](../bug-reports/bug-report-r7-1-2-loai-dn-be-enum-guard.md) — 0/1 đóng (Open re-test FAIL — chuyển từ 422 sang 500 + spec contradiction; Major).
 
 ---
 
@@ -33,12 +35,12 @@ Pre-existing 3 record `DN_SIEU_NHO/DN_NHO/DN_VUA` (đây là **quy mô doanh ngh
 | 1 | DN_SIEU_NHO | Doanh nghiệp siêu nhỏ | quy_mo (FR-VII-01 row 8) | ✅ pre-existing |
 | 2 | DN_NHO | Doanh nghiệp nhỏ | quy_mo | ✅ pre-existing |
 | 3 | DN_VUA | Doanh nghiệp vừa | quy_mo | ✅ pre-existing |
-| 4 | TNHH | Công ty TNHH | loai_hinh (FR-VII-01 row 7) | 🚫 BE 422 |
-| 5 | CP | Công ty Cổ phần | loai_hinh | 🚫 BE 422 |
-| 6 | DNTN | Doanh nghiệp tư nhân | loai_hinh | 🚫 BE 422 |
-| 7 | HKD | Hộ kinh doanh | loai_hinh | 🚫 BE 422 |
+| 4 | TNHH | Công ty TNHH | loai_hinh (FR-VII-01 row 6) | 🚫 BE 422 (sáng) → 500 (chiều) |
+| 5 | CP | Công ty Cổ phần | loai_hinh | 🚫 BE 422 → 500 |
+| 6 | DNTN | Doanh nghiệp tư nhân | loai_hinh | 🚫 BE 422 → 500 |
+| 7 | HKD | Hộ kinh doanh | loai_hinh | 🚫 BE 422 → 500 |
 
-**Tổng:** 3 vào kho / 4 bị BE chặn.
+**Tổng:** 3 vào kho / 4 bị BE chặn (re-test sau dev fix lần 1: vẫn 4 chặn, BE crash 500 thay vì 422).
 
 ---
 

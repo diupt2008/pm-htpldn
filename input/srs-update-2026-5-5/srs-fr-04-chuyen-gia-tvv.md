@@ -1,10 +1,10 @@
 # SRS — Section 3.2.5: Quản lý Mạng lưới Tư vấn viên
 
 **Dự án:** Phần mềm hỗ trợ pháp lý doanh nghiệp
-**Phiên bản SRS:** 3.0
+**Phiên bản SRS:** 3.5
 **Nhóm:** IV — Quản lý Mạng lưới Tư vấn viên (Tư vấn viên / Chuyên gia + Tổ chức tư vấn + Người hỗ trợ pháp lý)
 **UC range:** UC 39 – UC 50
-**Số FR:** 20 (13 + FR-IV-NEW-01 + FR-IV-13 + FR-IV-NEW-02 + FR-IV-NEW-04 + FR-IV-NHT-01/02/03) `[CR-02][GAP-IV-08][GAP-IV-09][GAP-IV-10][GAP-IV-11]`
+**Số FR:** 19 (12 + FR-IV-NEW-01 + FR-IV-NEW-02 + FR-IV-NEW-04 + FR-IV-NHT-01/02/03) `[CR-02][GAP-IV-09][GAP-IV-10][GAP-IV-11]`
 **File chính:** `srs-v3.md` Section 3.2
 
 ---
@@ -63,7 +63,7 @@ graph LR
     E --> I[TU_CHOI]
     I --> B
 ```
-> `[GAP-IV-04]` Đồng bộ 10 trạng thái với SM-TVV Section 5 (thêm CHO_THAM_DINH, TU_CHOI → CHO_THAM_DINH, TAM_DUNG → VO_HIEU_HOA, **CHO_KICH_HOAT** sau phê duyệt)
+> Đồng bộ 10 trạng thái với SM-TVV Section 5. Thêm **CHO_KICH_HOAT** sau phê duyệt (cho phép tự cấp tài khoản TVV trước khi vào HOAT_DONG). State CHO_THAM_DINH, transition TU_CHOI → CHO_THAM_DINH và TAM_DUNG → VO_HIEU_HOA giữ từ v3 — KHÔNG yêu cầu thao tác "Tiếp nhận hồ sơ" riêng (CB NV vào tab Thẩm định bắt đầu chấm = ngầm chuyển trạng thái).
 
 **Tiêu chí thẩm định 4 nhóm:** (1) Pháp lý, (2) Năng lực chuyên môn, (3) Hiệu quả & uy tín, (4) Mạng lưới
 
@@ -95,7 +95,6 @@ graph LR
 | UC50 | Cập nhật trạng thái TVV | FR-IV-12 | Essential |
 | Cross | Tổng hợp điểm đánh giá | FR-IV-CROSS-01 | Essential |
 | [GAP-IV-07] | Quản lý Tổ chức tư vấn | FR-IV-NEW-01 | Essential `[CR-02]` |
-| [GAP-IV-08] | Tiếp nhận & chuyển TT tiền thẩm định | FR-IV-13 | Essential |
 | [GAP-IV-09] | Cập nhật trạng thái TC TV | FR-IV-NEW-02 | Essential |
 | [GAP-IV-10] | Phê duyệt TC TV (NĐ 55/2019 Đ.9) | FR-IV-NEW-04 | Essential `[BA chốt 2026-05-03]` |
 | [GAP-IV-11] | Quản lý Người hỗ trợ pháp lý (NĐ 55/2019 Đ.7) | FR-IV-NHT-01 | Essential `[BA chốt 2026-05-03]` |
@@ -312,7 +311,7 @@ graph LR
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | Kiểm tra ứng viên chưa có hồ sơ đang chờ xử lý (theo CCCD, trạng thái ∈ {MOI_DANG_KY, CHO_THAM_DINH, DANG_THAM_DINH, YEU_CAU_BO_SUNG, CHO_PHE_DUYET}) | — |
-| 2 | Kiểm tra nếu có hồ sơ trước TU_CHOI → chuyển sang luồng "nộp lại" (xem FR-IV-13) | — |
+| 2 | Kiểm tra nếu có hồ sơ trước TU_CHOI → cho phép sửa và chuyển lại CHO_THAM_DINH (KHÔNG có cooldown — BA chốt 2026-05-03) | — |
 | 3 | Xác nhận dữ liệu đầu vào | — |
 | 4 | Kiểm tra CMND/CCCD duy nhất toàn hệ thống | — |
 | 5 | Kiểm tra email duy nhất toàn hệ thống | — |
@@ -396,7 +395,7 @@ graph LR
 | 4 | Cập nhật thông tin năng lực trong HO_SO_TU_VAN_VIEN | — |
 | 5 | Nếu có file mới: tạo bản ghi FILE_DINH_KEM | — |
 | 6 | Nếu thay đổi lĩnh vực: cập nhật TVV_LINH_VUC | — |
-| 7 | **Nếu TVV đang ở YEU_CAU_BO_SUNG và có cập nhật hồ sơ** → gọi FR-IV-13 để chuyển trạng thái DANG_THAM_DINH + thông báo CB NV | SM-TVV |
+| 7 | **Nếu TVV đang ở YEU_CAU_BO_SUNG và có cập nhật hồ sơ** → chuyển trạng thái về DANG_THAM_DINH + thông báo CB NV | SM-TVV |
 | 8 | Ghi nhật ký thao tác (giá trị cũ → mới) | BR-DATA-05 |
 
 **Outputs:**
@@ -947,75 +946,6 @@ graph LR
 
 ---
 
-### FR-IV-13: Tiếp nhận & chuyển trạng thái tiền thẩm định `[GAP-IV-08]`
-
-**UC Reference:** (cover 3 gap transitions F-32/F-33/F-34 — SM-TVV)
-**Priority:** Essential | **Stability:** High
-**Màn hình:** SCR-IV-03 (header action button "Tiếp nhận/Chuyển trạng thái") + SCR-IV-02 (form TVV/CG chuyên trang)
-
-**Mô tả:** FR cover các transition trạng thái tiền thẩm định chưa có FR riêng trong SM-TVV:
-1. **MOI_DANG_KY → CHO_THAM_DINH**: CB NV (NHT) tiếp nhận hồ sơ (sau khi ứng viên TVV/CG đăng ký)
-2. **YEU_CAU_BO_SUNG → DANG_THAM_DINH**: TVV/CG (chủ hồ sơ) gửi lại hồ sơ đã bổ sung (auto trigger khi FR-IV-04 cập nhật)
-3. **TU_CHOI → CHO_THAM_DINH**: TVV/CG (chủ hồ sơ) nộp lại hồ sơ sau khi bị từ chối (reset kết quả thẩm định cũ)
-
-**Tác nhân:**
-- Transition 1: CB Nghiệp vụ (thủ công)
-- Transition 2: TVV/CG (chủ hồ sơ — auto trigger từ FR-IV-04)
-- Transition 3: TVV/CG (chủ hồ sơ — thủ công, button "Nộp lại" trên SCR-IV-02 chuyên trang)
-
-**Preconditions:**
-- Transition 1: TVV ở MOI_DANG_KY, CB NV cùng đơn vị (BR-AUTH-08)
-- Transition 2: TVV ở YEU_CAU_BO_SUNG, TVV/CG (chủ hồ sơ) sở hữu hồ sơ, đã cập nhật ít nhất 1 trường
-- Transition 3: TVV ở TU_CHOI, TVV/CG (chủ hồ sơ) sở hữu hồ sơ. KHÔNG có cooldown — chấp nhận nộp lại bất kỳ lúc nào sau khi sửa hồ sơ (BA chốt 2026-05-03: NĐ 77/2008 + NĐ 55/2019 không quy định cooldown)
-
-**Inputs:**
-
-| # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
-|---|----------|-----------|----------|-----------|----------|-------|
-| 1 | tvv_id | identifier | Y | — | — | system |
-| 2 | transition_type | text | Y | TIEP_NHAN / BO_SUNG_XONG / NOP_LAI | — | system |
-| 3 | ghi_chu | text | N | Max 2000 ký (CB NV ghi chú khi tiếp nhận, hoặc TVV/CG ghi chú khi nộp lại) | — | user input |
-
-**Processing:**
-
-| Bước | Mô tả xử lý | BR áp dụng |
-|------|-------------|-----------|
-| 1 | Kiểm tra quyền theo transition_type (CB NV / TVV/CG sở hữu hồ sơ theo CCCD) | BR-AUTH-01, BR-AUTH-08 |
-| 2 | Kiểm tra transition hợp lệ theo SM-TVV | SM-TVV |
-| 3 | Nếu NOP_LAI: reset kết quả thẩm định cũ (HO_SO_TU_VAN_VIEN.trang_thai_tham_dinh = 'CHUA_THAM_DINH', clear ket_qua_tham_dinh) | — |
-| 4 | Chuyển trạng thái theo transition: TIEP_NHAN → CHO_THAM_DINH; BO_SUNG_XONG → DANG_THAM_DINH; NOP_LAI → CHO_THAM_DINH | SM-TVV |
-| 5 | Ghi timestamp tiếp nhận: `ngay_tiep_nhan = NOW()`, `nguoi_tiep_nhan = current_user.id` (nếu TIEP_NHAN) | — |
-| 6 | Gửi thông báo: TIEP_NHAN → TVV/CG (chủ hồ sơ); BO_SUNG_XONG → CB NV đã thẩm định; NOP_LAI → CB NV cùng đơn vị | — |
-| 7 | Ghi nhật ký thao tác | BR-DATA-05 |
-
-**Outputs:**
-
-| # | Tên | Kiểu logic | Điều kiện | Format |
-|---|-----|-----------|-----------|--------|
-| 1 | tvv_id | identifier | — | — |
-| 2 | trang_thai_moi | text | — | SM-TVV |
-| 3 | ngay_chuyen | datetime | — | dd/mm/yyyy HH:mm |
-
-**Postconditions:**
-- Trạng thái TVV được cập nhật theo SM-TVV
-- Thông báo được gửi đến tác nhân liên quan
-- Nhật ký ghi nhận
-
-**Error Handling:**
-
-| # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
-|---|--------------|--------|-------------------|----------|
-| E1 | Transition không hợp lệ | ERR-CT-01 | "Không thể chuyển từ {old} sang {new}" | ERROR |
-| E2 | Không có quyền | ERR-CT-02 | "Bạn không có quyền thực hiện thao tác này" | ERROR |
-| E3 | BO_SUNG_XONG nhưng chưa cập nhật gì | ERR-CT-03 | "Vui lòng cập nhật ít nhất 1 trường trước khi gửi lại" | ERROR |
-
-**Acceptance Criteria:**
-- **Given** CB NV (NHT) thấy hồ sơ MOI_DANG_KY trong tab "Mới đăng ký" **When** click "Tiếp nhận" **Then** TVV → CHO_THAM_DINH, TVV/CG (chủ hồ sơ) nhận thông báo
-- **Given** TVV/CG (chủ hồ sơ) ở trạng thái YEU_CAU_BO_SUNG cập nhật hồ sơ qua FR-IV-04 **When** lưu thành công **Then** auto chuyển DANG_THAM_DINH, CB NV nhận thông báo
-- **Given** TVV/CG (chủ hồ sơ) có hồ sơ TU_CHOI **When** sửa hồ sơ và nộp lại **Then** hồ sơ chuyển CHO_THAM_DINH, reset kết quả thẩm định cũ (KHÔNG yêu cầu cooldown — BA chốt 2026-05-03)
-
----
-
 ### FR-IV-NEW-02: Cập nhật trạng thái Tổ chức tư vấn `[CR-02][GAP-IV-09]`
 
 **UC Reference:** (chưa có trong CSV — cover state management TC TV)
@@ -1379,7 +1309,7 @@ graph LR
 
 ```
 Menu: Quản lý mạng lưới tư vấn viên
-├── Sub-menu: Tư vấn viên / Chuyên gia  → FR-IV-01 đến FR-IV-13 (TU_VAN_VIEN)
+├── Sub-menu: Tư vấn viên / Chuyên gia  → FR-IV-01 đến FR-IV-12 (TU_VAN_VIEN)
 │   ├── SCR-IV-01: Danh sách Tư vấn viên
 │   ├── SCR-IV-02: Thêm/Sửa Tư vấn viên
 │   └── SCR-IV-03: Chi tiết Tư vấn viên
@@ -1454,7 +1384,6 @@ Menu: Quản lý mạng lưới tư vấn viên
 
 | Mã modal | Tiêu đề | Nội dung hiển thị | Nút primary |
 |---------|---------|---------------------|-------------|
-| MD-TIEP-NHAN | Xác nhận tiếp nhận hồ sơ? | Bạn đang tiếp nhận hồ sơ của **{tên TVV/CG}**. Sau khi tiếp nhận, hồ sơ sẽ chuyển sang "Chờ thẩm định" và bạn không thể hoàn tác. | Tiếp nhận |
 | MD-TRINH-DUYET | Xác nhận trình phê duyệt? | Bạn đang trình hồ sơ **{tên}** lên Cán bộ Phê duyệt. Sau khi trình, bạn không thể chỉnh sửa kết quả thẩm định cho đến khi Cán bộ Phê duyệt phản hồi. | Trình duyệt |
 | MD-PHE-DUYET | Xác nhận phê duyệt và công bố? | Bạn đang công bố **{tên}** vào mạng lưới tư vấn viên pháp luật. Vui lòng nhập Số quyết định công bố. | Phê duyệt |
 | MD-TU-CHOI | Xác nhận từ chối? | Bạn đang từ chối hồ sơ **{tên}**. Vui lòng nhập lý do (tối thiểu 10 ký tự) — lý do sẽ được gửi đến chủ hồ sơ. | Từ chối |
@@ -1486,8 +1415,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 | 2 | thanh tiêu đề | Tiêu đề + 2 nút | label + 2 nút | "Quản lý Tư vấn viên" / Nút **+ Thêm tư vấn viên** (icon plus) / Nút **Xuất Excel** (icon download, tooltip: "Mẫu Phụ lục 1 — QĐ 1322/QĐ-BTP") | + Thêm → SCR-IV-02; Xuất Excel → tải file (tối đa 10.000 dòng) |
 | 3 | tab | Tab "Đang hoạt động" | tab + số đếm | Mặc định kích hoạt | Lọc trạng thái "Đang hoạt động" |
 | 4 | tab | Tab "Tạm dừng" | tab + số đếm | — | Lọc trạng thái "Tạm dừng" |
-| 5 | tab | Tab "Mới đăng ký" | tab + số đếm + chấm đỏ nếu >0 | Hồ sơ mới ứng viên đăng ký, chưa được tiếp nhận | Lọc trạng thái "Mới đăng ký" |
-| 6 | tab | Tab "Chờ thẩm định" | tab + số đếm + chấm đỏ nếu >0 | Hồ sơ đã tiếp nhận, chờ Cán bộ Nghiệp vụ bắt đầu thẩm định | Lọc trạng thái "Chờ thẩm định" |
+| 5 | tab | Tab "Mới đăng ký / Chờ thẩm định" | tab + số đếm + chấm đỏ nếu >0 | Hồ sơ mới ứng viên đăng ký hoặc chờ chấm điểm — Cán bộ Nghiệp vụ vào tab này để bắt đầu thẩm định | Lọc trạng thái IN ('Mới đăng ký', 'Chờ thẩm định') |
 | 7 | tab | Tab "Đang thẩm định" | tab + số đếm | Cán bộ Nghiệp vụ đang thẩm định 4 nhóm tiêu chí | Lọc trạng thái "Đang thẩm định" |
 | 8 | tab | Tab "Yêu cầu bổ sung" | tab + số đếm | Đã thẩm định một phần, chờ ứng viên bổ sung hồ sơ — Cán bộ Nghiệp vụ chỉ theo dõi | Lọc trạng thái "Yêu cầu bổ sung" |
 | 9 | tab | Tab "Chờ phê duyệt" | tab + số đếm | Hiển thị khi vai trò là Cán bộ Phê duyệt | Lọc trạng thái "Chờ phê duyệt" |
@@ -1586,14 +1514,14 @@ Menu: Quản lý mạng lưới tư vấn viên
 ### SCR-IV-03: Hồ sơ chi tiết Tư vấn viên
 
 **Loại màn hình:** Trang chi tiết 5 tab + 6 nút hành động ở header
-**FR sử dụng:** FR-IV-04 (cập nhật năng lực), FR-IV-05 (xem chi tiết), FR-IV-06 (thẩm định), FR-IV-07 (phê duyệt), FR-IV-08 (công khai), FR-IV-09 (đánh giá), FR-IV-10 (lịch sử), FR-IV-12 (cập nhật trạng thái), FR-IV-13 (tiếp nhận / chuyển trạng thái)
+**FR sử dụng:** FR-IV-04 (cập nhật năng lực), FR-IV-05 (xem chi tiết), FR-IV-06 (thẩm định), FR-IV-07 (phê duyệt), FR-IV-08 (công khai), FR-IV-09 (đánh giá), FR-IV-10 (lịch sử), FR-IV-12 (cập nhật trạng thái)
 **Đường dẫn:** `/chuyen-gia-tvv/:id`
 **Quyền truy cập:**
-- Cán bộ Nghiệp vụ: xem + tiếp nhận + thẩm định + cập nhật trạng thái + công khai (TVV cùng đơn vị)
+- Cán bộ Nghiệp vụ: xem + thẩm định + cập nhật trạng thái + công khai (TVV cùng đơn vị)
 - Cán bộ Phê duyệt cùng cấp: xem + phê duyệt / từ chối (theo phân cấp NĐ 121/2025 Đ.39-40 + NĐ 55/2019 Đ.9)
 - Tư vấn viên / Chuyên gia (chủ hồ sơ): xem hồ sơ + năng lực + lịch sử + đánh giá của mình; **tab Thẩm định ẩn hoàn toàn** để bảo mật nhận xét nội bộ
 
-**Mô tả:** Hồ sơ chi tiết tư vấn viên hợp nhất toàn bộ quy trình trên 1 trang: xem hồ sơ → tiếp nhận → thẩm định 4 nhóm tiêu chí → trình duyệt → phê duyệt / từ chối → công khai → cập nhật trạng thái.
+**Mô tả:** Hồ sơ chi tiết tư vấn viên hợp nhất toàn bộ quy trình trên 1 trang: xem hồ sơ → thẩm định 4 nhóm tiêu chí → trình duyệt → phê duyệt / từ chối → công khai → cập nhật trạng thái.
 
 #### Thành phần màn hình — Header + Nút hành động
 
@@ -1603,8 +1531,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 | 2 | thanh điều hướng | Nút Quay lại | nút phụ | "← Quay lại danh sách" | Click → SCR-IV-01 | Luôn |
 | 3 | header | Thẻ thông tin chính | thẻ hiển thị | Ảnh chân dung 80x100 + Họ tên (đậm 20px) + Mã tư vấn viên + Trạng thái (badge lớn theo § 3.0) + Điểm đánh giá trung bình (sao) + Ngày công nhận | — | Luôn |
 | 4 | header | Nút **Sửa hồ sơ** | nút phụ | "Sửa hồ sơ" | Click → SCR-IV-02 | Vai trò = Cán bộ Nghiệp vụ HOẶC chủ hồ sơ; trạng thái khác Vô hiệu hóa |
-| 5 | header | Nút **Tiếp nhận hồ sơ** | nút chính | "Tiếp nhận hồ sơ" | Click → mở MD-TIEP-NHAN → tiếp nhận → chuyển trạng thái Chờ thẩm định | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái = Mới đăng ký |
-| 6 | header | Nút **Bắt đầu thẩm định** | nút chính | "Bắt đầu thẩm định" | Click → chuyển trạng thái Đang thẩm định + chuyển sang tab Thẩm định | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái = Chờ thẩm định |
+| 6 | header | Nút **Bắt đầu thẩm định** | nút chính | "Bắt đầu thẩm định" | Click → ngầm chuyển trạng thái Mới đăng ký/Chờ thẩm định → Đang thẩm định + chuyển sang tab Thẩm định | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {Mới đăng ký, Chờ thẩm định} |
 | 7 | header | Nút **Cập nhật trạng thái** | nút phụ | "Cập nhật trạng thái" | Click → mở hộp thoại chọn trạng thái mới (Tạm dừng / Khôi phục / Vô hiệu hóa) + lý do (≥ 10 ký tự) → áp dụng MD-TAM-DUNG hoặc MD-VO-HIEU-HOA. Khi vô hiệu hóa: tự động gỡ khỏi Cổng pháp luật quốc gia | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {Đang hoạt động, Tạm dừng, Vô hiệu hóa} |
 | 8 | header | Nút **Phê duyệt** | nút chính | "Phê duyệt" | Click → mở MD-PHE-DUYET (form: Số quyết định * + Ý kiến phê duyệt) → đặt trạng thái Đang hoạt động + ghi ngày công nhận, người duyệt. Có khóa lạc quan chống 2 người duyệt cùng lúc | Vai trò = Cán bộ Phê duyệt cùng cấp với Cán bộ Nghiệp vụ thẩm định; trạng thái = Chờ phê duyệt |
 | 9 | header | Nút **Từ chối** | nút nguy hiểm (đỏ) | "Từ chối" | Click → mở MD-TU-CHOI (lý do bắt buộc ≥ 10 ký tự) → đặt trạng thái Đã từ chối + ghi người từ chối, lý do | Vai trò = Cán bộ Phê duyệt cùng cấp; trạng thái = Chờ phê duyệt |
@@ -1638,9 +1565,8 @@ Menu: Quản lý mạng lưới tư vấn viên
 
 #### Quy tắc tương tác
 
-**Quy trình trên 1 trang:** xem hồ sơ → tiếp nhận → bắt đầu thẩm định → chấm điểm 4 nhóm → trình phê duyệt → phê duyệt / từ chối → công khai → cập nhật trạng thái.
+**Quy trình trên 1 trang:** xem hồ sơ → bắt đầu thẩm định → chấm điểm 4 nhóm → trình phê duyệt → phê duyệt / từ chối → công khai → cập nhật trạng thái.
 
-- **Tiếp nhận** (Mới đăng ký → Chờ thẩm định): Cán bộ Nghiệp vụ click "Tiếp nhận hồ sơ", ghi ngày tiếp nhận và người tiếp nhận, gửi thông báo chủ hồ sơ.
 - **Thẩm định** (Chờ thẩm định → Đang thẩm định): Cán bộ Nghiệp vụ click "Bắt đầu thẩm định" → hiển thị form 4 nhóm tiêu chí. Khi gửi kết quả: nếu "Yêu cầu bổ sung" → trạng thái Yêu cầu bổ sung; nếu "Không đạt" → Đã từ chối; nếu "Đạt" → bật nút "Trình phê duyệt".
 - **Bổ sung hồ sơ** (Yêu cầu bổ sung → Đang thẩm định): tự động kích hoạt khi chủ hồ sơ lưu thông tin năng lực mới qua chuyên trang.
 - **Nộp lại sau từ chối** (Đã từ chối → Chờ thẩm định): chủ hồ sơ tự nộp lại, không yêu cầu thời gian chờ; hệ thống xóa kết quả thẩm định cũ.
@@ -2088,8 +2014,6 @@ erDiagram
 | so_vu_viec_da_xu_ly | number | N | | 0 | Counter: số VV đã xử lý |
 | so_quyet_dinh_cong_nhan | text | N | Format QĐ-{số}/QĐ-{đơn_vị} | | Số QĐ công nhận (FR-IV-07) |
 | ngay_cong_nhan | datetime | N | | | Ngày được công nhận vào mạng lưới |
-| ngay_tiep_nhan | datetime | N | | | **Common Approval Field** — Ngày Cán bộ Nghiệp vụ tiếp nhận hồ sơ (FR-IV-13) |
-| nguoi_tiep_nhan | identifier | N | FK → TAI_KHOAN(id) | | **Common Approval Field** — Cán bộ Nghiệp vụ tiếp nhận |
 | thoi_gian_duyet | datetime | N | | | **Common Approval Field** — Thời điểm Cán bộ Phê duyệt duyệt (FR-IV-07) |
 | nguoi_duyet | identifier | N | FK → TAI_KHOAN(id) | | **Common Approval Field** — Cán bộ Phê duyệt duyệt |
 | thoi_gian_tu_choi | datetime | N | | | **Common Approval Field** — Thời điểm từ chối (FR-IV-06 KHONG_DAT / FR-IV-07 TU_CHOI) |
@@ -2109,7 +2033,7 @@ erDiagram
 
 **Mô tả:** Cán bộ làm công tác Hỗ trợ pháp lý DNNVV theo **NĐ 55/2019 Điều 7** — cán bộ ở Sở TP/Bộ ngành/UBND/tổ chức đại diện DN. KHÔNG phải cá nhân ngoài hành nghề tư vấn (TVV/CG nằm ở entity riêng TU_VAN_VIEN). NHT có vai trò: (a) tiếp nhận/quản lý hồ sơ ứng viên TVV/CG (UC41-49), (b) trực tiếp xử lý vụ việc HTPL DN (UC60, UC65 — thuộc FR-V).
 
-**Tham chiếu FR:** FR-IV-03 đến FR-IV-13 (NHT làm tác nhân quản lý), FR-V (NHT xử lý vụ việc — UC59/60/65)
+**Tham chiếu FR:** FR-IV-03 đến FR-IV-12 (NHT làm tác nhân quản lý), FR-V (NHT xử lý vụ việc — UC59/60/65)
 
 **Pháp lý:** NĐ 55/2019/NĐ-CP Điều 7 (bồi dưỡng người làm công tác HTPL DNNVV)
 
@@ -2378,16 +2302,16 @@ stateDiagram-v2
 | Từ | Đến | Trigger | Guard | Action | FR Ref | BR Ref |
 |----|-----|---------|-------|--------|--------|--------|
 | [*] | MOI_DANG_KY | Người hỗ trợ submit hồ sơ ứng viên TVV/CG | — | Tạo hồ sơ TVV | FR-IV-03 | — |
-| MOI_DANG_KY | CHO_THAM_DINH | Cán bộ Nghiệp vụ (NHT) tiếp nhận | Hồ sơ đủ giấy tờ | Ghi `ngay_tiep_nhan`, `nguoi_tiep_nhan`, thông báo TVV/CG (chủ hồ sơ) | FR-IV-13 | — |
+| MOI_DANG_KY | CHO_THAM_DINH | Cán bộ Nghiệp vụ vào tab Thẩm định bắt đầu chấm | Hồ sơ đủ giấy tờ | Ngầm chuyển trạng thái + thông báo TVV/CG (chủ hồ sơ) | FR-IV-06 | — |
 | CHO_THAM_DINH | DANG_THAM_DINH | Cán bộ Nghiệp vụ bắt đầu thẩm định | — | Ghi thời điểm bắt đầu | FR-IV-06 | — |
 | DANG_THAM_DINH | YEU_CAU_BO_SUNG | Hồ sơ chưa đầy đủ | Cán bộ Nghiệp vụ xác nhận thiếu, có `ly_do` | Thông báo TVV/CG (chủ hồ sơ) | FR-IV-06 | — |
-| YEU_CAU_BO_SUNG | DANG_THAM_DINH | TVV/CG (chủ hồ sơ) bổ sung xong | Có tài liệu bổ sung (từ FR-IV-04) | Auto trigger khi FR-IV-04 lưu thành công, thông báo Cán bộ Nghiệp vụ | FR-IV-13 | — |
+| YEU_CAU_BO_SUNG | DANG_THAM_DINH | TVV/CG (chủ hồ sơ) bổ sung xong | Có tài liệu bổ sung (từ FR-IV-04) | Chuyển trạng thái khi FR-IV-04 lưu thành công, thông báo Cán bộ Nghiệp vụ | FR-IV-04 | — |
 | DANG_THAM_DINH | CHO_PHE_DUYET | Thẩm định đạt | ket_luan = DAT AND nhom1_ket_qua = true | Ghi kết quả thẩm định, thông báo Cán bộ Phê duyệt | FR-IV-06 | BR-LEGAL-04 |
 | DANG_THAM_DINH | TU_CHOI | Cán bộ Nghiệp vụ kết luận KHÔNG ĐẠT | ket_luan = KHONG_DAT, có `ly_do` | Thông báo TVV/CG (chủ hồ sơ) + ghi lý do | FR-IV-06 | BR-FLOW-04 |
 | CHO_PHE_DUYET | CHO_KICH_HOAT | Cán bộ Phê duyệt duyệt | Cùng cấp (BR-AUTH-05), có `so_quyet_dinh` | Audit, ngay_cong_nhan, thoi_gian_duyet, nguoi_duyet, **hệ thống tự cấp tài khoản cho TVV (qua FR-VIII-15) + gửi mail kích hoạt** | FR-IV-07 | BR-AUTH-05 |
 | CHO_KICH_HOAT | HOAT_DONG | TVV bấm link kích hoạt + đặt mật khẩu lần đầu | Token kích hoạt hợp lệ | Tài khoản chuyển HOAT_DONG, TVV chuyển HOAT_DONG (đồng thời) | FR-VIII-XX (Quên mật khẩu / Kích hoạt lần đầu) | — |
 | CHO_PHE_DUYET | TU_CHOI | Cán bộ Phê duyệt từ chối | Có lý do ≥ 10 ký | thoi_gian_tu_choi, nguoi_tu_choi, ly_do_tu_choi, thông báo Cán bộ Nghiệp vụ + TVV/CG (chủ hồ sơ) | FR-IV-07 | BR-FLOW-04 |
-| TU_CHOI | CHO_THAM_DINH | TVV/CG (chủ hồ sơ) nộp lại hồ sơ | KHÔNG có cooldown (BA chốt 2026-05-03) | Reset kết quả thẩm định cũ, thông báo Cán bộ Nghiệp vụ | FR-IV-13 | — |
+| TU_CHOI | CHO_THAM_DINH | TVV/CG (chủ hồ sơ) nộp lại hồ sơ | KHÔNG có cooldown (BA chốt 2026-05-03) | Reset kết quả thẩm định cũ, thông báo Cán bộ Nghiệp vụ | FR-IV-03 | — |
 | HOAT_DONG | TAM_DUNG | Cán bộ Nghiệp vụ quyết định | Không theo điều kiện tự động | Audit log | FR-IV-12 | — |
 | TAM_DUNG | HOAT_DONG | Cán bộ Nghiệp vụ kích hoạt lại | — | Audit log | FR-IV-12 | — |
 | HOAT_DONG | VO_HIEU_HOA | Cán bộ Nghiệp vụ vô hiệu hóa | Không có VU_VIEC AND HOI_DAP đang xử lý | Gỡ khỏi Cổng, audit | FR-IV-12 | — |
@@ -2445,6 +2369,49 @@ stateDiagram-v2
 
 ---
 
+### SM-NHT: Người hỗ trợ pháp lý
+
+**Entity:** NGUOI_HO_TRO (1:1 TAI_KHOAN)
+**Tham chiếu FR:** FR-IV-NHT-01 (CRUD + cấp tài khoản), FR-IV-NHT-03 (xem hồ sơ); cập nhật trạng thái nằm trong FR-IV-NHT-01
+
+**Pháp lý:** NĐ 55/2019 Điều 7 — Người hỗ trợ pháp lý là cán bộ HTPL nội bộ thuộc bộ/UBND/tổ chức đại diện DN; KHÔNG qua luồng thẩm định 4 nhóm tiêu chí như TVV/CG ngoài (NĐ 77/2008). Vòng đời chỉ gồm cấp tài khoản → kích hoạt → quản lý hoạt động.
+
+```mermaid
+stateDiagram-v2
+    [*] --> CHO_KICH_HOAT : Cán bộ quản trị tạo NHT (gán đơn vị + lĩnh vực + vai trò) — tự cấp tài khoản, gửi mail kích hoạt
+    CHO_KICH_HOAT --> HOAT_DONG : NHT bấm link kích hoạt + đặt mật khẩu lần đầu
+    HOAT_DONG --> TAM_DUNG : Cán bộ quản trị tạm dừng (có lý do ≥ 10 ký)
+    TAM_DUNG --> HOAT_DONG : Cán bộ quản trị kích hoạt lại
+    HOAT_DONG --> VO_HIEU_HOA : Cán bộ quản trị vô hiệu hóa (guard: không còn vụ việc đang xử lý)
+    TAM_DUNG --> VO_HIEU_HOA : Cán bộ quản trị vô hiệu hóa (guard: không còn vụ việc đang xử lý)
+    VO_HIEU_HOA --> HOAT_DONG : Cán bộ quản trị khôi phục (quyết định từng trường hợp)
+```
+
+**Bảng trạng thái:**
+
+| Trạng thái | Mã | Mô tả | Màu hiển thị |
+|-----------|-----|-------|-------------|
+| Chờ kích hoạt tài khoản | CHO_KICH_HOAT | NHT đã được tạo, tài khoản đã cấp ở trạng thái chờ kích hoạt; mail link đã gửi nhưng chưa được bấm | Xanh dương |
+| Đang hoạt động | HOAT_DONG | NHT đã kích hoạt tài khoản, có thể đăng nhập + nhận phân công vụ việc + quản lý TVV/CG cùng đơn vị | Xanh lá |
+| Tạm dừng | TAM_DUNG | NHT bị tạm dừng, không nhận phân công vụ việc mới; vụ việc đang xử lý vẫn có thể tiếp tục | Vàng đậm |
+| Vô hiệu hóa | VO_HIEU_HOA | NHT bị vô hiệu hóa hoàn toàn; tài khoản bị khóa; không còn xuất hiện trong dropdown phân công | Đen |
+
+**Bảng chuyển trạng thái:**
+
+| Từ | Đến | Trigger | Guard | Action | FR Ref |
+|----|-----|---------|-------|--------|--------|
+| [*] | CHO_KICH_HOAT | Cán bộ quản trị tạo NHT | Đủ field bắt buộc (họ tên, đơn vị, lĩnh vực, email, vai trò) | Tạo bản ghi NGUOI_HO_TRO + tạo TAI_KHOAN ở CHO_KICH_HOAT + gán vai trò NHT + gửi mail link kích hoạt | FR-IV-NHT-01, FR-VIII-15 |
+| CHO_KICH_HOAT | HOAT_DONG | NHT bấm link kích hoạt + đặt mật khẩu | Link còn hạn (1 lần dùng, không có thời hạn cố định) | NHT và tài khoản đồng thời chuyển HOAT_DONG; cho phép đăng nhập | FR-VIII-15 |
+| HOAT_DONG | TAM_DUNG | Cán bộ quản trị tạm dừng | Có lý do ≥ 10 ký | Audit log; ẩn NHT khỏi dropdown phân công vụ việc mới | FR-IV-NHT-01 |
+| TAM_DUNG | HOAT_DONG | Cán bộ quản trị kích hoạt lại | — | Audit log; NHT trở lại dropdown phân công | FR-IV-NHT-01 |
+| HOAT_DONG | VO_HIEU_HOA | Cán bộ quản trị vô hiệu hóa | **KHÔNG có vụ việc NHT đang xử lý** (COUNT VU_VIEC WHERE nguoi_ho_tro_id=@id AND trang_thai NOT IN ('HOAN_THANH','HUY') = 0) | Khóa tài khoản; gỡ khỏi dropdown; audit log | FR-IV-NHT-01 |
+| TAM_DUNG | VO_HIEU_HOA | Cán bộ quản trị vô hiệu hóa | Same guard | Khóa tài khoản; audit log | FR-IV-NHT-01 |
+| VO_HIEU_HOA | HOAT_DONG | Cán bộ quản trị khôi phục | Quyết định từng trường hợp | Mở khóa tài khoản; audit log | FR-IV-NHT-01 |
+
+> **Khác biệt cốt lõi với SM-TVV/SM-TCTV:** NHT là cán bộ HTPL nội bộ (NĐ 55/2019 Đ.7), KHÔNG cần qua thẩm định 4 nhóm tiêu chí (NĐ 77/2008) cũng KHÔNG cần phê duyệt từ Cán bộ Phê duyệt. Toàn bộ vòng đời do Cán bộ quản trị quản lý ở mức tài khoản + phân quyền.
+
+---
+
 ## 6. Business Rules liên quan
 
 > **Source of truth:** `srs-v3.md` Phụ lục B.
@@ -2455,7 +2422,7 @@ stateDiagram-v2
 |-------|-----|---------------------------|
 | BR-AUTH-01 | Xác thực bắt buộc | Toàn bộ FR nhóm IV |
 | BR-AUTH-05 | Phê duyệt cùng cấp | FR-IV-07, FR-IV-NEW-04 |
-| BR-AUTH-08 | Phân quyền dữ liệu theo đơn vị | FR-IV-01, FR-IV-02, FR-IV-06, FR-IV-11, FR-IV-12, FR-IV-13, FR-IV-NEW-01, FR-IV-NEW-02, FR-IV-NEW-04 |
+| BR-AUTH-08 | Phân quyền dữ liệu theo đơn vị | FR-IV-01, FR-IV-02, FR-IV-06, FR-IV-11, FR-IV-12, FR-IV-NEW-01, FR-IV-NEW-02, FR-IV-NEW-04 |
 | BR-DATA-01 | Soft delete | FR-IV-01, FR-IV-NEW-01 |
 | BR-DATA-03 | Common fields | FR-IV-01, FR-IV-NEW-01 |
 | BR-DATA-05 | Audit trail | Toàn bộ FR nhóm IV (CUD) |
@@ -2463,7 +2430,7 @@ stateDiagram-v2
 | BR-FLOW-02 | Phê duyệt hàng loạt / Từ chối từng bản ghi | FR-IV-07, SCR-IV-01 |
 | BR-FLOW-03 | Không sửa/xóa sau phê duyệt | FR-IV-06 |
 | BR-FLOW-04 | Từ chối yêu cầu lý do | FR-IV-06 (KHONG_DAT), FR-IV-07, FR-IV-12, FR-IV-NEW-02 |
-| BR-LEGAL-04 | NĐ77/2008 — Tư vấn pháp luật | FR-IV-01 đến FR-IV-13 |
+| BR-LEGAL-04 | NĐ77/2008 — Tư vấn pháp luật | FR-IV-01 đến FR-IV-12 |
 | BR-LEGAL-09 | NĐ55/2019 Điều 9 — Mạng lưới TVV công khai toàn quốc | FR-IV-08, FR-IV-02 |
 | BR-CALC-06 | Điểm đánh giá TB TVV | FR-IV-09, FR-IV-CROSS-01 |
 | BR-PUBLIC-01/02/03 | Công khai/Hủy công khai lên Cổng PLQG | FR-IV-08, FR-IV-NEW-01 |

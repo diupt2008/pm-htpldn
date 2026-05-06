@@ -87,7 +87,7 @@ Password mặc định: `Secret@123`.
 | Chương trình HT | `DANH_MUC WHERE loai='CHUONG_TRINH_HT'` | — | Luôn |
 | Tình trạng VV | `DANH_MUC WHERE loai='TINH_TRANG_VV'` | — | Luôn |
 | **Cơ quan ĐV** | `DON_VI` (tree-view) | **Tree 3 cấp TW→BN→ĐP** + form chi tiết bên phải + nút [+ Thêm đơn vị con] mỗi node (UC103) | Luôn |
-| Tổ chức tư vấn | `DANH_MUC WHERE loai='TO_CHUC_TU_VAN'` | NĐ77/2008 | Luôn |
+| ~~Tổ chức tư vấn~~ | ⚠️ **Đã tách entity riêng** `TO_CHUC_TU_VAN` (SRS update 2026-05-05) — xem §FR-04 mục ③. Quản lý ở SCR-IV-NEW-01/02/03 thuộc Nhóm IV, KHÔNG còn ở danh mục `DANH_MUC`. Cite: `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:2178` | NĐ77/2008 + NĐ55/2019 Đ.10 | — |
 | Loại DN | `DANH_MUC WHERE loai='LOAI_DN'` | SIEU_NHO/NHO/VUA | Luôn |
 | Hồ sơ đề nghị HT | `DANH_MUC WHERE loai='HO_SO_DE_NGHI_HT'` (UC106) | Checklist 6 hạng mục cho FR-V.I-06 | Luôn |
 | Hồ sơ đề nghị TT | `DANH_MUC WHERE loai='HO_SO_DE_NGHI_TT'` | Checklist cho FR-V.II | Luôn |
@@ -183,20 +183,23 @@ Password mặc định: `Secret@123`.
 - `cb_pd_dp_01` duyệt hồ sơ
 - `cb_nv_dp_01` phân công
 
-**Màn hình xem chi tiết:**
-- SCR-IV-01: Danh sách TVV/CG/NHT (3 tab phân loại đối tượng)
-- SCR-IV-02: Form Thêm/Sửa hồ sơ (5 accordion)
-- SCR-IV-03: Chi tiết TVV/CG (5 tab)
+**Màn hình xem chi tiết** (theo `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:1398-1845`):
+- SCR-IV-01: Danh sách Tư vấn viên / Chuyên gia (6 tab filter `trang_thai`)
+- SCR-IV-02: Form Thêm/Sửa Tư vấn viên (5 nhóm thu gọn)
+- SCR-IV-03: Hồ sơ chi tiết Tư vấn viên (5 tab)
+- **SCR-IV-NHT-01/02/03**: Danh sách / Thêm-sửa / Hồ sơ NHT (entity `NGUOI_HO_TRO` riêng — SRS update)
+- **SCR-IV-NEW-01/02/03**: Danh sách / Thêm-sửa / Chi tiết Tổ chức tư vấn (entity `TO_CHUC_TU_VAN` riêng — SRS update)
 
-**📑 Tabs SCR-IV-01 Danh sách Tư vấn viên — 5 tab filter `trang_thai` (theo srs-fr-04 §3 dòng 821-825 — SCR-IV-01 "Danh sách Tư vấn viên (trang chính)" của FR-IV-01 Quản lý Tư vấn viên):**
+**📑 Tabs SCR-IV-01 Danh sách Tư vấn viên — 6 tab filter `trang_thai` (cite `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:1416-1421`):**
 
-| Tab | Entity filter | Ghi chú |
-|-----|---------------|---------|
-| Đang hoạt động | Danh sách TVV đang hoạt động (`TU_VAN_VIEN WHERE trang_thai='DANG_HOAT_DONG'`) | Tab mặc định được chọn, kèm badge đếm số lượng |
-| Tạm dừng | Danh sách TVV bị tạm dừng (`TU_VAN_VIEN WHERE trang_thai='TAM_DUNG'`) | Badge đếm số lượng |
-| Mới đăng ký | Danh sách hồ sơ mới hoặc cần bổ sung (`TU_VAN_VIEN WHERE trang_thai IN ('MOI_DANG_KY','YEU_CAU_BO_SUNG')`) | Badge đỏ nếu số lượng >0. NHT / TVV / CG đều lưu chung trong entity `TU_VAN_VIEN` — phân biệt qua attribute role, không có entity riêng |
-| Chờ thẩm định | Danh sách hồ sơ đang chờ thẩm định (`TU_VAN_VIEN WHERE trang_thai='DANG_THAM_DINH'`) | CB NV thao tác thẩm định 4 nhóm tiêu chí (Pháp lý / Năng lực / Hiệu quả / Mạng lưới) — gắn với FR-IV-06 Thẩm định hồ sơ TVV (UC44) |
-| Chờ phê duyệt | Danh sách hồ sơ đã thẩm định, đang chờ CB PD duyệt (`TU_VAN_VIEN WHERE trang_thai='CHO_PHE_DUYET'`) | CB PD thao tác phê duyệt / từ chối + Batch approve — gắn với FR-IV-07 Phê duyệt hồ sơ TVV (UC45) |
+| # | Tab | Entity filter | Ghi chú |
+|---|-----|---------------|---------|
+| 1 | Đang hoạt động | `TU_VAN_VIEN WHERE trang_thai='HOAT_DONG'` | Tab mặc định, kèm badge đếm |
+| 2 | Tạm dừng | `TU_VAN_VIEN WHERE trang_thai='TAM_DUNG'` | Badge đếm |
+| 3 | Mới đăng ký / Chờ thẩm định | `TU_VAN_VIEN WHERE trang_thai IN ('MOI_DANG_KY','CHO_THAM_DINH')` | Badge đỏ nếu >0. Cán bộ Nghiệp vụ vào tab này để bắt đầu thẩm định. ⚠️ **NHT đã tách entity riêng** `NGUOI_HO_TRO` (SRS update 2026-05-05) — KHÔNG hiển thị ở tab này. `loai_tvv` enum chỉ `('TVV','CG')`. Cite: `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:1998` |
+| 4 | Đang thẩm định | `TU_VAN_VIEN WHERE trang_thai='DANG_THAM_DINH'` | CB NV thẩm định 4 nhóm tiêu chí — gắn FR-IV-06 (UC44) |
+| 5 | Yêu cầu bổ sung | `TU_VAN_VIEN WHERE trang_thai='YEU_CAU_BO_SUNG'` | Đã thẩm định một phần, chờ ứng viên bổ sung — CB NV chỉ theo dõi |
+| 6 | Chờ phê duyệt | `TU_VAN_VIEN WHERE trang_thai='CHO_PHE_DUYET'` | Hiển thị khi vai trò là CB PD. Phê duyệt / từ chối + Phê duyệt hàng loạt — FR-IV-07 (UC45) |
 
 **📑 Accordion SCR-IV-02 Form Thêm/Sửa TVV — 5 accordion (theo srs-fr-04 §3 dòng 862-870):**
 
@@ -204,7 +207,7 @@ Password mặc định: `Secret@123`.
 |-----------|---------------------|-----------|
 | **1. Thông tin cá nhân** | **Ảnh chân dung** (≤5MB, `.jpg`/`.png`), **Họ tên*** (`ho_ten`, tối đa 200 ký tự — lỗi `ERR-TVV-01`), **Ngày sinh*** (`ngay_sinh`), **Giới tính*** (`gioi_tinh` — `NAM` hoặc `NU`), **CCCD/CMND*** (`cmnd_cccd`, tối đa 12 ký tự, duy nhất — lỗi `ERR-TVV-02`), **Email*** (`email`, đúng chuẩn RFC 5322 — lỗi `ERR-TVV-03`), **Số điện thoại*** (`sdt`, 10-11 số), **Địa chỉ*** (`dia_chi`). (Dấu `*` = bắt buộc) | Luôn |
 | **2. Thông tin nghề nghiệp** | **Trình độ*** (`trinh_do` — Cử nhân / Thạc sĩ / Tiến sĩ / Khác), **Chứng chỉ hành nghề** (`chung_chi_hanh_nghe`), **Số thẻ hành nghề** (`so_the_hanh_nghe`), **Kinh nghiệm tư vấn** (`kinh_nghiem_tu_van`, tối đa 5000 ký tự) | Luôn |
-| **3. Tổ chức & Mạng lưới** | **Tổ chức chính*** (`to_chuc_chinh`, chọn từ danh mục `TO_CHUC_TU_VAN` — lỗi `ERR-TVV-04`), **Tổ chức đối tác** (`to_chuc_doi_tac[]`, chọn nhiều — lưu bảng N:N qua `TVV_TO_CHUC`), **Lĩnh vực PL phụ trách*** (`linh_vuc_pl`, multi-select, phải chọn ≥1), **Địa bàn hoạt động*** (`dia_ban_hoat_dong`, chọn nhiều tỉnh/TP từ cây `DON_VI`) | Luôn |
+| **3. Tổ chức & Mạng lưới** | **Tổ chức chính*** (`to_chuc_chinh_id`, chọn từ entity `TO_CHUC_TU_VAN` — lỗi `ERR-TVV-04`), **Tổ chức đối tác** (`to_chuc_doi_tac[]`, chọn nhiều — lưu bảng N:N qua `TVV_TO_CHUC`), **Lĩnh vực PL phụ trách*** (`linh_vuc_pl`, multi-select, phải chọn ≥1), **Đơn vị quản lý*** (`don_vi_id`, auto-set theo đơn vị NHT đang đăng nhập — read-only, lock theo BR-AUTH-08). ⚠️ **Đã bỏ field `dia_ban_hoat_dong`** theo NĐ 77/2008 Đ.19 — TVV scope toàn quốc (cite `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:42` + `:2027`) | Luôn |
 | **4. File đính kèm** | **Bằng cấp/Chứng chỉ*** (multi upload, mỗi file ≤10MB, tổng ≤50MB, định dạng PDF — lỗi `ERR-DK-02` / `ERR-DK-03`), **Thẻ hành nghề** (PDF ≤10MB) | Luôn |
 | **5. Ghi chú** | Ghi chú tự do, tối đa 5000 ký tự | Luôn |
 
@@ -216,7 +219,7 @@ Password mặc định: `Secret@123`.
 | **Thẩm định** | Lưu vào `HO_SO_TU_VAN_VIEN.trang_thai_tham_dinh` (`CHUA_THAM_DINH` / `DANG_THAM_DINH` / `DAT` / `KHONG_DAT`) + `HO_SO_TU_VAN_VIEN.ket_qua_tham_dinh` (text). **Lưu ý:** SRS không có entity `THAM_DINH_TVV` riêng — kết quả thẩm định lưu ngay trong `HO_SO_TU_VAN_VIEN` | Form chấm thẩm định theo 4 nhóm tiêu chí: **Pháp lý** (Pass/Fail), **Năng lực**, **Hiệu quả**, **Mạng lưới**. Mỗi tiêu chí lấy từ `TIEU_CHI_DANH_GIA` (§3.4.3.42) với `nhom_tieu_chi='THAM_DINH_TVV'`. Cuối form có trường **Kết luận** | Chỉ hiển thị khi TVV đang ở trạng thái `DANG_THAM_DINH` hoặc `CHO_PHE_DUYET` |
 | **Năng lực** | Lưu trong các cột của `HO_SO_TU_VAN_VIEN`: `bang_cap_chi_tiet`, `chung_chi_chi_tiet`, `kinh_nghiem_chi_tiet` (cả 3 đều là JSON array kiểu `text(long)`, §3.4.3.28) + `noi_dung_tom_tat` | Hiển thị chi tiết bằng cấp / chứng chỉ / kinh nghiệm dạng cấu trúc JSON + đoạn tóm tắt năng lực | Luôn |
 | **Lịch sử hỗ trợ** | Tổng hợp từ 3 nguồn: **FR-05 Vụ việc** (`VU_VIEC WHERE nguoi_ho_tro_id=<current>`), **FR-12 Tư vấn chuyên sâu** (`NOI_DUNG_TU_VAN_CS WHERE chuyen_gia_id=<current>`, §3.4.3.9), và bảng lịch sử `LICH_SU_HO_TRO_TVV` (§3.4.3.30) | Bảng các vụ việc + nội dung TV chuyên sâu TVV đã tham gia + 3 chỉ số KPI (Tổng VV, Đã hoàn thành, Điểm trung bình) + timeline thời gian | Luôn |
-| **Đánh giá** | `DANH_GIA_TU_VAN_VIEN WHERE tu_van_vien_id=<current>` (§3.4.3.29) | **Điểm tổng** (`diem`, thang 0-10) + 4 điểm thành phần: **Điểm Pháp lý** (`diem_phap_ly`), **Điểm Năng lực** (`diem_nang_luc`), **Điểm Hiệu quả** (`diem_hieu_qua`), **Điểm Mạng lưới** (`diem_mang_luoi`) + **Nhận xét** (`nhan_xet`) + **Ngày ĐG** (`ngay_danh_gia`) + form tạo đánh giá mới | Luôn (form ĐG chỉ mở khi user có quyền chấm) |
+| **Đánh giá** | 2 nguồn (theo SRS update 2026-05-05): (a) `DANH_GIA_TU_VAN_VIEN` thẩm định nội bộ FR-IV-06 — Nhóm 1 Pháp lý boolean Đạt/Không đạt, Nhóm 2 Năng lực 1-5, Nhóm 3 Hiệu quả 1-5 (nullable), Nhóm 4 Mạng lưới boolean (cite `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:2110-2117`); (b) `DANH_GIA_SAU_VU_VIEC` đánh giá DN sau VV FR-IV-09 — 3 tiêu chí 1-5 (chuyên môn / thái độ / đúng hạn), TB lưu ở `TU_VAN_VIEN.diem_danh_gia_tb` (DECIMAL 1.0-5.0, cite `:2013` + `:2138-2157`) | **Tab hiển thị 2 section:** (1) Kết quả thẩm định nội bộ (4 nhóm tiêu chí); (2) Đánh giá từ DN sau vụ việc (3 tiêu chí 1-5) + Nhận xét + Ngày ĐG. Form tạo ĐG mới chỉ mở khi user có quyền chấm | Luôn |
 
 **Xem chi tiết cần dữ liệu từ:**
 - **FR-10 Quản trị** → danh mục Lĩnh vực PL, Tổ chức tư vấn, Học vị, Chức danh
@@ -228,25 +231,28 @@ Password mặc định: `Secret@123`.
 - **Tự đăng ký (NHT public)** — NHT đăng ký tham gia MLTV qua form public — trạng thái ban đầu `MOI_DANG_KY`
 - **CB NV tạo proxy (CSKH)** — `cb_nv_dp_01` tạo hộ tại SCR-IV-02 (Form Thêm/Sửa TVV) → cũng tạo hồ sơ ở `MOI_DANG_KY`
 
-**Transition hồ sơ TVV/CG (SM-TVV — 9 states theo srs-v3.md §C.3):**
+**Transition hồ sơ TVV/CG (SM-TVV — 10 states theo `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:2287-2319`):**
 
 | Từ | Đến | Actor | Trigger | Dữ liệu nhập | Nguồn dropdown / Filter | Màn nguồn |
 |----|-----|-------|---------|--------------|-------------------------|-----------|
-| — | `MOI_DANG_KY` | NHT | **NHT đăng ký tham gia MLTV (FR-IV-03)** | `ho_ten`, CCCD, học vị, chứng chỉ hành nghề, lĩnh vực chuyên môn, địa bàn hoạt động, file bằng cấp, `to_chuc_tu_van_id` | `to_chuc_tu_van_id` ← FR-10 DANH_MUC loại TO_CHUC_TU_VAN; `linh_vuc_chuyen_mon[]` ← FR-10 DANH_MUC LINH_VUC_PL | Form public (NHT chưa login CMS) |
-| — | `MOI_DANG_KY` | `cb_nv_dp_01` | **🖐️ Thêm proxy (CSKH)** | Cùng trường | Tương tự | SCR-IV-02 Form Thêm/Sửa |
-| `MOI_DANG_KY` | `CHO_THAM_DINH` | `cb_nv_dp_01` | [Tiếp nhận] (FR-IV-06) | Guard: hồ sơ đủ giấy tờ | — | SCR-IV-03 action-bar |
-| `CHO_THAM_DINH` | `DANG_THAM_DINH` | `cb_nv_dp_01` | [Bắt đầu thẩm định] (FR-IV-06) | Ghi thời điểm bắt đầu | — | SCR-IV-03 Tab "Thẩm định" |
-| `DANG_THAM_DINH` | `YEU_CAU_BO_SUNG` | `cb_nv_dp_01` | Hồ sơ chưa đầy đủ (FR-IV-06) | Danh sách thiếu, TB NHT | — | SCR-IV-03 |
-| `YEU_CAU_BO_SUNG` | `DANG_THAM_DINH` | NHT | Bổ sung xong (FR-IV-06) | File bổ sung | — | Form public hoặc SCR-IV-02 |
-| `DANG_THAM_DINH` | `CHO_PHE_DUYET` | `cb_nv_dp_01` | Thẩm định đạt 4 nhóm tiêu chí (FR-IV-06, BR-LEGAL-04) | Ghi kết quả thẩm định (Pháp lý Pass/Fail, Năng lực, Hiệu quả, Mạng lưới) | — | SCR-IV-03 Tab "Thẩm định" |
-| `CHO_PHE_DUYET` | `DANG_HOAT_DONG` | `cb_pd_dp_01` | [Duyệt — công nhận] (FR-IV-07, BR-AUTH-05) | Cùng cấp; audit + `ngay_cong_nhan` | — | SCR-IV-03 action-bar |
-| `CHO_PHE_DUYET` | `TU_CHOI` | `cb_pd_dp_01` | [Từ chối] (FR-IV-07) | `ly_do` ≥10 ký tự (BR-FLOW-04) | — | SCR-IV-03 |
-| `TU_CHOI` | `CHO_THAM_DINH` | NHT | Nộp lại hồ sơ (FR-IV-06) | NHT cập nhật hồ sơ → reset thẩm định | — | Form public hoặc SCR-IV-02 |
-| `DANG_HOAT_DONG` | `TAM_DUNG` | `cb_nv_dp_01` | [Tạm dừng] (FR-IV-12) | Lý do | — | SCR-IV-03 |
-| `TAM_DUNG` | `DANG_HOAT_DONG` | `cb_nv_dp_01` | [Kích hoạt lại] (FR-IV-12) | — | — | SCR-IV-03 |
-| `DANG_HOAT_DONG` | `VO_HIEU_HOA` | `cb_nv_dp_01` | [Vô hiệu hóa] (FR-IV-12) | Lý do | **Guard: không có VU_VIEC / HOI_DAP đang xử lý** gắn TVV (lookup FR-02/FR-05) | SCR-IV-03 |
-| `TAM_DUNG` | `VO_HIEU_HOA` | `cb_nv_dp_01` | [Vô hiệu hóa] (FR-IV-12) | Lý do | **Guard** như trên | SCR-IV-03 |
-| `VO_HIEU_HOA` | `DANG_HOAT_DONG` | `cb_nv_dp_01` | [Khôi phục] (FR-IV-12) | Quyết định từng trường hợp | — | SCR-IV-03 |
+| — | `MOI_DANG_KY` | Người hỗ trợ pháp lý | **NHT submit hồ sơ ứng viên TVV/CG (FR-IV-03)** | `ho_ten`, CCCD, học vị, chứng chỉ hành nghề, lĩnh vực chuyên môn, file bằng cấp, `to_chuc_chinh_id`, `don_vi_id` (auto-set) | `to_chuc_chinh_id` ← entity `TO_CHUC_TU_VAN` (state HOAT_DONG); `linh_vuc_pl[]` ← `DANH_MUC LINH_VUC_PL` (FR-10) | SCR-IV-02 Form Thêm/Sửa |
+| `MOI_DANG_KY` | `CHO_THAM_DINH` | CB Nghiệp vụ | Vào tab "Mới đăng ký / Chờ thẩm định" bắt đầu chấm (FR-IV-06) | Ngầm chuyển trạng thái + thông báo TVV/CG (chủ hồ sơ) | — | SCR-IV-01 tab 3 |
+| `CHO_THAM_DINH` | `DANG_THAM_DINH` | CB Nghiệp vụ | Bắt đầu thẩm định (FR-IV-06) | Ghi thời điểm bắt đầu | — | SCR-IV-03 Tab "Thẩm định" |
+| `DANG_THAM_DINH` | `YEU_CAU_BO_SUNG` | CB Nghiệp vụ | Hồ sơ chưa đầy đủ (FR-IV-06) | Có `ly_do`, danh sách thiếu, TB chủ hồ sơ | — | SCR-IV-03 |
+| `YEU_CAU_BO_SUNG` | `DANG_THAM_DINH` | TVV/CG (chủ hồ sơ) | Bổ sung xong (FR-IV-04) | Có tài liệu bổ sung | — | SCR-IV-02 |
+| `DANG_THAM_DINH` | `CHO_PHE_DUYET` | CB Nghiệp vụ | Thẩm định đạt (FR-IV-06, BR-LEGAL-04) | Guard: `ket_luan='DAT' AND nhom1_phap_ly=true`. Ghi kết quả thẩm định 4 nhóm tiêu chí | — | SCR-IV-03 Tab "Thẩm định" |
+| `DANG_THAM_DINH` | `TU_CHOI` | CB Nghiệp vụ | Kết luận KHÔNG ĐẠT (FR-IV-06) | `ket_luan='KHONG_DAT'`, có `ly_do` (BR-FLOW-04) | — | SCR-IV-03 |
+| `CHO_PHE_DUYET` | **`CHO_KICH_HOAT`** | CB Phê duyệt | [Phê duyệt] (FR-IV-07, BR-AUTH-05) | Cùng cấp, có `so_quyet_dinh`. Audit, `ngay_cong_nhan`, `thoi_gian_duyet`, `nguoi_duyet`. **Hệ thống tự cấp tài khoản qua FR-VIII-15 + gửi mail kích hoạt** | — | SCR-IV-03 action-bar |
+| **`CHO_KICH_HOAT`** | **`HOAT_DONG`** | TVV/CG (chủ hồ sơ) | **Bấm link kích hoạt + đặt mật khẩu lần đầu** (FR-VIII-26) | Token kích hoạt hợp lệ. TAI_KHOAN + TU_VAN_VIEN đồng thời chuyển HOAT_DONG | — | Form đặt MK lần đầu |
+| `CHO_PHE_DUYET` | `TU_CHOI` | CB Phê duyệt | [Từ chối] (FR-IV-07) | `ly_do` ≥10 ký tự (BR-FLOW-04) | — | SCR-IV-03 |
+| `TU_CHOI` | `CHO_THAM_DINH` | TVV/CG (chủ hồ sơ) | Nộp lại hồ sơ (FR-IV-03) | ⚠️ **KHÔNG có cooldown 6 tháng** (BA chốt 2026-05-03 — bỏ) | — | SCR-IV-02 |
+| `HOAT_DONG` | `TAM_DUNG` | CB Nghiệp vụ | [Tạm dừng] (FR-IV-12) | Lý do (MD-TAM-DUNG ≥ 10 ký tự) | — | SCR-IV-03 |
+| `TAM_DUNG` | `HOAT_DONG` | CB Nghiệp vụ | [Kích hoạt lại] (FR-IV-12) | — | — | SCR-IV-03 |
+| `HOAT_DONG` | `VO_HIEU_HOA` | CB Nghiệp vụ | [Vô hiệu hóa] (FR-IV-12) | Lý do | **Guard: không có VU_VIEC AND HOI_DAP đang xử lý** (lookup FR-02/FR-05) | SCR-IV-03 |
+| `TAM_DUNG` | `VO_HIEU_HOA` | CB Nghiệp vụ | [Vô hiệu hóa] (FR-IV-12) | Lý do | **Guard** như trên | SCR-IV-03 |
+| `VO_HIEU_HOA` | `HOAT_DONG` | CB Nghiệp vụ | [Khôi phục] (FR-IV-12) | Quyết định từng trường hợp | — | SCR-IV-03 |
+
+> **⚠️ State đổi tên** so với v3 cũ: `DANG_HOAT_DONG` → **`HOAT_DONG`** (đồng bộ enum CHECK constraint SRS line 2011).
 
 **Đầu ra — Nguồn nhân lực cho:** FR-05 Vụ việc · FR-03 Đào tạo (TVV = GV) · FR-14 HĐ · FR-12 TV chuyên sâu.
 
@@ -377,7 +383,7 @@ Password mặc định: `Secret@123`.
 
 **Xem chi tiết cần dữ liệu từ:**
 - **FR-07 Doanh nghiệp** → `DOANH_NGHIEP` (để chọn `doanh_nghiep_id`)
-- **FR-04 CG/TVV** → `TU_VAN_VIEN` (entity duy nhất chứa cả NHT/TVV/CG — phân biệt qua role attribute) để chọn `nguoi_ho_tro_id`
+- **FR-04 CG/TVV** → 2 entity tách (SRS update 2026-05-05): (a) `TU_VAN_VIEN` cho TVV/CG cá nhân ngoài (`loai_tvv ∈ ('TVV','CG')`); (b) `NGUOI_HO_TRO` cho NHT cán bộ HTPL nội bộ (NĐ 55/2019 Đ.7). Dropdown phân công VV (UC59) hiển thị 2 thẻ "Cá nhân tư vấn" (TU_VAN_VIEN) + "Người hỗ trợ pháp lý" (NGUOI_HO_TRO). Cite: `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:1998` + `:2032`
 - **FR-10 Quản trị** → danh mục Lĩnh vực (`linh_vuc_id`), Loại hình HT (`loai_hinh_ht_id`)
 - **FR-10 Quản trị** → `CAU_HINH_SLA` (thời hạn xử lý 10 ngày làm việc theo NĐ55 Điều 9)
 - **FR-10 Quản trị** → `TAI_KHOAN` (`nguoi_tiep_nhan_id`, `nguoi_phe_duyet_id`)
@@ -452,7 +458,7 @@ Password mặc định: `Secret@123`.
 **Xem chi tiết cần dữ liệu từ:**
 - **FR-10 Quản trị** → danh mục Lĩnh vực PL + cấu hình `CAU_HINH_SLA` (hạn xử lý)
 - **FR-07 Doanh nghiệp** → `DOANH_NGHIEP` (tùy chọn — DN hỏi không bắt buộc đã đăng ký trong hệ thống)
-- **FR-04 CG/TVV** → `TU_VAN_VIEN` (cho dropdown phân công — NHT/TVV phân biệt qua role attribute)
+- **FR-04 CG/TVV** → 2 entity tách (SRS update 2026-05-05): `TU_VAN_VIEN` (TVV/CG) + `NGUOI_HO_TRO` (NHT) — dropdown phân công Hỏi đáp hiển thị 2 nguồn riêng
 - **FR-10 Quản trị** → `MAU_PHAN_HOI` (dropdown chọn mẫu phản hồi soạn sẵn)
 
 **🖐️ Nhập tay:** ✅ **Có — UC10** tại **SCR-II-01** (Form thêm mới dạng Drawer/Modal):

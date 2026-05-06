@@ -1,9 +1,9 @@
 # Ma trận phân quyền CRUD — FR × Entity × Role
 
-> **Nguồn:** SRS v3.1 §3.4.2 — Ma trận phân quyền CRUD (Permission Matrix)
-> **Ngày trích:** 2026-04-16 | **Cập nhật 2026-04-21:** bổ sung Dashboard (FR-01) cho CB_NV/CB_PD + KHO_CAU_HOI chuyển FR-12 → FR-13 (xác nhận qua NotebookLM SRS §3.2.13)
-> **View đối ứng:** [permission-matrix.md](permission-matrix.md) (Role × Entity)
-> **Tổng entity SRS §3.4.2:** 46 entity | **Role:** 11
+> **Nguồn:** SRS v3.1 §3.4.2 + **SRS update 2026-05-05** (`srs-update-2026-5-5/`)
+> **Ngày trích:** 2026-04-16 | **Cập nhật 2026-04-21:** bổ sung Dashboard (FR-01) cho CB_NV/CB_PD + KHO_CAU_HOI chuyển FR-12 → FR-13 | **Cập nhật 2026-05-06:** apply SRS update FR-04 — thêm 3 entity mới (DANH_GIA_SAU_VU_VIEC, NGUOI_HO_TRO, TO_CHUC_TU_VAN) + 7 FR mới (FR-IV-CROSS-01, FR-IV-NEW-01/02/04, FR-IV-NHT-01/02/03)
+> **View đối ứng:** [permission-matrix.md](permission-matrix.md) (Role × Entity) | [permission-matrix-by-role.md](permission-matrix-by-role.md) (Role × Function pivot)
+> **Tổng entity:** **49 entity** (46 cũ + NGUOI_HO_TRO + TO_CHUC_TU_VAN + NGAY_LE) | **Role:** 11
 > **Ghi chú:** FR-01 Dashboard là *view* (tổng hợp data từ các entity khác), không phải entity trong §3.4.2 — thêm dòng "Dashboard (Nhóm I — view)" để đối chiếu test quyền truy cập.
 
 ---
@@ -70,15 +70,26 @@
 
 ---
 
-## 4. FR-04 — Chuyên gia / Tư vấn viên
+## 4. FR-04 — Tư vấn viên / Chuyên gia + Người hỗ trợ + Tổ chức tư vấn
 
-> **SRS §3.2.4 (Nhóm IV)** | 3 entity
+> **SRS §3.2.4 (Nhóm IV) + SRS update 2026-05-05** | **6 entity** (3 cũ + 2 entity mới NGUOI_HO_TRO/TO_CHUC_TU_VAN + 1 entity tách DANH_GIA_SAU_VU_VIEC)
+> **Update 2026-05-05:** NHT tách entity riêng `NGUOI_HO_TRO` (NĐ 55/2019 Đ.7) — `loai_tvv` enum chỉ `('TVV','CG')`. TC TV nâng cấp từ DM thành entity `TO_CHUC_TU_VAN`. Đánh giá DN sau VV tách entity `DANH_GIA_SAU_VU_VIEC` (3 tiêu chí 1-5). Cite: `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:1998` + `:2032` + `:2138` + `:2178`.
+> **18 FR liên quan:** FR-IV-01..12 + FR-IV-CROSS-01 + **FR-IV-NEW-01/02/04** (TC TV) + **FR-IV-NHT-01/02/03** (NHT).
 
 | Entity | QTHT | CB_NV_TW | CB_NV_BN | CB_NV_DP | CB_PD_TW | CB_PD_BN | CB_PD_DP | DN | NHT | TVV | CG |
 |--------|------|----------|----------|----------|----------|----------|----------|----|-----|-----|----|
 | TU_VAN_VIEN | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 📝 RU* | 📝 RU* | 📝 RU* | ❌ | ❌ | 👁️ R* | 👁️ R* |
 | HO_SO_TU_VAN_VIEN | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | ✅ CRU* | 👁️ R* | 👁️ R* |
-| DANH_GIA_TU_VAN_VIEN | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | ✅ CRU* | ✅ CRU* | ✅ CRU* | 🔌 C†R* | ❌ | ❌ | ❌ |
+| DANH_GIA_TU_VAN_VIEN | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | ✅ CRU* | ✅ CRU* | ✅ CRU* | ❌ | ❌ | ❌ | ❌ |
+| **DANH_GIA_SAU_VU_VIEC** `[NEW]` | 👁️ R | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 🔌 C†R* | ❌ | ❌ | ❌ |
+| **NGUOI_HO_TRO** `[NEW]` | ✅ CRUD | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | 📝 RU* (own) | ❌ | ❌ |
+| **TO_CHUC_TU_VAN** `[NEW]` | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 📝 RU* | 📝 RU* | 📝 RU* | 👁️ R | ❌ | 👁️ R | 👁️ R |
+
+> **Ghi chú entity mới:**
+> - `DANH_GIA_TU_VAN_VIEN` (entity thẩm định nội bộ FR-IV-06) — 4 nhóm tiêu chí: Nhóm 1+4 boolean, Nhóm 2+3 thang 1-5. CB NV/CB PD chấm. **DN KHÔNG có quyền** (đánh giá DN sau VV nằm ở `DANH_GIA_SAU_VU_VIEC` riêng).
+> - `DANH_GIA_SAU_VU_VIEC` `[NEW]` (FR-IV-09 + BR-CALC-06) — DN chấm sau VV qua API (🔌 C†R*) 3 tiêu chí 1-5. Tính TB lưu ở `TU_VAN_VIEN.diem_danh_gia_tb` (DECIMAL 1.0-5.0).
+> - `NGUOI_HO_TRO` `[NEW]` (FR-IV-NHT-01) — QTHT/CB NV CRUD; CB PD R-only (KHÔNG có workflow phê duyệt NHT — SM-NHT 4 state đơn giản); NHT 📝 RU* own scope (FR-IV-NHT-03 xem hồ sơ + cập nhật chứng chỉ HTPL).
+> - `TO_CHUC_TU_VAN` `[NEW]` (FR-IV-NEW-01/02/04) — CB NV CRUD; CB PD 📝 RU* (FR-IV-NEW-04 phê duyệt cùng cấp BR-AUTH-05); DN/TVV/CG 👁️ R public TC TV `cong_khai=1` qua Cổng PLQG hoặc dropdown `to_chuc_chinh_id`.
 
 ---
 
