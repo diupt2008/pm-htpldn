@@ -16,7 +16,7 @@
 
 | Phase | Việc | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ |
 |---|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| 0 | Pre-test (verify deploy + bug gap + fixture) | 5 | 4 | - | 1 | - | - | - |
+| 0 | Pre-test (verify deploy + bug gap + fixture) | 5 | 3 | - | 2 | - | - | - |
 | 1 | Re-seed Tier 0 (DM/đơn vị/SLA/MPH/ngày lễ) | 5 | 5 | - | - | - | - | - |
 | 2 | Re-seed Tier 1 (TC TV/DN/TVV/CG/NHT/account/PC) | 11 | 8 | - | - | - | 1 | 2 |
 | 3 | Re-seed Tier 2 (transactional entry state) | 13 | 10 | - | - | - | 2 | 1 |
@@ -26,7 +26,7 @@
 | 7 | Functional 17 module + 2 NEW (NHT/TC TV) | 19 | 3 | - | - | - | - | 16 |
 | 8 | Cross-cutting + Profile + Permission | 5 | 5 | - | - | - | - | - |
 | Trụ E | Monitor unblock | 4 | 3 | - | - | - | - | 1 |
-| **Tổng** | | **90** | **44** | **0** | **1** | **0** | **3** | **42** |
+| **Tổng** | | **90** | **43** | **0** | **2** | **0** | **3** | **42** |
 
 > **Lưu ý:** Phase 2 có **1 task ❌ DROPPED** (R7.2.10 6 TK TVV TW — obsoleted by SRS update FR-04 line 590, hệ thống tự cấp TK). KHÔNG count vào tổng 90 active.
 
@@ -37,7 +37,8 @@
 - ✅ **R7.0.1** Verify deploy + scenario reset DB — DONE 2026-05-06
   - **R7:** Scenario MIX — partial reset (DN 30 mới, TVV/CG/KH=0, VV=70) + 10/18 deploy OK + 8 gap. [plan-r7-trigger.md](plan-r7-trigger.md)
 - 🟢 **R7.0.2** 🆕 Log 8 bug deploy gap → gửi dev fix song song chạy P1/P2 `[~0% — ready, file output/qa-reports/round7-2026-05-06/bug-report-deploy-gap.md]`
-- 🟢 **R7.0.3** 🆕 Bump fixture v2.7.0 → v2.7.1 (bỏ `dia_ban_ids`, xoá NHT khỏi `tvv_variants[19-21]`) `[~0% — ready, edit seed-fixture.yaml]`
+- ✅ **R7.0.3** 🆕 Bump fixture v2.7.0 → v2.7.1 (R7.0.3 done 2026-05-06)
+  - **R7:** v2.7.1 header note instruction strip `dia_ban_ids` + `loai_tvv:NHT` khỏi payload khi seed. 24 dòng dia_ban_ids giữ legacy R6 reference. [seed-fixture.yaml v2.7.1](../input/data/seed-fixture.yaml)
 - 🟢 **R7.0.4** 🔄 Verify users.csv accounts còn login (qtht_01/cb_nv_*/nht_01..03/cg_tw_01..06) `[~0% — ready, login từng account qua MCP]`
   - **R6:** ✅ R6.0.3 PASS — qtht_01/Secret@123/OTP 666666 OK; 34 TK pre-existing
 - 🟢 **R7.0.5** 🔄 Verify SCR-VIII-02 button [Thêm mới] visible (QTHT seed TK lại nếu mất) `[~0% — ready, smoke 30s qua MCP]`

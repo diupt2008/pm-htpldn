@@ -189,13 +189,13 @@ Account cần chuẩn bị: `Cán bộ Nghiệp vụ (CB NV)`, `Tư vấn viên 
 | :--- | :--- | :--- | :--- |
 | **1 (Thủ công — thay cho "DN nộp qua DVC → Chờ tiếp nhận → Tiếp nhận")** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `ĐÃ TIẾP NHẬN` (**bypass** `MỚI TẠO` và `CHỜ TIẾP NHẬN`) | CB NV mở danh sách Vụ việc → click **[+ Thêm mới / Nhập thủ công]** trên `SCR-V.I-02`. Nhập hộ DN: thông tin DN liên kết, lĩnh vực pháp lý, nội dung yêu cầu tư vấn, nguồn (`TRỰC TIẾP` / `ĐIỆN THOẠI`), upload giấy tờ. Lưu → bản ghi khởi tạo thẳng ở `DA_TIEP_NHAN`. |
 | **2** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐÃ TIẾP NHẬN` ➔ `ĐANG KIỂM TRA` | Trong chi tiết vụ việc, nhấn nút **[Kiểm tra Hồ sơ]**. Giao diện mở phần checklist 6 hạng mục hồ sơ. |
-| **3** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG KIỂM TRA` ➔ `ĐÃ PHÂN CÔNG` | Tích chọn ĐẠT cho các hạng mục. Nhấn **[Hoàn tất Kiểm tra]**. Sau đó nhấn **[Phân công NHT]**, chọn một TVV đang hoạt động từ danh sách gợi ý và lưu. |
+| **3** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG KIỂM TRA` ➔ `ĐÃ PHÂN CÔNG` | Tích chọn ĐẠT cho các hạng mục. Nhấn **[Hoàn tất Kiểm tra]**. Sau đó nhấn **[Phân công NHT]** — dropdown chọn **NHT** (entity riêng `NGUOI_HO_TRO` theo SRS update 2026-05-05, KHÔNG phải `loai_tvv=NHT` cũ) đang `HOAT_DONG`, scope theo `linh_vuc_pl` + `don_vi_id` (BR-AUTH-08). Lưu. |
 | **4** | **Tư vấn viên** (TVV) | `ĐÃ PHÂN CÔNG` ➔ `ĐANG XỬ LÝ` | Log out CB NV. **Đăng nhập bằng Account TVV** vừa được phân công. Mở vụ việc, nhấn nút **[Chấp nhận]** tham gia hỗ trợ. |
 | **5** | **Tư vấn viên** (TVV) | Giữ nguyên `ĐANG XỬ LÝ` | TVV thực hiện công việc, upload văn bản tư vấn và nhập nội dung tại khu vực "Cập nhật Kết quả". |
 | **6** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG XỬ LÝ` ➔ `CHỜ PHÊ DUYỆT` | Log out TVV. **Đăng nhập lại CB NV**. Kiểm tra kết quả của TVV, nhập kết luận cuối của CB NV và nhấn **[Trình Phê duyệt]**. Hồ sơ nhảy sang Tab **"Chờ PD"**. |
 | **7** | **Cán bộ Phê duyệt** (CB PD cùng cấp) | `CHỜ PHÊ DUYỆT` ➔ `ĐÃ DUYỆT` | Log out CB NV. **Đăng nhập bằng Account CB PD** (cùng cấp với CB NV). Mở tab Chờ PD, xem chi tiết và nhấn nút **[Phê duyệt]**. Hồ sơ nhảy sang Tab **"Hoàn thành"**. |
 | **8** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐÃ DUYỆT` ➔ `HOÀN THÀNH` | **Đăng nhập lại CB NV**. Mở hồ sơ, nhấn **[Cập nhật KQ cuối]** để chính thức đóng hồ sơ. |
-| *(Phụ)* | CB NV hoặc DN | `HOÀN THÀNH` ➔ `ĐÃ ĐÁNH GIÁ` | Trong màn hình chi tiết, mở khu vực "Đánh giá", nhập điểm (0-10) và lưu. |
+| *(Phụ)* | CB NV hoặc DN | `HOÀN THÀNH` ➔ `ĐÃ ĐÁNH GIÁ` | Trong màn hình chi tiết, mở khu vực "Đánh giá", nhập điểm **1-5** (DECIMAL 3,1 — SRS update 2026-05-05 đổi từ 0-10) và lưu. |
 
 ---
 
@@ -206,7 +206,7 @@ Luồng có 9 trạng thái, tính năng đặc biệt là có sự tự động
 | :--- | :--- | :--- | :--- |
 | **1 (Thủ công — thay cho "DN gửi từ Cổng PLQG → Mới")** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `MỚI` | CB NV mở module Hỏi đáp → click **[+ Thêm mới]** trên `SCR-II-01` (form Drawer/Modal). Nhập hộ DN: DN liên kết, lĩnh vực, tiêu đề, nội dung câu hỏi. Lưu → bản ghi tạo với trạng thái `MỚI`, hiển thị ở Tab **"Mới"**. |
 | **2** | **Cán bộ Nghiệp vụ** (CB NV) | `MỚI` ➔ `TIẾP NHẬN` | Mở chi tiết hỏi đáp, nhấn nút **[Tiếp nhận]**. Hồ sơ nhảy sang Tab **"Đang xử lý"**. |
-| **3** | **Cán bộ Nghiệp vụ** (CB NV) | `TIẾP NHẬN` ➔ `ĐANG XỬ LÝ` | Nhấn nút **[Phân công]**, chọn Account TVV/NHT hoặc CB NV khác để xử lý câu hỏi. |
+| **3** | **Cán bộ Nghiệp vụ** (CB NV) | `TIẾP NHẬN` ➔ `ĐANG XỬ LÝ` | Nhấn nút **[Phân công]** — dropdown 2 entity tách (TVV/CG ở `TU_VAN_VIEN` + NHT ở `NGUOI_HO_TRO` mới theo SRS update 2026-05-05) hoặc CB NV khác. Chọn rồi lưu. |
 | **4** | **Người được phân công** (TVV hoặc CB NV) | `ĐANG XỬ LÝ` ➔ `CHỜ PHÊ DUYỆT` | Đăng nhập Account được phân công. Nhập nội dung trả lời vào khung soạn thảo. **QUAN TRỌNG:** Phải tích vào checkbox **"Đã trả lời"** rồi nhấn Lưu. Hệ thống sẽ **TỰ ĐỘNG** chuyển thẳng sang trạng thái `CHỜ PHÊ DUYỆT` (không cần nút Trình duyệt). |
 | **5** | **Cán bộ Phê duyệt** (CB PD cùng cấp) | `CHỜ PHÊ DUYỆT` ➔ `ĐÃ DUYỆT` | Log out người soạn. **Đăng nhập CB PD**. Vào Tab "Chờ phê duyệt", mở hồ sơ và nhấn nút **[Phê duyệt]**. Hồ sơ nhảy sang Tab **"Đã duyệt"**. |
 | **6** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐÃ DUYỆT` ➔ `CÔNG KHAI` / `HOÀN THÀNH` | Đăng nhập lại CB NV. Nhấn nút **[Công khai]** để đẩy câu trả lời lên Cổng PLQG, hoặc nhấn **[Đóng hồ sơ]** để chuyển thành `HOÀN THÀNH` (ẩn vào lịch sử). |
@@ -224,7 +224,7 @@ Luồng tư vấn 1-1 riêng biệt giữa DN và Chuyên gia giỏi. Luồng đ
 
 | Bước | Account thao tác | Trạng thái chuyển | Thao tác thực hiện trên màn hình |
 | :--- | :--- | :--- | :--- |
-| **1 (Thủ công — thay cho "Cổng PLQG đẩy qua API Inbound")** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `TIẾP NHẬN` | CB NV mở module Tư vấn chuyên sâu → click **[+ Thêm mới]** trên `SCR-X1-02`. Nhập hộ DN: DN liên kết, chủ đề, nội dung vấn đề, mức độ ưu tiên, hình thức tư vấn (Video/Điện thoại/Hồ sơ). Lưu → bản ghi tạo với trạng thái `TIEP_NHAN`. |
+| **1 (Thủ công — thay cho "Cổng PLQG đẩy qua API Inbound")** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `TIẾP NHẬN` | CB NV mở module Tư vấn chuyên sâu → click **[+ Thêm mới]** trên `SCR-X1-02`. Nhập hộ DN: DN liên kết, chủ đề, nội dung vấn đề, mức độ ưu tiên. Lưu → bản ghi tạo với trạng thái `TIEP_NHAN`. **⚠️ SRS update 2026-05-05:** field `hinh_thuc_tv` orphan ĐÃ BỎ khỏi TU_VAN_CHUYEN_SAU — hình thức tư vấn (Video/Điện thoại/Hồ sơ) quản lý ở cấp `PHIEN_TU_VAN.hinh_thuc` khi CG bắt đầu phiên (Bước 3). |
 | **2** | **Cán bộ Nghiệp vụ** (CB NV) | `TIẾP NHẬN` ➔ `PHÂN CÔNG` | Mở chi tiết yêu cầu, chọn đích danh 1 Chuyên gia (CG) từ danh sách gợi ý và nhấn **[Phân công CG]**. |
 | **3** | **Chuyên gia** (CG) | `PHÂN CÔNG` ➔ `ĐANG TƯ VẤN` | Log out CB NV. **Đăng nhập bằng Account Chuyên gia**. Mở yêu cầu, nhấn **[Chấp nhận]** và bắt đầu tư vấn (tạo phiên Video Call/Điện thoại/Hồ sơ). |
 | **4** | **Chuyên gia** (CG) | `ĐANG TƯ VẤN` ➔ `HOÀN THÀNH` ➔ `CHỜ PHÊ DUYỆT` | Upload văn bản kết quả tư vấn và tích checkbox "Hoàn thành". Hệ thống **tự động (Auto-transition)** chuyển thẳng sang `CHỜ PHÊ DUYỆT` và báo cho CB PD. |
@@ -245,7 +245,17 @@ Module **Đào tạo, Tập huấn (Nhóm III)** theo SRS FR-III gồm **5 màn 
 
 ### SUB-MENU 1: CHƯƠNG TRÌNH ĐÀO TẠO & KHÓA HỌC (SM-KHOAHOC)
 
-**Entity chính:** `KHOA_HOC` (SRS §3.4.3.6) — **9 state** theo DB ENUM `KHOA_HOC.trang_thai`: `DU_THAO`, `CHO_DUYET`, `DA_DUYET`, `DA_CONG_KHAI`, `DANG_DIEN_RA`, `DA_KET_THUC`, `CHO_DUYET_KQ`, `HOAN_THANH`, `HUY`. Entity cha `CHUONG_TRINH_DAO_TAO` (CTĐT) là CRUD thường (không có workflow phê duyệt trên chính CTĐT — xem FR-III-01 §Processing).
+> **⚠️ CẬP NHẬT 2026-05-05 (apply SRS update srs-update-2026-5-5/srs-fr-03-dao-tao.md):**
+> - **SM-KHOAHOC 9 → 11 state** — thêm 2 state mới `TU_CHOI` + `TU_CHOI_KQ` (Cách 2 + refinement). Nhánh rẽ "bounce-back" cũ (line 267-274) KHÔNG còn đúng — KHOA_HOC giờ có state `TU_CHOI` riêng (giống SM-TVV).
+> - **SM-CTDT mới hoàn toàn** — Entity `CHUONG_TRINH_DAO_TAO` không còn CRUD thường, có quy trình phê duyệt riêng `DU_THAO → CHO_DUYET → DA_DUYET` (giải quyết spec contradiction R6.4.B2/B2.5/B7).
+> - **Mô hình A 3 cấp:** `KE_HOACH_DAO_TAO` (kế hoạch năm — entity mới) 1:N `CHUONG_TRINH_DAO_TAO` 1:N `KHOA_HOC`. Workflow seed phải theo thứ tự: KH năm → CTĐT (qua SM-CTDT mới) → KH (qua SM-KHOAHOC 11 state).
+> - **Entity HOC_VIEN mới** — 1:1 với TAI_KHOAN qua `tai_khoan_id`. Khi seed học viên, tạo TK đồng thời.
+> - **Điểm danh enum 3-value:** `CO_MAT/VANG_PHEP/VANG_KHONG_PHEP` (đổi từ boolean cũ).
+> - **FR-III-19 Hướng B:** BỎ cấp chứng nhận PDF, chỉ công bố KQ vào TK học viên + chuyên trang.
+> - **5 FR mới:** III-20 (Xuất docx ký số), III-21 (Phê duyệt khóa học), III-22 (Lịch học), III-NEW-01/02/03 (Đề kiểm tra).
+> - Chi tiết delta: [`_DELTA-MAP-FR03.md`](../srs-update-2026-5-5/_DELTA-MAP-FR03.md). Bảng workflow dưới (Bước 1-10) là **R6 cũ** — KHÔNG refactor lại trong session này, sẽ update khi test phase R7 chạm tới.
+
+**Entity chính:** `KHOA_HOC` (SRS §3.4.3.6) — **9 state** theo DB ENUM `KHOA_HOC.trang_thai`: `DU_THAO`, `CHO_DUYET`, `DA_DUYET`, `DA_CONG_KHAI`, `DANG_DIEN_RA`, `DA_KET_THUC`, `CHO_DUYET_KQ`, `HOAN_THANH`, `HUY`. **⚠️ R7:** thêm `TU_CHOI` + `TU_CHOI_KQ` = 11 state. Entity cha `CHUONG_TRINH_DAO_TAO` (CTĐT) là CRUD thường (không có workflow phê duyệt trên chính CTĐT — xem FR-III-01 §Processing). **⚠️ R7:** CTĐT có SM-CTDT mới với phê duyệt.
 
 > **⚠️ Lưu ý mâu thuẫn nội bộ SRS:** `DA_CONG_KHAI` có trong DB ENUM (§3.4.3.6) và là guard cho FR-III-04 PRE-02 ("Khóa học đang mở đăng ký — trạng thái DA_CONG_KHAI"), nhưng bảng State Transition Table tại Phụ lục C.2 **bỏ sót** transition dẫn đến state này. Theo logic nghiệp vụ + schema (`la_cong_khai` flag), transition đúng: `DA_DUYET → DA_CONG_KHAI` do CB NV kích hoạt (xem Bước 4 bên dưới). Test plan cần ghi nhận mâu thuẫn này và xác nhận với BA.
 
