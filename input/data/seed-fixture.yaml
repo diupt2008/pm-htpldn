@@ -91,7 +91,7 @@
 #     2885-3007 linkage_assertions (cross-module verify)
 # =============================================================================
 
-fixture_version: "2.7.1-2026-05-06-r7-fix"  # 2.7.1 (6/5): R7.0.3 task done. Instruction tester R7: KHI SEED qua API mới, **STRIP field `dia_ban_ids` khỏi payload** trước khi POST (BE đã bỏ field — NĐ 77/2008 Đ.19 TVV scope toàn quốc). 24 occurrences `dia_ban_ids` trong tvv_variants giữ làm legacy reference cho R6 frozen, KHÔNG bulk-delete. Tương tự cho `loai_tvv: "NHT"` ở variant 19-21 — strip khi seed (NHT giờ entity riêng NGUOI_HO_TRO, dùng nht_variants block). Add note SM-KHOAHOC 9→11 state + SM-CTDT mới ở §8 flow-module.md. — 2.7.0 (5/5): apply 3 SRS update từ srs-update-2026-5-5/ (FR-04 + FR-07 + FR-10). Thêm 3 entity mới: ngay_le_variants (Tier 0, FR-VIII-29 GAP-VIII-05), to_chuc_tu_van_variants (Tier 1, FR-IV-NEW-01 CR-02), nht_variants (Tier 1, FR-IV-NHT-01 phương án B+). Mark DEPRECATED 3 NHT cũ trong tvv_variants[19-21] (giữ lại để R6 chạy, R7+ migrate sang nht_variants riêng). Note method seed DN: FR-VIII-22 self-reg DN-only — CB NV bỏ Create. Note breaking change: TVV.dia_ban_ids[] đã bỏ (NĐ 77/2008 Đ.19 — TVV scope toàn quốc, filter bằng don_vi_id). Tham chiếu: input/srs-update-2026-5-5/_DELTA-MAP-FR04.md, _DELTA-MAP-FR07.md, _DELTA-MAP-FR10.md.
+fixture_version: "2.7.2-2026-05-06-lv-fix"  # 2.7.2 (6/5 R7.2.1 trigger): align Tier 0 `linh_vuc_phap_ly` với SRS authoritative — srs-update-2026-5-5/srs-fr-10-quan-tri.md FR-VIII-01 line 204 (10 LV: Thuế/Lao động/Đất đai/Dân sự/Thương mại/Hình sự/Hành chính/SHTT/Doanh nghiệp/Đầu tư). BREAKING CHANGE: bỏ `HOP_DONG` (không có trong SRS), bulk replace `linh_vuc_id*: "HOP_DONG"` → `"THUONG_MAI"` ở mọi entity downstream (MPH/TVV/HD/VV/TVCS/HSPL/Đào tạo/HĐ TV/...). Riêng `loai_ho_so: "HOP_DONG"` (HSPL enum SRS FR-X.1-04 — KHÁC LV) GIỮ NGUYÊN. App DM hiện không khớp SRS (thiếu DOANH_NGHIEP/THUONG_MAI/DAU_TU + có 3 LV non-SRS) — cần dev re-seed DM theo SRS line 204 (escalate riêng). — 2.7.1 (6/5): R7.0.3 task done. Instruction tester R7: KHI SEED qua API mới, **STRIP field `dia_ban_ids` khỏi payload** trước khi POST (BE đã bỏ field — NĐ 77/2008 Đ.19 TVV scope toàn quốc). 24 occurrences `dia_ban_ids` trong tvv_variants giữ làm legacy reference cho R6 frozen, KHÔNG bulk-delete. Tương tự cho `loai_tvv: "NHT"` ở variant 19-21 — strip khi seed (NHT giờ entity riêng NGUOI_HO_TRO, dùng nht_variants block). Add note SM-KHOAHOC 9→11 state + SM-CTDT mới ở §8 flow-module.md. — 2.7.0 (5/5): apply 3 SRS update từ srs-update-2026-5-5/ (FR-04 + FR-07 + FR-10). Thêm 3 entity mới: ngay_le_variants (Tier 0, FR-VIII-29 GAP-VIII-05), to_chuc_tu_van_variants (Tier 1, FR-IV-NEW-01 CR-02), nht_variants (Tier 1, FR-IV-NHT-01 phương án B+). Mark DEPRECATED 3 NHT cũ trong tvv_variants[19-21] (giữ lại để R6 chạy, R7+ migrate sang nht_variants riêng). Note method seed DN: FR-VIII-22 self-reg DN-only — CB NV bỏ Create. Note breaking change: TVV.dia_ban_ids[] đã bỏ (NĐ 77/2008 Đ.19 — TVV scope toàn quốc, filter bằng don_vi_id). Tham chiếu: input/srs-update-2026-5-5/_DELTA-MAP-FR04.md, _DELTA-MAP-FR07.md, _DELTA-MAP-FR10.md.
                                      # 2.6.3 (2/5): post-seed adapt notes. Seed 15 DN variants thực tế qua API direct (workaround JWT bug). MST gen checksum-valid (prefix 5*) thay fixture spec MST `01001..04004` (BE bắt buộc checksum NĐ Việt Nam). loaiDoanhNghiepId variant 14/15 đổi `CO_PHAN/TU_NHAN` → `CP/DNTN` khớp DM seed. Variant 8/12 BVA above-bound NĐ39 lưu thành công với flag ignoreWarning=true (BR-CALC-05 cảnh báo WRN-DN-01 nhưng không block). 4 bug Open: BUG-AUTH-JWT-001 (Critical), BUG-DM-LOAI-DN-001 (Major), BUG-FILTER-DN-001 (Major), BUG-API-DN-001 (Medium). Tham chiếu: output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-fixture-seed-dn.md.
                                      # 2.6.2 (1/5): dev reset toàn DB → re-seed full A→Z. Confirm cap_tai_khoan_cg_nht_r5 đủ data A5/A3 NHT. Bổ sung WARNING coverage DN cấp ĐP: 12 DN hiện cover TW/BN/DN/HN/HP, THIẾU AG/BG/BNI (3 đơn vị có account ĐP cg_01/02/03 + cb_nv_dp_01/02/03). Khi seed lại, QTHT cần tạo thêm ≥3 DN ở 3 đơn vị này nếu test scope ĐP toàn cấp. Spec đề xuất xem block `dn_variants_dp_extension` cuối M1. Master plan: tasks/post-reset-seed-plan.md. — 2.6.1 (1/5): thêm cap_tai_khoan_cg_nht_r5 (9 cặp TAI_KHOAN login). — 2.6.0 (28/4): split loai_tvv CG/NHT + add mau_phan_hoi/danh_muc_ly_do/hoc_vien.
                                      # 2.5.2: bỏ state_target khỏi bai_giang_variants (SRS FR-III-07 không có field state); rename file_path/link_video/linh_vuc_id → file_bai_giang/url_youtube/linh_vuc_ids[] khớp SRS Inputs row 4-6. Tra changelog: git log input/data/seed-fixture.yaml
@@ -108,13 +108,24 @@ seed_mode: "pure"        # pure = entry state only | hybrid = mixed states (v1.x
 
 tier_0_prerequisite:
   danh_muc_required:
+    # Source authoritative: srs-update-2026-5-5/srs-fr-10-quan-tri.md FR-VIII-01 line 204
+    # "Seed Data: Thuế, Lao động, Đất đai, Dân sự, Thương mại, Hình sự, Hành chính,
+    #             Sở hữu trí tuệ, Doanh nghiệp, Đầu tư"
+    # ⚠️ FIX 2026-05-06 v2.7.2: replace LV `HOP_DONG` → `THUONG_MAI` (SRS không có HOP_DONG).
+    # App DM hiện thiếu DOANH_NGHIEP / THUONG_MAI / DAU_TU + có 3 LV non-SRS
+    # (Hôn nhân gia đình / Kinh doanh thương mại / Khiếu nại tố cáo) — cần dev re-seed DM
+    # khớp SRS line 204 (escalate riêng — không phải scope fixture).
     linh_vuc_phap_ly:
-      - { code: "LAO_DONG",  name: "Lao động" }
-      - { code: "THUE",      name: "Thuế" }
-      - { code: "HOP_DONG",  name: "Hợp đồng" }
+      - { code: "THUE",         name: "Thuế" }
+      - { code: "LAO_DONG",     name: "Lao động" }
+      - { code: "DAT_DAI",      name: "Đất đai" }
+      - { code: "DAN_SU",       name: "Dân sự" }
+      - { code: "THUONG_MAI",   name: "Thương mại" }
+      - { code: "HINH_SU",      name: "Hình sự" }
+      - { code: "HANH_CHINH",   name: "Hành chính" }
+      - { code: "SHTT",         name: "Sở hữu trí tuệ" }
       - { code: "DOANH_NGHIEP", name: "Doanh nghiệp" }
-      - { code: "SHTT",      name: "Sở hữu trí tuệ" }
-      - { code: "DAT_DAI",   name: "Đất đai" }
+      - { code: "DAU_TU",       name: "Đầu tư" }
     loai_dn:
       - { code: "TNHH",  name: "Công ty TNHH" }
       - { code: "CP",    name: "Công ty Cổ phần" }
@@ -177,16 +188,16 @@ tier_0_prerequisite:
     dot_1_cb_only:
       - { linh_vuc_id: "LAO_DONG",     nguoi_xu_ly_username: "cb_nv_tw_01", loai_yeu_cau: "TAT_CA", uu_tien: 1, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT" }
       - { linh_vuc_id: "THUE",         nguoi_xu_ly_username: "cb_nv_tw_01", loai_yeu_cau: "TAT_CA", uu_tien: 1, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT" }
-      - { linh_vuc_id: "HOP_DONG",     nguoi_xu_ly_username: "cb_nv_tw_01", loai_yeu_cau: "TAT_CA", uu_tien: 1, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT" }
+      - { linh_vuc_id: "THUONG_MAI",     nguoi_xu_ly_username: "cb_nv_tw_01", loai_yeu_cau: "TAT_CA", uu_tien: 1, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT" }
       - { linh_vuc_id: "DOANH_NGHIEP", nguoi_xu_ly_username: "cb_nv_tw_01", loai_yeu_cau: "TAT_CA", uu_tien: 1, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT" }
       - { linh_vuc_id: "SHTT",         nguoi_xu_ly_username: "cb_nv_tw_01", loai_yeu_cau: "TAT_CA", uu_tien: 1, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT" }
       - { linh_vuc_id: "DAT_DAI",      nguoi_xu_ly_username: "cb_nv_tw_01", loai_yeu_cau: "TAT_CA", uu_tien: 1, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT" }
 
     # ── ĐỢT 2: backfill TVV phụ trách (sau khi T3.1 SM-TVV xong, có TVV ACTIVE) ──
     # Mapping TVV ↔ lĩnh vực — verify từ tvv_variants[].linh_vuc_ids (no overlap, mỗi LV 1 TVV chính):
-    #   LAO_DONG     → TVV[1] Nguyễn VT  (linh_vuc_ids: LAO_DONG, HOP_DONG)
+    #   LAO_DONG     → TVV[1] Nguyễn VT  (linh_vuc_ids: LAO_DONG, THUONG_MAI)
     #   THUE         → TVV[2] Trần TV    (linh_vuc_ids: THUE, DOANH_NGHIEP)
-    #   HOP_DONG     → TVV[3] Lê CG      (linh_vuc_ids: HOP_DONG, SHTT)
+    #   THUONG_MAI   → TVV[3] Lê CG      (linh_vuc_ids: THUONG_MAI, SHTT)
     #   DOANH_NGHIEP → TVV[4] Phạm ĐT    (linh_vuc_ids: DOANH_NGHIEP, DAT_DAI)
     #   SHTT         → TVV[5] Hoàng N    (linh_vuc_ids: SHTT)
     #   DAT_DAI      → TVV[6] Vũ Sáu     (linh_vuc_ids: DAT_DAI, LAO_DONG)
@@ -208,7 +219,7 @@ tier_0_prerequisite:
     dot_2_tvv_backfill:
       - { linh_vuc_id: "LAO_DONG",     nguoi_xu_ly_ref: "tvv_variants[1]", maTvv: "TVV-BTP-TW-0001", uuid: "fd76f004-46f0-4067-8ad5-d3bcb19f3344", loai_yeu_cau: "TAT_CA", uu_tien: 2, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT", note: "TVV ưu tiên 2 (sau CB)" }
       - { linh_vuc_id: "THUE",         nguoi_xu_ly_ref: "tvv_variants[2]", maTvv: "TVV-BTP-TW-0002", uuid: "63640ce9-1985-41f7-b2bd-5e8e91100080", loai_yeu_cau: "TAT_CA", uu_tien: 2, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT", note: "TVV ưu tiên 2" }
-      - { linh_vuc_id: "HOP_DONG",     nguoi_xu_ly_ref: "tvv_variants[3]", maTvv: "TVV-BTP-TW-0003", uuid: "09ef865d-3729-4989-8369-03f052b2010f", loai_yeu_cau: "TAT_CA", uu_tien: 2, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT", note: "TVV ưu tiên 2 — bổ sung mục (c) 2026-04-25" }
+      - { linh_vuc_id: "THUONG_MAI",     nguoi_xu_ly_ref: "tvv_variants[3]", maTvv: "TVV-BTP-TW-0003", uuid: "09ef865d-3729-4989-8369-03f052b2010f", loai_yeu_cau: "TAT_CA", uu_tien: 2, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT", note: "TVV ưu tiên 2 — bổ sung mục (c) 2026-04-25" }
       - { linh_vuc_id: "DOANH_NGHIEP", nguoi_xu_ly_ref: "tvv_variants[4]", maTvv: "TVV-BTP-TW-0004", uuid: "5bd3b075-c63e-481f-a3d9-3c180dae474d", loai_yeu_cau: "TAT_CA", uu_tien: 2, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT", note: "TVV ưu tiên 2 — bổ sung mục (c) 2026-04-25" }
       - { linh_vuc_id: "SHTT",         nguoi_xu_ly_ref: "tvv_variants[5]", maTvv: "TVV-BTP-TW-0005", uuid: "6e9dfdf5-7d84-4667-bf25-c2b617626feb", loai_yeu_cau: "TAT_CA", uu_tien: 2, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT", note: "TVV ưu tiên 2" }
       - { linh_vuc_id: "DAT_DAI",      nguoi_xu_ly_ref: "tvv_variants[6]", maTvv: "TVV-BTP-TW-0006", uuid: "df8f6a64-c574-49bf-96ef-8c5a1ce48290", loai_yeu_cau: "TAT_CA", uu_tien: 2, don_vi_id: "TW-CUC", trang_thai: "KICH_HOAT", note: "TVV ưu tiên 2 — bổ sung mục (c) 2026-04-25" }
@@ -581,17 +592,17 @@ dn_variants_actual_seed_2026_05_02:
 # Bắt buộc: ten_to_chuc, loai_hinh, nguoi_dai_dien, dia_chi, linh_vuc_ids[] (≥1), Giấy ĐKHĐ Sở TP (so_giay_dkhd + ngay_cap_dkhd theo NĐ 77/2008 Đ.13)
 # 6 variant cover 4 loại hình × scope TW/BN/ĐP. Sau khi seed → TVV chọn TC chính (to_chuc_chinh_id) khi tạo hồ sơ.
 to_chuc_tu_van_variants:
-  - { index: 1, ten_to_chuc: "Công ty Luật TNHH Alpha Hà Nội",   loai_hinh: "CONG_TY_LUAT", nguoi_dai_dien: "Nguyễn Văn A", chuc_vu_dai_dien: "Giám đốc",     so_giay_dkhd: "DKHD-HN-001/2024",  ngay_cap_dkhd: "2024-03-15", linh_vuc_ids: ["LAO_DONG", "HOP_DONG", "DOANH_NGHIEP"], so_lao_dong: 25, dia_chi: "Số 5 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội", dien_thoai: "0241000101", email: "alpha-law@test.htpldn.vn", website: "https://alpha-law.vn", ghi_chu: "TC TV cấp ĐP Hà Nội — chính cho TVV variant 1-3", don_vi_quan_ly: "DP-HN", state_target: "MOI_DANG_KY" }
+  - { index: 1, ten_to_chuc: "Công ty Luật TNHH Alpha Hà Nội",   loai_hinh: "CONG_TY_LUAT", nguoi_dai_dien: "Nguyễn Văn A", chuc_vu_dai_dien: "Giám đốc",     so_giay_dkhd: "DKHD-HN-001/2024",  ngay_cap_dkhd: "2024-03-15", linh_vuc_ids: ["LAO_DONG", "THUONG_MAI","DOANH_NGHIEP"], so_lao_dong: 25, dia_chi: "Số 5 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội", dien_thoai: "0241000101", email: "alpha-law@test.htpldn.vn", website: "https://alpha-law.vn", ghi_chu: "TC TV cấp ĐP Hà Nội — chính cho TVV variant 1-3", don_vi_quan_ly: "DP-HN", state_target: "MOI_DANG_KY" }
   - { index: 2, ten_to_chuc: "Văn phòng Luật sư Beta Hải Phòng", loai_hinh: "VP_LUAT_SU",   nguoi_dai_dien: "Trần Thị B",  chuc_vu_dai_dien: "Trưởng VP",    so_giay_dkhd: "DKHD-HP-002/2023",  ngay_cap_dkhd: "2023-06-20", linh_vuc_ids: ["THUE", "DOANH_NGHIEP"],                  so_lao_dong: 8,  dia_chi: "Số 12 Lạch Tray, Ngô Quyền, Hải Phòng",         dien_thoai: "0241000102", email: "beta-law@test.htpldn.vn",  website: null,                       ghi_chu: "TC TV cấp ĐP Hải Phòng",  don_vi_quan_ly: "DP-HP", state_target: "MOI_DANG_KY" }
-  - { index: 3, ten_to_chuc: "Trung tâm TVPL Gamma Đà Nẵng",     loai_hinh: "TT_TVPL",      nguoi_dai_dien: "Lê Văn C",    chuc_vu_dai_dien: "Giám đốc TT",  so_giay_dkhd: "DKHD-DN-003/2024",  ngay_cap_dkhd: "2024-01-10", linh_vuc_ids: ["HOP_DONG", "SHTT", "DAT_DAI"],          so_lao_dong: 15, dia_chi: "Số 88 Bạch Đằng, Hải Châu, Đà Nẵng",            dien_thoai: "0241000103", email: "gamma-tvpl@test.htpldn.vn", website: "https://gamma-tvpl.vn",   ghi_chu: "TC TV cấp ĐP Đà Nẵng",     don_vi_quan_ly: "DP-DN", state_target: "MOI_DANG_KY" }
-  - { index: 4, ten_to_chuc: "Đoàn Luật sư Hà Nội",              loai_hinh: "VP_LUAT_SU",   nguoi_dai_dien: "Phạm Thị D",  chuc_vu_dai_dien: "Chủ nhiệm",    so_giay_dkhd: "DKHD-HN-004/2020",  ngay_cap_dkhd: "2020-09-05", linh_vuc_ids: ["LAO_DONG", "HOP_DONG", "DAT_DAI", "SHTT"], so_lao_dong: 200, dia_chi: "Số 25 Trần Phú, Ba Đình, Hà Nội",              dien_thoai: "0241000104", email: "doanluatsu-hn@test.htpldn.vn", website: "https://doanluatsuhanoi.vn", ghi_chu: "TC TV cấp ĐP HN — đoàn luật sư lớn", don_vi_quan_ly: "DP-HN", state_target: "MOI_DANG_KY" }
+  - { index: 3, ten_to_chuc: "Trung tâm TVPL Gamma Đà Nẵng",     loai_hinh: "TT_TVPL",      nguoi_dai_dien: "Lê Văn C",    chuc_vu_dai_dien: "Giám đốc TT",  so_giay_dkhd: "DKHD-DN-003/2024",  ngay_cap_dkhd: "2024-01-10", linh_vuc_ids: ["THUONG_MAI","SHTT", "DAT_DAI"],          so_lao_dong: 15, dia_chi: "Số 88 Bạch Đằng, Hải Châu, Đà Nẵng",            dien_thoai: "0241000103", email: "gamma-tvpl@test.htpldn.vn", website: "https://gamma-tvpl.vn",   ghi_chu: "TC TV cấp ĐP Đà Nẵng",     don_vi_quan_ly: "DP-DN", state_target: "MOI_DANG_KY" }
+  - { index: 4, ten_to_chuc: "Đoàn Luật sư Hà Nội",              loai_hinh: "VP_LUAT_SU",   nguoi_dai_dien: "Phạm Thị D",  chuc_vu_dai_dien: "Chủ nhiệm",    so_giay_dkhd: "DKHD-HN-004/2020",  ngay_cap_dkhd: "2020-09-05", linh_vuc_ids: ["LAO_DONG", "THUONG_MAI","DAT_DAI", "SHTT"], so_lao_dong: 200, dia_chi: "Số 25 Trần Phú, Ba Đình, Hà Nội",              dien_thoai: "0241000104", email: "doanluatsu-hn@test.htpldn.vn", website: "https://doanluatsuhanoi.vn", ghi_chu: "TC TV cấp ĐP HN — đoàn luật sư lớn", don_vi_quan_ly: "DP-HN", state_target: "MOI_DANG_KY" }
   - { index: 5, ten_to_chuc: "Tổ chức TVPL Khác Delta",          loai_hinh: "KHAC",         nguoi_dai_dien: "Hoàng Văn E", chuc_vu_dai_dien: "Đại diện",     so_giay_dkhd: null,                ngay_cap_dkhd: null,         linh_vuc_ids: ["DOANH_NGHIEP"],                          so_lao_dong: 5,  dia_chi: "Số 100 Lê Lai, Quận 1, TP.HCM",                 dien_thoai: "0241000105", email: "delta-tvpl@test.htpldn.vn", website: null,                     ghi_chu: "TC TV loại Khác — KHÔNG có Giấy ĐKHĐ → expect ERR-TCTV-* khi save (BVA edge)",  don_vi_quan_ly: "TW-CUC", state_target: "MOI_DANG_KY", scenario: "BVA — thiếu Giấy ĐKHĐ Sở TP NĐ 77/2008 Đ.13, expect block save" }
-  - { index: 6, ten_to_chuc: "Công ty Luật TW Epsilon",          loai_hinh: "CONG_TY_LUAT", nguoi_dai_dien: "Vũ Thị F",    chuc_vu_dai_dien: "Tổng Giám đốc", so_giay_dkhd: "DKHD-TW-006/2024", ngay_cap_dkhd: "2024-11-30", linh_vuc_ids: ["LAO_DONG", "THUE", "HOP_DONG"],          so_lao_dong: 50, dia_chi: "Số 1 Nguyễn Trãi, Hà Đông, Hà Nội",            dien_thoai: "0241000106", email: "epsilon-law@test.htpldn.vn", website: "https://epsilon-law.vn", ghi_chu: "TC TV cấp TW (BTP công bố MLTV)",  don_vi_quan_ly: "TW-CUC", state_target: "MOI_DANG_KY" }
+  - { index: 6, ten_to_chuc: "Công ty Luật TW Epsilon",          loai_hinh: "CONG_TY_LUAT", nguoi_dai_dien: "Vũ Thị F",    chuc_vu_dai_dien: "Tổng Giám đốc", so_giay_dkhd: "DKHD-TW-006/2024", ngay_cap_dkhd: "2024-11-30", linh_vuc_ids: ["LAO_DONG", "THUE", "THUONG_MAI"],          so_lao_dong: 50, dia_chi: "Số 1 Nguyễn Trãi, Hà Đông, Hà Nội",            dien_thoai: "0241000106", email: "epsilon-law@test.htpldn.vn", website: "https://epsilon-law.vn", ghi_chu: "TC TV cấp TW (BTP công bố MLTV)",  don_vi_quan_ly: "TW-CUC", state_target: "MOI_DANG_KY" }
 to_chuc_tu_van_prereq: |
   Cần đạt 3 điều kiện trước khi seed:
   (1) Tier 0 ngay_le + cau_hinh_sla + don_vi đủ (TW-CUC + 3 ĐP HN/HP/DN).
   (2) Account CB NV cùng cấp (cb_nv_dp_01 cho ĐP-HN, ...) đã login OK.
-  (3) DM `linh_vuc_phap_ly` đã đủ 6 LV chính (LAO_DONG/THUE/HOP_DONG/DOANH_NGHIEP/SHTT/DAT_DAI).
+  (3) DM `linh_vuc_phap_ly` đã đủ 10 LV chính theo SRS line 204 (THUE/LAO_DONG/DAT_DAI/DAN_SU/THUONG_MAI/HINH_SU/HANH_CHINH/SHTT/DOANH_NGHIEP/DAU_TU).
   Verify hậu seed: GET /api/v1/to-chuc-tu-vans?trangThai=MOI_DANG_KY → ≥6 records (5 OK + 1 edge).
   Variant 5 (KHAC, thiếu Giấy ĐKHĐ) — expect ERR-TCTV-* khi save → coi là BVA negative test, KHÔNG counter pass.
   Workflow advance: 5 variant valid sang CHO_PHE_DUYET (CB NV trình duyệt) → CB PD cùng cấp công bố HOAT_DONG (FR-IV-NEW-04). Đó là phase test workflow, KHÔNG làm ở seed.
@@ -627,7 +638,7 @@ tvv_variants:
     trinh_do: "Thạc sĩ"
     to_chuc_chinh_id: "Đoàn Luật sư Hà Nội"    # FK → TO_CHUC_TU_VAN (code)
     to_chuc_doi_tac_ids: []                    # N:N, rỗng ở seed
-    linh_vuc_ids: ["LAO_DONG", "HOP_DONG"]     # FK[] → DANH_MUC
+    linh_vuc_ids: ["LAO_DONG", "THUONG_MAI"]     # FK[] → DANH_MUC
     dia_ban_ids: ["DP-HN"]                     # FK[] → DON_VI
     chung_chi: "LS-HN-2020-001"
     so_the: null
@@ -667,7 +678,7 @@ tvv_variants:
     trinh_do: "Thạc sĩ"
     to_chuc_chinh_id: "Trường ĐH Luật Hà Nội"
     to_chuc_doi_tac_ids: []
-    linh_vuc_ids: ["HOP_DONG", "SHTT"]
+    linh_vuc_ids: ["THUONG_MAI","SHTT"]
     dia_ban_ids: ["DP-HN", "DP-HP"]
     chung_chi: "LS-HP-2021-003"
     so_the: null
@@ -769,7 +780,7 @@ tvv_variants:
     trinh_do: "Tiến sĩ"
     to_chuc_chinh_id: "Trung tâm Trợ giúp Pháp lý NN"
     to_chuc_doi_tac_ids: []
-    linh_vuc_ids: ["DOANH_NGHIEP", "THUE", "HOP_DONG"]
+    linh_vuc_ids: ["DOANH_NGHIEP", "THUE", "THUONG_MAI"]
     dia_ban_ids: ["DP-HN"]
     chung_chi: "LS-HN-2015-008"
     so_the: "the-008"
@@ -790,7 +801,7 @@ tvv_variants:
     trinh_do: "Thạc sĩ"
     to_chuc_chinh_id: "Đoàn Luật sư Hải Phòng"
     to_chuc_doi_tac_ids: []
-    linh_vuc_ids: ["LAO_DONG", "HOP_DONG"]
+    linh_vuc_ids: ["LAO_DONG", "THUONG_MAI"]
     dia_ban_ids: ["DP-HP"]                 # scope ĐP HP - test data isolation
     chung_chi: "LS-HP-2018-009"
     so_the: null
@@ -852,7 +863,7 @@ tvv_variants:
     trinh_do: "Tiến sĩ"
     to_chuc_chinh_id: "Hội Luật gia Việt Nam"
     to_chuc_doi_tac_ids: []
-    linh_vuc_ids: ["SHTT", "HOP_DONG", "DOANH_NGHIEP"]
+    linh_vuc_ids: ["SHTT", "THUONG_MAI","DOANH_NGHIEP"]
     dia_ban_ids: ["DP-HN", "DP-HP", "DP-DN"]    # multi-region
     chung_chi: "LS-HN-2010-012"
     so_the: "the-012"
@@ -906,7 +917,7 @@ tvv_variants:
     trinh_do: "Tiến sĩ"
     to_chuc_chinh_id: "Trung tâm trợ giúp pháp lý"
     to_chuc_doi_tac_ids: []
-    linh_vuc_ids: ["HOP_DONG"]
+    linh_vuc_ids: ["THUONG_MAI"]
     dia_ban_ids: ["DP-HN"]
     chung_chi: "LS-HN-2010-014"
     so_the: "the-014"
@@ -1043,7 +1054,7 @@ tvv_variants:
     trinh_do: "Thạc sĩ"
     to_chuc_chinh_id: "Sở Tư pháp Đà Nẵng"
     to_chuc_doi_tac_ids: []
-    linh_vuc_ids: ["HOP_DONG", "THUE"]
+    linh_vuc_ids: ["THUONG_MAI","THUE"]
     dia_ban_ids: ["DP-DN"]
     chung_chi: "NHT-DN-2021-020"
     so_the: null
@@ -1124,7 +1135,7 @@ tvv_variants:
 # =============================================================================
 nht_variants:
   - { index: 1, ho_ten: "Phùng Thị NHT An Giang",   email: "nht_01@htpldn.test", username: "nht_01", don_vi_id: "STP-AG", chuc_vu: "Chuyên viên",         linh_vuc_ids: ["DOANH_NGHIEP", "LAO_DONG"], chung_chi_htpl: '[{"ten_khoa":"Bồi dưỡng HTPL DNNVV 2022","ngay":"2022-06-15","noi_to_chuc":"Bộ Tư pháp"}]',     ngay_tham_gia_mang_luoi: "2022-07-01", state_target: "CHO_KICH_HOAT", note: "NHT cấp ĐP An Giang — match users.csv nht_01. Sau kích hoạt → xuất hiện trong dropdown UC59 phân công VV scope ĐP-AG." }
-  - { index: 2, ho_ten: "Lương Văn NHT Đà Nẵng",    email: "nht_02@htpldn.test", username: "nht_02", don_vi_id: "STP-DN", chuc_vu: "Trưởng phòng",       linh_vuc_ids: ["HOP_DONG", "THUE"],          chung_chi_htpl: '[{"ten_khoa":"Bồi dưỡng HTPL DNNVV 2021","ngay":"2021-09-20","noi_to_chuc":"Sở Tư pháp Đà Nẵng"}]', ngay_tham_gia_mang_luoi: "2021-10-15", state_target: "CHO_KICH_HOAT", note: "NHT cấp ĐP Đà Nẵng — match users.csv nht_02. NHT có 📝 RU* trên VU_VIEC + ✅ CRU* trên HO_SO_VU_VIEC scope ĐP-DN." }
+  - { index: 2, ho_ten: "Lương Văn NHT Đà Nẵng",    email: "nht_02@htpldn.test", username: "nht_02", don_vi_id: "STP-DN", chuc_vu: "Trưởng phòng",       linh_vuc_ids: ["THUONG_MAI","THUE"],          chung_chi_htpl: '[{"ten_khoa":"Bồi dưỡng HTPL DNNVV 2021","ngay":"2021-09-20","noi_to_chuc":"Sở Tư pháp Đà Nẵng"}]', ngay_tham_gia_mang_luoi: "2021-10-15", state_target: "CHO_KICH_HOAT", note: "NHT cấp ĐP Đà Nẵng — match users.csv nht_02. NHT có 📝 RU* trên VU_VIEC + ✅ CRU* trên HO_SO_VU_VIEC scope ĐP-DN." }
   - { index: 3, ho_ten: "Đào Thị NHT Hải Phòng",    email: "nht_03@htpldn.test", username: "nht_03", don_vi_id: "STP-HP", chuc_vu: "Chuyên viên cao cấp", linh_vuc_ids: ["SHTT", "DAT_DAI"],          chung_chi_htpl: '[{"ten_khoa":"Bồi dưỡng HTPL DNNVV 2023","ngay":"2023-04-10","noi_to_chuc":"Bộ Tư pháp"}]',     ngay_tham_gia_mang_luoi: "2023-05-05", state_target: "CHO_KICH_HOAT", note: "NHT cấp ĐP Hải Phòng — match users.csv nht_03." }
 nht_prereq: |
   Cần đạt 3 điều kiện trước khi seed:
@@ -1167,8 +1178,8 @@ mau_phan_hoi_variants:
     pham_vi_ap_dung: "TW_QUOC_GIA"
     loai: "MAU_PHAN_HOI"
   - index: 2
-    ten_mau: "Mẫu phản hồi HD - Hợp đồng/KDTM"
-    linh_vuc_id: "HOP_DONG"
+    ten_mau: "Mẫu phản hồi HD - Thương mại"
+    linh_vuc_id: "THUONG_MAI"
     noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nVề câu hỏi liên quan đến hợp đồng/kinh doanh thương mại, chúng tôi xin trả lời:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Bộ luật Dân sự 2015 + Luật Thương mại 2005.\n\nTrân trọng."
     state_target: "KICH_HOAT"
     pham_vi_ap_dung: "TW_QUOC_GIA"
@@ -1238,7 +1249,7 @@ mau_phan_hoi_dp_variants:
   - index: 10
     account_seed: "cb_nv_dp_01"  # Sở Tư pháp An Giang
     ten_mau: "Mẫu phản hồi DP-AG - Hợp đồng"
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     noi_dung_mau: "Kính gửi Quý Doanh nghiệp,\n\nMẫu phản hồi cấp Địa phương (Sở Tư pháp An Giang) — chuyên ngành hợp đồng/KDTM:\n\n[NỘI DUNG TRẢ LỜI]\n\nCơ sở pháp lý: Bộ luật Dân sự 2015 + Luật Thương mại 2005.\n\nTrân trọng."
     state_target: "KICH_HOAT"
     pham_vi_ap_dung: "DP_RIENG"
@@ -1318,7 +1329,7 @@ vu_viec_variants:
     state_target: "ĐÃ TIẾP NHẬN"
   - index: 3
     dn_link: "dn_variants[3]"
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     noi_dung_yeu_cau: "Review và tư vấn sửa đổi hợp đồng hợp tác chiến lược"
     kenh_tiep_nhan: "TRUC_TIEP"
     file_scan: null
@@ -1363,7 +1374,7 @@ vu_viec_variants:
     scenario: "Cấp ĐP-HN — test scope filter cấp ĐP"
   - index: 9
     dn_link: "dn_variants[9]"
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     noi_dung_yeu_cau: "DN cần tư vấn HĐ phân phối độc quyền thiết bị y tế nhập khẩu cho 5 tỉnh phía Bắc. Quan tâm điều khoản giải quyết tranh chấp và chấm dứt HĐ."
     kenh_tiep_nhan: "DIEN_THOAI"
     file_scan: null
@@ -1411,7 +1422,7 @@ vu_viec_variants:
     scenario: "Pagination test — bulk record cho test page 2 (cần ≥21 record/list)"
   - index: 15
     dn_link: "dn_variants[6]"
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     noi_dung_yeu_cau: "DN đào tạo cần tư vấn HĐ dịch vụ giảng dạy với giảng viên thỉnh giảng. Quan tâm phân biệt với HĐ lao động + nghĩa vụ thuế TNCN."
     kenh_tiep_nhan: "DIEN_THOAI"
     file_scan: "vu-viec/file-large-15.pdf"   # File ≥10MB — test boundary upload
@@ -1452,7 +1463,7 @@ hoi_dap_variants:
   - index: 3
     doanh_nghiep_id: "dn_variants[3]"
     dn_link: "dn_variants[3]"
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     tieu_de: "Thời hạn HĐ lao động xác định thời hạn"
     noi_dung: "HĐLĐ xác định thời hạn có thể ký tối đa bao nhiêu lần với cùng 1 người?"
     kenh_tiep_nhan: "CONG_PLQG"
@@ -1553,7 +1564,7 @@ hoi_dap_variants:
   - index: 11
     doanh_nghiep_id: "dn_variants[11]"
     dn_link: "dn_variants[11]"
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     tieu_de: "HĐ dịch vụ du lịch"
     noi_dung: "Công ty du lịch cần tư vấn điều khoản hủy tour, hoàn tiền và bảo hiểm trách nhiệm khi gặp sự cố bất khả kháng."
     kenh_tiep_nhan: "TRUC_TIEP"
@@ -1586,7 +1597,7 @@ tv_cs_variants:
   - index: 2
     doanh_nghiep_id: "dn_variants[2]"
     dn_link: "dn_variants[2]"
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     noi_dung_tu_van: "Đối tác nước ngoài không thực hiện nghĩa vụ thanh toán đúng hạn theo HĐ cung ứng dịch vụ xây dựng. Cần tư vấn căn cứ pháp lý để khởi kiện hoặc thương lượng hòa giải, bảo vệ quyền lợi DN."
     tom_tat: "Tranh chấp HĐ thương mại quốc tế — đối tác không thanh toán"
     hinh_thuc_tv: "VIDEO_CALL"
@@ -1724,7 +1735,7 @@ ho_so_phap_ly_dn_variants:
     doanh_nghiep_id: "dn_variants[3]"
     ten_ho_so: "Hợp đồng thuê xưởng sản xuất Gamma"
     loai_ho_so: "HOP_DONG"
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     ngay_cap: "2024-01-15"
     ngay_het_han: "2029-01-14"
     co_quan_cap: null                     # HĐ giữa 2 bên không có "cơ quan cấp"
@@ -1894,7 +1905,7 @@ chuong_trinh_dao_tao_variants:
   - index: 6
     ten_chuong_trinh: "CTĐT 2026 - HĐ thương mại khu vực ĐP-DN"
     mo_ta: "CTĐT cấp ĐP Đà Nẵng cho DN tại Đà Nẵng"
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     muc_tieu: "Đào tạo HĐ thương mại nội địa + xuất khẩu cho DN Đà Nẵng"
     doi_tuong: "DN tại Đà Nẵng + Quảng Nam"
     hinh_thuc: "TRUC_TIEP"
@@ -2182,7 +2193,7 @@ bai_giang_variants:
     loai_tai_lieu: "SLIDE"
     file_bai_giang: "slides/baigiang-04.pptx"
     url_youtube: null
-    linh_vuc_ids: ["HOP_DONG"]
+    linh_vuc_ids: ["THUONG_MAI"]
     cong_khai: false
   - index: 5
     ten_bai_giang: "Bài giảng 05 - Sở hữu trí tuệ"
@@ -2254,7 +2265,7 @@ ngan_hang_ch_variants:
     cau_hoi: "HĐLĐ có giá trị pháp lý ngay khi ký hay phải đăng ký với cơ quan nhà nước?"
     loai_cau_hoi: "TRAC_NGHIEM"
     muc_do: "DE"
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     lua_chon: ["Có giá trị ngay khi ký", "Phải đăng ký BHXH", "Phải đăng ký với Sở LĐTBXH", "Cả 2 bên đồng ý là đủ"]
     dap_an_dung: "Có giá trị ngay khi ký"
   - index: 6
@@ -2364,7 +2375,7 @@ giang_vien_variants:
     ho_ten: "GS.TS Trần Giảng Viên"
     chuyen_nganh: "Luật dân sự"
     trinh_do: "Tiến sĩ"                   # Y
-    linh_vuc_ids: ["DOANH_NGHIEP", "HOP_DONG"]    # Y, ≥1 FK → DANH_MUC
+    linh_vuc_ids: ["DOANH_NGHIEP", "THUONG_MAI"]    # Y, ≥1 FK → DANH_MUC
     don_vi: "Trường ĐH Luật Hà Nội"
     email: "gs.tran@test.htpldn.vn"
     so_dien_thoai: "0911000001"
@@ -2431,7 +2442,7 @@ giang_vien_variants:
     ho_ten: "ThS. Bùi Tạm Dừng"
     chuyen_nganh: "Luật hợp đồng"
     trinh_do: "Thạc sĩ"
-    linh_vuc_ids: ["HOP_DONG"]
+    linh_vuc_ids: ["THUONG_MAI"]
     don_vi: "Đoàn Luật sư Đà Nẵng"
     email: "ths.bui@test.htpldn.vn"
     so_dien_thoai: "0911000007"
@@ -2443,7 +2454,7 @@ giang_vien_variants:
     ho_ten: "GS.TS Phan Đa Lĩnh Vực"
     chuyen_nganh: "Luật kinh doanh quốc tế"
     trinh_do: "Tiến sĩ"
-    linh_vuc_ids: ["DOANH_NGHIEP", "HOP_DONG", "THUE", "SHTT"]   # multi linh vuc
+    linh_vuc_ids: ["DOANH_NGHIEP", "THUONG_MAI","THUE", "SHTT"]   # multi linh vuc
     don_vi: "ĐH Ngoại thương"
     email: "gs.phan@test.htpldn.vn"
     so_dien_thoai: "0911000008"
@@ -2745,7 +2756,7 @@ kho_qa_variants:
   - index: 2
     cau_hoi: "Mức phạt vi phạm hợp đồng thương mại tối đa là bao nhiêu?"
     cau_tra_loi: "Theo Điều 301 Luật Thương mại 2005, mức phạt vi phạm hợp đồng do các bên thỏa thuận nhưng không được vượt quá 8% giá trị phần nghĩa vụ hợp đồng bị vi phạm. Doanh nghiệp cần phân biệt rõ với hợp đồng dân sự thông thường (không giới hạn mức phạt) để soạn thảo điều khoản cho hợp lệ."
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     tu_khoa: "phạt vi phạm, hợp đồng thương mại, Điều 301"
     nguon: "THU_CONG"
     state_target: "CHO_DUYET"
@@ -2789,7 +2800,7 @@ kho_qa_variants:
   - index: 8
     cau_hoi: "DN có quyền yêu cầu hoàn trả tiền cọc khi đối tác đơn phương chấm dứt HĐ không?"
     cau_tra_loi: "Theo Điều 328 BLDS 2015, nếu bên nhận cọc đơn phương chấm dứt thì phải trả lại tiền cọc cho bên đặt cọc và trả thêm khoản tương đương giá trị tiền cọc (phạt cọc), trừ trường hợp các bên có thỏa thuận khác."
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     tu_khoa: "tiền cọc, phạt cọc, đơn phương chấm dứt"
     nguon: "THU_CONG"
     state_target: "CHO_DUYET"
@@ -2894,7 +2905,7 @@ thu_muc_bieu_mau_variants:
     state_target: "NHÁP"
   - index: 2
     ten_thu_muc: "HĐ Dân sự - Thương mại"
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     mo_ta: "Kho mẫu HĐ dịch vụ, NDA, HĐ thương mại"
     thu_tu_hien_thi: 2
     state_target: "NHÁP"
@@ -2943,7 +2954,7 @@ bieu_mau_variants:
     file: "templates/hddv-mau.docx"
     file_dinh_dang: "docx"
     file_kich_thuoc: 38000
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     loai_hinh: "HĐ dịch vụ"
     mo_ta: "Mẫu HĐ dịch vụ tổng quát, áp dụng nhiều ngành"
     thu_tu_hien_thi: 1
@@ -3035,7 +3046,7 @@ bieu_mau_variants:
     file: "templates/hd-mua-ban-quoc-te.docx"
     file_dinh_dang: "docx"
     file_kich_thuoc: 78000
-    linh_vuc_id: "HOP_DONG"
+    linh_vuc_id: "THUONG_MAI"
     loai_hinh: "HĐ thương mại quốc tế"
     mo_ta: "Mẫu HĐ song ngữ Việt-Anh - INCOTERMS 2020"
     thu_tu_hien_thi: 4
