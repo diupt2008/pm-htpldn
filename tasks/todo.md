@@ -173,15 +173,15 @@
 ## Phase 5 — Verification
 
 - ⏳ **R7.5.1** ✏️ Dashboard KPI counter HD/VV/TVCS/CT (KPI-07 count đổi do NHT tách entity) `[need: R7.4.A1/A3/A4/A5 ✅]`
-  - **R6:** ⏳ R6.5.1 — chờ A5 ✅. HD ✅ + VV ✅ + CT ✅ đủ; thiếu TVCS
+  - **R6:** ✅ R6.5.1 PASS 5/5 (HD 64, VV 100/65/1). Obs Major count mismatch 65 vs 14. [report](../output/qa-reports/round6-2026-05-01-postreset/workflow/verification-test-report-DashboardKPI.md)
 - 🟢 **R7.5.2** 🔄 Cross-module DN: Tab #2 HSPL + Tab #3 KPI + Tab #4 Chi trả ≥1 record/tab `[~0% — ready, need R7.3.4 ✅ + R7.4.A3 ✅ + R7.6.1 ✅]`
-  - **R6:** 🟢 R6.5.2 — full ready: DN001 HSPL ✅ + KPI A3 ✅ + 100 chi trả E3 ✅
+  - **R6:** ✅ R6.5.2 PASS 3/3 tab DN000001 (HSPL 6, VV 2, HSCT 2). 5 obs UI polish. [report](../output/qa-reports/round6-2026-05-01-postreset/workflow/verification-test-report-CrossModule-DN.md)
 - ⏳ **R7.5.3** ✏️ SLA cảnh báo banner — verify trừ ngày lễ (BR-CALC-03) `[need: R7.1.5 ✅ + ≥1 HD/VV deadline >70%]`
   - **R6:** ⏳ R6.5.3 — chờ thời gian hoặc dev seed lùi ngày
 - 🟢 **R7.5.4** 🔄 BC04 export Excel có data `[~0% — ready, need R7.4.A3 + R7.4.A4 ✅]`
-  - **R6:** 🟢 R6.5.4 — full ready: HD CONG_KHAI + VV HOAN_THANH
+  - **R6:** ⚠️ R6.5.4 FAIL 2/6 — BC HD + BC04 VV load OK, export Excel trả JSON wrap. [report](../output/qa-reports/round6-2026-05-01-postreset/workflow/verification-test-report-BaoCao-Export.md) · [bug](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-bao-cao.md) 0/2 đóng
 - 🟢 **R7.5.5** 🔄 Audit log ≥100 entry qua Nhật ký HT (FR-VIII-28) `[~0% — ready, accumulate qua Phase 4]`
-  - **R6:** 🟢 R6.5.5 — full ready
+  - **R6:** ✅ R6.5.5 PASS 5/5 — 1270 entries (12.7× acceptance), filter CREATE → 333. [report](../output/qa-reports/round6-2026-05-01-postreset/workflow/verification-test-report-AuditLog.md)
 
 ---
 
@@ -220,7 +220,7 @@
 - ⏳ **R7.7.6** ✏️ Khóa học 40 TC + FR-III mới (B10/B11/B12 + Đề KT + Lịch học) `[need: R7.4.B7+B10+B11+B12 ✅]`
   - **R6:** 🚫 R6.7.6 — cascade B7/B2/B2.5 block spec contradiction
 - ⏳ **R7.7.7** ✏️ Dashboard 34 TC (KPI-07 count đổi) `[need: R7.4 trụ A ✅]`
-  - **R6:** ⏳ R6.7.7 — chờ A5
+  - **R6:** ⚠️ R6.7.7 PASS 19/34 + FAIL 3 + PARTIAL 5 + DEFER 7 (Pass 55.9%, Health 62/100). [report](../output/qa-reports/round6-2026-05-01-postreset/functional/functional-test-report-Dashboard.md) · [bug](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-functional-dashboard.md) 0/5 đóng
 - 🟢 **R7.7.8** 🔄 QTHT 8 TC `[~0% — ready, re-test sample sau reset]`
   - **R6:** ✅ R6.7.8 — PASS 8/8 (QT-010/017/025-027/029-032). 0 bug. [functional-test-report-QTHT.md](../output/qa-reports/round6-2026-05-01-postreset/functional/functional-test-report-QTHT.md)
 - ⏳ **R7.7.9** ✏️ Đánh giá HQ 40 TC `[need: R7.4.D2 ✅; UNBLOCKED]`
@@ -230,7 +230,7 @@
 - ⏳ **R7.7.11** 🔄 TV nhanh 39 TC `[need: R7.6.2 ✅ + R7.4.D3 ✅]`
   - **R6:** ⏳ R6.7.11 — cascade D3 UI defer
 - 🟢 **R7.7.12** 🔄 Chi trả 30 TC `[~0% — ready, was R6.7.12 🟢]`
-  - **R6:** 🟢 R6.7.12 — 100 record sẵn, chưa run
+  - **R6:** ⚠️ R6.7.12 PASS-WITH-NOTE 16/30 + FAIL 1 + DEFER 13. Perm 7/7 PASS, UI negative 5/5. [report](../output/qa-reports/round6-2026-05-01-postreset/functional/functional-test-report-ChiTra.md) · [bug](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-functional-chi-tra.md) 0/1 đóng
 - ⏳ **R7.7.13** 🔄 Báo cáo 38 TC `[need: ≥1 BC từ HD/VV/TVCS/CT/Đào tạo ready]`
   - **R6:** ⏳ R6.7.13 — chỉ HD ✅ + VV ✅ → 4-5/38 BC ready (12% scope)
 - ⏳ **R7.7.14** 🔄 HĐ tư vấn (UC163 sub-resource v2.1) `[need: R7.4.A3 + R7.4.A1 ✅]`
@@ -264,7 +264,7 @@
 - 🟢 **R7.E3** 🔄 Chi trả (FR-06) — verify 100 record HSCT còn `[~0% — ready, verify HSCT000001..100 còn]`
   - **R6:** ✅ R6.E3 — 100 record HSCT000001..100 sẵn (3 states), verified 2026-05-04
 - ⏳ **R7.E4** 🔄 TV nhanh (FR-13.A) — ≥1 phiên tồn tại `[need: R7.6.2 + R7.6.3]`
-  - **R6:** ⏳ R6.E4 — Menu render OK 2026-05-04 nhưng data=0
+  - **R6:** ⚠️ R6.E4 PARTIAL 4/5 — menu/UI/GET 200 OK, seed BLOCKED by-design (POST 401, FR-13 mTLS Cổng PLQG). [report](../output/qa-reports/round6-2026-05-01-postreset/workflow/verification-test-report-TVNhanh-Monitor.md)
 
 ---
 
