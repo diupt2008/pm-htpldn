@@ -4,6 +4,41 @@ File ghi lại vấn đề thực tế gặp khi chạy QA + bài học áp dụ
 
 ---
 
+## 2026-05-06 R7.0.2 — False positive 2/8 bug deploy gap do verify bằng QTHT (sai role)
+
+**Vấn đề:**
+- Plan-r7-trigger.md ngày 2026-05-06 list 8 bug deploy gap (DEPLOY-001..008). Trong đó:
+  - DEPLOY-002 "Sub-menu UI 'Người hỗ trợ pháp lý' chưa thêm vào sidebar Mạng lưới TVV"
+  - DEPLOY-003 "Sub-menu UI 'Tổ chức tư vấn' chưa thêm (BE đã có endpoint)"
+- User push back "mình vào web vẫn thấy Tổ chức tư vấn mà". Retest qua MCP với `qtht_01` → confirm chỉ thấy 1 sub-menu "Tư vấn viên / Chuyên gia". User push back tiếp "QTHT có quyền không?".
+- Login lại bằng `cb_nv_tw_01` (CB Nghiệp vụ TW) → sub-menu "Mạng lưới Tư vấn viên" hiện đầy đủ 3 sub-menu: Tư vấn viên / Chuyên gia + **Tổ chức tư vấn** + **Người hỗ trợ pháp lý**.
+- SCR-IV-01 SRS line 1474-1477 spec "Quyền truy cập" chỉ Cán bộ Nghiệp vụ + Cán bộ Phê duyệt + TVV/CG — KHÔNG có QTHT. Đây là feature đúng spec, không phải bug.
+
+**Root cause:**
+1. **Default mental model "QTHT all-access".** QA verify deploy mặc định login qtht_01 vì là role admin — assume QTHT thấy mọi UI element. Sai cho menu/submenu/tab có gating per-permission.
+2. **Plan-r7-trigger không ghi rõ test bằng role nào.** Khi verify "sidebar Mạng lưới TVV chỉ 1 sub-menu" — không note login bằng account nào → reproducer thiếu, dễ miss.
+3. **Bug bị rơi vào confirmation bias.** Verify deploy chạy tuần tự `qtht_01` → kết luận "thiếu" cho tất cả menu/submenu — không retest với role khác trước khi log.
+
+**Bài học:**
+1. **Verify "UI element thiếu" BẮT BUỘC test bằng role có permission per SCR.** Memory cross-project: [`feedback_verify_ui_gap_role_permission.md`](../../../.claude/projects/-Users-teamai-Downloads-antigravity-QA-skilkk/memory/feedback_verify_ui_gap_role_permission.md).
+2. **Pre-test UI surface audit** cần task riêng với checklist `[Spec ref / UI element / Required role / Verify status / Bug ID nếu thiếu]` extract từ SRS update.
+3. **Bug report "missing UI element" phải quote line SRS role permission + role đã test.** Nếu thiếu, dev/PM đọc bug không reproduce được.
+
+**Findings phụ kèm verify lại 8 bug:**
+- DEPLOY-001 (NHT BE 404) + DEPLOY-004 (HOC_VIEN BE 404): vẫn cần curl re-verify hôm nay
+- DEPLOY-002 + DEPLOY-003: ❌ FALSE POSITIVE — drop khỏi list
+- DEPLOY-005 (4 sub-menu Đào tạo): ✅ CONFIRMED với cb_nv_tw_01 — chỉ thấy 5 sub-menu cũ
+- DEPLOY-006 (Tab Ngày lễ Cấu hình HT): ✅ CONFIRMED với qtht_01 — Cấu hình HT 4 tab cố định + Danh mục dùng chung 14 mục đều không có Ngày lễ
+- DEPLOY-007 (Filter Địa bàn): ⚠️ SAI MÔ TẢ — SRS không bỏ filter, chỉ rename label "Địa bàn" → "Đơn vị quản lý". Bug đúng = label sai (Minor UI copy)
+- DEPLOY-008 (Tab Chờ kích hoạt): ⚠️ SAI TÊN TAB — web có 6 tab, SRS quy định 7 tab. Tab thiếu thực sự = "Chờ thẩm định" (CHO_THAM_DINH state), KHÔNG phải "Chờ kích hoạt"
+
+**Áp dụng:**
+- Trước khi log "UI element missing" → grep section "Quyền truy cập" SCR + login đúng role.
+- Mỗi SRS update batch → tạo pre-test UI surface audit task với checklist per-role.
+- Bug report "missing UI" entry phải quote role permission line + role tested.
+
+---
+
 ## 2026-05-02 R11 — A5 TVCS BLOCK lần 4 (Round 11) do seed actor không advance state + bug template vi phạm cũ chưa cleanup
 
 **Vấn đề:**

@@ -4,6 +4,8 @@
 > **Ngày tạo:** 2026-05-06 | **Tác giả:** QA + Claude
 > **Tham chiếu:** [`_DELTA-MAP-FR03/04/07/10/12.md`](../input/srs-update-2026-5-5/) + [`_DELTA-MAP-CROSS-CUTTING.md`](../input/srs-update-2026-5-5/_DELTA-MAP-CROSS-CUTTING.md) + [`_DELTA-MAP-PROFILE-PWD.md`](../input/srs-update-2026-5-5/_DELTA-MAP-PROFILE-PWD.md)
 
+> **Update 2026-05-06 sau verify role-correct:** Bảng §5 "8 bug deploy gap" đã re-verify với role đúng — **6 bug confirmed, 2 dropped (false positive)**. Sub-menu "Tổ chức tư vấn" + "Người hỗ trợ pháp lý" thực tế đã deploy, lần verify đầu dùng `qtht_01` không thấy vì SCR-IV-01 line 1474-1477 không cho QTHT permission. Đầy đủ 6 bug + evidence: [`output/qa-reports/round7-2026-05-06/bug-reports/bug-report-deploy-gap.md`](../output/qa-reports/round7-2026-05-06/bug-reports/bug-report-deploy-gap.md). Bài học: [`tasks/lessons-learned.md` 2026-05-06](lessons-learned.md).
+
 ---
 
 ## 1. Scenario thực tế (verified 2026-05-06 qua MCP web rà soát)
