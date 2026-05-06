@@ -28,6 +28,8 @@
 | Trụ E | Monitor unblock | 4 | 3 | - | - | - | - | 1 |
 | **Tổng** | | **90** | **44** | **0** | **1** | **0** | **3** | **42** |
 
+> **Lưu ý:** Phase 2 có **1 task ❌ DROPPED** (R7.2.10 6 TK TVV TW — obsoleted by SRS update FR-04 line 590, hệ thống tự cấp TK). KHÔNG count vào tổng 90 active.
+
 ---
 
 ## Phase 0 — Pre-test (gate before run)
@@ -74,12 +76,13 @@
 - 🟢 **R7.2.6** ✏️ Seed 6 CG TW (`loai_tvv=CG`, MOI_DANG_KY) `[~0% — ready, enum bỏ NHT chỉ còn TVV/CG]`
   - **R6:** ✅ R6.2.5 — Audit R12 chỉ 5/6 visible (TVV-0008 missing). Seed bù 2 CG R12 cover 6/6 LV
 - 🚫 **R7.2.7** 🆕 Seed 3 NHT qua FR-IV-NHT-01 (entity NGUOI_HO_TRO mới) `[block: dev fix entity 404 /api/v1/nguoi-ho-tros]`
-- ⏳ **R7.2.8** 🔄 QTHT tạo 9 account login (6 cg_tw_01..06 + 3 nht_ag_01/dn_01/hp_01) `[need: R7.2.6 ✅ + R7.2.7 ✅]`
-  - **R6:** ✅ R6.2.7 — PASS 9/9. [seed-checklist-account.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-account.md)
-- ⏳ **R7.2.9** ✏️ Activate 9 accounts qua FR-VIII-26 (kích hoạt TK lần đầu) `[need: R7.2.8 ✅; flow đổi từ activate trực tiếp sang bấm link mail]`
+- 🟢 **R7.2.8a** 🔄 QTHT tạo 6 account `cg_tw_01..06` `[~0% — ready, was R6.2.7 phần CG; need R7.2.6 ✅]`
+  - **R6:** ✅ R6.2.7 (split phần cg) — PASS 6/6. [seed-checklist-account.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-account.md)
+- ⏳ **R7.2.8b** 🔄 QTHT tạo 3 account `nht_ag_01/dn_01/hp_01` `[need: R7.2.7 ✅ NHT entity]`
+  - **R6:** ✅ R6.2.7 (split phần nht) — PASS 3/3
+- ⏳ **R7.2.9** ✏️ Activate 9 accounts qua FR-VIII-26 (kích hoạt TK lần đầu) `[need: R7.2.8a ✅ + R7.2.8b ✅; flow đổi từ activate trực tiếp sang bấm link mail]`
   - **R6:** ✅ R6.2.8 — PASS 9/9 active. nht_ag_01 login + role NHT OK
-- 🟢 **R7.2.10** 🔄 6 TK TVV TW (`tvv_tw_01..06` vai trò NHT) + FK link `[~0% — ready, was R6.2.7-TW]`
-  - **R6:** ✅ R6.2.7-TW — PASS 6/6 TK + FK link entity TVV-BTP-TW-0001..06. [users.csv +6 row](../input/users.csv)
+- ❌ **R7.2.10** ~~6 TK TVV TW~~ — DROPPED 2026-05-06 (obsoleted by SRS update FR-04 line 590: hệ thống tự cấp TK qua FR-VIII-15 trong A1 step 6 phê duyệt) `[was R6.2.7-TW PASS 6/6 — workaround R6 không còn cần thiết]`
 - 🟢 **R7.2.11** 🔄 Cấu hình PC mặc định Đợt 1 — 6 LV → cb_nv_tw_01 `[~0% — ready, was R6.2.9a]`
   - **R6:** ✅ R6.2.9a — PASS 6/6. [seed-checklist-cau-hinh-PC.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-cau-hinh-PC.md)
 
@@ -118,13 +121,13 @@
 
 ### 🟦 Trụ A — TVV → PC → CG → VV → HD → TVCS
 
-- ⏳ **R7.4.A1** ✏️ Workflow TVV (SM 9→11 state, thêm CHO_KICH_HOAT, hệ thống tự cấp TK qua FR-VIII-15) `[need: R7.2.5 ✅ + R7.2.9 ✅]`
+- ⏳ **R7.4.A1** ✏️ Workflow TVV (SM 9→11 state, thêm CHO_KICH_HOAT, hệ thống tự cấp TK qua FR-VIII-15 step 6) `[need: R7.2.5 ✅ + R7.2.6 ✅]`
   - **R6:** ✅ R6.4.A1 — PASS 10/10 CMS-scope (12 bước). B7+B8 (FR-IV-11) ngoài scope qua Portal. [workflow-test-report-TVV.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-TVV.md)
-- ⏳ **R7.4.A1.5** ✏️ Đợt 2 PC TVV backfill — dropdown đổi sau bỏ NHT khỏi enum `[need: R7.4.A1 ✅; verify 2 BE bug Open có còn không]`
-  - **R6:** ⚠️ R6.4.A1.5 ~95% — 12/12 PC config done, 2 BE bug Open
-  - **Bug R6:** [bug-report-flow-vuviec.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-vuviec.md) — 0/2 đóng (BUG-FUNC-CHPC-001/002)
 - ⏳ **R7.4.A1-CG** ✏️ Advance state 6 CG → DANG_HOAT_DONG (loai_tvv enum đổi) `[need: R7.2.6 ✅]`
   - **R6:** ✅ R6.4.A1-CG — PASS 6/6 CG (4 + 2 bonus seed LĐ/Thuế). Pool 12/12. [workflow-test-report-CG.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-CG.md)
+- ⏳ **R7.4.A1.5** ✏️ Đợt 2 PC TVV backfill — verify dropdown "Người xử lý" có TAI_KHOAN role NHT mới sau khi NHT tách entity `[need: R7.4.A1 ✅ + R7.4.A1-CG ✅; verify 2 BE bug Open R6 (CHPC-001/002) còn không sau dev deploy]`
+  - **R6:** ⚠️ R6.4.A1.5 ~95% — 12/12 PC config done, 2 BE bug Open
+  - **Bug R6:** [bug-report-flow-vuviec.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-vuviec.md) — 0/2 đóng (BUG-FUNC-CHPC-001/002)
 - ⏳ **R7.4.A2** 🆕 Tiếp nhận TVV (FR-IV-13) — 3 transition mới (MOI_DANG_KY→CHO_THAM_DINH, YEU_CAU_BO_SUNG→DANG_THAM_DINH, TU_CHOI→CHO_THAM_DINH) `[need: R7.4.A1 ≥1 TVV MOI_DANG_KY]`
 - ⏳ **R7.4.A3** ✏️ Workflow VV (FK `nguoi_ho_tro_id` đổi target sang NGUOI_HO_TRO) `[need: R7.2.9 ✅ NHT active; block khi NHT entity chưa deploy]`
   - **R6:** ✅ R6.4.A3 — PASS 12/12 CMS DB (R8 happy 7/12 + R9 reject/edge 5/12). [workflow-test-report-VuViec.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-VuViec.md)
