@@ -49,6 +49,8 @@ R7 retest workflow ĐG HQ phát hiện **2 bug mới** + **5 bug R6 Closed** ver
 
 ## BUG-FUNC-DG-006 — Endpoint /vu-viec-eligible trả empty list mặc dù tồn tại VV state HOAN_THANH match đợt
 
+> **Re-test:** 2026-05-07 R8 — ⚠️ **INCONCLUSIVE**. Pool VV reset giữa R7→R8: dashboard "Vụ việc hoàn thành: 0 vụ việc" + Tab Hoàn thành rỗng. Không có data state HOAN_THANH để verify mismatch endpoint `/vu-viec-eligible` vs `/vu-viec?trangThai=HOAN_THANH`. Bug giữ Open chờ seed lại VV HOAN_THANH (≥3 VV trong date range đợt) để retest đúng pattern. Screenshot: [r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png](../../screenshots/r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png).
+
 ### Mô tả
 
 Sau khi đợt ĐG HQ chuyển state `CHO_DUYET_PC` (B4 cb_pd duyệt PC OK), Tab "Thực hiện" hiển thị "0/0 VV - Không có vụ việc nào phù hợp". Endpoint `GET /api/v1/ke-hoach-danh-gias/{id}/vu-viec-eligible` trả 200 OK với data rỗng `[]`. Tuy nhiên `GET /api/v1/vu-viec?trangThai=HOAN_THANH` trả **20 VV state HOAN_THANH** trong system, trong đó ≥3 VV (VV000108, VV000105, VV000102) có ngày tiếp nhận `01/04/2026 ≤ ngày ≤ 12/04/2026` nằm trong **date range đợt 01/04 - 30/06/2026**. Lỗi block B6 (chọn VV) → cascade B7-B10.
@@ -115,6 +117,8 @@ VV list (verify VV HOAN_THANH tồn tại):
 ---
 
 ## BUG-FUNC-DG-007 — Dashboard KPI "Vụ việc hoàn thành: 0" sai vs thực tế 20 VV state HOAN_THANH
+
+> **Re-test:** 2026-05-07 R8 — ⚠️ **INCONCLUSIVE**. Cùng evidence với DG-006: pool VV reset, Dashboard KPI "Vụ việc hoàn thành: 0" + Tab Hoàn thành cũng rỗng → KPI=0 hiện đã match thực tế. Không có cách verify mismatch giữa Dashboard KPI và Tab list khi cả hai cùng = 0. Bug giữ Open chờ seed lại VV HOAN_THANH để retest cross-module sync. Screenshot: [r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png](../../screenshots/r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png).
 
 ### Mô tả
 

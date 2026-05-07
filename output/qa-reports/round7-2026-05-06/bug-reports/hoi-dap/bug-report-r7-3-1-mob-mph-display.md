@@ -20,11 +20,13 @@
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-MPH-DISP-01 | Major | P1 | UI/UX | R7.3.1.MoB | `srs-fr-02-hoi-dap.md FR-II-NEW-02 Outputs row 5+6` (`pham_vi_ap_dung` + `ten_don_vi`) + `srs-fr-10-quan-tri.md SCR-VIII-06 Tab 3 row 19` (cột "Phạm vi" badge + "Tác giả") | UI list MPH sai SRS: cột phải là "Phạm vi" (badge 🟦/🟩/🟨) + "Tác giả" — FE đặt sai tên cột "Cấp tạo" và giá trị "—" | Open |
+| ~~BUG-MPH-DISP-01~~ | Major | P1 | UI/UX | R7.3.1.MoB | `srs-fr-02-hoi-dap.md FR-II-NEW-02 Outputs row 5+6` (`pham_vi_ap_dung` + `ten_don_vi`) + `srs-fr-10-quan-tri.md SCR-VIII-06 Tab 3 row 19` (cột "Phạm vi" badge + "Tác giả") | UI list MPH sai SRS: cột phải là "Phạm vi" (badge 🟦/🟩/🟨) + "Tác giả" — FE đặt sai tên cột "Cấp tạo" và giá trị "—" | **Closed** |
 
 ---
 
-## BUG-MPH-DISP-01 — UI list MPH sai SRS: cột "Cấp tạo" thay vì "Phạm vi" + "Tác giả", giá trị rỗng "—"
+## ~~BUG-MPH-DISP-01~~ [CLOSED] — UI list MPH sai SRS: cột "Cấp tạo" thay vì "Phạm vi" + "Tác giả", giá trị rỗng "—"
+
+> **Re-test:** 2026-05-07 R8 — ✅ PASS (Closed-verified). List MPH `/quan-tri/cau-hinh` Tab Mẫu phản hồi nay có cột "Phạm vi" (badge TW/BN/DP) + "Tác giả" đúng SRS SCR-VIII-06 Tab 3 row 19. Cột "Cấp tạo" cũ đã bị bỏ. Screenshot: [r8-verify-2026-05-07-mph-list-phamvi-tacgia-fixed.png](../../screenshots/r8-verify-2026-05-07-mph-list-phamvi-tacgia-fixed.png).
 
 ### Mô tả
 

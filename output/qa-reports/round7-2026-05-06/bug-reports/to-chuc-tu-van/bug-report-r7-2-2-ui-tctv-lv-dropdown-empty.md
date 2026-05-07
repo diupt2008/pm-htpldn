@@ -26,11 +26,13 @@ Phát hiện **1 bug Major** trong R7.2.2-UI: FE TC TV form gửi `loaiDanhMuc=L
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-TCTV-FE-001 | Major | P0 | UI/UX | R7.2.2-UI TC-CG-A1-02 | `srs-fr-10-quan-tri.md` FR-VIII-01 line 204 (DM LINH_VUC_PL 10 LV SRS) + `srs-fr-04-chuyen-gia-tvv.md` FR-IV-NEW-01 (TC TV form yêu cầu linhVucIds[] UUID) | FE TC TV form query `loaiDanhMuc=LINH_VUC_PHAP_LY` BE trả empty → dropdown LV rỗng | Open |
+| ~~BUG-TCTV-FE-001~~ | Major | P0 | UI/UX | R7.2.2-UI TC-CG-A1-02 | `srs-fr-10-quan-tri.md` FR-VIII-01 line 204 (DM LINH_VUC_PL 10 LV SRS) + `srs-fr-04-chuyen-gia-tvv.md` FR-IV-NEW-01 (TC TV form yêu cầu linhVucIds[] UUID) | FE TC TV form query `loaiDanhMuc=LINH_VUC_PHAP_LY` BE trả empty → dropdown LV rỗng | **Closed** |
 
 ---
 
-## BUG-TCTV-FE-001 — TC TV form gửi sai `loaiDanhMuc` query → dropdown LV rỗng
+## ~~BUG-TCTV-FE-001~~ [CLOSED] — TC TV form gửi sai `loaiDanhMuc` query → dropdown LV rỗng
+
+> **Re-test:** 2026-05-07 R8 — ✅ PASS (Closed-verified). Dropdown "Lĩnh vực pháp lý" trên TC TV form `/chuyen-gia-tvv/to-chuc/tao-moi` nay render đầy đủ 10 LV (Thuế / Lao động / Đất đai / Dân sự / Thương mại / Hình sự / Hành chính / Sở hữu trí tuệ / Doanh nghiệp / Đầu tư) — match SRS FR-VIII-01 line 204. Screenshot: [r8-verify-2026-05-07-tctv-lv-dropdown-10-options-fixed.png](../../screenshots/r8-verify-2026-05-07-tctv-lv-dropdown-10-options-fixed.png).
 
 ### Mô tả
 

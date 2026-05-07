@@ -36,6 +36,7 @@ UI surface audit R7.0.6 phát hiện 2 button trên SCR-V.III-01 (Quản lý DN)
 ## ~~FR07-UI-001~~ [CLOSED] — SCR-V.III-01 vẫn còn button [Thêm mới] (sai SRS update FR-07)
 
 > **Re-test:** 2026-05-06 — ✅ PASS (Closed-verified). Action bar nay chỉ render 4 button `[Tìm kiếm] [Xóa bộ lọc] [Xuất Excel] [Làm mới]`. Button [Thêm mới] đã bị BỎ. Match `srs-fr-07-doanh-nghiep.md:83+128+295`. Screenshot: [r7-0-6-fr-07-dn-buttons-RESOLVED.png](../../screenshots/r7-0-6-fr-07-dn-buttons-RESOLVED.png).
+> **Re-test:** 2026-05-07 R8 — ✅ PASS (Closed-verified, lần 2). Action bar SCR-V.III-01 vẫn chỉ 4 button đúng spec, không có [Thêm mới]. Screenshot: [r8-verify-2026-05-07-fr07-dn-buttons-still-removed.png](../../screenshots/r8-verify-2026-05-07-fr07-dn-buttons-still-removed.png).
 
 ### Mô tả
 
@@ -78,6 +79,7 @@ uid=40_33 button "reload Làm mới"
 ## ~~FR07-UI-002~~ [CLOSED] — SCR-V.III-01 vẫn còn button [Import Excel] (sai SRS update FR-07)
 
 > **Re-test:** 2026-05-06 — ✅ PASS (Closed-verified). Button [Import Excel] đã bị BỎ khỏi action bar. Match `srs-fr-07-doanh-nghiep.md:283-285+295`. Screenshot: [r7-0-6-fr-07-dn-buttons-RESOLVED.png](../../screenshots/r7-0-6-fr-07-dn-buttons-RESOLVED.png).
+> **Re-test:** 2026-05-07 R8 — ✅ PASS (Closed-verified, lần 2). Button [Import Excel] vẫn không hiện trong action bar SCR-V.III-01. Screenshot: [r8-verify-2026-05-07-fr07-dn-buttons-still-removed.png](../../screenshots/r8-verify-2026-05-07-fr07-dn-buttons-still-removed.png).
 
 ### Mô tả
 

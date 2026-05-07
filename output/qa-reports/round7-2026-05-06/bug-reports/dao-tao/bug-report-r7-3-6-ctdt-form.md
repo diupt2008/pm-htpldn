@@ -20,11 +20,13 @@
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-CTDT-FE-01 | Major | P1 | UI/UX | R7.3.6 | `srs-fr-03-dao-tao.md FR-III-01 Inputs row 3` + `Processing Bước 3` + `AC ERR-CTDT-05` | Form CTĐT thiếu field bắt buộc `keHoachId` → submit BE 422 silent | Open |
+| ~~BUG-CTDT-FE-01~~ | Major | P1 | UI/UX | R7.3.6 | `srs-fr-03-dao-tao.md FR-III-01 Inputs row 3` + `Processing Bước 3` + `AC ERR-CTDT-05` | Form CTĐT thiếu field bắt buộc `keHoachId` → submit BE 422 silent | **Closed** |
 
 ---
 
-## BUG-CTDT-FE-01 — Form Tạo CTĐT thiếu field bắt buộc `keHoachId` → BE 422 silent
+## ~~BUG-CTDT-FE-01~~ [CLOSED] — Form Tạo CTĐT thiếu field bắt buộc `keHoachId` → BE 422 silent
+
+> **Re-test:** 2026-05-07 R8 — ✅ PASS (Closed-verified). Form Tạo CTĐT nay có dropdown "Kế hoạch năm" (FK `keHoachId`) — match SRS FR-III-01 Inputs row 3. Dropdown hiện rỗng do chưa seed kế hoạch năm DA_DUYET/DA_CONG_KHAI (data gap, không phải FE bug). Screenshot: [r8-verify-2026-05-07-ctdt-form-now-has-kehoach-field.png](../../screenshots/r8-verify-2026-05-07-ctdt-form-now-has-kehoach-field.png) · [r8-verify-2026-05-07-ctdt-kehoach-dropdown-empty-data-gap.png](../../screenshots/r8-verify-2026-05-07-ctdt-kehoach-dropdown-empty-data-gap.png).
 
 ### Mô tả
 

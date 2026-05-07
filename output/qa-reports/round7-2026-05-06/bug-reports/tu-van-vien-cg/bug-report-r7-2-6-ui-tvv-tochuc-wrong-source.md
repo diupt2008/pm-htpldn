@@ -26,11 +26,13 @@ Phát hiện **1 bug Major** trong R7.2.6-UI: FE TVV form "Tổ chức hành ngh
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-TVV-FE-002 | Major | P0 | UI/UX | R7.2.6-UI | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` FR-IV-NEW-01 (TO_CHUC_TU_VAN tách entity riêng) + DDL `tu_van_vien.to_chuc_chinh_id` FK → TO_CHUC_TU_VAN.id | FE TVV form combobox "Tổ chức hành nghề chính" query DM legacy thay vì entity TO_CHUC_TU_VAN → submit fail 400 | Open |
+| ~~BUG-TVV-FE-002~~ | Major | P0 | UI/UX | R7.2.6-UI | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` FR-IV-NEW-01 (TO_CHUC_TU_VAN tách entity riêng) + DDL `tu_van_vien.to_chuc_chinh_id` FK → TO_CHUC_TU_VAN.id | FE TVV form combobox "Tổ chức hành nghề chính" query DM legacy thay vì entity TO_CHUC_TU_VAN → submit fail 400 | **Closed** |
 
 ---
 
-## BUG-TVV-FE-002 — TVV form combobox query DM legacy thay vì entity TO_CHUC_TU_VAN
+## ~~BUG-TVV-FE-002~~ [CLOSED] — TVV form combobox query DM legacy thay vì entity TO_CHUC_TU_VAN
+
+> **Re-test:** 2026-05-07 R8 — ✅ PASS (Closed-verified). Combobox "Tổ chức hành nghề chính" trên TVV form `/chuyen-gia-tvv/tao-moi` nay query đúng endpoint entity `TO_CHUC_TU_VAN` và render 5 record TC TV thực (TC-BTP-TW-0001..0005) thay vì 3 enum DM legacy. Submit form không còn 400 ERR-TVV-DV-NOT-FOUND. Screenshot: [r8-verify-2026-05-07-tvv-tochuc-5-entity-fixed.png](../../screenshots/r8-verify-2026-05-07-tvv-tochuc-5-entity-fixed.png).
 
 ### Mô tả
 

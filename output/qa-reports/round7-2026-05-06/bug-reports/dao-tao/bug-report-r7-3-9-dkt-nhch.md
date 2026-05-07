@@ -20,12 +20,14 @@
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-DKT-FE-01 | Major | P1 | Negative | R7.3.9 | `srs-fr-03-dao-tao.md §3.4.3.22 row 7` (`diem_dat default 5`) + `FR-III-NEW-01 Inputs` + `BR-KQ-02` (`5/10`) | Field "Điểm đạt" FE spinbutton `max=100` vs BE schema `max=10` (thang 0-10) | Open |
-| BUG-SRS-NHCH-STATE-01 | Medium | P2 | Data | R7.3.9 | `srs-fr-03-dao-tao.md §3.4.3.21 row 9` (Entity authoritative: `KICH_HOAT/VO_HIEU_HOA`) **vs** `FR-III-09 Inputs row 7` (UI sai copy-paste từ SM-BIEUMAU C.9: `NHAP/CONG_KHAI/AN`) | SRS bất đồng bộ state machine NHCH (FR-III-09 typo) → FE seed default sai → ĐKT random reject; FR-III-NEW-01 cũng thiếu guard filter | Open |
+| ~~BUG-DKT-FE-01~~ | Major | P1 | Negative | R7.3.9 | `srs-fr-03-dao-tao.md §3.4.3.22 row 7` (`diem_dat default 5`) + `FR-III-NEW-01 Inputs` + `BR-KQ-02` (`5/10`) | Field "Điểm đạt" FE spinbutton `max=100` vs BE schema `max=10` (thang 0-10) | **Closed** |
+| ~~BUG-SRS-NHCH-STATE-01~~ | Medium | P2 | Data | R7.3.9 | `srs-fr-03-dao-tao.md §3.4.3.21 row 9` (Entity authoritative: `KICH_HOAT/VO_HIEU_HOA`) **vs** `FR-III-09 Inputs row 7` (UI sai copy-paste từ SM-BIEUMAU C.9: `NHAP/CONG_KHAI/AN`) | SRS bất đồng bộ state machine NHCH (FR-III-09 typo) → FE seed default sai → ĐKT random reject; FR-III-NEW-01 cũng thiếu guard filter | **Closed (FE)** |
 
 ---
 
-## BUG-DKT-FE-01 — Field "Điểm đạt" FE max=100 vs BE max=10 (thang 0-10)
+## ~~BUG-DKT-FE-01~~ [CLOSED] — Field "Điểm đạt" FE max=100 vs BE max=10 (thang 0-10)
+
+> **Re-test:** 2026-05-07 R8 — ✅ PASS (Closed-verified). Spinbutton "Điểm đạt" nay `valuemax="10"` (cũ `100`), default 5. Match SRS Entity §3.4.3.22 row 7. Screenshot: [r8-verify-2026-05-07-dkt-diemdat-max10-fixed.png](../../screenshots/r8-verify-2026-05-07-dkt-diemdat-max10-fixed.png).
 
 ### Mô tả
 
@@ -73,7 +75,9 @@ Response: ERR-VAL-SYS-00-01 / diemDat must not be greater than 10
 
 ---
 
-## BUG-SRS-NHCH-STATE-01 — SRS bất đồng bộ state machine NGAN_HANG_CAU_HOI
+## ~~BUG-SRS-NHCH-STATE-01~~ [CLOSED FE] — SRS bất đồng bộ state machine NGAN_HANG_CAU_HOI
+
+> **Re-test:** 2026-05-07 R8 — ✅ PASS FE side (Closed-verified). Form NHCH default trạng thái nay là "Kích hoạt" (radio KICH_HOAT/VO_HIEU_HOA) — match Entity §3.4.3.21 row 9 authoritative. SRS doc-side fix (sync FR-III-09 Inputs row 7) vẫn cần BA confirm — không phải FE bug. Screenshot: [r8-verify-2026-05-07-nhch-form-default-kichhoat.png](../../screenshots/r8-verify-2026-05-07-nhch-form-default-kichhoat.png).
 
 ### Mô tả
 

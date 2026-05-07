@@ -26,12 +26,14 @@ Phát hiện **2** lỗi có SRS reference cụ thể trong quá trình seed 15 
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-THROTTLE-001 | Major | P1 | Performance | R7.2.4 | `srs-fr-10-quan-tri.md FR-VIII-22 Processing` (no spec specified rate limit cho seed batch QA) | Endpoint `/api/v1/auth/register-doanh-nghiep` throttle quá aggressive — block batch seed QA | Open |
-| BUG-DM-LOAI-DN-002 | Medium | P2 | Data | R7.2.4 / R7.7.4 | `srs-fr-10-quan-tri.md FR-V.III-01 Inputs row 6` (`loai_doanh_nghiep_id FK → DANH_MUC UC105`) | Form field "Loại doanh nghiệp" dropdown render quy mô (Siêu nhỏ/Nhỏ/Vừa) thay vì loại hình (TNHH/CP/DNTN/HKD) | Open |
+| ~~BUG-THROTTLE-001~~ | Major | P1 | Performance | R7.2.4 | `srs-fr-10-quan-tri.md FR-VIII-22 Processing` (no spec specified rate limit cho seed batch QA) | Endpoint `/api/v1/auth/register-doanh-nghiep` throttle quá aggressive — block batch seed QA | **Closed** |
+| ~~BUG-DM-LOAI-DN-002~~ | Medium | P2 | Data | R7.2.4 / R7.7.4 | `srs-fr-10-quan-tri.md FR-V.III-01 Inputs row 6` (`loai_doanh_nghiep_id FK → DANH_MUC UC105`) | Form field "Loại doanh nghiệp" dropdown render quy mô (Siêu nhỏ/Nhỏ/Vừa) thay vì loại hình (TNHH/CP/DNTN/HKD) | **Closed** |
 
 ---
 
-## BUG-THROTTLE-001 — Endpoint self-reg DN rate limit aggressive, block batch seed QA + risk DDoS public flow
+## ~~BUG-THROTTLE-001~~ [CLOSED] — Endpoint self-reg DN rate limit aggressive, block batch seed QA + risk DDoS public flow
+
+> **Re-test:** 2026-05-07 R8 — ✅ PASS (Closed-verified). Probe `POST /api/v1/auth/register-doanh-nghiep` 5 lần liên tiếp: header `x-ratelimit-limit: 20` (cũ 3), `remaining: 19→15`, không hit 429. Rate limit nâng từ 3→20 req/window. Screenshot: API headers ghi trong evidence dưới.
 
 ### Mô tả
 
@@ -118,7 +120,9 @@ reqid=1042 POST /api/v1/auth/register-doanh-nghiep [429]   ← retry 4 (after 27
 
 ---
 
-## BUG-DM-LOAI-DN-002 — Form field "Loại doanh nghiệp" dropdown render quy mô (Siêu nhỏ/Nhỏ/Vừa) thay vì loại hình TNHH/CP/DNTN/HKD
+## ~~BUG-DM-LOAI-DN-002~~ [CLOSED] — Form field "Loại doanh nghiệp" dropdown render quy mô (Siêu nhỏ/Nhỏ/Vừa) thay vì loại hình TNHH/CP/DNTN/HKD
+
+> **Re-test:** 2026-05-07 R8 — ✅ PASS (Closed-verified). Dropdown `/register/doanh-nghiep` field "Loại doanh nghiệp" nay render đúng 4 loại hình + 1 entry test ("Công ty TNHH / Công ty cổ phần / Doanh nghiệp tư nhân / Hộ kinh doanh / Công ty hợp danh test verify"). KHÔNG còn quy mô siêu nhỏ/nhỏ/vừa. Match SRS FR-VIII-05 + fixture v2.7.2 line 118-122. Screenshot: [r8-verify-2026-05-07-loai-dn-dropdown-fixed.png](../../screenshots/r8-verify-2026-05-07-loai-dn-dropdown-fixed.png).
 
 ### Mô tả
 

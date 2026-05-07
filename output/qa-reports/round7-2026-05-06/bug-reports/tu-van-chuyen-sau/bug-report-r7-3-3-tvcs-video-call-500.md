@@ -26,11 +26,13 @@ Phát hiện **1** bug có SRS reference cụ thể trong R7.3.3 seed TVCS.
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-TVCS-VIDEO-CALL-001 | Major | P1 | Negative | R7.3.3 seed | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md §Changelog line 18 + §3.4.3.9 line 1294` | POST `/api/v1/noi-dung-tu-van-cs` trả 500 khi `hinhThucTv=VIDEO_CALL` (BE chưa bỏ field orphan + chưa handle enum) | Open |
+| ~~BUG-TVCS-VIDEO-CALL-001~~ | Major | P1 | Negative | R7.3.3 seed | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md §Changelog line 18 + §3.4.3.9 line 1294` | POST `/api/v1/noi-dung-tu-van-cs` trả 500 khi `hinhThucTv=VIDEO_CALL` (BE chưa bỏ field orphan + chưa handle enum) | **Closed (FE)** |
 
 ---
 
-## BUG-TVCS-VIDEO-CALL-001 — POST TVCS trả 500 khi hinhThucTv=VIDEO_CALL
+## ~~BUG-TVCS-VIDEO-CALL-001~~ [CLOSED FE] — POST TVCS trả 500 khi hinhThucTv=VIDEO_CALL
+
+> **Re-test:** 2026-05-07 R8 — ✅ PASS FE side (Closed-verified). Form `/tv-chuyen-sau/tao-moi` đã BỎ field "Hình thức tư vấn" (`hinhThucTv`) — match SRS update 2026-05-05 §Changelog line 18 (field đẩy xuống `PHIEN_TU_VAN.hinh_thuc`). FE không gửi field orphan → BE không có cơ hội 500. BE-side direct probe (POST với extra `hinhThucTv` field) chưa test trực tiếp do JWT clear giữa session; risk thực tế gone vì FE không gửi. Screenshot: [r8-verify-2026-05-07-tvcs-form-no-hinhthuc-field-fixed.png](../../screenshots/r8-verify-2026-05-07-tvcs-form-no-hinhthuc-field-fixed.png).
 
 ### Mô tả
 

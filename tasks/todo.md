@@ -125,17 +125,17 @@
   - **Cần có sẵn:** R7.1.1 ✅ (DM LV đủ 10 SRS)
 - ✅ <a id="r7-2-2"></a>**R7.2.2** 🆕 Seed 6 Tổ chức tư vấn qua API (cb_nv_tw_02)
   - **Kết quả:** PASS 5/5 OK + 1 BVA-422 đúng kỳ vọng. TC-BTP-TW-0001..0005 MOI_DANG_KY. [seed-checklist-r7-2-2-tc-tv.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-2-tc-tv.md)
-  - **Bug:** [bug-report-r7-2-2-ui-tctv-lv-dropdown-empty.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/bug-report-r7-2-2-ui-tctv-lv-dropdown-empty.md) — 0/1 đóng (BUG-TCTV-FE-001 Major UI Open — FE TC TV form gửi `loaiDanhMuc=LINH_VUC_PHAP_LY` BE empty → dropdown LV rỗng, seed thực qua API)
+  - **Bug:** [bug-report-r7-2-2-ui-tctv-lv-dropdown-empty.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/bug-report-r7-2-2-ui-tctv-lv-dropdown-empty.md) — 1/1 đóng (BUG-TCTV-FE-001 Closed-verified R8 2026-05-07 — dropdown LV render đủ 10 LV)
 - ✅ <a id="r7-2-3"></a>**R7.2.3** 🆕 Phê duyệt TC TV → HOAT_DONG (FR-IV-NEW-04, cb_pd_tw_02)
   - **Kết quả:** PASS 5/5 → HOAT_DONG, soQdCongBo + ngayCongNhan set đầy đủ. [seed-checklist-r7-2-3-phe-duyet-tc-tv.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-3-phe-duyet-tc-tv.md)
 - ✅ **R7.2.4** ✏️ Seed DN — acceptance filter-based v3.5
   - **Kết quả:** PASS 36 DN cover 3 quy mô × 3 ngành (verified MCP). [seed-checklist-r7-2-4-dn.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-4-dn.md)
-  - **Bug:** [bug-report-r7-2-4-throttle-self-reg.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/bug-report-r7-2-4-throttle-self-reg.md) — 0/2 đóng (Major+Medium, không block R7.7.4)
+  - **Bug:** [bug-report-r7-2-4-throttle-self-reg.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/bug-report-r7-2-4-throttle-self-reg.md) — 2/2 đóng (THROTTLE-001 + LOAI-DN-002 Closed-verified R8 2026-05-07)
 - ✅ <a id="r7-2-5"></a>**R7.2.5** ✏️ Seed 6 TVV TW (bỏ dia_ban_ids, MOI_DANG_KY)
   - **Kết quả:** PASS 6/6 TVV-BTP-TW-0009..0014 MOI_DANG_KY. Per-LV cover 5/5 (LD/Thuế/KDTM/SHTT/ĐĐ); DN/TM N/A do BUG-DM-LVPL-001. [seed-checklist-r7-2-5-tvv-tw.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-5-tvv-tw.md)
 - ✅ <a id="r7-2-6"></a>**R7.2.6** ✏️ Seed 6 CG TW (`loai_tvv=CG`, MOI_DANG_KY)
   - **Kết quả:** PASS 6/6 TVV-BTP-TW-0001..0006 cover 6 LV (DN/TM/LĐ/Thuế/SHTT/ĐĐ). [seed-checklist-r7-2-6-cg-tw.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-6-cg-tw.md)
-  - **Bug:** [bug-report-r7-2-6-ui-tvv-tochuc-wrong-source.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-r7-2-6-ui-tvv-tochuc-wrong-source.md) — 0/1 đóng (BUG-TVV-FE-002 Major UI Open — FE combobox "Tổ chức hành nghề chính" query DM legacy thay vì entity TO_CHUC_TU_VAN → submit 400, seed thực qua API)
+  - **Bug:** [bug-report-r7-2-6-ui-tvv-tochuc-wrong-source.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-r7-2-6-ui-tvv-tochuc-wrong-source.md) — 1/1 đóng (BUG-TVV-FE-002 Closed-verified R8 2026-05-07 — combobox query đúng entity TO_CHUC_TU_VAN, render 5 TC TV thật)
 - ✅ <a id="r7-2-7"></a>**R7.2.7** 🆕 Seed 3 NHT qua FR-IV-NHT-01 (qtht_02 — CB_NV_TW không có quyền)
   - **Kết quả:** PASS 3/3 NHT-STP-AG/DN/HP-0001 CHO_KICH_HOAT + auto-tạo TK. [seed-checklist-r7-2-7-nht.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-7-nht.md)
 - ✅ <a id="r7-2-9"></a>**R7.2.9** ✏️ Verify 9 TK CG/NHT click mail kích hoạt → đặt MK → HOAT_DONG (FR-VIII-26) — happy path
@@ -149,14 +149,14 @@
   - **Kết quả:** PASS 6/6 cover 6 LV × 4 kênh. [seed-checklist-r7-3-1-hd.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-3-1-hd.md)
 - ✅ <a id="r7-3-1-mob"></a>**R7.3.1.MoB** 🆕 Seed Mẫu Mô hình B qua UI Tab Mẫu phản hồi 3 cấp (FR-II-NEW-02)
   - **Kết quả:** PASS 3/3 — TW (Lao động) + BN-BTC (Thuế) + DP-BG (SHTT) auto cấp đúng. [r7-3-1-mob-dp-list.png](../output/qa-reports/round7-2026-05-06/seed/r7-3-1-mob-dp-list.png)
-  - **Bug:** [bug-report-r7-3-1-mob-mph-display.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/bug-report-r7-3-1-mob-mph-display.md) — 0/1 đóng (BUG-MPH-DISP-01 Major UI list sai SRS — cột "Phạm vi"+"Tác giả" thay vì "Cấp tạo")
+  - **Bug:** [bug-report-r7-3-1-mob-mph-display.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/bug-report-r7-3-1-mob-mph-display.md) — 1/1 đóng (BUG-MPH-DISP-01 Closed-verified R8 2026-05-07 — list MPH có cột Phạm vi+Tác giả đúng SRS)
 - 🟢 <a id="r7-3-1-tvn"></a>**R7.3.1.TVN** 🆕 Seed phiên TV nhanh ESCALATE → HD `kenh=TVN_BRIDGE` qua UI FR-13
   - **Cần có sẵn:** R7.6.2 ⏳ (walk UI FR-13 ESCALATE, không POST API)
 - ✅ <a id="r7-3-2"></a>**R7.3.2** 🔄 Seed 6 VV entry DA_TIEP_NHAN cover 6 LV (top up pre-existing 10)
   - **Kết quả:** PASS 16/16 (10 cũ + 6 mới VV-BTP-TW-20260506-001..006). Pre-existing chỉ 2 LV → seed thêm 4 LV. [seed-checklist-r7-3-2-vv.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-3-2-vv.md)
 - ✅ <a id="r7-3-3"></a>**R7.3.3** ✏️ Seed 10 TVCS entry TIEP_NHAN cover 6 LV (endpoint thực `/api/v1/noi-dung-tu-van-cs`)
   - **Kết quả:** PASS 10/10 TVCS-20260506-0001..0010. 5/10 fail VIDEO_CALL → retry HO_SO. [seed-checklist-r7-3-3-tvcs.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-3-3-tvcs.md)
-  - **Bug:** [bug-report-r7-3-3-tvcs-video-call-500.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/bug-report-r7-3-3-tvcs-video-call-500.md) — 0/1 đóng (Major BE 500 hinhThucTv=VIDEO_CALL)
+  - **Bug:** [bug-report-r7-3-3-tvcs-video-call-500.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/bug-report-r7-3-3-tvcs-video-call-500.md) — 1/1 đóng FE (BUG-TVCS-VIDEO-CALL-001 Closed-verified R8 2026-05-07 — form bỏ field hinhThucTv, FE không gửi orphan)
 - 🚫 <a id="r7-3-4"></a>**R7.3.4** 🔄 Seed 10 HSPL DN cover 5 loại × 3 state × 5 DN
   - **Kết quả:** 🚫 BLOCK — DN list rỗng env (R7.2.4 36 DN reset, BE total=0). Cần re-self-reg DN.
 - ⏳ <a id="r7-3-5"></a>**R7.3.5** 🆕 Seed Kế hoạch ĐT năm (KE_HOACH_DAO_TAO — Mô hình A 3 cấp) `[need: dev confirm endpoint deploy]`
@@ -169,7 +169,7 @@
   - **Kết quả:** 7/7 cover full filter — 5 LV + 3 mức độ + 3 loại (TN-1/TN-nhiều/Tự luận). [r7-3-8-nhch-list-7-final.png](../output/qa-reports/round7-2026-05-06/seed/r7-3-8-nhch-list-7-final.png)
 - 🚫 <a id="r7-3-9"></a>**R7.3.9** 🔄 Seed 5 ĐKT entry NHAP cover 5 LV
   - **Kết quả:** 🚫 BLOCK — NHCH state NHAP, BE filter KICH_HOAT; chưa re-seed sau fix FE 2026-05-07.
-  - **Bug:** [bug-report-r7-3-9-dkt-nhch.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-3-9-dkt-nhch.md) — 1/2 đóng (BUG-DKT-FE-01 Closed-verified 2026-05-07 max=10; BUG-SRS-NHCH-STATE-01 Medium Open SRS doc)
+  - **Bug:** [bug-report-r7-3-9-dkt-nhch.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-3-9-dkt-nhch.md) — 2/2 đóng FE (DKT-FE-01 Closed max=10; NHCH-STATE-01 Closed FE R8 2026-05-07 default Kích hoạt — SRS doc-side cần BA sync FR-III-09)
 - ⚠️ <a id="r7-3-10"></a>**R7.3.10** 🔄 Seed 8 bài giảng entry KICH_HOAT
   - **Kết quả:** ⚠️ 5/8 PASS — Video type cover 5 LV (Lao động/Thuế/KDTM/SHTT/Đất đai). Slide/PDF skip do file upload. [r7-3-10-bai-giang-list.png](../output/qa-reports/round7-2026-05-06/seed/r7-3-10-bai-giang-list.png)
 - ✅ <a id="r7-3-11"></a>**R7.3.11** ✏️ Seed 8 giảng viên entry HOAT_DONG (verify FR-III-11 refactor)
@@ -188,7 +188,7 @@
 - 🟢 <a id="r7-4-a1"></a>**R7.4.A1** ✏️ Workflow TVV (SM 9→**10 state**, thêm CHO_KICH_HOAT, hệ thống tự cấp TK qua FR-VIII-15 step 6) `[need: R7.2.5 ✅ + R7.2.6 ✅; spec: 7.4-chuyen-gia-tvv.md + 6.4-sm-tvv.md (sync 2026-05-06)]`
 - ⚠️ <a id="r7-4-a1-cg"></a>**R7.4.A1-CG** ✏️ Advance 8 CG → DANG_HOAT_DONG + 14 TC (BR-AUTH-05/08 + LEGAL-04 + opt-lock)
   - **Kết quả:** 13/14 PASS (TC-07+14 unblock 7/5 qua R7.7.8a+d), 1 ⚠️ DEVIATION state name spec v3.5. [workflow-test-report-r7-4-a1-cg.md](../output/qa-reports/round7-2026-05-06/workflow/workflow-test-report-r7-4-a1-cg.md)
-  - **Bug:** [bug-report-r7-4-a1-cg-state-deviation.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-r7-4-a1-cg-state-deviation.md) — 0/1 đóng (BUG-CG-A1-001 Major Open: state DANG_HOAT_DONG vs CHO_KICH_HOAT spec). **Re-test 2026-05-07: VẪN OPEN** — API + UI evidence không đổi.
+  - **Bug:** [bug-report-r7-4-a1-cg-state-deviation.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-r7-4-a1-cg-state-deviation.md) — 0/1 đóng (BUG-CG-A1-001 Major Open: state DANG_HOAT_DONG vs CHO_KICH_HOAT spec). **Re-test R8 2026-05-07: VẪN OPEN** (lần 2 verify, BE chưa rename + chưa chèn CHO_KICH_HOAT).
 - ⏳ <a id="r7-4-a1-5"></a>**R7.4.A1.5** ✏️ Đợt 2 PC TVV backfill — verify dropdown "Người xử lý" có TAI_KHOAN role NHT mới sau khi NHT tách entity `[need: R7.4.A1 🟢 + R7.4.A1-CG ⚠️; verify 2 BE bug Open R6 (CHPC-001/002) còn không sau dev deploy]`
 - 🟢 <a id="r7-4-a2"></a>**R7.4.A2** 🆕 Tiếp nhận TVV (FR-IV-13) — 3 transition mới (MOI_DANG_KY→CHO_THAM_DINH, YEU_CAU_BO_SUNG→DANG_THAM_DINH, TU_CHOI→CHO_THAM_DINH) `[need: ≥1 TVV MOI_DANG_KY (R7.2.5 ✅)]`
 - ⏳ <a id="r7-4-a3"></a>**R7.4.A3** ✏️ Workflow VV (FR-05 v3.5 refactor — bỏ `nguoi_ho_tro_id`, thay 3 cột phân công + 2 thẻ Cá nhân/Tổ chức + SLA 15 ngày + CB PD từ chối → DANG_XU_LY) `[need: R7.2.9 ✅ NHT active + R7.2.3 ✅ TC TV HOAT_DONG; spec mới: 7.5-vu-viec-htpl.md v3.0 + 6.5-sm-vuviec.md (sync 2026-05-06)]`
@@ -217,8 +217,8 @@
   - **Kết quả:** PASS 1/1 — DG-20260506-0001 LAP_KE_HOACH. R6 DG-001/002 ✅ FIXED. [seed-checklist](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-4-d1-danhgiahq.md)
 - ⚠️ <a id="r7-4-d2"></a>**R7.4.D2** ✏️ Workflow 9 bước v3.5 (8 state + HUY)
   - **Kết quả:** ⚠️ 5/11 R7. B6 FAIL cascade B7-B10. 2 bug mới (DG-006 Major + DG-007 Medium). [report](../output/qa-reports/round7-2026-05-06/workflow/workflow-test-report-DanhGiaHQ.md)
-  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — 5/7 đóng (5 R6 closed + 0/2 R7 mới)
-  - **Cần có sẵn:** dev fix BUG-FUNC-DG-006 + ≥1 VV HOAN_THANH match đợt scope
+  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — 5/7 đóng (5 R6 closed; DG-006 + DG-007 R8 2026-05-07 ⚠️ INCONCLUSIVE — pool VV reset 0 HOAN_THANH, không thể verify mismatch)
+  - **Cần có sẵn:** seed lại ≥3 VV HOAN_THANH match đợt scope để retest DG-006/007
 - ⏳ <a id="r7-4-d2a"></a>**R7.4.D2a** 🆕 State HUY transition (4 state → HUY + guard HOAN_THANH)
   - **Cần có sẵn:** R7.4.D2 ⚠️ workflow forward
 - ⏳ <a id="r7-4-d2b"></a>**R7.4.D2b** 🆕 FR-VI-10 read-only cross-co-quan (CB NV `co_quan_duoc_danh_gia_id` xem KQ HOAN_THANH)

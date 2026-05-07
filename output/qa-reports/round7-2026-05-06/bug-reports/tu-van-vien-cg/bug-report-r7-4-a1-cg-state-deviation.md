@@ -36,6 +36,7 @@ Phát hiện **1 bug Major** trong test R7.4.A1-CG advance state happy path. BE 
 > - GET `/api/v1/tu-van-viens/7cb207b8-eea1-44f2-835f-ebd923dbfbc2` response `data.trangThai = "DANG_HOAT_DONG"` (chưa rename → `HOAT_DONG`, chưa thêm `CHO_KICH_HOAT`).
 > - UI badge detail TVV-BTP-TW-0007 vẫn "Đang hoạt động"; tab list KHÔNG có tab "Chờ kích hoạt".
 > - Account verify: `cb_nv_tw_02` qua MCP. Evidence: ![bug-cg-a1-001-retest-2026-05-07-still-open.png](image/bug-cg-a1-001-retest-2026-05-07-still-open.png)
+> **Re-test:** 2026-05-07 R8 — 🔴 **VẪN OPEN**. Verify lần 2: list TVV vẫn KHÔNG có tab "Chờ kích hoạt"; TVV-0007 detail badge "Đang hoạt động" giữ nguyên (response `trangThai="DANG_HOAT_DONG"`). BE chưa rename + chưa chèn state mới theo SRS update 2026-05-05. Screenshot: [r8-verify-2026-05-07-cg-a1-tvv0007-still-danghoatdong.png](../../screenshots/r8-verify-2026-05-07-cg-a1-tvv0007-still-danghoatdong.png).
 
 ### Mô tả
 
