@@ -52,7 +52,7 @@
 | **Giảng viên** | ✅ [R7.3.11](#r7-3-11) seed |
 | **Học viên** 🆕 | 🚫 [R7.3.12](#r7-3-12) seed |
 | **Lịch học** 🆕 | 🚫 [R7.3.13](#r7-3-13) seed · ⏳ [R7.4.B12](#r7-4-b12) workflow |
-| **Biểu mẫu** ✏️ | ✅ [R7.3.7](#r7-3-7) seed · 🟢 [R7.4.C1](#r7-4-c1) workflow · 🟢 [R7.7.10](#r7-7-10) functional |
+| **Biểu mẫu** ✏️ | ✅ [R7.3.7](#r7-3-7) seed · ⚠️ [R7.4.C1](#r7-4-c1) workflow 5/8 · ⚠️ [R7.7.10](#r7-7-10) functional 22/47 + 8 bug |
 | **Đánh giá Hiệu quả HTPL** ✏️ | ✅ [R7.4.D1](#r7-4-d1) tạo · ⚠️ [R7.4.D2](#r7-4-d2) workflow · ⏳ [R7.4.D2a](#r7-4-d2a) HUY 🆕 · ⏳ [R7.4.D2b](#r7-4-d2b) FR-VI-10 🆕 · ⏳ [R7.7.9](#r7-7-9) functional 46 TC |
 | **Kho QA** | 🟢 [R7.3.16](#r7-3-16) seed · ⏳ [R7.4.D3](#r7-4-d3) workflow · ⏳ [R7.4.D3.AUTO](#r7-4-d3-auto) auto-feed |
 | **Chi trả** ✏️ v3.5 | 🚫 [R7.6.1](#r7-6-1) workflow · 🟢 [R7.7.12](#r7-7-12) functional 35 TC · ✅ [R7.7.12.1](#r7-7-12-1) smoke IMPACT 🆕 · 🚫 [R7.7.12.2](#r7-7-12-2) FR-V.II-14 🆕 · 🚫 [R7.7.12.3](#r7-7-12-3) CB PD trả về 🆕 · ✅ [R7.7.12.4](#r7-7-12-4) UI Việt 🆕 · ⚠️ [R7.E3](#r7-e3) monitor
@@ -212,7 +212,9 @@
 
 ### 🟨 Trụ C — Biểu mẫu
 
-- 🟢 <a id="r7-4-c1"></a>**R7.4.C1** ✏️ Workflow BM v3.5 — SM-BIEUMAU 3 transition + Switch công khai 4 trường + BR-PUBLIC-01/02/03 `[need: ≥3 BM ở NHAP có 4 trường công khai NULL (verify R7.3.7 done)]`
+- ⚠️ <a id="r7-4-c1"></a>**R7.4.C1** ✏️ Workflow BM v3.5 — SM-BIEUMAU 3 transition + Switch công khai 4 trường + BR-PUBLIC-01/02/03
+  - **Kết quả:** ⚠️ 5/8 PASS — SM 3/3 transition + BR-PUBLIC-01 BE + BR-PUBLIC-03 BE PASS. BR-PUBLIC-02 FAIL. [workflow-r7-4-c1](../output/qa-reports/round7-2026-05-06/workflow/workflow-test-report-r7-4-c1-bm.md)
+  - **Bug:** [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) — 0/6 đóng (2 Critical + 2 Major + 2 Medium)
 
 ### 🟧 Trụ D — Theo dõi Đánh giá Hiệu quả HTPL + Kho QA
 
@@ -291,8 +293,10 @@
   - **Bug:** [bug-report-r7-7-8e-vai-tro.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-vai-tro/bug-report-r7-7-8e-vai-tro.md) — 6/7 đóng (VT-001/003/004/005/006/009 Closed; VT-008 Minor defer Open)
 - ⏳ <a id="r7-7-9"></a>**R7.7.9** ✏️ Đánh giá Hiệu quả HTPL functional 46 TC v3.5 (10 FR)
   - **Cần có sẵn:** R7.4.D2 ⚠️ + R7.4.D2a/D2b ✅
-- 🟢 <a id="r7-7-10"></a>**R7.7.10** ✏️ Biểu mẫu v3.5 — 7 TC cũ + ~6 TC mới (Switch + 4 trường + BR-PUBLIC) `[~0% — ready, was R6.7.10 ⚠️ 71%; spec v3.5 — file 7.9 chưa sync, dùng SRS làm authoritative]`
-- ⏳ <a id="r7-7-11"></a>**R7.7.11** 🔄 TV nhanh 39 TC `[need: R7.6.2 ⏳ + R7.4.D3 ⏳]`
+- ⚠️ <a id="r7-7-10"></a>**R7.7.10** ✏️ Biểu mẫu v3.5 — 47 TC (7 cũ + 10 CR-01 + 30 CRUD/workflow)
+  - **Kết quả:** PASS 22/47 (47%) — 19 PASS + 1 PARTIAL + 3 FAIL + 11 BLOCKED + 14 DEFER. P0 9/14. [functional-r7-7-10](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-r7-7-10-bm.md)
+  - **Bug:** [bug-report-functional-bm-r7-7-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-functional-bm-r7-7-10.md) — 0/2 đóng (BUG-BM-007 Critical MinIO localhost broken preview+download · BUG-BM-008 Medium silent reject upload). Workflow bugs riêng tại [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) (6 bugs R7.4.C1).
+- ⏳ <a id="r7-7-11"></a>**R7.7.11** 🔄 TV nhanh 39 TC `[need: R7.6.2 🟢 + R7.4.D3 ✅]`
 - 🟢 <a id="r7-7-12"></a>**R7.7.12** ✏️ Chi trả v3.5 — 35 TC (30 base + 5 mới) `[~80% — 28 TC ready; CT-006 + CT-021 chờ BA Q1+Q2]`
   - **Cần có sẵn:** R7.7.12.1 ✅ + R7.E3 ⚠️ + R7.6.1 cho TC workflow.
   - **Output:** functional-test-report-ChiTra-v3.5.md
