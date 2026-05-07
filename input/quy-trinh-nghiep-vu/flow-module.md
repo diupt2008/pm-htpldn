@@ -56,7 +56,7 @@ Trước khi seed data cho bất kỳ module nào, nắm thứ tự tạo data h
 | 1 | `DOANH_NGHIEP` (DN), `TU_VAN_VIEN` (TVV), `BIEU_MAU`, `CT_HTPLDN` (GĐ1 Kế hoạch) | §1, §2, §3, §4 | Master actor + tài liệu nền + khung chỉ đạo — prereq cho §5/§6/§7/§8/§10/§12 (BƯỚC 2) |
 | 2 | `VU_VIEC`, `HOI_DAP`, `TV_CHUYEN_SAU_YC`, `KHOA_HOC` | §5, §6, §7, §8 | Transactional hub — BƯỚC 3 giao dịch cốt lõi |
 | 3 | `HOP_DONG_TV`, `HO_SO_CHI_TRA`, `KE_HOACH_DANH_GIA`, `KHO_CAU_HOI` (TU_DONG) | §9, §10, §11, §12 | Downstream — BƯỚC 4 hậu kỳ (phụ thuộc Tier 2) |
-| 4 | `DOT_BAO_CAO_CT` (GĐ2 CT HTPLDN), `BAO_CAO`, Dashboard aggregate, API outbound | §13, §14, §15, §16 | Output — BƯỚC 5 đầu ra (phụ thuộc Tier 1+2+3) |
+| 4 | `DOT_BAO_CAO` (GĐ2 CT HTPLDN — chính thức 3.4.3.10a v3.5, SM-DOT-BC 6 states), `BAO_CAO`, Dashboard aggregate, API outbound | §13, §14, §15, §16 | Output — BƯỚC 5 đầu ra (phụ thuộc Tier 1+2+3) |
 
 **Bảng Entity Map chi tiết** (mỗi entity tạo ở SCR nào, đọc ở SCR nào, quan hệ 1:N/N:N): xem file riêng [`input/data/entity-map.md`](./data/entity-map.md).
 
@@ -506,7 +506,7 @@ Module có **23 loại BC** đọc dữ liệu từ các module khác, entity ow
 | KPI-04 | FR-I-04 | Count VU_VIEC state = `HOAN_THANH` (ngày HT trong kỳ) | VU_VIEC |
 | KPI-05 | FR-I-05 | Count KHOA_HOC state = `DANG_DIEN_RA` | KHOA_HOC |
 | KPI-06 | FR-I-06 | Count KHOA_HOC state = `KET_THUC` | KHOA_HOC |
-| KPI-07 | FR-I-07 | Count TU_VAN_VIEN state = `DANG_HOAT_DONG` | TU_VAN_VIEN |
+| KPI-07 | FR-I-07 | Count TU_VAN_VIEN state = `HOAT_DONG` (rename v3.5 FR-04 từ `DANG_HOAT_DONG`) | TU_VAN_VIEN |
 | KPI-08 | FR-I-08 | Chart cột (điểm hài lòng TB) + đường (SLA %) | KET_QUA_DANH_GIA |
 | KPI-09 | FR-I-09 | Chart tròn (tỷ lệ đạt + điểm TB) | KET_QUA_DAO_TAO |
 

@@ -34,6 +34,7 @@
 - **Out of scope Round 4:** Phân quyền đầy đủ ~1000 TC (11 vai trò × 16 module × CRUD) — chuyển Round 5 cuối, sau khi 5 phase đầu PASS.
 - **Module BLOCKED đến hết Round 4:** Chi trả + Phiên TV nhanh + 8 API inbound — chờ tích hợp DVC/LGSP/Cổng PLQG. Test bằng workaround (BE inject hoặc negative test).
 - **Round 7 scope (PENDING — apply 3 SRS update 2026-05-05):** mở rộng 46→**49 entity** (thêm NGUOI_HO_TRO + TO_CHUC_TU_VAN + NGAY_LE), thêm **9 FR mới** (FR-VIII-26/28/29 + FR-IV-13/NHT-01/02/03 + FR-IV-NEW-01/02/04), bỏ **1 FR** (FR-V.III-NEW-01 Import DN — DN tự đăng ký TK-first qua FR-VIII-22). DN/TVV/NHT đổi luồng tạo: tự đăng ký + kích hoạt TK lần đầu (FR-VIII-22 + FR-VIII-26). Thang điểm thẩm định TVV đổi 0-10 → 1-5. Bỏ entity TVV_DIA_BAN (TVV scope toàn quốc theo NĐ 77/2008 Đ.19). Tham chiếu: [`_DELTA-MAP-FR04.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR04.md), [`_DELTA-MAP-FR07.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR07.md), [`_DELTA-MAP-FR10.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR10.md).
+- **Round 7 expanded (2026-05-06/07 — 4 SRS update v3.5 thêm):** mở rộng tiếp **49 → 55+ entity** với 4 FR v3.5 batch: **FR-02 v3.5** (Mô hình B Hybrid MAU_PHAN_HOI + 5 trường công khai CR-01 + state HUY HOI_DAP + TVN_BRIDGE), **FR-05 v3.5** (3 entity owned mới: PHAN_CONG_VU_VIEC + DANH_GIA_VU_VIEC + LICH_SU_VU_VIEC + 2 SCR DN mới + FR-V.I-NEW-02/05), **FR-06 v3.5** (2 entity owned mới: THAM_DINH_HO_SO + PHE_DUYET_CHI_TRA + FR-V.II-14 DN bổ sung HSCT), **FR-08 v3.5** (rename DOT_DANH_GIA→KE_HOACH_DANH_GIA + SM-DANHGIA 8 state + FR-VI-10), **FR-12 v3.5** (rename NOI_DUNG_TU_VAN_CS→TU_VAN_CHUYEN_SAU + 3 entity owned mới: HO_SO_PHAP_LY_DN + TU_LIEU_PHAP_LY_VV + DANH_GIA_CHAT_LUONG_TV + SM-TVCS 7 state + BR-ROUTE-TVCS-01), **FR-15 v3.5** (DOT_BAO_CAO chính thức 3.4.3.10a + SM-DOT-BC 6 state + don_vi_id BẮT BUỘC). UC FR-11 renumber +4 offset (UC120-142 → UC124-146 do FR-VIII-22..25 chiếm UC120-123). **CAU_HINH_PHAN_CONG DEPRECATED** (user chốt 2026-05-06 — bỏ feature). Tham chiếu: [`CHANGELOG-v3-to-v3.5.md`](../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) + [`srs-v3.5.md`](../input/srs-update-2026-5-5/srs-v3.5.md) consolidated.
 
 ### 1.3 Timeline + thứ tự thực thi
 
@@ -62,10 +63,10 @@
 |---|---|---|
 | QTHT seed Tài khoản + Đơn vị + Danh mục | Mọi module khác | Không có TK = không login. Không có DM = dropdown rỗng |
 | QTHT cấu hình SLA | Phân công Vụ việc | Tính deadline xử lý (BR-CALC-04) |
-| QTHT cấu hình Phân công mặc định Đợt 1 (CB) | Phân công Hỏi đáp/Vụ việc tự gợi ý | Modal phân công lấy mapping từ CAU_HINH_PHAN_CONG |
-| Tạo TVV | TVV qua workflow active (`DANG_HOAT_DONG`) | TVV mới `MOI_DANG_KY` không xuất hiện trong dropdown |
-| TVV `DANG_HOAT_DONG` | QTHT thêm Phân công Đợt 2 (TVV phụ trách) | Dropdown "Người xử lý" lọc `trang_thai=HOAT_DONG` |
-| TVV `DANG_HOAT_DONG` + Đợt 2 | Phân công Hỏi đáp/VV ưu tiên TVV theo lĩnh vực | Modal hiện ≥2 gợi ý/lĩnh vực |
+| QTHT cấu hình Phân công mặc định Đợt 1 (CB) `[DEPRECATED v3.5]` | Phân công Hỏi đáp/Vụ việc tự gợi ý | Modal phân công lấy mapping từ ~~CAU_HINH_PHAN_CONG~~ DEPRECATED 2026-05-06 — feature bỏ. Modal vẫn có dropdown gợi ý nhưng không phụ thuộc entity này. |
+| Tạo TVV | TVV qua workflow active (`HOAT_DONG`) | TVV mới `MOI_DANG_KY` không xuất hiện trong dropdown |
+| TVV `HOAT_DONG` | QTHT thêm Phân công Đợt 2 (TVV phụ trách) | Dropdown "Người xử lý" lọc `trang_thai=HOAT_DONG` |
+| TVV `HOAT_DONG` + Đợt 2 | Phân công Hỏi đáp/VV ưu tiên TVV theo lĩnh vực | Modal hiện ≥2 gợi ý/lĩnh vực |
 | Tạo DN | Tạo VV/HD/TVCS gắn DN | Dropdown "Chọn DN" lọc theo `don_vi_id` user |
 | CTĐT đẩy lên `DA_DUYET` | Tạo Khóa học gắn CTĐT | Combobox CTĐT trong form tạo Khóa học chỉ lọc `trangThai=DA_DUYET` |
 | Khóa học `DA_CONG_KHAI` | Đăng ký học viên | Guard FR-III-04 PRE-02: KH phải mở đăng ký |
@@ -164,11 +165,11 @@ Chỉ cần LỚP 1 (QTHT) đã setup là chạy được:
 
 #### 🟦 Trụ A — TVV → Phân công → VV → HD → TVCS (~5 ngày)
 
-**Vì sao A đầu tiên:** TVV `DANG_HOAT_DONG` là phụ thuộc đắt nhất. 4 luồng LỚP 3 + Phân công Đợt 2 + 8 TC functional T4 đều cần.
+**Vì sao A đầu tiên:** TVV `HOAT_DONG` là phụ thuộc đắt nhất. 4 luồng LỚP 3 + Phân công Đợt 2 + 8 TC functional T4 đều cần.
 
 | # | Task | Tài khoản | Cần có sẵn | Output |
 |---|---|---|---|---|
-| **A1** | Workflow TVV (5 bước) | `cb_nv_tw_01` → `cb_pd_tw_01` | ≥6 TVV state `MOI_DANG_KY` (T1.B3, fixture 12 variant) | ≥6 TVV `DANG_HOAT_DONG` + 6 TK TVV cấp. Pool 12 dùng cho test reject (TVV[7]) + TAM_DUNG (TVV[8]) + xóa mềm (TVV[11]) |
+| **A1** | Workflow TVV (5 bước) | `cb_nv_tw_01` → `cb_pd_tw_01` | ≥6 TVV state `MOI_DANG_KY` (T1.B3, fixture 12 variant) | ≥6 TVV `HOAT_DONG` + 6 TK TVV cấp. Pool 12 dùng cho test reject (TVV[7]) + TAM_DUNG (TVV[8]) + xóa mềm (TVV[11]) |
 | **A2** | QTHT thêm PC Đợt 2 (≥6 row TVV × 6 lĩnh vực `uu_tien=2`) | `qtht_01` | A1 PASS | Modal PC HD/VV ≥2 gợi ý/lĩnh vực |
 | **A3** | Workflow Vụ việc (8 bước) | CB NV → TVV → CB NV → CB PD | ≥6 VV state `DA_TIEP_NHAN` (T1.C2, fixture 15 variant) + TVV active từ A1 | ≥3 VV `HOAN_THANH` (cần cho Trụ D). Pool 15 dùng cho YEU_CAU_BS x3 (VV[11]) + TU_CHOI (VV[12]) + DA_DANH_GIA (VV[13]) + pagination |
 | **A4** | Workflow Hỏi đáp (6 bước) | CB NV → CB/TVV → CB PD | ≥6 HD state `MOI` (T1.C1, fixture 11 variant) + PC từ A2 | ≥6 HD `DA_DUYET`/`CONG_KHAI`. Pool 11 dùng cho bounce-back (HD[7]) + 4 kênh đầy đủ |

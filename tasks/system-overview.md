@@ -4,8 +4,8 @@
 >
 > Cần test thực tế đi kèm thứ tự seed data + ràng buộc nhân quả → đọc [plan.md](plan.md).
 
-**Ngày viết:** 2026-04-25 · **Phiên bản:** v1.2 (merge nốt phần unique của `logic-data.md` → archive file gốc)
-**Nguồn:** consolidate từ `input/srs-v3/` (17 file SRS) + `input/quy-trinh-nghiep-vu/02-thu-tu-module.md` + `input/flow-module.md` + `logic-data.md` (đã archive 25/04, nội dung consolidate hết vào file này).
+**Ngày viết:** 2026-04-25 · **Phiên bản:** v2.0 (2026-05-07 — sync SRS update v3.5: rename `DANG_HOAT_DONG` → `HOAT_DONG` cho TVV ở 8 dropdown filter, thêm §6 ghi chú thay đổi v3.5)
+**Nguồn:** consolidate từ `input/srs-v3/` (17 file SRS baseline v3.1) + **`input/srs-update-2026-5-5/`** (delta v3.5 — CHANGELOG + 14 DELTA-MAP-FRxx + consolidated `srs-v3.5.md` 6695 lines) + `input/quy-trinh-nghiep-vu/02-thu-tu-module.md` + `input/flow-module.md` + `logic-data.md` (đã archive 25/04, nội dung consolidate hết vào file này).
 
 ---
 
@@ -275,7 +275,7 @@ Mỗi tab CRUD chuẩn: Mã / Tên / Mô tả / Thứ tự / Trạng thái + tì
 4. **Lịch sử hỗ trợ:** List VV gắn TVV + thống kê (Tổng / Hoàn thành / Điểm TB)
 5. **Đánh giá:** Điểm tổng hợp + 3 progress bar (Chuyên môn / Thái độ / Đúng hạn) + List đánh giá + Form đánh giá mới
 
-**Workflow:** `MOI_DANG_KY` → `CHO_THAM_DINH` → `DANG_THAM_DINH` → `CHO_PHE_DUYET` → `DANG_HOAT_DONG`. TVV/CG/NHT đều lưu chung 1 entity, phân biệt qua field `vai_tro`.
+**Workflow:** `MOI_DANG_KY` → `CHO_THAM_DINH` → `DANG_THAM_DINH` → `CHO_PHE_DUYET` → `HOAT_DONG`. TVV/CG/NHT đều lưu chung 1 entity, phân biệt qua field `vai_tro`.
 
 ---
 
@@ -594,16 +594,16 @@ Dùng khi seed gặp dropdown rỗng → tra ngay biết phải seed cái gì đ
 | Dropdown | Xuất hiện ở module | Nguồn entity | Filter |
 |---|---|---|---|
 | **Chọn DN** | HD/VV/TVCS/HĐTV/Chi trả | `DOANH_NGHIEP` | `don_vi_id` khớp scope user |
-| **Chọn TVV/CG** (phân công VV) | VV bước Phân công NHT | `TU_VAN_VIEN` | `trang_thai=DANG_HOAT_DONG` AND `vai_tro IN (TVV,CG,NHT)` AND `linh_vuc_pl` khớp |
+| **Chọn TVV/CG** (phân công VV) | VV bước Phân công NHT | `TU_VAN_VIEN` | `trang_thai=HOAT_DONG` AND `vai_tro IN (TVV,CG,NHT)` AND `linh_vuc_pl` khớp |
 | **Chọn người xử lý** (phân công HD) | HD Modal Phân công | `TAI_KHOAN` | `trang_thai=HOAT_DONG` (gồm CB NV + TVV active) |
-| **Chọn CG** (phân công TVCS) | TVCS Phân công | `TU_VAN_VIEN` | `vai_tro=CG` AND `trang_thai=DANG_HOAT_DONG` |
+| **Chọn CG** (phân công TVCS) | TVCS Phân công | `TU_VAN_VIEN` | `vai_tro=CG` AND `trang_thai=HOAT_DONG` |
 | **Chọn Vụ việc** (HĐTV liên kết) | HĐTV tab "VV liên kết" | `VU_VIEC` | `trang_thai=HOAN_THANH` |
 | **Chọn Vụ việc** (Đánh giá HQ chấm điểm) | ĐG HQ Tab Chấm điểm | `VU_VIEC` | `trang_thai=HOAN_THANH` AND `ngay_hoan_thanh` trong kỳ ĐG |
-| **Chọn Đánh giá viên** | ĐG HQ Phân công | `TU_VAN_VIEN` | `trang_thai=DANG_HOAT_DONG` |
+| **Chọn Đánh giá viên** | ĐG HQ Phân công | `TU_VAN_VIEN` | `trang_thai=HOAT_DONG` |
 | **Chọn CTĐT** | Form tạo Khóa học | `CHUONG_TRINH_DAO_TAO` | `trangThai=DA_DUYET` |
 | **Chọn Khóa học** | Form tạo Đề KT (gán đề vào KH) | `KHOA_HOC` | `trang_thai IN (DA_CONG_KHAI, DANG_DIEN_RA)` |
 | **Chọn Giảng viên** | Form Khóa học | `GIANG_VIEN` | `trang_thai=DANG_HOAT_DONG` |
-| **Chọn Bên B (TVV/Tổ chức)** | Form HĐTV | `TU_VAN_VIEN` | `trang_thai=DANG_HOAT_DONG` |
+| **Chọn Bên B (TVV/Tổ chức)** | Form HĐTV | `TU_VAN_VIEN` | `trang_thai=HOAT_DONG` |
 | **Chọn HĐTV** (optional khi Chi trả) | Chi trả bước thẩm định | `HOP_DONG_TV` | `trang_thai=HIEU_LUC` |
 | **Chọn Đơn vị áp dụng** | Form PC mặc định | `DON_VI` | scope user |
 | **Chọn CT HTPLDN** | Form Đợt BC GĐ2 | `CT_HTPLDN` | `trang_thai=DANG_THUC_HIEN` |
@@ -634,8 +634,8 @@ Mỗi dòng = **1 hành động workflow quan trọng có FR-code**. Dùng để
 
 | Chức năng / Màn hình | Data đầu vào bắt buộc (upstream) | Data đầu ra → Downstream tiêu thụ |
 |---|---|---|
-| **Phân công Hỏi đáp** (FR-II-06) | • `DOANH_NGHIEP` tồn tại<br>• `TU_VAN_VIEN` = `DANG_HOAT_DONG`<br>• `CAU_HINH_PHAN_CONG` đã map lĩnh vực | Sinh `HOI_DAP` = `DA_DUYET` → Kho Q&A Tư vấn Nhanh (FR-X.2) |
-| **Phân công Vụ việc** (FR-V.I-09) | • `DOANH_NGHIEP` tồn tại<br>• `TU_VAN_VIEN` = `DANG_HOAT_DONG`<br>• `CAU_HINH_SLA` (LỚP 1) | Sinh `VU_VIEC` = `HOAN_THANH` → Đánh giá (FR-VI) + Chi trả (FR-V.II) |
+| **Phân công Hỏi đáp** (FR-II-06) | • `DOANH_NGHIEP` tồn tại<br>• `TU_VAN_VIEN` = `HOAT_DONG`<br>• `CAU_HINH_PHAN_CONG` đã map lĩnh vực | Sinh `HOI_DAP` = `DA_DUYET` → Kho Q&A Tư vấn Nhanh (FR-X.2) |
+| **Phân công Vụ việc** (FR-V.I-09) | • `DOANH_NGHIEP` tồn tại<br>• `TU_VAN_VIEN` = `HOAT_DONG`<br>• `CAU_HINH_SLA` (LỚP 1) | Sinh `VU_VIEC` = `HOAN_THANH` → Đánh giá (FR-VI) + Chi trả (FR-V.II) |
 | **Chi trả Chi phí** (FR-V.II-05 / FR-V.II-12) | • `VU_VIEC` liên kết<br>• `TU_VAN_VIEN` thực hiện tư vấn<br>• `DOANH_NGHIEP` (quy mô → tính % hỗ trợ BR-CALC-01) | Sinh `HO_SO_CHI_TRA` = `DA_THANH_TOAN` → số liệu Kinh phí cho Báo cáo CT HTPLDN (FR-XI) |
 | **Chọn Vụ việc Đánh giá** (FR-VI-05) | • `VU_VIEC` = `HOAN_THANH` **trong kỳ ĐG**<br>• `TIEU_CHI_DANH_GIA` (Σ trọng số = 100%) | Sinh `BAO_CAO_DANH_GIA` → Dashboard (FR-I) + Báo cáo (FR-IX) |
 | **Lập Báo cáo TT17 / Mẫu 21a-21b** (FR-XI-06) | Toàn bộ data: `VU_VIEC`, `KHOA_HOC`, `HO_SO_CHI_TRA`, `TU_VAN_VIEN` ở trạng thái cuối | Auto-fill cột biểu mẫu 21a/21b; xuất Excel/Word cho TW tổng hợp |
@@ -726,7 +726,7 @@ Khi mở 1 màn hình mà thấy trống → tra bảng này trước khi log bu
 | **DN detail Tab "Lịch sử hỗ trợ"** (3 KPI) | VV `HOAN_THANH` gắn DN | Chạy VV đủ 8 state, không dừng giữa chừng |
 | **DN detail Tab "Hồ sơ chi trả"** | Chi trả `DA_THANH_TOAN` | BLOCKED — BE inject hoặc chờ LGSP |
 | **TVV detail Tab "Lịch sử hỗ trợ"** | VV gắn TVV | Seed VV gắn TVV này |
-| **Dropdown "Chọn TVV"** (phân công VV/HD/Chi trả) | TVV `DANG_HOAT_DONG` | Quay lại duyệt TVV qua workflow |
+| **Dropdown "Chọn TVV"** (phân công VV/HD/Chi trả) | TVV `HOAT_DONG` | Quay lại duyệt TVV qua workflow |
 | **Dropdown "Chọn DN"** (tạo VV/HD/TVCS) | DN đã lưu thành công | Kiểm `don_vi_id` của user khớp DN |
 | **Dropdown "Chọn VV"** (tạo HĐTV/Chi trả) | VV `HOAN_THANH` | Chạy bước cuối "Cập nhật KQ" cho VV |
 | **Danh sách "Chấm điểm"** (Đánh giá HQ) | ≥1 VV `HOAN_THANH` trong kỳ ĐG | Kiểm `ngay_hoan_thanh` có trong kỳ |
@@ -790,3 +790,51 @@ Khi mở 1 màn hình mà thấy trống → tra bảng này trước khi log bu
   - **§5.4 Bảng FR-code prereq** (7 dòng) — trace ngược FR-code → SRS, biết action cần prereq gì + sinh data gì cho downstream.
   - **§9 Bản đồ "tab nào cần data nào"** (12 dòng) — tra nhanh khi mở màn hình thấy trống, biết phải seed gì trước.
   - Renumber §10 (tab rỗng phân loại) + §11 (tham chiếu) + §12 (lịch sử). Bỏ ref `logic-data §1.5/§4/§8` thay bằng tham chiếu nội bộ hoặc UI thực tế.
+- **2026-05-07 v2.0** — Sync SRS update v3.5 (cherry-pick từ `input/srs-update-2026-5-5/`):
+  - Rename `DANG_HOAT_DONG` → `HOAT_DONG` cho TVV ở 8 dropdown filter (FR-04 SM-TVV — `srs-fr-04-chuyen-gia-tvv.md`). **GIANG_VIEN giữ `DANG_HOAT_DONG`** (FR-03 không có thay đổi).
+  - Thêm §6 ghi chú thay đổi v3.5 (rename module + entity mới + 4 luồng nghiệp vụ mới) — xem cuối file.
+
+---
+
+## §6. Ghi chú thay đổi v3.5 (cherry-pick 2026-05-05/06/07)
+
+> **Nguồn:** [`../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md`](../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) + 14 DELTA-MAP-FRxx.md + consolidated [`srs-v3.5.md`](../input/srs-update-2026-5-5/srs-v3.5.md). File này giữ nguyên §1-§5 baseline; bổ sung §6 để bridge sang test plan v3.5.
+
+### 6.1 Rename module + entity (chính tả thay đổi)
+- **FR-08:** "Kế hoạch đánh giá" → **"Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý"**. Entity `DOT_DANH_GIA / DANH_GIA_HQ` → `KE_HOACH_DANH_GIA`. SM-DANHGIA 8 state mới: `LAP_KE_HOACH/PHAN_CONG/CHO_DUYET_PC/THUC_HIEN/BAO_CAO/CHO_PHE_DUYET/HOAN_THANH/HUY` (state cũ bỏ).
+- **FR-12:** "Tư vấn chuyên sâu" → **"Tư vấn pháp luật chuyên sâu"**. Entity `NOI_DUNG_TU_VAN_CS` → `TU_VAN_CHUYEN_SAU`. Thêm `don_vi_id` (cơ quan tiếp nhận, BR-ROUTE-TVCS-01) + `hop_dong_tv_id` (link FR-14). SM-TVCS 7 state v3.5 mới: `TIEP_NHAN/PHAN_CONG/DANG_TU_VAN/HOAN_THANH/CHO_PHE_DUYET/DA_DUYET/HUY` (default `TIEP_NHAN`).
+- **FR-15:** Entity `CT_HTPLDN_KE_HOACH` → `CHUONG_TRINH_HTPL` (3.4.3.10, SM-CTHTPL 8 states + `TAM_DUNG`). Entity `CT_HTPLDN_DOT_BC` → `DOT_BAO_CAO` (3.4.3.10a chính thức, 17 fields, SM-DOT-BC 6 states, `don_vi_id` FK BẮT BUỘC).
+- **FR-04:** SM-TVV state rename — `DANG_HOAT_DONG` → `HOAT_DONG` (đồng bộ enum CHECK constraint). Áp dụng filter dropdown ở: VV phân công, TVCS phân công CG, ĐG HQ phân công, HĐTV chọn Bên B, Hỏi đáp phân công, Chi trả thẩm định.
+
+### 6.2 Bốn luồng nghiệp vụ MỚI (CHANGELOG cite)
+1. **TC TV approval (FR-IV-NEW-01/02/04):** TC tư vấn nâng từ DM lên entity riêng `TO_CHUC_TU_VAN`. Vòng đời: `MOI_DANG_KY` → CB NV trình → CB PD công bố vào MLTV (NĐ 55/2019 Đ.9, BR-AUTH-05) → `HOAT_DONG`.
+2. **NHT lifecycle (FR-IV-NHT-01/02/03):** NHT tách entity riêng `NGUOI_HO_TRO` (NĐ 55/2019 Đ.7), `loai_tvv` enum chỉ còn `('TVV','CG')`. Tạo NHT → tạo TAI_KHOAN gán role NHT `CHO_KICH_HOAT` → NHT bấm link mail kích hoạt (FR-VIII-26) → `HOAT_DONG`. NHT có quyền `📝 RU*` trên hồ sơ NHT của chính mình + HSPL_DN của VV được phân công (Thay đổi 10).
+3. **DN bổ sung HSCT (FR-V.II-14):** Khi HSCT ở `YEU_CAU_BO_SUNG`, DN có ≤5 ngày LV để bổ sung file qua DVC/Cổng PLQG hoặc CB NV bổ sung thủ công. Tối đa 3 lần (`bo_sung_count` CHECK 0-3). Sau bổ sung → `DANG_KIEM_TRA` quay lại quy trình thẩm định/duyệt.
+4. **FR-VI-10 Nhận kết quả ĐG:** Khi đợt ĐG ở `HOAN_THANH`, CB NV thuộc `co_quan_duoc_danh_gia_id` (cơ quan được ĐG, có thể KHÁC `don_vi_id` cơ quan thực hiện ĐG) được 👁️ R\* trên KE_HOACH_DANH_GIA + KET_QUA_DANH_GIA + BAO_CAO_DANH_GIA.
+
+### 6.3 14 entity mới v3.5 (cộng dồn vào §3 Lớp DATA)
+| Entity | FR | Tier | Định nghĩa SRS v3.5 |
+|---|---|---|---|
+| `NGUOI_HO_TRO` | FR-04 | 1 | NĐ 55/2019 Đ.7, NHT entity riêng, SM-NHT 4 state |
+| `TO_CHUC_TU_VAN` | FR-04 | 1 | NĐ 55/2019 Đ.9, MLTV — TC TV nâng cấp từ DM |
+| `DANH_GIA_SAU_VU_VIEC` | FR-04 | 2 | DN chấm sau VV qua API (3 tiêu chí 1-5), tính TB lưu `TU_VAN_VIEN.diem_danh_gia_tb` |
+| `NGAY_LE` | FR-10 | 0 | FR-VIII-29 — QTHT CRUD, BR-CALC-03 trừ ngày lễ tính SLA |
+| `DOANH_NGHIEP_LINH_VUC` | FR-07 | 1 | M-N junction DN ↔ DM lĩnh vực kinh doanh (v3.5) |
+| `PHAN_CONG_VU_VIEC` | FR-05 | 2 | Tạo bản ghi mỗi lần CB NV phân công VV (v3.5 §4) |
+| `DANH_GIA_VU_VIEC` | FR-05 | 2 | UNIQUE per `loai_nguoi_danh_gia` (CB_NV/DN), thang 0-10 |
+| `LICH_SU_VU_VIEC` | FR-05 | 2 | Audit log auto-ghi từ mọi action SM-VUVIEC |
+| `THAM_DINH_HO_SO` | FR-06 | 3 | 1:1 với HSCT, FR-V.II-09/UC76, ket_qua DAT/KHONG_DAT/CAN_BO_SUNG |
+| `PHE_DUYET_CHI_TRA` | FR-06 | 3 | N:1 với HSCT, FR-V.II-12/UC79, immutable history (CR* không update) |
+| `HO_SO_PHAP_LY_DN` | FR-12 | 2 | 3.4.3.46, NHT `📝 RU*` scoped theo VV phân công |
+| `TU_LIEU_PHAP_LY_VV` | FR-12 | 2 | 3.4.3.47, BR-FLOW-07 không cần phê duyệt, 2 state NHAP/CONG_KHAI |
+| `DANH_GIA_CHAT_LUONG_TV` | FR-12 | 2 | 3.4.3.48, DN gửi điểm 1-5 + nhận xét qua API Cổng PLQG sau DA_DUYET |
+| `DOT_BAO_CAO` | FR-15 | 4 | 3.4.3.10a, 17 fields, SM-DOT-BC 6 states, `don_vi_id` FK BẮT BUỘC |
+
+### 6.4 Cross-cutting changes (áp toàn bộ 16 module)
+- **C1 Hard-delete:** bỏ trạng thái `DA_XOA` toàn dự án — DELETE soft → DELETE thật + AUDIT_LOG ghi.
+- **C3 Lưu nháp HẸP:** bỏ button [Lưu nháp] ở các form không có entry state `DU_THAO`.
+- **2-tier permission (BR-AUTH-08):** `BN không có ĐP trực thuộc` (FR-V.I refactor v3.5).
+- **5 trường công khai chuẩn (CR-01):** áp HOI_DAP/PHAN_HOI/VU_VIEC/BIEU_MAU/TU_VAN_CHUYEN_SAU/TU_LIEU_PHAP_LY_VV — `cong_khai`/`anh_dai_dien`/`thoi_gian_dang_tai`/`mo_ta_cong_khai`/`file_dinh_kem_cong_khai`.
+- **UC renumber +4 offset FR-11:** UC120-142 → UC124-146 (FR-VIII-22..25 chiếm UC120-123).
+- **CAU_HINH_PHAN_CONG DEPRECATED** (user chốt 2026-05-06 — bỏ feature). Dropdown gợi ý phân công ở §4.x giữ logic nhưng không dùng entity này.
+- **Word→PDF cho BC nhóm IX (FR-11 only):** export Excel + Word→PDF (không áp FR-15 — FR-15 vẫn Excel + Word qua Apache POI).

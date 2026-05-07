@@ -91,13 +91,13 @@
 #     2885-3007 linkage_assertions (cross-module verify)
 # =============================================================================
 
-fixture_version: "2.7.3-2026-05-06-fr12-v3.5"  # 2.7.3 (6/5): apply SRS update FR-12 v3.5 (srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md). 13 thay đổi áp: rename entity `NOI_DUNG_TU_VAN_CS` → `TU_VAN_CHUYEN_SAU` (Thay đổi 2); bỏ field `hinh_thuc_tv` ở cấp Vụ việc TVCS — đã move sang PHIEN_TU_VAN (Thay đổi 12); thêm `don_vi_id` cơ quan tiếp nhận (Thay đổi 6 + BR-ROUTE-TVCS-01); thêm 5 trường công khai chuyên trang `cong_khai`/`anh_dai_dien`/`thoi_gian_dang_tai`/`mo_ta_cong_khai`/`file_dinh_kem_cong_khai` (Thay đổi 7 + BR-PUBLIC-01/02/03); thêm `hop_dong_tv_id` link FR-14 (Thay đổi 13); state machine 4→7 state (TIEP_NHAN/PHAN_CONG/DANG_TU_VAN/HOAN_THANH/CHO_PHE_DUYET/DA_DUYET/HUY default TIEP_NHAN — Thay đổi 3); rename field `trang_thai_xu_ly` → `trang_thai`. Thêm 2 entity owned mới: `tu_lieu_phap_ly_vv_variants` (FR-X.1-06 / UC152 — 5 enum loai_tu_lieu VAN_BAN_PL/TAI_LIEU/NGHIEN_CUU/TIEN_LE/KHAC, 2 state NHAP/CONG_KHAI) + `danh_gia_chat_luong_tv_variants` (FR-X.1-07 / UC153 API inbound, diem_so 1-5). Mark DEPRECATED 24 occurrences `hinh_thuc_tv` + `trang_thai_xu_ly` trong `tv_cs_variants` (giữ R6/R7 legacy frozen, R8+ migrate sang v3.5 schema khi BE deploy migration). Tham chiếu: input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md §srs-fr-12-tv-chuyen-sau.md (line 1416-1604). — 2.7.2 (6/5 R7.2.1 trigger): align Tier 0 `linh_vuc_phap_ly` với SRS authoritative — srs-update-2026-5-5/srs-fr-10-quan-tri.md FR-VIII-01 line 204 (10 LV: Thuế/Lao động/Đất đai/Dân sự/Thương mại/Hình sự/Hành chính/SHTT/Doanh nghiệp/Đầu tư). BREAKING CHANGE: bỏ `HOP_DONG` (không có trong SRS), bulk replace `linh_vuc_id*: "HOP_DONG"` → `"THUONG_MAI"` ở mọi entity downstream (MPH/TVV/HD/VV/TVCS/HSPL/Đào tạo/HĐ TV/...). Riêng `loai_ho_so: "HOP_DONG"` (HSPL enum SRS FR-X.1-04 — KHÁC LV) GIỮ NGUYÊN. App DM hiện không khớp SRS (thiếu DOANH_NGHIEP/THUONG_MAI/DAU_TU + có 3 LV non-SRS) — cần dev re-seed DM theo SRS line 204 (escalate riêng). — 2.7.1 (6/5): R7.0.3 task done. Instruction tester R7: KHI SEED qua API mới, **STRIP field `dia_ban_ids` khỏi payload** trước khi POST (BE đã bỏ field — NĐ 77/2008 Đ.19 TVV scope toàn quốc). 24 occurrences `dia_ban_ids` trong tvv_variants giữ làm legacy reference cho R6 frozen, KHÔNG bulk-delete. Tương tự cho `loai_tvv: "NHT"` ở variant 19-21 — strip khi seed (NHT giờ entity riêng NGUOI_HO_TRO, dùng nht_variants block). Add note SM-KHOAHOC 9→11 state + SM-CTDT mới ở §8 flow-module.md. — 2.7.0 (5/5): apply 3 SRS update từ srs-update-2026-5-5/ (FR-04 + FR-07 + FR-10). Thêm 3 entity mới: ngay_le_variants (Tier 0, FR-VIII-29 GAP-VIII-05), to_chuc_tu_van_variants (Tier 1, FR-IV-NEW-01 CR-02), nht_variants (Tier 1, FR-IV-NHT-01 phương án B+). Mark DEPRECATED 3 NHT cũ trong tvv_variants[19-21] (giữ lại để R6 chạy, R7+ migrate sang nht_variants riêng). Note method seed DN: FR-VIII-22 self-reg DN-only — CB NV bỏ Create. Note breaking change: TVV.dia_ban_ids[] đã bỏ (NĐ 77/2008 Đ.19 — TVV scope toàn quốc, filter bằng don_vi_id). Tham chiếu: input/srs-update-2026-5-5/_DELTA-MAP-FR04.md, _DELTA-MAP-FR07.md, _DELTA-MAP-FR10.md.
+fixture_version: "2.7.4-2026-05-07-v3.5-batch"  # 2.7.4 (7/5): áp v3.5 cross-cutting batch — apply 4 delta core. (a) FR-04 SM-TVV rename TU_VAN_VIEN.trang_thai value `DANG_HOAT_DONG` → `HOAT_DONG` (entry state sau duyệt; KHÔNG đổi GIANG_VIEN/NHT/TO_CHUC_TU_VAN). 14 occurrences refresh trong tvv_variants/scenario/workflow_advance + bao_cao_variants nguon_data + dashboard_expected derivation. (b) FR-05 HOI_DAP +1 state HUY (8→9 states) + +1 kênh `TVN_BRIDGE` (4→5 kênh, system-only auto-fill từ FR-13 inbound — KHÔNG seed user). Thêm 1 variant index 12 scenario HUY. (c) FR-11 UC renumber `UC120..142` → `UC124..146` ở bao_cao_variants (FR-IX block, 23 entries) — do FR-VIII-22..25 chiếm UC120-123 v3.5. (d) FR-15 DOT_BAO_CAO formalize §3.4.3.10a — update dot_bao_cao_note với SM-DOT-BC 6 states (LAP_KE_HOACH/PHAN_CONG/THUC_HIEN/BAO_CAO/PHE_DUYET/HOAN_THANH; +HUY transition any→HUY). srs_version v3 → v3.5. Tham chiếu: srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md (FR-04 line 287, FR-05 line 1341+1487, FR-11 §srs-fr-11, FR-15 §srs-fr-15). — 2.7.3 (6/5): apply SRS update FR-12 v3.5 (srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md). 13 thay đổi áp: rename entity `NOI_DUNG_TU_VAN_CS` → `TU_VAN_CHUYEN_SAU` (Thay đổi 2); bỏ field `hinh_thuc_tv` ở cấp Vụ việc TVCS — đã move sang PHIEN_TU_VAN (Thay đổi 12); thêm `don_vi_id` cơ quan tiếp nhận (Thay đổi 6 + BR-ROUTE-TVCS-01); thêm 5 trường công khai chuyên trang `cong_khai`/`anh_dai_dien`/`thoi_gian_dang_tai`/`mo_ta_cong_khai`/`file_dinh_kem_cong_khai` (Thay đổi 7 + BR-PUBLIC-01/02/03); thêm `hop_dong_tv_id` link FR-14 (Thay đổi 13); state machine 4→7 state (TIEP_NHAN/PHAN_CONG/DANG_TU_VAN/HOAN_THANH/CHO_PHE_DUYET/DA_DUYET/HUY default TIEP_NHAN — Thay đổi 3); rename field `trang_thai_xu_ly` → `trang_thai`. Thêm 2 entity owned mới: `tu_lieu_phap_ly_vv_variants` (FR-X.1-06 / UC152 — 5 enum loai_tu_lieu VAN_BAN_PL/TAI_LIEU/NGHIEN_CUU/TIEN_LE/KHAC, 2 state NHAP/CONG_KHAI) + `danh_gia_chat_luong_tv_variants` (FR-X.1-07 / UC153 API inbound, diem_so 1-5). Mark DEPRECATED 24 occurrences `hinh_thuc_tv` + `trang_thai_xu_ly` trong `tv_cs_variants` (giữ R6/R7 legacy frozen, R8+ migrate sang v3.5 schema khi BE deploy migration). Tham chiếu: input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md §srs-fr-12-tv-chuyen-sau.md (line 1416-1604). — 2.7.2 (6/5 R7.2.1 trigger): align Tier 0 `linh_vuc_phap_ly` với SRS authoritative — srs-update-2026-5-5/srs-fr-10-quan-tri.md FR-VIII-01 line 204 (10 LV: Thuế/Lao động/Đất đai/Dân sự/Thương mại/Hình sự/Hành chính/SHTT/Doanh nghiệp/Đầu tư). BREAKING CHANGE: bỏ `HOP_DONG` (không có trong SRS), bulk replace `linh_vuc_id*: "HOP_DONG"` → `"THUONG_MAI"` ở mọi entity downstream (MPH/TVV/HD/VV/TVCS/HSPL/Đào tạo/HĐ TV/...). Riêng `loai_ho_so: "HOP_DONG"` (HSPL enum SRS FR-X.1-04 — KHÁC LV) GIỮ NGUYÊN. App DM hiện không khớp SRS (thiếu DOANH_NGHIEP/THUONG_MAI/DAU_TU + có 3 LV non-SRS) — cần dev re-seed DM theo SRS line 204 (escalate riêng). — 2.7.1 (6/5): R7.0.3 task done. Instruction tester R7: KHI SEED qua API mới, **STRIP field `dia_ban_ids` khỏi payload** trước khi POST (BE đã bỏ field — NĐ 77/2008 Đ.19 TVV scope toàn quốc). 24 occurrences `dia_ban_ids` trong tvv_variants giữ làm legacy reference cho R6 frozen, KHÔNG bulk-delete. Tương tự cho `loai_tvv: "NHT"` ở variant 19-21 — strip khi seed (NHT giờ entity riêng NGUOI_HO_TRO, dùng nht_variants block). Add note SM-KHOAHOC 9→11 state + SM-CTDT mới ở §8 flow-module.md. — 2.7.0 (5/5): apply 3 SRS update từ srs-update-2026-5-5/ (FR-04 + FR-07 + FR-10). Thêm 3 entity mới: ngay_le_variants (Tier 0, FR-VIII-29 GAP-VIII-05), to_chuc_tu_van_variants (Tier 1, FR-IV-NEW-01 CR-02), nht_variants (Tier 1, FR-IV-NHT-01 phương án B+). Mark DEPRECATED 3 NHT cũ trong tvv_variants[19-21] (giữ lại để R6 chạy, R7+ migrate sang nht_variants riêng). Note method seed DN: FR-VIII-22 self-reg DN-only — CB NV bỏ Create. Note breaking change: TVV.dia_ban_ids[] đã bỏ (NĐ 77/2008 Đ.19 — TVV scope toàn quốc, filter bằng don_vi_id). Tham chiếu: input/srs-update-2026-5-5/_DELTA-MAP-FR04.md, _DELTA-MAP-FR07.md, _DELTA-MAP-FR10.md.
                                      # 2.6.3 (2/5): post-seed adapt notes. Seed 15 DN variants thực tế qua API direct (workaround JWT bug). MST gen checksum-valid (prefix 5*) thay fixture spec MST `01001..04004` (BE bắt buộc checksum NĐ Việt Nam). loaiDoanhNghiepId variant 14/15 đổi `CO_PHAN/TU_NHAN` → `CP/DNTN` khớp DM seed. Variant 8/12 BVA above-bound NĐ39 lưu thành công với flag ignoreWarning=true (BR-CALC-05 cảnh báo WRN-DN-01 nhưng không block). 4 bug Open: BUG-AUTH-JWT-001 (Critical), BUG-DM-LOAI-DN-001 (Major), BUG-FILTER-DN-001 (Major), BUG-API-DN-001 (Medium). Tham chiếu: output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-fixture-seed-dn.md.
                                      # 2.6.2 (1/5): dev reset toàn DB → re-seed full A→Z. Confirm cap_tai_khoan_cg_nht_r5 đủ data A5/A3 NHT. Bổ sung WARNING coverage DN cấp ĐP: 12 DN hiện cover TW/BN/DN/HN/HP, THIẾU AG/BG/BNI (3 đơn vị có account ĐP cg_01/02/03 + cb_nv_dp_01/02/03). Khi seed lại, QTHT cần tạo thêm ≥3 DN ở 3 đơn vị này nếu test scope ĐP toàn cấp. Spec đề xuất xem block `dn_variants_dp_extension` cuối M1. Master plan: tasks/post-reset-seed-plan.md. — 2.6.1 (1/5): thêm cap_tai_khoan_cg_nht_r5 (9 cặp TAI_KHOAN login). — 2.6.0 (28/4): split loai_tvv CG/NHT + add mau_phan_hoi/danh_muc_ly_do/hoc_vien.
                                      # 2.5.2: bỏ state_target khỏi bai_giang_variants (SRS FR-III-07 không có field state); rename file_path/link_video/linh_vuc_id → file_bai_giang/url_youtube/linh_vuc_ids[] khớp SRS Inputs row 4-6. Tra changelog: git log input/data/seed-fixture.yaml
 tier_strategy: "Y"
 track: "A_UI_only"       # Track A (UI click-chain) — Track B (BE script) chưa khả dụng
-srs_version: "v3"
+srs_version: "v3.5"     # bumped 2026-05-07 — fixture đã apply 4 delta v3.5 (FR-04/05/11/15). Tham chiếu CHANGELOG: input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md
 seed_mode: "pure"        # pure = entry state only | hybrid = mixed states (v1.x, deprecated)
 
 # =============================================================================
@@ -791,7 +791,7 @@ tvv_variants:
     file_bang_cap: null
     ghi_chu: "Test scenario TAM_DUNG — TVV cũ active rồi tạm dừng, không hiện trong dropdown phân công"
     state_target: "MỚI ĐĂNG KÝ"
-    scenario: "Sau khi advance qua DANG_HOAT_DONG → CB NV manual toggle TAM_DUNG"
+    scenario: "Sau khi advance qua HOAT_DONG → CB NV manual toggle TAM_DUNG"
   - index: 9
     ho_ten: "Phan Văn Chín"
     ngay_sinh: "1985-08-14"
@@ -875,9 +875,9 @@ tvv_variants:
     ghi_chu: "TVV active đa lĩnh vực — test dropdown gợi ý đa lĩnh vực + boundary pagination"
     state_target: "MỚI ĐĂNG KÝ"
   # --- BỔ SUNG v2.6.0 (R5 28/4) — 6 CG cover 6 lĩnh vực fixture (cho A5 TVCS Phân công CG) ---
-  # Phát sinh từ A5 R5 FAIL: modal Phân công TVCS strict `loai_tvv=CG AND trang_thai=DANG_HOAT_DONG AND linh_vuc khớp` (system-overview §5.2 line 595 + srs-fr-12 line 938).
+  # Phát sinh từ A5 R5 FAIL: modal Phân công TVCS strict `loai_tvv=CG AND trang_thai=HOAT_DONG AND linh_vuc khớp` (system-overview §5.2 line 595 + srs-fr-12 line 938).
   # Pool 12 TVV cũ chỉ có 1 record CG (index 10) → thiếu 5 lĩnh vực (Hợp đồng/Lao động/Thuế/SHTT/Đất đai) → modal empty cho TVCS-0002..0006.
-  # Workflow advance: tạo MOI_DANG_KY → Thẩm định Đạt → Trình duyệt → CB PD Phê duyệt → DANG_HOAT_DONG → Công khai PLQG (cong_khai=true) [v3.5 rename CR-01].
+  # Workflow advance: tạo MOI_DANG_KY → Thẩm định Đạt → Trình duyệt → CB PD Phê duyệt → HOAT_DONG → Công khai PLQG (cong_khai=true) [v3.5 rename CR-01].
   # Tracked: tasks/todo.md T1.B3b 🟢. Đã có 1 CG seed thực tế R4 (TVV-BTP-TW-0019 "Test Chuyên Gia A4A5", lĩnh vực Doanh nghiệp).
   #
   # ⚠️ DATA GAP CRITICAL (2026-05-01 R10 phát hiện qua A5 Bước 4):
@@ -906,7 +906,7 @@ tvv_variants:
     ghi_chu: "CG cover lĩnh vực Doanh nghiệp — A5 TVCS-0001 phân công"
     state_target: "MỚI ĐĂNG KÝ"
     loai_tvv: "CG"
-    workflow_advance: "DANG_HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
+    workflow_advance: "HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
     scenario: "CG fallback nếu CG `Test Chuyên Gia A4A5` (TVV-BTP-TW-0019) bị soft-delete"
   - index: 14
     ho_ten: "Đinh Văn Mười Bốn"
@@ -929,7 +929,7 @@ tvv_variants:
     ghi_chu: "CG cover lĩnh vực Hợp đồng/KDTM — A5 TVCS-0002 phân công"
     state_target: "MỚI ĐĂNG KÝ"
     loai_tvv: "CG"
-    workflow_advance: "DANG_HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
+    workflow_advance: "HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
   - index: 15
     ho_ten: "Ngô Thị Mười Lăm"
     ngay_sinh: "1978-12-05"
@@ -951,7 +951,7 @@ tvv_variants:
     ghi_chu: "CG cover lĩnh vực Lao động — A5 TVCS-0003 phân công"
     state_target: "MỚI ĐĂNG KÝ"
     loai_tvv: "CG"
-    workflow_advance: "DANG_HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
+    workflow_advance: "HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
   - index: 16
     ho_ten: "Trương Văn Mười Sáu"
     ngay_sinh: "1974-06-18"
@@ -973,7 +973,7 @@ tvv_variants:
     ghi_chu: "CG cover lĩnh vực Thuế — A5 TVCS-0004 phân công"
     state_target: "MỚI ĐĂNG KÝ"
     loai_tvv: "CG"
-    workflow_advance: "DANG_HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
+    workflow_advance: "HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
   - index: 17
     ho_ten: "Mai Thị Mười Bảy"
     ngay_sinh: "1980-02-28"
@@ -995,7 +995,7 @@ tvv_variants:
     ghi_chu: "CG cover lĩnh vực SHTT — A5 TVCS-0005 phân công"
     state_target: "MỚI ĐĂNG KÝ"
     loai_tvv: "CG"
-    workflow_advance: "DANG_HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
+    workflow_advance: "HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
   - index: 18
     ho_ten: "Hồ Văn Mười Tám"
     ngay_sinh: "1976-08-10"
@@ -1017,7 +1017,7 @@ tvv_variants:
     ghi_chu: "CG cover lĩnh vực Đất đai — A5 TVCS-0006 phân công"
     state_target: "MỚI ĐĂNG KÝ"
     loai_tvv: "CG"
-    workflow_advance: "DANG_HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
+    workflow_advance: "HOAT_DONG + cong_khai=true"  # v3.5: rename la_cong_khai→cong_khai (FR-04 + FR-09 CR-01)
   # --- BỔ SUNG v2.6.0 (R5 28/4) — 3 NHT cấp ĐP NĐ77/2008 (cho A3 VV Phân công NHT) ---
   # SRS ref: srs-v3.md line 201 (NHT = Người hỗ trợ pháp lý), line 441 ("Cấp ĐP — thuộc Tổ chức HT PLDN dưới Sở TP, NĐ77/2008"), line 458 ("NHT ĐP + chỉ vụ việc được phân công BR-AUTH-10").
   # Filter dropdown: system-overview §5.2 line 593 "Chọn TVV/CG (phân công VV) — vai_tro IN (TVV,CG,NHT) AND linh_vuc_pl khớp".
@@ -1043,7 +1043,7 @@ tvv_variants:
     ghi_chu: "NHT cấp ĐP NĐ77/2008 — A3 VV phân công NHT scope ĐP-AG"
     state_target: "MỚI ĐĂNG KÝ"
     loai_tvv: "NHT"
-    workflow_advance: "DANG_HOAT_DONG"
+    workflow_advance: "HOAT_DONG"
     scenario: "BR-AUTH-10 NHT lọc kép — chỉ thấy VV được phân công cho mình tại đơn vị Sở TP AG"
   - index: 20
     ho_ten: "Lương Văn NHT Đà Nẵng"
@@ -1066,7 +1066,7 @@ tvv_variants:
     ghi_chu: "NHT cấp ĐP — A3 VV phân công NHT scope ĐP-DN"
     state_target: "MỚI ĐĂNG KÝ"
     loai_tvv: "NHT"
-    workflow_advance: "DANG_HOAT_DONG"
+    workflow_advance: "HOAT_DONG"
   - index: 21
     ho_ten: "Đào Thị NHT Hải Phòng"
     ngay_sinh: "1990-03-08"
@@ -1088,7 +1088,7 @@ tvv_variants:
     ghi_chu: "NHT cấp ĐP — A3 VV phân công NHT scope ĐP-HP. ⚠️ DEPRECATED v2.7.0: NHT đã migrate sang nht_variants riêng — giữ tạm để R6 chạy."
     state_target: "MỚI ĐĂNG KÝ"
     loai_tvv: "NHT"
-    workflow_advance: "DANG_HOAT_DONG"
+    workflow_advance: "HOAT_DONG"
 
 # =============================================================================
 # Supplementary — Cấp TK CG/NHT R5 (LIÊN QUAN tvv_variants[13-21] — promoted to root)
@@ -1123,7 +1123,7 @@ cap_tai_khoan_cg_nht_r5:
 cap_tai_khoan_prereq: |
   Cần đạt 3 điều kiện trước khi seed:
   (1) QTHT account (qtht_01..03 hoặc admin) login OK với mật khẩu hợp lệ. Nếu cả 4 account fail (như R10 1/5) → escalate dev reset password trước.
-  (2) 9 TVV/CG/NHT profile (variant 13-21) đã ở state DANG_HOAT_DONG (advance từ MOI_DANG_KY qua thẩm định + duyệt — task T1.B3b/B3c).
+  (2) 9 TVV/CG/NHT profile (variant 13-21) đã ở state HOAT_DONG (advance từ MOI_DANG_KY qua thẩm định + duyệt — task T1.B3b/B3c).
   (3) Sau khi cấp TK + link FK xong, verify: GET /api/v1/tu-van-viens/{id} response field `taiKhoanId != null` cho mỗi TVV. Login bằng cg_tw_01 → list TVCS phải hiện TVCS-0001 trong inbox "Việc của tôi".
   Nếu có ít nhất 1 fail trong 3 điều kiện trên → A5 Bước 4-12 + A3 VV Phân công NHT vẫn BLOCK.
 
@@ -1777,6 +1777,29 @@ hoi_dap_variants:
     file_dinh_kem: null
     state_target: "MỚI"
     scenario: "Pagination — bulk record cho test page 2 list HD"
+  # --- BỔ SUNG v3.5 (7/5) — HUY scenario + TVN_BRIDGE note ---
+  # SRS ref: srs-update-2026-5-5/srs-fr-02-hoi-dap.md line 1341 (SM-HOIDAP 9 states +HUY) + line 1487 (state diagram MOI → HUY).
+  # SM-HOIDAP transition: MOI → HUY khi CB NV cùng đơn vị bấm "Hủy yêu cầu" (chưa có phản hồi đang soạn) — BR-DATA-01/05 audit log.
+  - index: 12
+    doanh_nghiep_id: "dn_variants[12]"
+    dn_link: "dn_variants[12]"
+    linh_vuc_id: "DAT_DAI"
+    tieu_de: "HUY scenario — DN gửi nhầm câu hỏi"
+    noi_dung: "DN gửi câu hỏi nhầm vào lĩnh vực đất đai (đáng lẽ thuộc lao động). Yêu cầu hủy để gửi lại."
+    kenh_tiep_nhan: "TRUC_TIEP"
+    ten_nguoi_gui: "Mai Văn Mu"
+    email_nguoi_gui: "mu@test.htpldn.vn"
+    sdt_nguoi_gui: "0241000012"
+    file_dinh_kem: null
+    state_target: "MỚI"                        # Entry state — workflow_advance MỚI → HUY ở T3 (CB NV bấm "Hủy yêu cầu")
+    workflow_advance: "HUY (transition MỚI → HUY, BR-DATA-01 soft delete)"
+    scenario: "v3.5 HUY scenario — verify SM-HOIDAP transition MỚI → HUY + audit log + tab Hoàn thành filter HOAN_THANH/HUY"
+  # --- LƯU Ý v3.5 — kênh TVN_BRIDGE KHÔNG seed user ---
+  # `kenh_tiep_nhan: "TVN_BRIDGE"` (kênh thứ 5) là system-only — hệ thống tự ghi khi câu hỏi đẩy
+  # từ FR-13 Tư vấn nhanh sang HOI_DAP qua hành động Escalate (UC12). Cán bộ KHÔNG nhập tay được.
+  # Form SCR-II-01 dropdown CHỈ hiển thị 4 kênh user-input (DVC/CONG_PLQG/TRUC_TIEP/HE_THONG_KHAC).
+  # Khi test FR-13 → FR-02 escalate → seed PHIEN TVN trước, advance Escalate → HOI_DAP tự sinh
+  # với kenh_tiep_nhan='TVN_BRIDGE' + tu_van_nhanh_goc_id=<id phiên>. Tracked: T2.B5 workflow phase.
 
 # M5 — Tư vấn pháp luật chuyên sâu (FR-X.1-01, SM-TVCS, 10 records at ENTRY state)
 # Screen: SCR-X1-02 (đổi tên menu "Tư vấn chuyên sâu" → "Tư vấn pháp luật chuyên sâu" theo Thay đổi 1 v3.5)
@@ -3442,11 +3465,17 @@ ct_htpldn_variants:
   # M11.2 — Đợt Báo cáo (flow-module §13 BƯỚC 5 Tier 4) — KHÔNG seed ở pure-seed phase
   # Prereq: CT phải state = ĐANG THỰC HIỆN (từ M11.1 advance qua SM-KH-CTHTPL).
   # Seed ở T3.8 workflow phase sau khi Tier 3 (VV/Chi trả/Đào tạo) có data trong kỳ.
+  # ⚠️ v3.5 (7/5): DOT_BAO_CAO formalize entity §3.4.3.10a — entity riêng (rename từ CT_HTPLDN_DOT_BC).
+  #   SM-DOT-BC 6 states: LAP_KE_HOACH (default) → PHAN_CONG → THUC_HIEN → BAO_CAO → PHE_DUYET → HOAN_THANH (+HUY transition any→HUY).
+  #   17 fields chính: ma_dot, ten_dot, chuong_trinh_id (FK CHUONG_TRINH_HTPL), don_vi_id, ky_bao_cao,
+  #   tu_ngay, den_ngay, ngan_sach, muc_tieu, trang_thai, ly_do_huy, nguoi_tao, ...
+  #   Tham chiếu: input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md §srs-fr-15.
   dot_bao_cao_variants: null
   dot_bao_cao_note: |
-    Seed ở T3.8 workflow phase (2026-04-24 v1.6 sync, trước đây ghi "T3 workflow phase").
-    Prereq: advance ke_hoach_variants[1] qua CHỜ PHÊ DUYỆT → ĐÃ DUYỆT → ĐÃ CÔNG BỐ → ĐANG THỰC HIỆN
-    (Phase A SM-KH-CTHTPL trong T3.8) + Tier 3 có ≥1 VV/Chi trả/KHOAHOC trong kỳ.
+    Seed ở T3.8 workflow phase (2026-04-24 v1.6 sync; v3.5 7/5 update entity name + SM).
+    Prereq: advance ct_htpldn_variants[1] (CHUONG_TRINH_HTPL) qua CHỜ PHÊ DUYỆT → ĐÃ DUYỆT
+    → ĐÃ CÔNG BỐ → ĐANG THỰC HIỆN (Phase A SM-KH-CTHTPL trong T3.8) + Tier 3 có ≥1 VV/Chi trả/KHOAHOC trong kỳ.
+    Variant target khi seed (T3.8): ≥6 ĐBC cover SM-DOT-BC 6 state + ≥1 HUY scenario (transition any→HUY).
 
 # =============================================================================
 # TIER 1 — MASTER TÀI LIỆU (BƯỚC 2 MASTER DATA — sync 2026-04-24 flow-module §3)
@@ -3637,7 +3666,7 @@ bao_cao_variants:
   - index: 1
     fr_code: "FR-IX-01"
     loai: "BC Số lượng hỏi đáp/vướng mắc"
-    uc_ref: "UC120"
+    uc_ref: "UC124"
     nguon_data: "hoi_dap_variants"
     filter:
       tu_ngay: "2026-01-01"
@@ -3649,7 +3678,7 @@ bao_cao_variants:
   - index: 2
     fr_code: "FR-IX-04"
     loai: "BC Vụ việc đã hoàn thành"
-    uc_ref: "UC123"
+    uc_ref: "UC127"
     nguon_data: "vu_viec_variants (filter state = HOAN_THANH)"
     filter:
       tu_ngay: "2026-01-01"
@@ -3661,7 +3690,7 @@ bao_cao_variants:
   - index: 3
     fr_code: "FR-IX-15"
     loai: "BC Chi phí chi trả hỗ trợ"
-    uc_ref: "UC134"
+    uc_ref: "UC138"
     nguon_data: "ho_so_chi_tra (BLOCKED)"
     filter:
       tu_ngay: "2026-01-01"
@@ -3674,7 +3703,7 @@ bao_cao_variants:
   - index: 4
     fr_code: "FR-IX-02"
     loai: "BC Vụ việc đã tiếp nhận"
-    uc_ref: "UC121"
+    uc_ref: "UC125"
     nguon_data: "vu_viec_variants (state DA_TIEP_NHAN)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", don_vi_id: "TW-CUC" }
     state_target: "HOAN_THANH"
@@ -3683,7 +3712,7 @@ bao_cao_variants:
   - index: 5
     fr_code: "FR-IX-03"
     loai: "BC Vụ việc đang hỗ trợ"
-    uc_ref: "UC122"
+    uc_ref: "UC126"
     nguon_data: "vu_viec_variants (state DA_TIEP_NHAN/DANG_XU_LY/DA_PHAN_CONG)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", don_vi_id: "TW-CUC" }
     state_target: "HOAN_THANH"
@@ -3692,7 +3721,7 @@ bao_cao_variants:
   - index: 6
     fr_code: "FR-IX-05"
     loai: "BC Vụ việc theo thời gian"
-    uc_ref: "UC124"
+    uc_ref: "UC128"
     nguon_data: "vu_viec_variants (group by tháng)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", don_vi_id: "TW-CUC", group_by: "MONTH" }
     state_target: "HOAN_THANH"
@@ -3701,7 +3730,7 @@ bao_cao_variants:
   - index: 7
     fr_code: "FR-IX-06"
     loai: "BC Lớp đào tạo đang diễn ra"
-    uc_ref: "UC125"
+    uc_ref: "UC129"
     nguon_data: "khoa_hoc_variants (state DANG_DIEN_RA)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", don_vi_id: "TW-CUC" }
     state_target: "HOAN_THANH"
@@ -3710,7 +3739,7 @@ bao_cao_variants:
   - index: 8
     fr_code: "FR-IX-07"
     loai: "BC Lớp đào tạo đã diễn ra"
-    uc_ref: "UC126"
+    uc_ref: "UC130"
     nguon_data: "khoa_hoc_variants (state DA_KET_THUC/HOAN_THANH)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", don_vi_id: "TW-CUC" }
     state_target: "HOAN_THANH"
@@ -3719,8 +3748,8 @@ bao_cao_variants:
   - index: 9
     fr_code: "FR-IX-08"
     loai: "BC Số lượng CG/TVV"
-    uc_ref: "UC127"
-    nguon_data: "tvv_variants (state DANG_HOAT_DONG)"
+    uc_ref: "UC131"
+    nguon_data: "tvv_variants (state HOAT_DONG)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31" }
     state_target: "HOAN_THANH"
     expected_record_count: 0      # Pure seed all MỚI ĐĂNG KÝ → tăng sau A1
@@ -3728,7 +3757,7 @@ bao_cao_variants:
   - index: 10
     fr_code: "FR-IX-09"
     loai: "BC Đánh giá hiệu quả HTPL"
-    uc_ref: "UC128"
+    uc_ref: "UC132"
     nguon_data: "danh_gia_hq_variants + ket_qua_danh_gia"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31" }
     state_target: "HOAN_THANH"
@@ -3737,7 +3766,7 @@ bao_cao_variants:
   - index: 11
     fr_code: "FR-IX-10"
     loai: "BC Chất lượng đào tạo"
-    uc_ref: "UC129"
+    uc_ref: "UC133"
     nguon_data: "ket_qua_dao_tao"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31" }
     state_target: "HOAN_THANH"
@@ -3746,7 +3775,7 @@ bao_cao_variants:
   - index: 12
     fr_code: "FR-IX-11"
     loai: "BC Vụ việc theo đơn vị quản lý"
-    uc_ref: "UC130"
+    uc_ref: "UC134"
     nguon_data: "vu_viec_variants (group by don_vi)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", group_by: "DON_VI" }
     state_target: "HOAN_THANH"
@@ -3755,7 +3784,7 @@ bao_cao_variants:
   - index: 13
     fr_code: "FR-IX-12"
     loai: "BC Vụ việc theo lĩnh vực"
-    uc_ref: "UC131"
+    uc_ref: "UC135"
     nguon_data: "vu_viec_variants (group by linh_vuc)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", group_by: "LINH_VUC" }
     state_target: "HOAN_THANH"
@@ -3764,7 +3793,7 @@ bao_cao_variants:
   - index: 14
     fr_code: "FR-IX-13"
     loai: "BC Vụ việc theo loại hình DN"
-    uc_ref: "UC132"
+    uc_ref: "UC136"
     nguon_data: "vu_viec_variants + dn (group by quy_mo)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", group_by: "QUY_MO" }
     state_target: "HOAN_THANH"
@@ -3773,7 +3802,7 @@ bao_cao_variants:
   - index: 15
     fr_code: "FR-IX-14"
     loai: "BC Vụ việc theo thời gian chi tiết"
-    uc_ref: "UC133"
+    uc_ref: "UC137"
     nguon_data: "vu_viec_variants (group by ngày/tuần)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-03-31", group_by: "WEEK" }
     state_target: "HOAN_THANH"
@@ -3782,7 +3811,7 @@ bao_cao_variants:
   - index: 16
     fr_code: "FR-IX-16"
     loai: "BC Chi phí theo đơn vị"
-    uc_ref: "UC135"
+    uc_ref: "UC139"
     nguon_data: "ho_so_chi_tra (BLOCKED)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", group_by: "DON_VI" }
     state_target: "HOAN_THANH"
@@ -3791,7 +3820,7 @@ bao_cao_variants:
   - index: 17
     fr_code: "FR-IX-17"
     loai: "BC Chi phí theo lĩnh vực"
-    uc_ref: "UC136"
+    uc_ref: "UC140"
     nguon_data: "ho_so_chi_tra (BLOCKED)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", group_by: "LINH_VUC" }
     state_target: "HOAN_THANH"
@@ -3800,7 +3829,7 @@ bao_cao_variants:
   - index: 18
     fr_code: "FR-IX-18"
     loai: "BC Chi phí theo loại hình DN"
-    uc_ref: "UC137"
+    uc_ref: "UC141"
     nguon_data: "ho_so_chi_tra (BLOCKED)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", group_by: "QUY_MO" }
     state_target: "HOAN_THANH"
@@ -3809,7 +3838,7 @@ bao_cao_variants:
   - index: 19
     fr_code: "FR-IX-19"
     loai: "BC Chi phí theo thời gian"
-    uc_ref: "UC138"
+    uc_ref: "UC142"
     nguon_data: "ho_so_chi_tra (BLOCKED)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", group_by: "MONTH" }
     state_target: "HOAN_THANH"
@@ -3818,7 +3847,7 @@ bao_cao_variants:
   - index: 20
     fr_code: "FR-IX-20"
     loai: "BC Số lượng CT hỗ trợ"
-    uc_ref: "UC139"
+    uc_ref: "UC143"
     nguon_data: "ct_htpldn_variants (state DANG_THUC_HIEN/HOAN_THANH)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31" }
     state_target: "HOAN_THANH"
@@ -3827,7 +3856,7 @@ bao_cao_variants:
   - index: 21
     fr_code: "FR-IX-21"
     loai: "BC CT theo đơn vị"
-    uc_ref: "UC140"
+    uc_ref: "UC144"
     nguon_data: "ct_htpldn_variants (group by don_vi)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", group_by: "DON_VI" }
     state_target: "HOAN_THANH"
@@ -3836,7 +3865,7 @@ bao_cao_variants:
   - index: 22
     fr_code: "FR-IX-22"
     loai: "BC CT theo lĩnh vực"
-    uc_ref: "UC141"
+    uc_ref: "UC145"
     nguon_data: "ct_htpldn_variants (group by linh_vuc)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", group_by: "LINH_VUC" }
     state_target: "HOAN_THANH"
@@ -3845,7 +3874,7 @@ bao_cao_variants:
   - index: 23
     fr_code: "FR-IX-23"
     loai: "BC CT theo thời gian"
-    uc_ref: "UC142"
+    uc_ref: "UC146"
     nguon_data: "ct_htpldn_variants (group by năm/quý)"
     filter: { tu_ngay: "2026-01-01", den_ngay: "2026-12-31", group_by: "MONTH" }
     state_target: "HOAN_THANH"
@@ -3984,7 +4013,7 @@ dashboard_expected_kpi_post_seed:
       fr: "FR-I-07"
       nhan: "Tổng CG/TVV"
       expected: 0
-      derivation: "Pure seed: 0 TVV DANG_HOAT_DONG (all MỚI ĐĂNG KÝ). Sau test function M2 → số sẽ tăng."
+      derivation: "Pure seed: 0 TVV HOAT_DONG (all MỚI ĐĂNG KÝ). Sau test function M2 → số sẽ tăng."
     - kpi: "KPI-08"
       fr: "FR-I-08"
       nhan: "Biểu đồ đánh giá HQ"

@@ -1,8 +1,8 @@
 # Ma trận phân quyền — Pivot theo Role × Chức năng (screen-level)
 
 > **Nguồn:**
-> - Ma trận CRUD: SRS v3.1 §3.4.2 (line 1050–1116) — 46 entity × 11 role
-> - Chức năng + màn hình: SRS v3.1 `srs-fr-01..16` — 198 chức năng + SCR references
+> - Ma trận CRUD: SRS v3.1 §3.4.2 baseline 46 entity × 11 role + **SRS update v3.5 (2026-05-05/06)** add 9 entity → 55 entity (xem header bullet bên dưới)
+> - Chức năng + màn hình: SRS v3.1 `srs-fr-01..16` (baseline) + `srs-update-2026-5-5/srs-fr-NN-*.md` (delta v3.5) — 198+ chức năng + SCR references
 > - Mapping function → entity: heuristic parse entity count trong mỗi function block + manual override cho FR-10, FR-11
 > - Test accounts: `input/users.csv`
 
@@ -14,7 +14,19 @@
 
 > **Update 2026-05-06 (SRS update FR-12 v3.5):** Đổi tên menu "Tư vấn chuyên sâu" → **"Tư vấn pháp luật chuyên sâu"** (Thay đổi 1) — sửa 11 heading FR-12 mỗi role. Rename entity `NOI_DUNG_TU_VAN_CS` → `TU_VAN_CHUYEN_SAU` ở cột Entity các row FR-X.1-01/02 (Thay đổi 2). Update entity ở cột FR-X.1-04 → `HO_SO_PHAP_LY_DN` (định nghĩa mới 3.4.3.46), FR-X.1-06 → `TU_LIEU_PHAP_LY_VV` (3.4.3.47), FR-X.1-07 → `DANH_GIA_CHAT_LUONG_TV` (3.4.3.48) — Thay đổi 5. NHT có 📝 RU* trên `HO_SO_PHAP_LY_DN` scoped theo VV phân công (Thay đổi 10). Cite: `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md`.
 
-> **Generate:** 2026-04-21 | Roles: 11 | Entities: **55** (46 cũ + 3 FR-04/07/10 update 2026-05-05 + 3 FR-05 update 2026-05-06: PHAN_CONG_VU_VIEC + DANH_GIA_VU_VIEC + LICH_SU_VU_VIEC + 3 FR-12 update 2026-05-06: HO_SO_PHAP_LY_DN + TU_LIEU_PHAP_LY_VV + DANH_GIA_CHAT_LUONG_TV) | Functions: 198+
+> **Update 2026-05-06 (SRS update FR-02 v3.5):** **MAU_PHAN_HOI áp Mô hình B Hybrid 2 tầng** — scope đổi từ `don_vi_id` sang `pham_vi_ap_dung × cấp user` (4 mã quyền mới: `MPH_CREATE_TW`/`MPH_CREATE_BN`/`MPH_CREATE_DP`/`MPH_READ`). HOI_DAP + PHAN_HOI thêm 5 trường công khai chuẩn CR-01 (`cong_khai`/`anh_dai_dien`/`thoi_gian_dang_tai`/`mo_ta_cong_khai`/`file_dinh_kem_cong_khai`). HOI_DAP thêm `don_vi_id` (CR-06 — DN chọn cơ quan tiếp nhận từ Cổng PLQG, default Sở TP tỉnh DN), enum `kenh_tiep_nhan` thêm `TVN_BRIDGE`, state `HUY` (8→9 state SM-HOIDAP). BR-FLOW-05 thu hẹp: CB NV bị chặn Công khai/Hủy CK — chỉ CB Phê duyệt cùng cấp được. BR-FLOW-06 mới: Đóng hồ sơ thủ công, KHÔNG auto-close. CAU_HINH_PHAN_CONG entity bỏ khỏi FR-02 (chuyển sang FR-10 MH-10.7). Cite: `srs-update-2026-5-5/srs-fr-02-hoi-dap.md`.
+
+> **Update 2026-05-06 (SRS update FR-06 v3.5):** **+1 FR mới FR-V.II-14** (DN bổ sung HSCT qua DVC/Cổng PLQG hoặc CB NV thủ công, ≤5 ngày LV, max 3 lần — `bo_sung_count` CHECK 0-3). **+2 entity owned mới**: `THAM_DINH_HO_SO` (1:1 với HSCT, CB NV thẩm định Đạt/Không đạt/Cần bổ sung — FR-V.II-09/UC76) + `PHE_DUYET_CHI_TRA` (N:1 với HSCT, CB PD quyết định DUYET hoặc TU_CHOI=trả về — FR-V.II-12/UC79, BR-FLOW-04 lý do ≥10 ký tự). DN đổi quyền HO_SO_CHI_TRA: 🔌 C†R* → **🔌 C†RU*** (Update file_bo_sung[] qua FR-V.II-14 + Update rút HS qua FR-V.II-02 [GAP-V.II-03]). HSCT +9 fields lifecycle + UNIQUE `ma_ho_so_dvc` idempotent ERR-CT-02. SM-CHITRA 10 enum mới (bỏ MOI/DA_TIEP_NHAN/CHO_THAM_DINH/DA_THAM_DINH/TU_CHOI_THAM_DINH/TU_CHOI_THANH_TOAN). Cite: `srs-update-2026-5-5/srs-fr-06-chi-tra.md`.
+
+> **Update 2026-05-06 (SRS update FR-07 v3.5):** **CB NV bỏ quyền Create** trên DOANH_NGHIEP (✅ CRUD* → 📝 RU\*D). DN tự reg qua **FR-VIII-22 self-reg** (login page button "Đăng ký dành cho doanh nghiệp", username = MST 10 chữ số). FR-V.III-NEW-01 (Import Excel DN) **BỎ HOÀN TOÀN** — BA chốt. Thêm entity `DOANH_NGHIEP_LINH_VUC` (M-N junction DN ↔ DM lĩnh vực kinh doanh). DN có quyền 🔌 C†RU* trên DOANH_NGHIEP của chính mình. Cite: `srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md`.
+
+> **Update 2026-05-06 (SRS update FR-08 v3.5):** Module rename "Kế hoạch đánh giá" → **"Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý"**. Entity rename `DOT_DANH_GIA / DANH_GIA_HQ` → **`KE_HOACH_DANH_GIA`**. SM-DANHGIA thống nhất 8 state v3.5: `LAP_KE_HOACH/PHAN_CONG/CHO_DUYET_PC/THUC_HIEN/BAO_CAO/CHO_PHE_DUYET/HOAN_THANH/HUY` (state cũ NHAP/DA_LAP_KH/DA_DUYET_PC/DANG_DANH_GIA/DA_DANH_GIA/DA_LAP_BC/CHO_DUYET_BC/DA_DUYET_BC bỏ). Thêm 2 field: `co_quan_duoc_danh_gia_id` FK→DON_VI 1:1 BẮT BUỘC (cơ quan được ĐG, có thể KHÁC `don_vi_id` cơ quan thực hiện ĐG) + `file_dinh_kem`. **+FR-VI-10 "Nhận kết quả đánh giá"** (GAP-VI-04) — CB NV thuộc `co_quan_duoc_danh_gia_id` 👁️ R\*\* trên KE_HOACH_DANH_GIA + KET_QUA_DANH_GIA + BAO_CAO_DANH_GIA chỉ khi đợt `HOAN_THANH`. BR-NOTIF-01 mở rộng FR-VI-03/04/08/09. Cite: `srs-update-2026-5-5/srs-fr-08-danh-gia.md`.
+
+> **Update 2026-05-05 (SRS update FR-10 v3.5):** **+1 entity NGAY_LE** (FR-VIII-29 GAP-VIII-05) — QTHT CRUD only, hỗ trợ import Excel; dùng trong BR-CALC-03 tính SLA trừ ngày lễ cho VV/Hỏi đáp/TVCS/Chi trả. **CAU_HINH_PHAN_CONG DEPRECATED** (user chốt bỏ feature 2026-05-06). **+4 FR self-reg/VNeID** (FR-VIII-22 đăng ký TK DN UC120, FR-VIII-23 login VNeID UC121, FR-VIII-24 logout VNeID UC122, FR-VIII-25 đồng bộ TK VNeID UC123 — chiếm UC120-123, đẩy FR-IX-01..23 sang UC124-146). Cite: `srs-update-2026-5-5/srs-fr-10-quan-tri-he-thong.md` + `_DELTA-MAP-FR10.md`.
+
+> **Update 2026-05-07 (UC renumber FR-11):** UC FR-IX-01..23 đã shift +4 offset (UC120-142 → **UC124-146**) trên 11 role × 23 UC = 253 entries để tránh conflict với FR-VIII-22..25 chiếm UC120-123. Cite: `srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md` §srs-fr-11 Thay đổi 1.
+
+> **Generate:** 2026-04-21 | Roles: 11 | Entities: **55** (46 cũ + 3 FR-04/07/10 update 2026-05-05: NGUOI_HO_TRO + TO_CHUC_TU_VAN + NGAY_LE + 3 FR-05 update 2026-05-06: PHAN_CONG_VU_VIEC + DANH_GIA_VU_VIEC + LICH_SU_VU_VIEC + 3 FR-12 update 2026-05-06: HO_SO_PHAP_LY_DN + TU_LIEU_PHAP_LY_VV + DANH_GIA_CHAT_LUONG_TV + 2 FR-06 update 2026-05-06: THAM_DINH_HO_SO + PHE_DUYET_CHI_TRA + 1 FR-07 update 2026-05-06: DOANH_NGHIEP_LINH_VUC) | Functions: 198+
 
 ## Mục đích
 
@@ -293,29 +305,29 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC120 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC121 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC122 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC123 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 21 | `FR-IX-21` | BC CT theo đơn vị | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC143 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 21 | `FR-IX-21` | BC CT theo đơn vị | UC144 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC145 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 23 | `FR-IX-23` | BC CT theo thời gian | UC146 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
@@ -590,29 +602,29 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC120 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC121 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC122 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC123 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 21 | `FR-IX-21` | BC CT theo đơn vị | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC143 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 21 | `FR-IX-21` | BC CT theo đơn vị | UC144 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC145 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 23 | `FR-IX-23` | BC CT theo thời gian | UC146 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 
 ### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
@@ -887,29 +899,29 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC120 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC121 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC122 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC123 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 21 | `FR-IX-21` | BC CT theo đơn vị | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC143 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 21 | `FR-IX-21` | BC CT theo đơn vị | UC144 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC145 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 23 | `FR-IX-23` | BC CT theo thời gian | UC146 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 
 ### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
@@ -1184,29 +1196,29 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC120 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC121 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC122 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC123 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 21 | `FR-IX-21` | BC CT theo đơn vị | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC143 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 21 | `FR-IX-21` | BC CT theo đơn vị | UC144 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC145 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 23 | `FR-IX-23` | BC CT theo thời gian | UC146 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 
 ### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
@@ -1481,29 +1493,29 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC120 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC121 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC122 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC123 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 21 | `FR-IX-21` | BC CT theo đơn vị | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC143 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 21 | `FR-IX-21` | BC CT theo đơn vị | UC144 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC145 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 23 | `FR-IX-23` | BC CT theo thời gian | UC146 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 
 ### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
@@ -1778,29 +1790,29 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC120 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC121 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC122 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC123 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 21 | `FR-IX-21` | BC CT theo đơn vị | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC143 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 21 | `FR-IX-21` | BC CT theo đơn vị | UC144 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC145 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 23 | `FR-IX-23` | BC CT theo thời gian | UC146 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 
 ### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
@@ -2075,29 +2087,29 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC120 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC121 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC122 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC123 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 21 | `FR-IX-21` | BC CT theo đơn vị | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC143 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 21 | `FR-IX-21` | BC CT theo đơn vị | UC144 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC145 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 23 | `FR-IX-23` | BC CT theo thời gian | UC146 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 
 ### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
@@ -2372,29 +2384,29 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC120 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC121 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC122 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC123 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 21 | `FR-IX-21` | BC CT theo đơn vị | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC143 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 21 | `FR-IX-21` | BC CT theo đơn vị | UC144 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC145 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-IX-23` | BC CT theo thời gian | UC146 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
@@ -2669,29 +2681,29 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC120 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC121 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC122 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC123 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 21 | `FR-IX-21` | BC CT theo đơn vị | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC143 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 21 | `FR-IX-21` | BC CT theo đơn vị | UC144 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC145 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-IX-23` | BC CT theo thời gian | UC146 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
@@ -2966,29 +2978,29 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC120 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC121 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC122 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC123 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 21 | `FR-IX-21` | BC CT theo đơn vị | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC143 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 21 | `FR-IX-21` | BC CT theo đơn vị | UC144 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC145 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-IX-23` | BC CT theo thời gian | UC146 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
@@ -3263,29 +3275,29 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC120 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC121 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC122 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC123 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 21 | `FR-IX-21` | BC CT theo đơn vị | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 1 | `FR-IX-01` | BC Số lượng hỏi đáp/vướng mắc | UC124 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 2 | `FR-IX-02` | BC Vụ việc đã tiếp nhận | UC125 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 3 | `FR-IX-03` | BC Vụ việc đang hỗ trợ | UC126 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 4 | `FR-IX-04` | BC Vụ việc đã hoàn thành | UC127 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 5 | `FR-IX-05` | BC Vụ việc theo thời gian | UC128 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 6 | `FR-IX-06` | BC Lớp đào tạo đang diễn ra | UC129 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 7 | `FR-IX-07` | BC Lớp đào tạo đã diễn ra | UC130 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 8 | `FR-IX-08` | BC Số lượng CG/TVV | UC131 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 9 | `FR-IX-09` | BC Đánh giá hiệu quả HTPL | UC132 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 10 | `FR-IX-10` | BC Chất lượng đào tạo | UC133 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 11 | `FR-IX-11` | BC Vụ việc theo đơn vị quản lý | UC134 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 12 | `FR-IX-12` | BC Vụ việc theo lĩnh vực | UC135 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 13 | `FR-IX-13` | BC Vụ việc theo loại hình DN | UC136 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 14 | `FR-IX-14` | BC Vụ việc theo thời gian chi tiết | UC137 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 15 | `FR-IX-15` | BC Chi phí chi trả hỗ trợ | UC138 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 16 | `FR-IX-16` | BC Chi phí theo đơn vị | UC139 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 17 | `FR-IX-17` | BC Chi phí theo lĩnh vực | UC140 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 18 | `FR-IX-18` | BC Chi phí theo loại hình DN | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 19 | `FR-IX-19` | BC Chi phí theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 20 | `FR-IX-20` | BC Số lượng CT hỗ trợ | UC143 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 21 | `FR-IX-21` | BC CT theo đơn vị | UC144 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC145 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-IX-23` | BC CT theo thời gian | UC146 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 

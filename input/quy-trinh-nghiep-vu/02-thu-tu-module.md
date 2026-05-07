@@ -544,15 +544,15 @@ Password mặc định: `Secret@123`.
 **🖐️ Nhập tay:** ✅ **Có — UC147 "Quản lý nội dung tư vấn với chuyên gia"** tại **SCR-X1-01 / SCR-X1-02**:
 - CB NV chủ động tạo mới YC TV chuyên sâu (chọn DN, Chuyên gia, Lĩnh vực, nội dung)
 - Song song với **UC149** (API inbound từ Cổng PLQG — không có màn hình)
-- Lỗi ERR-TVCS-02 nếu chọn Chuyên gia `NGUNG_HOAT_DONG` → cần đảm bảo CG ở state `DANG_HOAT_DONG` (FR-04)
+- Lỗi ERR-TVCS-02 nếu chọn Chuyên gia `NGUNG_HOAT_DONG` → cần đảm bảo CG ở state `HOAT_DONG` (FR-04 v3.5 — rename từ `DANG_HOAT_DONG`)
 
 **Transition (SM-TVCS):**
 
 | Từ | Đến | Actor | Trigger | Dữ liệu nhập | Nguồn dropdown / Filter | Màn nguồn |
 |----|-----|-------|---------|--------------|-------------------------|-----------|
 | — | `TIEP_NHAN` | DN | **Gửi YC qua Cổng PLQG (UC149, API nhận)** | **Mã số thuế** (`ma_so_thue`), **Nội dung yêu cầu**, **Lĩnh vực PL**, **File đính kèm** (hệ thống tự giải mã + quét virus) | — | API nhận từ ngoài |
-| — | `TIEP_NHAN` | `cb_nv_<cap>_01` | **🖐️ Thêm thủ công (UC147)** | **DN** (`doanh_nghiep_id`, bắt buộc), **Chuyên gia** (`chuyen_gia_id`, bắt buộc), **Lĩnh vực PL** (`linh_vuc_id`, bắt buộc), **Nội dung tư vấn** (`noi_dung_tu_van`, Rich Text, tối đa 50KB), **Tóm tắt** (`tom_tat`, tối đa 500 ký tự), **Ngày tư vấn** (`ngay_tu_van`, bắt buộc), **Ghi chú** (`ghi_chu`, tối đa 2000 ký tự) | `doanh_nghiep_id` ← **FR-07 Doanh nghiệp** (dropdown có search — khi chọn hệ thống tự hiện MST / địa chỉ / người đại diện)<br>`chuyen_gia_id` ← **FR-04 CG/TVV**, lọc `trang_thai=DANG_HOAT_DONG` (nếu CG đã ngừng → lỗi `ERR-TVCS-02`)<br>`linh_vuc_id` ← danh mục **FR-10 Quản trị** | SCR-X1-02 Accordion "Thông tin cơ bản" |
-| `TIEP_NHAN` | `PHAN_CONG` | `cb_nv_<cap>_01` | **Phân công CG (UC147 — action Phân công)** | **Chuyên gia** (`chuyen_gia_id`) + **Ghi chú** + **Thông tin SLA** hiển thị | Dropdown chọn CG từ `TU_VAN_VIEN` với:<br>• Chỉ lấy CG đang `DANG_HOAT_DONG`<br>• Hệ thống **gợi ý Top 5** CG khớp lĩnh vực<br>• Thứ tự sắp xếp: **điểm đánh giá TB giảm dần → workload tăng dần**<br>• Có **thanh search** để tìm thủ công<br>• Hiển thị banner thông báo: SLA 2 ngày làm việc để CG xác nhận tham gia | SCR-X1-02 modal overlay Phân công CG |
+| — | `TIEP_NHAN` | `cb_nv_<cap>_01` | **🖐️ Thêm thủ công (UC147)** | **DN** (`doanh_nghiep_id`, bắt buộc), **Chuyên gia** (`chuyen_gia_id`, bắt buộc), **Lĩnh vực PL** (`linh_vuc_id`, bắt buộc), **Nội dung tư vấn** (`noi_dung_tu_van`, Rich Text, tối đa 50KB), **Tóm tắt** (`tom_tat`, tối đa 500 ký tự), **Ngày tư vấn** (`ngay_tu_van`, bắt buộc), **Ghi chú** (`ghi_chu`, tối đa 2000 ký tự) | `doanh_nghiep_id` ← **FR-07 Doanh nghiệp** (dropdown có search — khi chọn hệ thống tự hiện MST / địa chỉ / người đại diện)<br>`chuyen_gia_id` ← **FR-04 CG/TVV**, lọc `trang_thai=HOAT_DONG` (v3.5 rename từ `DANG_HOAT_DONG`; nếu CG đã ngừng → lỗi `ERR-TVCS-02`)<br>`linh_vuc_id` ← danh mục **FR-10 Quản trị** | SCR-X1-02 Accordion "Thông tin cơ bản" |
+| `TIEP_NHAN` | `PHAN_CONG` | `cb_nv_<cap>_01` | **Phân công CG (UC147 — action Phân công)** | **Chuyên gia** (`chuyen_gia_id`) + **Ghi chú** + **Thông tin SLA** hiển thị | Dropdown chọn CG từ `TU_VAN_VIEN` với:<br>• Chỉ lấy CG đang `HOAT_DONG` (v3.5 rename từ `DANG_HOAT_DONG`)<br>• Hệ thống **gợi ý Top 5** CG khớp lĩnh vực<br>• Thứ tự sắp xếp: **điểm đánh giá TB giảm dần → workload tăng dần**<br>• Có **thanh search** để tìm thủ công<br>• Hiển thị banner thông báo: SLA 2 ngày làm việc để CG xác nhận tham gia | SCR-X1-02 modal overlay Phân công CG |
 | `PHAN_CONG` | `DANG_TU_VAN` | `cg_01` | [Chấp nhận] | — | — | SCR-X1-02 (thanh hành động khi user là CG được phân công) |
 | `PHAN_CONG` | `TIEP_NHAN` | `cg_01` | [Từ chối] | Lý do | — | SCR-X1-02 (quay lại chọn CG khác) |
 | `PHAN_CONG` | — (banner cảnh báo) | System | **Auto: CG không phản hồi quá 2 ngày LV** | — | — | Banner trên SCR-X1-02 |
@@ -618,7 +618,7 @@ Password mặc định: `Secret@123`.
 
 | Từ | Đến | Actor | Trigger | Dữ liệu nhập | Nguồn dropdown / Filter | Màn nguồn |
 |----|-----|-------|---------|--------------|-------------------------|-----------|
-| — | `DU_THAO` | `cb_nv_<cap>_01` | **🖐️ Tạo KH thủ công** | **Tên khóa học** (`ten_khoa_hoc`, bắt buộc), **CTĐT cha** (`ctdt_id`, bắt buộc), **Hình thức** (`hinh_thuc` ∈ `TRUC_TUYEN` / `TRUC_TIEP`, bắt buộc), **Ngày bắt đầu** (`ngay_bat_dau`, bắt buộc), **Ngày kết thúc** (`ngay_ket_thuc`, phải > ngày bắt đầu), **Số lượng HV tối đa** (`so_luong_toi_da`, ≥1), **Bài giảng** (`bai_giang_ids`, chọn nhiều), **Lĩnh vực PL** (`linh_vuc_id`) | `ctdt_id` ← dữ liệu nội bộ FR-03, dropdown chỉ lấy CTĐT đã `DA_DUYET` (không cho chọn CTĐT đang `DU_THAO`)<br>`bai_giang_ids` ← kho `BAI_GIANG` nội bộ FR-03<br>`linh_vuc_id` ← danh mục **FR-10 Quản trị**<br>**Giảng viên** chọn từ `TU_VAN_VIEN` (**FR-04 CG/TVV**), lọc `trang_thai=DANG_HOAT_DONG` | SCR-III-02 Tab Thông tin |
+| — | `DU_THAO` | `cb_nv_<cap>_01` | **🖐️ Tạo KH thủ công** | **Tên khóa học** (`ten_khoa_hoc`, bắt buộc), **CTĐT cha** (`ctdt_id`, bắt buộc), **Hình thức** (`hinh_thuc` ∈ `TRUC_TUYEN` / `TRUC_TIEP`, bắt buộc), **Ngày bắt đầu** (`ngay_bat_dau`, bắt buộc), **Ngày kết thúc** (`ngay_ket_thuc`, phải > ngày bắt đầu), **Số lượng HV tối đa** (`so_luong_toi_da`, ≥1), **Bài giảng** (`bai_giang_ids`, chọn nhiều), **Lĩnh vực PL** (`linh_vuc_id`) | `ctdt_id` ← dữ liệu nội bộ FR-03, dropdown chỉ lấy CTĐT đã `DA_DUYET` (không cho chọn CTĐT đang `DU_THAO`)<br>`bai_giang_ids` ← kho `BAI_GIANG` nội bộ FR-03<br>`linh_vuc_id` ← danh mục **FR-10 Quản trị**<br>**Giảng viên** chọn từ `TU_VAN_VIEN` (**FR-04 CG/TVV**), lọc `trang_thai=HOAT_DONG` (v3.5 rename từ `DANG_HOAT_DONG`) | SCR-III-02 Tab Thông tin |
 | `DU_THAO` | `CHO_DUYET` | `cb_nv_<cap>_01` | [Gửi duyệt] | Guard: có ≥1 bài giảng | — | SCR-III-02 |
 | `CHO_DUYET` | `DA_DUYET` | `cb_pd_<cap>_01` | [Duyệt] | Cùng cấp (BR-AUTH-05) | — | SCR-III-02 |
 | `CHO_DUYET` | `DU_THAO` | `cb_pd_<cap>_01` | [Từ chối] | `ly_do` ≥10 ký tự | — | SCR-III-02 |
@@ -668,7 +668,7 @@ Password mặc định: `Secret@123`.
 
 | Từ | Đến | Actor | Trigger | Dữ liệu nhập | Nguồn dropdown / Filter | Màn nguồn |
 |----|-----|-------|---------|--------------|-------------------------|-----------|
-| — | `DANG_THUC_HIEN` | `cb_nv_<cap>_01` | **🖐️ Tạo HĐ thủ công (UC163)** — mặc định vào thẳng `DANG_THUC_HIEN` | Nhập 12 trường qua 4 accordion: **Thông tin chung** + **Vụ việc liên kết** + **Mốc tiến độ** + **Thanh toán giai đoạn** | `tvv_id` ← **FR-04 CG/TVV**, lọc `trang_thai=DANG_HOAT_DONG`<br>`vu_viec_ids` ← **FR-05 Vụ việc** qua modal multi-select, lọc theo `BR-AUTH-08` (chỉ VV thuộc đơn vị của user)<br>`ben_a` hệ thống tự điền từ `don_vi_id` của user | SCR-X3-01 Form |
+| — | `DANG_THUC_HIEN` | `cb_nv_<cap>_01` | **🖐️ Tạo HĐ thủ công (UC163)** — mặc định vào thẳng `DANG_THUC_HIEN` | Nhập 12 trường qua 4 accordion: **Thông tin chung** + **Vụ việc liên kết** + **Mốc tiến độ** + **Thanh toán giai đoạn** | `tvv_id` ← **FR-04 CG/TVV**, lọc `trang_thai=HOAT_DONG` (v3.5 rename từ `DANG_HOAT_DONG`)<br>`vu_viec_ids` ← **FR-05 Vụ việc** qua modal multi-select, lọc theo `BR-AUTH-08` (chỉ VV thuộc đơn vị của user)<br>`ben_a` hệ thống tự điền từ `don_vi_id` của user | SCR-X3-01 Form |
 | `DANG_THUC_HIEN` | `TAM_DUNG` | `cb_nv_<cap>_01` | Tạm dừng HĐ | Lý do | — | SCR-X3-01 |
 | `TAM_DUNG` | `DANG_THUC_HIEN` | `cb_nv_<cap>_01` | Tiếp tục | — | — | SCR-X3-01 |
 | `DANG_THUC_HIEN` | `HOAN_THANH` | `cb_nv_<cap>_01` | Đóng HĐ | Guard: `SUM(thanh_toan_giai_doan.so_tien) ≤ gia_tri` | Inline validation JSON array | SCR-X3-01 Accordion "Thanh toán giai đoạn" |
@@ -877,7 +877,7 @@ Password mặc định: `Secret@123`.
 **Login:** `cb_nv_<cap>_01` tạo; `cb_pd_<cap>_01` duyệt.
 
 **Màn hình xem chi tiết (UNIFIED 1 màn cho cả 23 loại BC theo srs-fr-11 §3 dòng 1025):**
-- SCR-IX-01: **Trang Báo cáo Thống kê** (Dashboard / Unified Report Page) — 1 trang duy nhất gồm: dropdown chọn loại BC (23 loại) → bộ lọc kỳ + đơn vị + bộ lọc đặc thù → nút [Xem báo cáo] → vùng kết quả (biểu đồ + bảng) → nút [Xuất Excel] / [Xuất Word] theo mẫu TT17/2025. FR sử dụng: FR-IX-01 đến FR-IX-23 (UC120-142 — toàn bộ 23 loại BC dùng chung 1 SCR).
+- SCR-IX-01: **Trang Báo cáo Thống kê** (Dashboard / Unified Report Page) — 1 trang duy nhất gồm: dropdown chọn loại BC (23 loại) → bộ lọc kỳ + đơn vị + bộ lọc đặc thù → nút [Xem báo cáo] → vùng kết quả (biểu đồ + bảng) → nút [Xuất Excel] / [Xuất Word→PDF v3.5] theo mẫu TT17/2025 (FR-11 v3.5 Thay đổi 6 — Word→PDF chỉ áp BC nhóm IX, KHÔNG áp FR-15). FR sử dụng: FR-IX-01 đến FR-IX-23 (**UC124-146** — UC renumber +4 từ UC120-142 v3 do FR-VIII-22..25 chiếm UC120-123 — CHANGELOG §srs-fr-11 Thay đổi 1).
 - ⚠️ **Lưu ý:** SRS v2.1 KHÔNG có SCR-IX-02 — toàn bộ thao tác xem/lọc/xuất Word/Excel đều thực hiện trong SCR-IX-01 (xem dòng 1046-1047 srs-fr-11 — nút [Xuất Excel] / [Xuất Word] thuộc action-bar của SCR-IX-01).
 
 **Xem chi tiết cần dữ liệu từ — Dữ liệu đã `DA_DUYET` của các module:**
@@ -924,7 +924,7 @@ Password mặc định: `Secret@123`.
 |----------------|---------------|-------|
 | `/api/v1/hoi-dap` + `/search` | **FR-02 Hỏi đáp** — chỉ trả về bản ghi đã `CONG_KHAI` | Public |
 | `/api/v1/dao-tao` + `/search` | **FR-03 Đào tạo** — chỉ trả về CTĐT / Khóa học đã công khai | Public |
-| `/api/v1/tu-van-vien` + `/search` | **FR-04 CG/TVV** — lọc `trang_thai=DANG_HOAT_DONG` **VÀ** `cong_khai=1` (v3.5 rename CR-01) | Public |
+| `/api/v1/tu-van-vien` + `/search` | **FR-04 CG/TVV** — lọc `trang_thai=HOAT_DONG` (v3.5 rename từ `DANG_HOAT_DONG`) **VÀ** `cong_khai=1` (v3.5 rename CR-01) | Public |
 | `/api/v1/vu-viec` + `/search` | **FR-05 Vụ việc** — chỉ trả metadata (không trả nội dung chi tiết) | Public |
 | `/api/v1/danh-gia` + `/search` | **FR-08 Đánh giá** — chỉ trả báo cáo đánh giá đã duyệt | Public |
 | `/api/v1/bieu-mau` + `/search` | **FR-09 Biểu mẫu** — lọc `cong_khai=1` (v3.5 rename CR-01, kèm endpoint download: `/bieu-mau/{id}/download`) | Public |
@@ -1001,7 +1001,7 @@ Password mặc định: `Secret@123`.
 1. **Muốn test FR-06 Chi trả?** → Phải có ít nhất 1 VV `HOAN_THANH` (FR-05) + DN có quy mô rõ ràng (FR-07) + HĐ TV (FR-14).
 2. **Muốn test FR-08 Đánh giá?** → Phải có tập VV `HOAN_THANH` ≥ 1 (FR-05) + Tiêu chí đánh giá (FR-10 DANH_MUC).
 3. **Muốn test FR-13 nguồn TU_DONG?** → Phải push 1 Hỏi đáp (FR-02) qua `DA_DUYET`.
-4. **Muốn test FR-05 phân công TVV?** → Phải có TVV `DANG_HOAT_DONG` cấp ĐP (FR-04).
+4. **Muốn test FR-05 phân công TVV?** → Phải có TVV `HOAT_DONG` cấp ĐP (FR-04 v3.5 — rename từ `DANG_HOAT_DONG`).
 5. **Muốn test bất kỳ module nào?** → Phải có tài khoản role tương ứng (FR-10) và DANH_MUC liên quan.
 
 <a id="toc-quy-uoc"></a>
@@ -1023,7 +1023,7 @@ Password mặc định: `Secret@123`.
 <a id="toc-cot-nguon"></a>
 ### Cột "Nguồn dropdown / Filter"
 - Mô tả dropdown/modal chọn value lấy data từ **entity nào của module nào**, kèm filter `WHERE ...` cụ thể.
-- Ví dụ: `← FR-04 filter trang_thai=DANG_HOAT_DONG AND cong_khai=1 AND linh_vuc khớp` (v3.5 rename CR-01)
+- Ví dụ: `← FR-04 filter trang_thai=HOAT_DONG AND cong_khai=1 AND linh_vuc khớp` (v3.5 rename CR-01 + FR-04 SM-TVV state rename `DANG_HOAT_DONG` → `HOAT_DONG`)
 - Nếu ghi "—" nghĩa là transition không có dropdown (chỉ confirm hoặc free-form input).
 
 <a id="toc-cot-mannguon"></a>

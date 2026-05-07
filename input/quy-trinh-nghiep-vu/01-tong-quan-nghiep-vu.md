@@ -1,7 +1,8 @@
 ---
 title: Quy trình nghiệp vụ PM HTPLDN — Tổng quan dễ hiểu
-source: NotebookLM gstack-HTPLDN (33 SRS sources)
+source: NotebookLM gstack-HTPLDN (33 SRS sources) + SRS update v3.5 (2026-05-05/06)
 created: 2026-04-24
+updated: 2026-05-07 — bổ sung §6 ghi chú thay đổi v3.5 (4 luồng mới + rename module FR-08/FR-12)
 ---
 
 # PM HTPLDN — Tổng quan nghiệp vụ dễ hiểu
@@ -203,7 +204,31 @@ Xem chi tiết ở file [02-thu-tu-module.md](./02-thu-tu-module.md).
 
 Tóm tắt 5 tầng:
 1. **Tầng NỀN** — FR-10 Quản trị HT (QTHT chạy đầu tiên)
-2. **Tầng MASTER DATA** — FR-07 DN, FR-04 CG/TVV, FR-09 Biểu mẫu, FR-15 CT HTPLDN
-3. **Tầng GIAO DỊCH LÕI** — FR-05 Vụ việc, FR-02 Hỏi đáp, FR-12 TV chuyên sâu, FR-03 Đào tạo
-4. **Tầng GIAO DỊCH PHÁI SINH** — FR-14 Hợp đồng, FR-06 Chi trả, FR-13 TV Nhanh, FR-08 Đánh giá
+2. **Tầng MASTER DATA** — FR-07 DN, FR-04 CG/TVV/NHT/TC TV, FR-09 Biểu mẫu, FR-15 CT HTPLDN
+3. **Tầng GIAO DỊCH LÕI** — FR-05 Vụ việc, FR-02 Hỏi đáp, FR-12 Tư vấn pháp luật chuyên sâu, FR-03 Đào tạo
+4. **Tầng GIAO DỊCH PHÁI SINH** — FR-14 Hợp đồng, FR-06 Chi trả, FR-13 TV Nhanh, FR-08 Theo dõi Đánh giá Hiệu quả HTPL
 5. **Tầng TỔNG HỢP** — FR-11 Báo cáo, FR-01 Dashboard, FR-16 API
+
+---
+
+## 6. Ghi chú thay đổi v3.5 (cherry-pick 2026-05-05/06)
+
+> **Nguồn:** [`../srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md`](../srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) + [`srs-v3.5.md`](../srs-update-2026-5-5/srs-v3.5.md) consolidated. File này giữ nguyên 5 section trên; bổ sung 4 luồng mới + 2 rename module để khớp v3.5.
+
+### 6.1 Rename module
+- **FR-12 Tư vấn chuyên sâu → "Tư vấn pháp luật chuyên sâu"** (CHANGELOG §srs-fr-12 Thay đổi 1).
+- **FR-08 Kế hoạch đánh giá → "Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý"** + entity `DOT_DANH_GIA / DANH_GIA_HQ` → `KE_HOACH_DANH_GIA` (CHANGELOG §srs-fr-08 Thay đổi 1+6).
+
+### 6.2 Bốn luồng nghiệp vụ MỚI
+1. **TC TV approval (FR-IV-NEW-01/02/04 — CB NV/PD ĐP):** TC tư vấn nâng từ DM lên entity riêng `TO_CHUC_TU_VAN`. Vòng đời: `MOI_DANG_KY` → CB NV trình → CB PD công bố vào MLTV (NĐ 55/2019 Đ.9, BR-AUTH-05) → `HOAT_DONG`. Cite: `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md`.
+2. **NHT lifecycle (FR-IV-NHT-01/02/03 — QTHT/CB NV + NHT cá nhân):** NHT tách entity riêng `NGUOI_HO_TRO` (NĐ 55/2019 Đ.7), `loai_tvv` enum chỉ còn `('TVV','CG')`. Tạo NHT → tạo TAI_KHOAN gán role NHT `CHO_KICH_HOAT` → NHT bấm link mail kích hoạt (FR-VIII-26) → `HOAT_DONG`. NHT có quyền `📝 RU*` trên hồ sơ NHT của chính mình + HSPL_DN của VV được phân công.
+3. **DN bổ sung HSCT (FR-V.II-14 — DN qua DVC/Cổng PLQG):** Khi HSCT ở `YEU_CAU_BO_SUNG`, DN có ≤5 ngày LV để bổ sung file qua Cổng PLQG hoặc CB NV bổ sung thủ công. Tối đa 3 lần (`bo_sung_count` CHECK 0-3). Sau bổ sung → `DANG_KIEM_TRA` quay lại quy trình thẩm định/duyệt. Cite: `srs-update-2026-5-5/srs-fr-06-chi-tra.md`.
+4. **FR-VI-10 Nhận kết quả ĐG (CB NV cơ quan được ĐG — read-only):** Khi đợt ĐG ở `HOAN_THANH`, CB NV thuộc `co_quan_duoc_danh_gia_id` (cơ quan được ĐG, có thể KHÁC `don_vi_id` cơ quan thực hiện ĐG) được 👁️ R\* trên KE_HOACH_DANH_GIA + KET_QUA_DANH_GIA + BAO_CAO_DANH_GIA. Cite: GAP-VI-04.
+
+### 6.3 Thay đổi xuyên suốt (cross-cutting)
+- **C1 Hard-delete:** bỏ trạng thái `DA_XOA` toàn dự án — DELETE soft → DELETE thật + AUDIT_LOG ghi.
+- **C3 Lưu nháp HẸP:** bỏ button [Lưu nháp] ở các form không có entry state `DU_THAO`.
+- **2-tier permission (BR-AUTH-08):** `BN không có ĐP trực thuộc` (FR-V.I refactor v3.5).
+- **5 trường công khai chuẩn (CR-01):** áp HOI_DAP/PHAN_HOI/VU_VIEC/BIEU_MAU/TU_VAN_CHUYEN_SAU/TU_LIEU_PHAP_LY_VV — `cong_khai`/`anh_dai_dien`/`thoi_gian_dang_tai`/`mo_ta_cong_khai`/`file_dinh_kem_cong_khai`.
+- **UC renumber +4 offset FR-11:** UC120-142 → UC124-146 (FR-VIII-22..25 chiếm UC120-123).
+- **9 entity mới:** NGUOI_HO_TRO, TO_CHUC_TU_VAN, NGAY_LE, PHAN_CONG_VU_VIEC, DANH_GIA_VU_VIEC, LICH_SU_VU_VIEC, HO_SO_PHAP_LY_DN, TU_LIEU_PHAP_LY_VV, DANH_GIA_CHAT_LUONG_TV, THAM_DINH_HO_SO, PHE_DUYET_CHI_TRA, DOT_BAO_CAO (chính thức 3.4.3.10a), DOANH_NGHIEP_LINH_VUC, DANH_GIA_SAU_VU_VIEC.

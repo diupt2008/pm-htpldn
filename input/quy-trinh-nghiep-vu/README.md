@@ -16,6 +16,7 @@ Tài liệu dẫn giải luồng nghiệp vụ hệ thống PM HTPLDN theo thứ
 ## Nguồn
 
 - NotebookLM: https://notebooklm.google.com/notebook/2160bfb1-2020-4199-90a6-d607b298bb42
-- SRS chi tiết: [../srs-v3/](../srs-v3/)
+- SRS chi tiết: [../srs-v3/](../srs-v3/) (baseline v3.1)
+- **SRS update v3.5 (2026-05-05/06):** [../srs-update-2026-5-5/](../srs-update-2026-5-5/) — per-FR delta + [`CHANGELOG-v3-to-v3.5.md`](../srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) + consolidated [`srs-v3.5.md`](../srs-update-2026-5-5/srs-v3.5.md) (6695 lines)
 - Flow & seed fixture: [../flow-module.md](../flow-module.md) · [../data/entity-map.md](../data/entity-map.md) · [../data/seed-fixture.yaml](../data/seed-fixture.yaml)
 - Tài khoản test: [../users.csv](../users.csv)

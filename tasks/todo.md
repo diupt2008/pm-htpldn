@@ -16,16 +16,16 @@
 | Phase | Việc | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ |
 |---|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | 0 | Pre-test (verify deploy + bug gap + fixture + spec review) | 7 | - | - | 5 | 2 | - | - |
-| 1 | Re-seed Tier 0 (DM/đơn vị/SLA/MPH/ngày lễ) | 6 | - | - | 3 | 3 | - | - |
+| 1 | Re-seed Tier 0 (DM/đơn vị/SLA/MPH/ngày lễ) | 6 | - | - | 5 | 1 | - | - |
 | 2 | Re-seed Tier 1 (TC TV/DN/TVV/CG/NHT/account) | 8 | - | - | 7 | - | 1 | - |
-| 3 | Re-seed Tier 2 (transactional entry state) +**2 sub-task FR-02 v3.5** (R7.3.1.MoB + R7.3.1.TVN) | 17 | 1 | - | 5 | 3 | 5 | 3 |
-| 4 | Workflow E2E (Trụ A/B/C/D) +**2 task FR-05 v3.5** (R7.4.A3-PUBLIC + R7.4.A3-DN-BS) | 20 | 2 | - | - | 1 | - | 17 |
+| 3 | Re-seed Tier 2 (transactional entry state) +**2 sub-task FR-02 v3.5** (R7.3.1.MoB + R7.3.1.TVN) | 17 | 1 | - | 7 | 1 | 5 | 3 |
+| 4 | Workflow E2E (Trụ A/B/C/D) +**2 task FR-05 v3.5** (R7.4.A3-PUBLIC + R7.4.A3-DN-BS) | 22 | 3 | - | 1 | 2 | - | 16 |
 | 5 | Verification (KPI/cross/SLA/audit) | 5 | 3 | - | - | - | - | 2 |
 | 6 | Workflow đầu ra hậu kỳ (Chi trả/TVN/CT) | 5 | 1 | - | - | - | 1 | 3 |
-| 7 | Functional 17 module + 2 NEW + **4 sub-task FR-06 v3.5** | 28 | 9 | - | 5 | - | 2 | 12 |
-| 8 | Cross-cutting + Profile + Permission | 5 | 5 | - | - | - | - | - |
+| 7 | Functional 17 module + 2 NEW + **4 sub-task FR-06 v3.5** | 29 | 7 | - | 5 | 1 | 2 | 14 |
+| 8 | Cross-cutting + Profile + Permission +**R7.8.6 UC renumber FR-11 v3.5** | 6 | 6 | - | - | - | - | - |
 | Trụ E | Monitor unblock | 4 | 3 | - | - | - | - | 1 |
-| **Tổng** | | **105** | **24** | **0** | **25** | **9** | **9** | **38** |
+| **Tổng** | | **109** | **24** | **0** | **30** | **7** | **9** | **39** |
 
 ---
 
@@ -34,10 +34,10 @@
 | Module | Tasks |
 |---|---|
 | **Pre-test** | ✅ [R7.0.1](#r7-0-1) deploy · ⚠️ [R7.0.2](#r7-0-2) bug-deploy · ✅ [R7.0.3](#r7-0-3) fixture · ✅ [R7.0.4](#r7-0-4) login · ⚠️ [R7.0.6](#r7-0-6) UI-audit · ✅ [R7.0.7](#r7-0-7) SRS-FR10-review |
-| **TVV** | ✅ [R7.2.5](#r7-2-5) seed · ⏳ [R7.4.A1](#r7-4-a1) workflow · ⏳ [R7.4.A1.5](#r7-4-a1-5) PC · ⏳ [R7.4.A2](#r7-4-a2) tiếp-nhận · ⏳ [R7.7.2](#r7-7-2) functional |
-| **CG** | ✅ [R7.2.6](#r7-2-6) seed · ⚠️ [R7.4.A1-CG](#r7-4-a1-cg) advance · ⏳ [R7.7.2](#r7-7-2) functional (chung TVV) |
+| **TVV** | ✅ [R7.2.5](#r7-2-5) seed · 🟢 [R7.4.A1](#r7-4-a1) workflow · ⏳ [R7.4.A1.5](#r7-4-a1-5) PC · 🟢 [R7.4.A2](#r7-4-a2) tiếp-nhận · 🟢 [R7.7.2](#r7-7-2) functional |
+| **CG** | ✅ [R7.2.6](#r7-2-6) seed · ⚠️ [R7.4.A1-CG](#r7-4-a1-cg) advance · 🟢 [R7.7.2](#r7-7-2) functional (chung TVV) |
 | **NHT** 🆕 | ✅ [R7.2.7](#r7-2-7) seed (auto-tạo TK qua FR-VIII-15) · ⏳ [R7.7.4.5](#r7-7-4-5) functional |
-| **TC TV** 🆕 | ✅ [R7.2.2](#r7-2-2) seed · ✅ [R7.2.3](#r7-2-3) phê-duyệt · ⏳ [R7.7.4.6](#r7-7-4-6) functional |
+| **TC TV** 🆕 | ✅ [R7.2.2](#r7-2-2) seed · ✅ [R7.2.3](#r7-2-3) phê-duyệt · 🟢 [R7.7.4.6](#r7-7-4-6) functional |
 | **DN** | ✅ [R7.2.4](#r7-2-4) seed · 🚫 [R7.3.4](#r7-3-4) HSPL · 🟢 [R7.5.2](#r7-5-2) cross-module · 🟢 [R7.7.4](#r7-7-4) functional v3.5 |
 | **Hỏi đáp** ✏️ v3.5 | ✅ [R7.3.1](#r7-3-1) seed · ⏳ [R7.4.A4](#r7-4-a4) workflow 11 paths · ⏳ [R7.7.1](#r7-7-1) functional 60 TC v3.5 · ✅ [R7.3.1.MoB](#r7-3-1-mob) seed Mẫu Mô hình B (UI Tab Mẫu phản hồi) 🆕 · 🟢 [R7.3.1.TVN](#r7-3-1-tvn) seed TVN ESCALATE (UI FR-13) 🆕 |
 | **Vụ việc** ✏️ | ✅ [R7.3.2](#r7-3-2) seed · ⏳ [R7.4.A3](#r7-4-a3) workflow base · ⏳ [R7.4.A3-PUBLIC](#r7-4-a3-public) công khai 🆕 · ⏳ [R7.4.A3-DN-BS](#r7-4-a3-dn-bs) DN bổ sung HS 🆕 · ⏳ [R7.7.3](#r7-7-3) functional 72 TC · ⏳ [R7.7.3-PRIVACY](#r7-7-3-privacy) 2 TC P0 Critical 🆕 |
@@ -125,6 +125,7 @@
   - **Cần có sẵn:** R7.1.1 ✅ (DM LV đủ 10 SRS)
 - ✅ <a id="r7-2-2"></a>**R7.2.2** 🆕 Seed 6 Tổ chức tư vấn qua API (cb_nv_tw_02)
   - **Kết quả:** PASS 5/5 OK + 1 BVA-422 đúng kỳ vọng. TC-BTP-TW-0001..0005 MOI_DANG_KY. [seed-checklist-r7-2-2-tc-tv.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-2-tc-tv.md)
+  - **Bug:** [bug-report-r7-2-2-ui-tctv-lv-dropdown-empty.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/bug-report-r7-2-2-ui-tctv-lv-dropdown-empty.md) — 0/1 đóng (BUG-TCTV-FE-001 Major UI Open — FE TC TV form gửi `loaiDanhMuc=LINH_VUC_PHAP_LY` BE empty → dropdown LV rỗng, seed thực qua API)
 - ✅ <a id="r7-2-3"></a>**R7.2.3** 🆕 Phê duyệt TC TV → HOAT_DONG (FR-IV-NEW-04, cb_pd_tw_02)
   - **Kết quả:** PASS 5/5 → HOAT_DONG, soQdCongBo + ngayCongNhan set đầy đủ. [seed-checklist-r7-2-3-phe-duyet-tc-tv.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-3-phe-duyet-tc-tv.md)
 - ✅ **R7.2.4** ✏️ Seed DN — acceptance filter-based v3.5
@@ -134,6 +135,7 @@
   - **Kết quả:** PASS 6/6 TVV-BTP-TW-0009..0014 MOI_DANG_KY. Per-LV cover 5/5 (LD/Thuế/KDTM/SHTT/ĐĐ); DN/TM N/A do BUG-DM-LVPL-001. [seed-checklist-r7-2-5-tvv-tw.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-5-tvv-tw.md)
 - ✅ <a id="r7-2-6"></a>**R7.2.6** ✏️ Seed 6 CG TW (`loai_tvv=CG`, MOI_DANG_KY)
   - **Kết quả:** PASS 6/6 TVV-BTP-TW-0001..0006 cover 6 LV (DN/TM/LĐ/Thuế/SHTT/ĐĐ). [seed-checklist-r7-2-6-cg-tw.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-6-cg-tw.md)
+  - **Bug:** [bug-report-r7-2-6-ui-tvv-tochuc-wrong-source.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-r7-2-6-ui-tvv-tochuc-wrong-source.md) — 0/1 đóng (BUG-TVV-FE-002 Major UI Open — FE combobox "Tổ chức hành nghề chính" query DM legacy thay vì entity TO_CHUC_TU_VAN → submit 400, seed thực qua API)
 - ✅ <a id="r7-2-7"></a>**R7.2.7** 🆕 Seed 3 NHT qua FR-IV-NHT-01 (qtht_02 — CB_NV_TW không có quyền)
   - **Kết quả:** PASS 3/3 NHT-STP-AG/DN/HP-0001 CHO_KICH_HOAT + auto-tạo TK. [seed-checklist-r7-2-7-nht.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-7-nht.md)
 - ✅ <a id="r7-2-9"></a>**R7.2.9** ✏️ Verify 9 TK CG/NHT click mail kích hoạt → đặt MK → HOAT_DONG (FR-VIII-26) — happy path
@@ -159,22 +161,22 @@
   - **Kết quả:** 🚫 BLOCK — DN list rỗng env (R7.2.4 36 DN reset, BE total=0). Cần re-self-reg DN.
 - ⏳ <a id="r7-3-5"></a>**R7.3.5** 🆕 Seed Kế hoạch ĐT năm (KE_HOACH_DAO_TAO — Mô hình A 3 cấp) `[need: dev confirm endpoint deploy]`
 - 🚫 <a id="r7-3-6"></a>**R7.3.6** ✏️ Seed 6 CTĐT entry DU_THAO
-  - **Kết quả:** 🚫 BLOCK — BE 422 `keHoachId must be a UUID`. UI form thiếu field FK Kế hoạch (R7.3.5 ⏳).
-  - **Bug:** [bug-report-r7-3-6-ctdt-form.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-3-6-ctdt-form.md) — 0/1 đóng (BUG-CTDT-FE-01 Major form thiếu keHoachId)
+  - **Kết quả:** 🚫 BLOCK — verify 2026-05-07 FE form đã có field "Kế hoạch năm"; còn block do dropdown KH năm rỗng (R7.3.5 ⏳ chưa seed).
+  - **Bug:** [bug-report-r7-3-6-ctdt-form.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-3-6-ctdt-form.md) — 1/1 đóng (BUG-CTDT-FE-01 Closed-verified 2026-05-07 — form has keHoachId field)
 - ✅ <a id="r7-3-7"></a>**R7.3.7** ✏️ Seed 4 TM (v3.5 enum `NHAP/CONG_KHAI/AN`) + 7 BM entry NHAP
   - **Kết quả:** TM 4/4 PASS — filter LV cover 4/4 (Lao động/KDTM/Thuế/SHTT). BM 0/7 defer (env limit thiếu file .docx). [r7-3-7-tm-list.png](../output/qa-reports/round7-2026-05-06/seed/r7-3-7-tm-list.png)
 - ✅ <a id="r7-3-8"></a>**R7.3.8** 🔄 Seed 10 NHCH entry NHAP
   - **Kết quả:** 7/7 cover full filter — 5 LV + 3 mức độ + 3 loại (TN-1/TN-nhiều/Tự luận). [r7-3-8-nhch-list-7-final.png](../output/qa-reports/round7-2026-05-06/seed/r7-3-8-nhch-list-7-final.png)
 - 🚫 <a id="r7-3-9"></a>**R7.3.9** 🔄 Seed 5 ĐKT entry NHAP cover 5 LV
-  - **Kết quả:** 🚫 BLOCK — BE 422 `Ngân hàng không đủ câu hỏi thỏa điều kiện`. NHCH state NHAP, BE filter KICH_HOAT.
-  - **Bug:** [bug-report-r7-3-9-dkt-nhch.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-3-9-dkt-nhch.md) — 0/2 đóng (BUG-DKT-FE-01 Major Điểm đạt FE max=100 vs BE=10 + BUG-SRS-NHCH-STATE-01 Medium FR-III-09 typo state máy)
+  - **Kết quả:** 🚫 BLOCK — NHCH state NHAP, BE filter KICH_HOAT; chưa re-seed sau fix FE 2026-05-07.
+  - **Bug:** [bug-report-r7-3-9-dkt-nhch.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-3-9-dkt-nhch.md) — 1/2 đóng (BUG-DKT-FE-01 Closed-verified 2026-05-07 max=10; BUG-SRS-NHCH-STATE-01 Medium Open SRS doc)
 - ⚠️ <a id="r7-3-10"></a>**R7.3.10** 🔄 Seed 8 bài giảng entry KICH_HOAT
   - **Kết quả:** ⚠️ 5/8 PASS — Video type cover 5 LV (Lao động/Thuế/KDTM/SHTT/Đất đai). Slide/PDF skip do file upload. [r7-3-10-bai-giang-list.png](../output/qa-reports/round7-2026-05-06/seed/r7-3-10-bai-giang-list.png)
 - ✅ <a id="r7-3-11"></a>**R7.3.11** ✏️ Seed 8 giảng viên entry HOAT_DONG (verify FR-III-11 refactor)
   - **Kết quả:** PASS 8/8 cover 6 LV (Dân sự/Lao động/Thuế/SHTT/KDTM/Đất đai/Hành chính/KDQT). [r7-3-11-giang-vien-list.png](../output/qa-reports/round7-2026-05-06/seed/r7-3-11-giang-vien-list.png)
 - 🚫 <a id="r7-3-12"></a>**R7.3.12** 🆕 Seed 8 Học viên (HOC_VIEN entity mới — Mô hình A) `[block: dev fix entity 404 /api/v1/hoc-viens]`
 - 🚫 <a id="r7-3-13"></a>**R7.3.13** 🆕 Seed Lịch học (LICH_HOC — FR-III-22) `[block: chưa rõ endpoint deploy]`
-- ⏳ <a id="r7-3-14"></a>**R7.3.14** 🆕 Seed 6 Hợp đồng TV entry DANG_THUC_HIEN cover 6 LV `[need: R7.4.A1 ⏳ TVV active + R7.4.A3 ≥1 VV HOAN_THANH; unblock R7.7.14 functional]`
+- ⏳ <a id="r7-3-14"></a>**R7.3.14** 🆕 Seed 6 Hợp đồng TV entry DANG_THUC_HIEN cover 6 LV `[need: R7.4.A1 🟢 TVV active + R7.4.A3 ≥1 VV HOAN_THANH; unblock R7.7.14 functional]`
 - ⏳ <a id="r7-3-15"></a>**R7.3.15** 🆕 Seed 8 Khóa học entry DU_THAO direct (bypass workflow B7 nếu block) cover 6 LV + 2 hình thức `[need: R7.3.6 🚫 CTĐT DU_THAO; unblock R7.7.6 functional 40 TC khi B7 block dev]`
 
 ---
@@ -183,12 +185,12 @@
 
 ### 🟦 Trụ A — TVV → PC → CG → VV → HD → TVCS
 
-- ⏳ <a id="r7-4-a1"></a>**R7.4.A1** ✏️ Workflow TVV (SM 9→**10 state**, thêm CHO_KICH_HOAT, hệ thống tự cấp TK qua FR-VIII-15 step 6) `[need: R7.2.5 ✅ + R7.2.6 ✅; spec: 7.4-chuyen-gia-tvv.md + 6.4-sm-tvv.md (sync 2026-05-06)]`
+- 🟢 <a id="r7-4-a1"></a>**R7.4.A1** ✏️ Workflow TVV (SM 9→**10 state**, thêm CHO_KICH_HOAT, hệ thống tự cấp TK qua FR-VIII-15 step 6) `[need: R7.2.5 ✅ + R7.2.6 ✅; spec: 7.4-chuyen-gia-tvv.md + 6.4-sm-tvv.md (sync 2026-05-06)]`
 - ⚠️ <a id="r7-4-a1-cg"></a>**R7.4.A1-CG** ✏️ Advance 8 CG → DANG_HOAT_DONG + 14 TC (BR-AUTH-05/08 + LEGAL-04 + opt-lock)
   - **Kết quả:** 13/14 PASS (TC-07+14 unblock 7/5 qua R7.7.8a+d), 1 ⚠️ DEVIATION state name spec v3.5. [workflow-test-report-r7-4-a1-cg.md](../output/qa-reports/round7-2026-05-06/workflow/workflow-test-report-r7-4-a1-cg.md)
   - **Bug:** [bug-report-r7-4-a1-cg-state-deviation.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-r7-4-a1-cg-state-deviation.md) — 0/1 đóng (BUG-CG-A1-001 Major Open: state DANG_HOAT_DONG vs CHO_KICH_HOAT spec). **Re-test 2026-05-07: VẪN OPEN** — API + UI evidence không đổi.
-- ⏳ <a id="r7-4-a1-5"></a>**R7.4.A1.5** ✏️ Đợt 2 PC TVV backfill — verify dropdown "Người xử lý" có TAI_KHOAN role NHT mới sau khi NHT tách entity `[need: R7.4.A1 ⏳ + R7.4.A1-CG ⚠️; verify 2 BE bug Open R6 (CHPC-001/002) còn không sau dev deploy]`
-- ⏳ <a id="r7-4-a2"></a>**R7.4.A2** 🆕 Tiếp nhận TVV (FR-IV-13) — 3 transition mới (MOI_DANG_KY→CHO_THAM_DINH, YEU_CAU_BO_SUNG→DANG_THAM_DINH, TU_CHOI→CHO_THAM_DINH) `[need: R7.4.A1 ≥1 TVV MOI_DANG_KY]`
+- ⏳ <a id="r7-4-a1-5"></a>**R7.4.A1.5** ✏️ Đợt 2 PC TVV backfill — verify dropdown "Người xử lý" có TAI_KHOAN role NHT mới sau khi NHT tách entity `[need: R7.4.A1 🟢 + R7.4.A1-CG ⚠️; verify 2 BE bug Open R6 (CHPC-001/002) còn không sau dev deploy]`
+- 🟢 <a id="r7-4-a2"></a>**R7.4.A2** 🆕 Tiếp nhận TVV (FR-IV-13) — 3 transition mới (MOI_DANG_KY→CHO_THAM_DINH, YEU_CAU_BO_SUNG→DANG_THAM_DINH, TU_CHOI→CHO_THAM_DINH) `[need: ≥1 TVV MOI_DANG_KY (R7.2.5 ✅)]`
 - ⏳ <a id="r7-4-a3"></a>**R7.4.A3** ✏️ Workflow VV (FR-05 v3.5 refactor — bỏ `nguoi_ho_tro_id`, thay 3 cột phân công + 2 thẻ Cá nhân/Tổ chức + SLA 15 ngày + CB PD từ chối → DANG_XU_LY) `[need: R7.2.9 ✅ NHT active + R7.2.3 ✅ TC TV HOAT_DONG; spec mới: 7.5-vu-viec-htpl.md v3.0 + 6.5-sm-vuviec.md (sync 2026-05-06)]`
 - ⏳ <a id="r7-4-a3-public"></a>**R7.4.A3-PUBLIC** 🆕 Workflow Công khai VV lên Cổng PLQG (FR-V.I-NEW-05 — 2 self-loop SM trên DA_DUYET + HOAN_THANH) `[need: R7.4.A3 ≥1 VV DA_DUYET hoặc HOAN_THANH; account: cb_pd_<cap>_01 cùng cấp với CB NV xử lý VV (BR-AUTH-05)]`
 - ⏳ <a id="r7-4-a3-dn-bs"></a>**R7.4.A3-DN-BS** 🆕 Workflow DN bổ sung HS qua chuyên trang VNeID (FR-V.I-NEW-02 — formal hoá YEU_CAU_BO_SUNG → DANG_KIEM_TRA) `[need: R7.4.A3 ≥1 VV YEU_CAU_BO_SUNG + DN VNeID Tier 2 sandbox; account: dn_<X>_01 với VNeID]`
@@ -251,15 +253,15 @@
 
 - ⏳ <a id="r7-7-1"></a>**R7.7.1** ✏️ Hỏi đáp 60 TC v3.5 (35 base updated + 25 mới HD-040..064) `[need: R7.3.1 ✅ + R7.3.1.MoB + R7.3.1.TVN + R7.4.A4; spec: 7.2-hoi-dap-phap-ly.md v3.5]`
   - **Cần có sẵn:** DEV schema v3.5 ❌ + R7.3.1/MoB/TVN re-seed ❌ + file test (ảnh 5MB, PDF 19/21MB)
-- ⏳ <a id="r7-7-2"></a>**R7.7.2** ✏️ CG/TVV 31 TC (enum loai_tvv đổi) `[need: R7.2.5/6 ✅]`
+- 🟢 <a id="r7-7-2"></a>**R7.7.2** ✏️ CG/TVV 31 TC (enum loai_tvv đổi) `[need: R7.2.5/6 ✅]`
 - ⏳ <a id="r7-7-3"></a>**R7.7.3** ✏️ Vụ việc 72 TC v3.5 (33 base + 42 mới Cluster 1-8) `[need: R7.3.2 ✅ + R7.4.A3 ≥1 VV mỗi state; spec mới: 7.5-vu-viec-htpl.md v3.0 (sync 2026-05-06)]`
   - **Cần có sẵn:** R7.3.2 ✅ + R7.4.A3 ⏳ + R7.4.A3-PUBLIC ⏳ + R7.4.A3-DN-BS ⏳ + DN VNeID Tier 2 + CB PD cùng cấp
 - ⏳ <a id="r7-7-3-privacy"></a>**R7.7.3-PRIVACY** 🆕 **2 TC P0 Critical privacy NĐ 13/2023** (verify riêng đầu tiên, escalate ngay nếu FAIL) `[need: R7.4.A3-PUBLIC ≥1 VV cong_khai=1 + R7.2.4 ≥1 DN test với VV + R7.4.A3 ≥1 VV scope đa DN]`
 - 🟢 <a id="r7-7-4"></a>**R7.7.4** ✏️ DN 17 TC v3.5 (4 TC mới DN-021..024)
   - **Kết quả:** 🟢 ready, 15/17 test ngay; 2 defer (DN-004 Tier 2 + DN-020 Tier 3). [7.7-quan-ly-doanh-nghiep.md](../output/funtion/7.7-quan-ly-doanh-nghiep.md)
   - **Cần có sẵn:** R7.2.4 ✅ (36 DN cover 3 quy mô × 3 ngành) + DM TINH_THANH 63 tỉnh + DM LINH_VUC_KINH_DOANH
-- ⏳ <a id="r7-7-4-5"></a>**R7.7.4.5** 🆕 NHT functional 10 TC (CRUD + permission + workflow kích hoạt) `[need: R7.2.9 ✅ + R7.4.A2 ⏳]`
-- ⏳ <a id="r7-7-4-6"></a>**R7.7.4.6** 🆕 TC TV functional 10 TC (CRUD + permission + phê duyệt edge) `[need: R7.4.B1 ⏳ — wait actually R7.2.3 ✅]`
+- ⏳ <a id="r7-7-4-5"></a>**R7.7.4.5** 🆕 NHT functional 10 TC (CRUD + permission + workflow kích hoạt) `[need: R7.2.9 ✅ + R7.4.A2 🟢]`
+- 🟢 <a id="r7-7-4-6"></a>**R7.7.4.6** 🆕 TC TV functional 10 TC (CRUD + permission + phê duyệt edge) `[need: R7.2.3 ✅]`
 - ⏳ <a id="r7-7-5"></a>**R7.7.5** 🔄 TVCS 44 TC `[need: R7.4.A5 ⏳; UNBLOCKED]`
 - ⏳ <a id="r7-7-6"></a>**R7.7.6** ✏️ Khóa học 40 TC + FR-III mới (B10/B11/B12 + Đề KT + Lịch học) `[need: R7.4.B7+B10+B11+B12 ✅]`
 - ⏳ <a id="r7-7-7"></a>**R7.7.7** ✏️ Dashboard 34 TC (KPI-07 count đổi) `[need: R7.4 trụ A ✅]`
@@ -306,7 +308,7 @@
   - **Cần có sẵn:** R7.E3 🟢 + role cb_nv_tw_01 + cb_pd_tw_01.
   - **Output:** ui-audit-report-fr06-vietnamese-2026-05-06.md
 - ⏳ <a id="r7-7-13"></a>**R7.7.13** 🔄 Báo cáo 38 TC `[need: ≥1 BC từ HD/VV/TVCS/CT/Đào tạo ready]`
-- ⏳ <a id="r7-7-14"></a>**R7.7.14** 🔄 HĐ tư vấn (UC163 sub-resource v2.1) `[need: R7.4.A3 + R7.4.A1 ⏳]`
+- ⏳ <a id="r7-7-14"></a>**R7.7.14** 🔄 HĐ tư vấn (UC163 sub-resource v2.1) `[need: R7.4.A3 + R7.4.A1 🟢]`
 - ⏳ <a id="r7-7-15"></a>**R7.7.15** 🔄 CT HTPLDN 42 TC `[need: R7.6.4 🟢]`
 - ⏳ <a id="r7-7-16"></a>**R7.7.16** ✏️ API 42 TC + 8 API inbound mock (v3.5 rename filter `cong_khai=1`) `[need: data upstream state cuối từ HD/VV/TVCS/Chi trả/CT/TVN]`
 - ⏳ <a id="r7-7-17"></a>**R7.7.17** 🔄 Edge BR-EC-01..23 (4 BR scope) `[need: infra/wait/integration cho 19 BR còn lại]`
@@ -319,7 +321,8 @@
 - 🟢 <a id="r7-8-2"></a>**R7.8.2** 🆕 Verify bỏ ClamAV (upload `.exe` → BE behavior, security regression risk) `[~0% — ready, item 10 dev list]`
 - 🟢 <a id="r7-8-3"></a>**R7.8.3** 🆕 Verify bỏ lưu nháp scope hẹp (button [Lưu nháp] bỏ, state DU_THAO/NHAP/MOI_DANG_KY giữ) `[~0% — ready, scope HẸP verified từ SRS]`
 - 🟢 <a id="r7-8-4"></a>**R7.8.4** 🆕 Profile + đổi MK self-service (ho-so-doi-mat-khau.md) `[~0% — ready, verify 3 mâu thuẫn FR-VIII-26]`
-- 🟢 <a id="r7-8-5"></a>**R7.8.5** 🆕 Permission 49 entity × 11 role sample 40 TC/module `[~0% — ready, was R5 scope]`
+- 🟢 <a id="r7-8-5"></a>**R7.8.5** 🆕 Permission 55+ entity × 11 role sample 40 TC/module `[~0% — ready, was R5 scope; entity count update v3.5]`
+- 🟢 <a id="r7-8-6"></a>**R7.8.6** 🆕 Verify UC renumber +4 offset FR-11 (UC120-142 → UC124-146 do FR-VIII-22..25 chiếm UC120-123) `[~0% — ready, scope: 23 UC × 11 role × 1 BC mỗi loại = 253 entries cần verify trong [permission-matrix-by-role.md](../output/permission-matrix-by-role.md) FR-IX block + 7.11-bao-cao-thong-ke.md UC ref khớp v3.5; CHANGELOG §srs-fr-11 Thay đổi 1]`
 
 ---
 
