@@ -30,11 +30,13 @@
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-KHOQA-001 | Critical | P0 | UI/UX | R6.4.D3 | `FR-X.2-01 UC158 Priority=Essential` + `SCR-X2-01 rows 1-12` (toàn bộ màn) | UI Kho câu hỏi tư vấn nhanh (SCR-X2-01) chưa build — thiếu sidebar/route + modal [+ Thêm câu hỏi] + modal [Nhập Excel] + tab phân loại + duyệt inline | Open |
+| BUG-KHOQA-001 | Critical | P0 | UI/UX | R6.4.D3 | `FR-X.2-01 UC158 Priority=Essential` + `SCR-X2-01 rows 1-12` (toàn bộ màn) | UI Kho câu hỏi tư vấn nhanh (SCR-X2-01) chưa build — thiếu sidebar/route + modal [+ Thêm câu hỏi] + modal [Nhập Excel] + tab phân loại + duyệt inline | Closed |
 
 ---
 
-## BUG-KHOQA-001 — UI Kho câu hỏi tư vấn nhanh (SCR-X2-01) chưa build trên CMS
+## ~~BUG-KHOQA-001~~ [CLOSED] — UI Kho câu hỏi tư vấn nhanh (SCR-X2-01) chưa build trên CMS
+
+> **Re-test:** 2026-05-07 R7 — ✅ PASS (Closed-verified). Login `cb_nv_tw_02`, sidebar `Quản lý tư vấn` đã có 3 submenu (Tư vấn chuyên sâu / **Kho câu hỏi** / Tư vấn nhanh). Click `Kho câu hỏi` → URL `/tv-nhanh/kho-cau-hoi` render đúng (KHÔNG redirect). 12 thành phần SCR-X2-01 đủ: heading "Kho Câu hỏi Thường gặp" + toolbar 4 nút (Thêm câu hỏi / Nhập Excel / Xuất Excel / Làm mới) + 3 tab phân loại (Tất cả / Đã duyệt / Chờ duyệt) + filter-bar (search + Lĩnh vực + Nguồn + Date range) + bảng 10 cột + pagination + modal Thêm câu hỏi 4 trường + modal Import Excel 3-step wizard + tab Chờ duyệt có checkbox "Select all" cho bulk approve. Network: `GET /api/v1/kho-cau-hois?page=1&pageSize=20` → 200, `GET /api/v1/kho-cau-hois?trangThai=CHO_DUYET,NHAP` → 200. Record `QA-20260507-0001` (Sở hữu trí tuệ, Đã duyệt, nguồn Thủ công) tồn tại. Minor deviation: modal Thêm câu hỏi gộp 3 button spec `[Hủy] [Lưu nháp] [Gửi duyệt]` thành 2 button `[Hủy] [Lưu]` — không thuộc scope BUG-KHOQA-001 chính (12 thành phần SCR-X2-01 đã có UI). Bằng chứng: [bug-khoqa-001-r7-fix-verified.png](image/bug-khoqa-001-r7-fix-verified.png).
 
 ### Mô tả
 

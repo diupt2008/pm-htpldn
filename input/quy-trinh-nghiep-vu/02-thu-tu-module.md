@@ -64,28 +64,30 @@ Password mặc định: `Secret@123`.
 ### ① FR-10 · Quản trị Hệ thống (Nhóm VIII) 🔑
 **Login:** `qtht_01` (QTHT) — duy nhất được CRUD ở đây.
 
-**Màn hình (SCR-VIII-01..10) theo SRS FR-10 v3.5 §3:**
-- SCR-VIII-01: **Quản lý Danh mục** (14 tab dọc bên trái — bỏ Tổ chức TV)
+**Màn hình (SCR-VIII-01..10) theo SRS FR-10 v3.5 BA chốt 2026-05-07:**
+- SCR-VIII-01: **Quản lý Danh mục** (14 tab dọc bên trái — bỏ Tổ chức TV, **+ Tab Tỉnh/Thành phố Q9**)
 - SCR-VIII-02: **Quản lý Vai trò**
-- SCR-VIII-03: **Quản lý Tài khoản NSD** (5 trạng thái + nút "Phân quyền" cho TK CHO_PHAN_QUYEN — fix C.5)
+- SCR-VIII-03: **Quản lý Tài khoản NSD** (**4 trạng thái** Q3: CHO_KICH_HOAT/HOAT_DONG/KHOA/KHOI_TAO — bỏ CHO_PHAN_QUYEN. Nút "Phân quyền" CHO_PHAN_QUYEN row → DEPRECATED)
 - SCR-VIII-04: **Phân quyền Chức năng**
 - SCR-VIII-05: **Phân quyền Dữ liệu** (cây 2 tầng)
-- SCR-VIII-06: Cấu hình Hệ thống (MH-10.7 — 4 tab, Tab 3 Mẫu phản hồi áp Mô hình B Hybrid 2 tầng)
+- SCR-VIII-06: Cấu hình Hệ thống (MH-10.7 — **2 tab** Q11: SLA + Mẫu phản hồi. **Bỏ Tab Phân công mặc định + Tab Quy trình hỗ trợ** — Tab Ngày lễ tách MH riêng FR-VIII-29)
 - SCR-VIII-07: Đăng nhập (MH-10.8b — Tier 1 nội bộ + Tier 2 SSO VNeID, bỏ VNPT eKYC)
 - SCR-VIII-08: Đăng ký TK doanh nghiệp (chỉ DN tự đăng ký, form 21 trường, username = MST)
-- SCR-VIII-08a: ⚠️ QTHT duyệt TK đăng ký — **dead UI** sau FR-VIII-22 bypass CHO_PHAN_QUYEN. Chờ BA Q3 chốt xóa hay giữ
+- ~~SCR-VIII-08a~~: ⚠️ **XÓA Q10** — BA chốt 2026-05-07 xóa hẳn MH này (FR-VIII-22 bypass CHO_PHAN_QUYEN, không còn UC duyệt thủ công)
 - SCR-VIII-09: Đăng xuất
-- SCR-VIII-10: Nhật ký Hệ thống (MH-10.10 — FR-VIII-28 mới)
+- SCR-VIII-10: Nhật ký Hệ thống (MH-10.10 — FR-VIII-28 mới, **export cap 10K Q4**)
 
-**FR mới SRS v3.5 (apply 2026-05-06):**
+**FR mới SRS v3.5 (apply 2026-05-06, BA chốt batch 2026-05-07):**
 - **FR-VIII-26**: Quên mật khẩu / Kích hoạt TK lần đầu — workflow chung cho TVV/CG/NHT/DN/CB
-- **FR-VIII-28**: Nhật ký Hệ thống `[GAP-VIII-02]` — filter, paginate 50/trang, cap 90 ngày
-- **FR-VIII-29**: Quản lý ngày lễ `[GAP-VIII-05]` — entity NGAY_LE + import Excel + calendar
+- **FR-VIII-28**: Nhật ký Hệ thống `[GAP-VIII-02]` — filter, paginate 50/trang, cap 90 ngày, **export 10K Q4**
+- **FR-VIII-29**: Quản lý ngày lễ `[GAP-VIII-05]` — entity NGAY_LE schema chốt Q1 (5 trường: `ngay`/`nam`/`ten_ngay_le`/`loai ∈ {NGAY_LE, NGHI_BU, NGHI_KHAC}`/`ghi_chu`) + import Excel + calendar. **Mỗi ngày 1 dòng** (Tết 7 ngày → 7 dòng). **MH riêng** không gộp SCR-VIII-06
+- **FR-VIII-30** `[NEW Q9]`: Quản lý Tỉnh/Thành phố — 63 tỉnh GSO QĐ 124/2004, entity `TINH_THANH` E32, hiển thị Tab 14 SCR-VIII-01
 - **FR-VIII-06 (Tổ chức TV)**: chuyển sang FR-04 thành FR-IV-NEW-01
+- ~~**FR-II-NEW-01** (Phân công mặc định)~~: **BỎ Q11** — thay bằng auto-filter 4 tiêu chí FR-II-06 Step 5 (lĩnh vực + đơn vị BR-AUTH-08 + workload ASC + ho_ten ASC LIMIT 10)
 
 > **Lưu ý DM Cơ quan/Đơn vị (UC103 — tree view 2 tầng TW→{BN,ĐP} ngang cấp song song theo BR-AUTH-02) KHÔNG có màn riêng** — là thành phần đặc biệt bên trong tab "Cơ quan ĐV" của SCR-VIII-01 (srs-fr-10 v3.5 §3 dòng 1475-1482). **CẢNH BÁO:** đổi từ "3 cấp TW→BN→ĐP" v3 thành "2 tầng TW→{BN, ĐP}" v3.5 — BN không có cấp con, ĐP trỏ trực tiếp lên TW (không qua BN).
 
-**📑 Tabs SCR-VIII-01 Quản lý Danh mục — 14 tab dọc bên trái (theo SRS FR-10 §3 dòng 1221):**
+**📑 Tabs SCR-VIII-01 Quản lý Danh mục — 14 tab dọc bên trái (theo SRS FR-10 §3 dòng 1221, **+ Tab 14 Tỉnh/Thành phố Q9**):**
 
 | Tab | Entity filter | Data đặc biệt | Điều kiện hiển thị |
 |-----|---------------|---------------|--------------------|
@@ -103,16 +105,17 @@ Password mặc định: `Secret@123`.
 | Loại TK | `DANH_MUC WHERE loai='LOAI_TK'` | — | Luôn |
 | Loại hình tiếp nhận | `DANH_MUC WHERE loai='LOAI_HINH_TIEP_NHAN'` | — | Luôn |
 | Kênh tiếp nhận | `DANH_MUC WHERE loai='KENH_TIEP_NHAN'` | — | Luôn |
+| **Tỉnh/Thành phố** `[NEW Q9 2026-05-07]` | `TINH_THANH` (entity riêng E32) | 63 tỉnh GSO theo QĐ 124/2004; cột: `ma` (01-63), `ten`, `vung_mien`, `trang_thai`. Read-only seed lúc deploy, QTHT chỉnh `trang_thai` | Luôn (FR-VIII-30) |
 
-**📑 Tabs SCR-VIII-06 Cấu hình hệ thống — 4 tab (sau user chốt 2026-05-06: bỏ Phân công + thêm Ngày lễ):**
+**📑 Tabs SCR-VIII-06 Cấu hình hệ thống — 2 tab (BA Q11 chốt 2026-05-07: chỉ giữ SLA + Mẫu phản hồi):**
 
 | Tab | Entity | Data | Điều kiện hiển thị |
 |-----|--------|------|--------------------|
-| **Thời hạn xử lý (SLA)** | `CAU_HINH_SLA` | Bảng cấu hình thời hạn xử lý cho 4 loại yêu cầu: **FR-02 Hỏi đáp / FR-05 Vụ việc / FR-06 Chi trả / FR-12 Tư vấn chuyên sâu**. Mỗi loại cấu hình các trường: **Số ngày làm việc để xử lý** (`deadline_ngay_lv`), **Ngưỡng cảnh báo mức 1** (`canh_bao_muc_1`, % so với SLA, vd 70%), **Ngưỡng cảnh báo mức 2** (`canh_bao_muc_2`, vd 90%), **Ngưỡng quá hạn nghiêm trọng** (`qua_han_nghiem_trong`, vd 120%), công tắc bật/tắt gửi thông báo qua **Email** / **In-app** | Luôn |
-| ~~**Phân công mặc định**~~ | ⚠️ **DEPRECATED 2026-05-06** — User chốt **bỏ hẳn feature**. Entity `CAU_HINH_PHAN_CONG` + FR-II-NEW-01 không còn dùng. **Cross-module impact:** FR-02 Hỏi đáp / FR-05 Vụ việc / FR-12 TVCS bỏ dropdown gợi ý người xử lý → chọn manual hoặc cơ chế khác (chờ BA verify) | — |
+| **Thời hạn xử lý (SLA)** | `CAU_HINH_SLA` | Bảng cấu hình thời hạn xử lý cho 4 loại yêu cầu: **FR-02 Hỏi đáp / FR-05 Vụ việc / FR-06 Chi trả / FR-12 Tư vấn chuyên sâu**. Mỗi loại cấu hình các trường: **Số ngày làm việc để xử lý** (`deadline_ngay_lv`), **Ngưỡng cảnh báo mức 1** (`canh_bao_muc_1`, % so với SLA, vd 70%), **Ngưỡng cảnh báo mức 2** (`canh_bao_muc_2`, vd 90%), công tắc bật/tắt gửi thông báo qua **Email** / **In-app**. **BA Q5 BỎ cột "Quá hạn nghiêm trọng"** — chỉ còn 2 ngưỡng cảnh báo | Luôn |
 | **Mẫu phản hồi** | `MAU_PHAN_HOI` | Kho mẫu câu trả lời dùng lại (cho module **FR-02 Hỏi đáp**), phân loại theo lĩnh vực pháp luật. Mỗi mẫu gồm: **Tên mẫu** (`ten_mau`), **Lĩnh vực** (`linh_vuc_id`), **Nội dung mẫu** (`noi_dung`, soạn bằng Rich Text editor — có format đậm/nghiêng/bullet), **Trạng thái** (`trang_thai`). Áp Mô hình B Hybrid 2 tầng (CĐT chốt 2026-05-02) | Luôn |
-| **Quy trình hỗ trợ** | ⚠️ **Tên entity chưa verify** — srs-fr-10 §3 dòng 1423-1430 mô tả Tab này nhưng KHÔNG định nghĩa entity cụ thể trong §3.4.3 | Bảng CRUD các bước trong quy trình hỗ trợ pháp lý linh hoạt. Mỗi bước gồm: **Thứ tự**, **Tên bước**, **SLA riêng cho bước** (số ngày làm việc), **Quy tắc phân công tự động**. **Lưu ý khi sửa quy trình:** hồ sơ đang xử lý vẫn giữ snapshot quy trình cũ; chỉ hồ sơ tạo mới (sau thời điểm thay đổi) mới áp dụng quy trình mới | Luôn (chỉ QTHT) |
-| **Ngày lễ** `[NEW 2026-05-06]` | `NGAY_LE` (FR-VIII-29) | Bảng CRUD ngày lễ + import Excel + calendar view. Schema chờ BA Q1 chốt (FR Inputs `ngay_bat_dau`/`ngay_ket_thuc`/`lap_lai_hang_nam` vs entity 3.4.3.51 `ngay`/`nam`/`loai`). Hỗ trợ tính SLA trừ ngày lễ theo BR-CALC-03 | Luôn (chỉ QTHT) |
+| ~~**Phân công mặc định**~~ | ⚠️ **DEPRECATED Q11 2026-05-07** — Entity `CAU_HINH_PHAN_CONG` + FR-II-NEW-01 BỎ hẳn. Thay bằng auto-filter 4 tiêu chí FR-II-06 Step 5 (lĩnh vực + đơn vị BR-AUTH-08 + workload ASC + ho_ten ASC LIMIT 10). **Cross-module impact:** FR-02 Hỏi đáp / FR-05 Vụ việc / FR-12 TVCS dùng modal SCR-II-03 với bảng gợi ý theo auto-filter | — |
+| ~~**Quy trình hỗ trợ**~~ | ⚠️ **DEPRECATED Q11 2026-05-07** — BA chốt SCR-VIII-06 chỉ 2 tab. Tab này không còn trong scope | — |
+| ~~**Ngày lễ**~~ | ⚠️ **TÁCH MH RIÊNG** — BA Q1 chốt FR-VIII-29 có MH riêng, KHÔNG gộp SCR-VIII-06. Schema 5 trường (`ngay`/`nam`/`ten_ngay_le`/`loai`/`ghi_chu`), mỗi ngày 1 dòng | — |
 
 **Xem chi tiết cần dữ liệu từ:** KHÔNG cần module khác (module gốc).
 
@@ -124,17 +127,18 @@ Password mặc định: `Secret@123`.
 |----------|-------|---------|----------|--------------|-------------------------|
 | **🖐️ Tạo Đơn vị** | `qtht_01` | [+ Thêm đơn vị con] trên node TW | **SCR-VIII-01** tab "Cơ quan ĐV" (UC103) | `ma_don_vi`, `ten_don_vi`, `cap ∈ {TW, BN, DP}`, `don_vi_cha_id`, `tinh_thanh_id` (mới v3.5), địa chỉ, ĐT, email | `don_vi_cha_id` ← **cây DON_VI 2 tầng**: NULL khi cap=TW; **PHẢI = TW** khi cap=BN hoặc cap=DP (BR-AUTH-02). Tạo ĐP với cha = BN → ERR-DV-02 |
 | **🖐️ Tạo Tài khoản** | `qtht_01` | [+ Thêm TK] | **SCR-VIII-03** Quản lý Tài khoản NSD | `username` (theo BR-AUTH-USERNAME-01: DN auto = MST 10 chữ số; CB nội bộ QTHT đặt; TVV/CG auto local-part email; NHT do CB NV nhập), `email` (unique trên TAI_KHOAN.email — BR-AUTH-EMAIL-01), `ho_ten`, mật khẩu (≥8 ký tự + hoa + thường + số + **ký tự đặc biệt** `[GAP-VIII-04]`), `vai_tro_id`, `don_vi_id`. State entry: CHO_KICH_HOAT (gửi mail kích hoạt qua FR-VIII-26) | `vai_tro_id` ← `VAI_TRO` (quản lý ở SCR-VIII-02); `don_vi_id` ← **DON_VI filter theo cấp của vai trò** |
-| **🖐️ Phân quyền cho TK CHO_PHAN_QUYEN** (mới v3.5 fix C.5) | `qtht_01` | Nút "Phân quyền" trong cột Hành động (SCR-VIII-03 row 16) | SCR-VIII-03 | Gán `vai_tro` + `don_vi_id` cho TK ở state CHO_PHAN_QUYEN → chuyển HOAT_DONG | ⚠️ **BLOCKED chờ BA Q3** — sau FR-VIII-22 bypass, scenario nào còn trigger CHO_PHAN_QUYEN? Xem [bug-report-r7-srs-fr10-inconsistency.md](../../output/qa-reports/round7-2026-05-06/bug-reports/bug-report-r7-srs-fr10-inconsistency.md) BUG-SRS-FR10-003 |
+| ~~**🖐️ Phân quyền cho TK CHO_PHAN_QUYEN**~~ | ⚠️ **DEPRECATED Q3 2026-05-07** — BA chốt 4 trạng thái (CHO_KICH_HOAT/HOAT_DONG/KHOA/KHOI_TAO), bỏ CHO_PHAN_QUYEN khỏi SM-TAIKHOAN. FR-VIII-22 bypass thẳng CHO_KICH_HOAT, không còn UC duyệt thủ công | — | — | — |
 | **🖐️ Tạo Vai trò** | `qtht_01` | [+ Thêm vai trò] | **SCR-VIII-02** Quản lý Vai trò | `ten_vai_tro`, `mo_ta`, danh sách quyền hạn | `quyen_ids[]` ← danh sách quyền (set ở SCR-VIII-04) |
 | **🖐️ Phân quyền chức năng** | `qtht_01` | Gán quyền | **SCR-VIII-04** Phân quyền Chức năng | Mapping vai_tro × quyen | — |
 | **🖐️ Phân quyền dữ liệu** | `qtht_01` | Gán scope | **SCR-VIII-05** Phân quyền Dữ liệu | Scope `{don_vi_id, phạm vi đọc/ghi}` cho mỗi vai trò | `don_vi_id` ← DON_VI |
 | **🖐️ Tạo Danh mục** | `qtht_01` | [+ Thêm mới] trên 1 trong 14 tab | SCR-VIII-01 | `loai` auto theo tab đang chọn, `ma`, `ten`, `mo_ta`, `thu_tu`, `trang_thai` | Tab đang chọn quyết định `loai` DM |
 | Kích hoạt / Vô hiệu hóa Đơn vị | `qtht_01` | Toggle trạng thái | SCR-VIII-01 tab Cơ quan ĐV | — | Cảnh báo "Thay đổi cấp/đơn vị cha sẽ cập nhật chính sách phân quyền" khi đổi cấp/cha (srs-fr-10 §3 row 20) |
 | Vô hiệu hóa Tài khoản | `qtht_01` | Toggle | SCR-VIII-03 | — | Guard: TK không đang phân công VV/Hỏi Đáp |
-| **🖐️ Cấu hình SLA** | `qtht_01` | Form | SCR-VIII-06 Tab 1 (SLA) | Thời hạn xử lý (ngày làm việc) cho từng module: **Hỏi đáp** (`deadline_hoi_dap`), **Vụ việc** (`deadline_vu_viec`, mặc định `10`), **Chi trả** (`deadline_chi_tra`), **Hạn bổ sung hồ sơ** (`bo_sung_timeout` — xem BR-EC-16) | Nhập số ngày LV |
-| ~~**🖐️ Cấu hình Phân công**~~ | ⚠️ **DEPRECATED 2026-05-06** — User chốt bỏ feature. Entity `CAU_HINH_PHAN_CONG` + FR-II-NEW-01 không còn dùng | — | — | — | — |
-| **🖐️ Cấu hình Ngày lễ** `[NEW 2026-05-06]` | `qtht_01` | [+ Thêm ngày lễ] hoặc Import Excel | SCR-VIII-06 Tab 4 (Ngày lễ — gộp vào Cấu hình HT theo user chốt 2026-05-06) | Schema chờ BA Q1 — nếu theo FR Inputs: `ten_ngay_le`, `ngay_bat_dau`, `ngay_ket_thuc`, `mo_ta`, `lap_lai_hang_nam`. Nếu theo entity 3.4.3.51: `ngay` (single), `nam`, `ten_ngay_le`, `loai`, `ghi_chu` | — |
-| **🖐️ Tạo Mẫu phản hồi** | `qtht_01` | Form | SCR-VIII-06 Tab 3 (Mẫu phản hồi) | **Tên mẫu** (`ten_mau`), **Lĩnh vực** (`linh_vuc_id`), **Nội dung mẫu** (`noi_dung_mau`, Rich text) | `linh_vuc_id` ← danh mục `LINH_VUC_PL` (FR-10) |
+| **🖐️ Cấu hình SLA** | `qtht_01` | Form | SCR-VIII-06 Tab 1 (SLA) | Thời hạn xử lý (ngày làm việc) cho từng module: **Hỏi đáp** (`deadline_hoi_dap`), **Vụ việc** (`deadline_vu_viec`, mặc định `10`), **Chi trả** (`deadline_chi_tra`), **Hạn bổ sung hồ sơ** (`bo_sung_timeout` — xem BR-EC-16). **BA Q5 BỎ ngưỡng "Quá hạn nghiêm trọng"** — chỉ giữ 2 ngưỡng cảnh báo | Nhập số ngày LV |
+| ~~**🖐️ Cấu hình Phân công**~~ | ⚠️ **DEPRECATED Q11 2026-05-07** — BA chốt BỎ entity `CAU_HINH_PHAN_CONG` + FR-II-NEW-01. Thay bằng auto-filter 4 tiêu chí FR-II-06 Step 5 | — | — | — | — |
+| **🖐️ Cấu hình Ngày lễ** `[NEW Q1 2026-05-07]` | `qtht_01` | [+ Thêm ngày lễ] hoặc Import Excel | **MH riêng FR-VIII-29** (KHÔNG gộp SCR-VIII-06 Q1) | Schema chốt: `ngay` (date Y, UNIQUE per `nam`), `nam` (number Y, ≥2024), `ten_ngay_le` (text Y), `loai ∈ {NGAY_LE, NGHI_BU, NGHI_KHAC}` (text Y), `ghi_chu` (text N). **Mỗi ngày 1 dòng** (Tết 7 ngày → 7 dòng). Hỗ trợ tính SLA trừ ngày lễ theo BR-CALC-03 | — |
+| **🖐️ Quản lý Tỉnh/Thành phố** `[NEW Q9 2026-05-07]` | `qtht_01` | Toggle trạng thái (read-only seed) | **SCR-VIII-01 Tab 14 (Tỉnh/TP — FR-VIII-30)** | Entity `TINH_THANH` E32 — 63 tỉnh GSO QĐ 124/2004. Cột: `ma` (01-63), `ten`, `vung_mien`, `trang_thai`. QTHT chỉ chỉnh `trang_thai`, không Add/Delete (read-only seed lúc deploy) | — |
+| **🖐️ Tạo Mẫu phản hồi** | `qtht_01` | Form | SCR-VIII-06 Tab 2 (Mẫu phản hồi — đổi từ Tab 3 sau Q11) | **Tên mẫu** (`ten_mau`), **Lĩnh vực** (`linh_vuc_id`), **Nội dung mẫu** (`noi_dung_mau`, Rich text) | `linh_vuc_id` ← danh mục `LINH_VUC_PL` (FR-10) |
 
 ---
 
@@ -492,7 +496,7 @@ Password mặc định: `Secret@123`.
 | — | `MOI` | DN | **Gửi qua Cổng PLQG / DVC (API inbound)** | `noi_dung`, `linh_vuc_id`, DN (nếu có) | — | API inbound |
 | — | `MOI` | `cb_nv_<cap>_01` | **🖐️ Thêm thủ công (UC10)** | **Nội dung câu hỏi** (`noi_dung`, tối đa 5000 ký tự), **Lĩnh vực PL** (`linh_vuc_id`), **Kênh tiếp nhận** (`kenh_tiep_nhan` ∈ `TRUC_TIEP` / `HE_THONG_KHAC`), và (tùy chọn) thông tin **DN / Người gửi / Email / SĐT / File đính kèm** | `linh_vuc_id` ← danh mục `LINH_VUC_PL` (FR-10 Quản trị); `doanh_nghiep_id` ← **FR-07 Doanh nghiệp** (dropdown có search) | SCR-II-01 Form thêm mới (Drawer) |
 | `MOI` | `TIEP_NHAN` | `cb_nv_<cap>_01` | [Tiếp nhận] | Hệ thống tự tính **hạn xử lý** theo cấu hình `CAU_HINH_SLA` | `CAU_HINH_SLA` ← **FR-10 Quản trị** | SCR-II-02 |
-| `TIEP_NHAN` | `DANG_XU_LY` | `cb_nv_<cap>_01` | **Phân công (UC15)** | **Người xử lý** (`nguoi_xu_ly_id`, bắt buộc), **Ghi chú** (`ghi_chu`, tùy chọn), **Thời hạn** (`thoi_han`, tùy chọn — mặc định lấy theo deadline SLA) | Dropdown chọn tài khoản từ `TAI_KHOAN` với các điều kiện:<br>• Chỉ lấy TK đang `HOAT_DONG` (TK bị khóa sẽ disabled kèm tooltip — lỗi `ERR-PC-01`)<br>• Hệ thống tự gợi ý từ bảng `CAU_HINH_PHAN_CONG` (FR-II-NEW-01, do QTHT cấu hình) — khớp `linh_vuc_id` của câu hỏi<br>• Mỗi dòng hiển thị: Họ tên / Đơn vị / Lĩnh vực chuyên môn / **Workload hiện tại** / Mức ưu tiên<br>• Thứ tự sắp xếp: **độ ưu tiên tăng dần → workload tăng dần**<br>• Nếu workload vượt ngưỡng → badge đỏ "Quá tải (N yêu cầu)" — chỉ **cảnh báo, KHÔNG chặn** (`WRN-PC-01`) | **SCR-II-03 Modal phân công** (overlay trên SCR-II-02) |
+| `TIEP_NHAN` | `DANG_XU_LY` | `cb_nv_<cap>_01` | **Phân công (UC15)** | **Người xử lý** (`nguoi_xu_ly_id`, bắt buộc), **Ghi chú** (`ghi_chu`, tùy chọn), **Thời hạn** (`thoi_han`, tùy chọn — mặc định lấy theo deadline SLA) | Bảng gợi ý người xử lý theo **auto-filter 4 tiêu chí FR-II-06 Step 5** (BA Q11 chốt 2026-05-07 — BỎ entity `CAU_HINH_PHAN_CONG` + FR-II-NEW-01):<br>• **(1) Lọc lĩnh vực** — TVV/CG match `linh_vuc_chuyen_mon`, NHT match `linh_vuc_ids[]`, CB NV bỏ qua filter<br>• **(2) Lọc đơn vị BR-AUTH-08** cùng cấp mạng lưới (TW/BN/ĐP)<br>• **(3) Sort `workload ASC`** (count HD đang xử lý của TK)<br>• **(4) `ho_ten ASC LIMIT 10`**<br>• Chỉ TK `HOAT_DONG` (TK lock disabled + tooltip — `ERR-PC-01`)<br>• Mỗi dòng hiển thị: Họ tên / Đơn vị / Lĩnh vực chuyên môn / **Workload hiện tại** (KHÔNG còn cột "Mức ưu tiên")<br>• Workload vượt ngưỡng → badge đỏ "Quá tải (N yêu cầu)" — **cảnh báo, KHÔNG chặn** (`WRN-PC-01`) | **SCR-II-03 Modal phân công** (overlay trên SCR-II-02) |
 | `DANG_XU_LY` | `DA_TRA_LOI` | `tvv_01` / `nht_01` / `cb_nv_<cap>_01` | Tích "Đã trả lời" | **Nội dung phản hồi** (`noi_dung_phan_hoi`, không được rỗng — lỗi `ERR-PH-01`); user có thể chọn mẫu phản hồi soạn sẵn | Dropdown **Mẫu phản hồi** lấy từ `MAU_PHAN_HOI` (FR-10 Quản trị) | SCR-II-02 |
 | `DA_TRA_LOI` | `CHO_PHE_DUYET` | System | **Auto (BR-FLOW-01)** | — | — | Auto |
 | `CHO_PHE_DUYET` | `DA_DUYET` | `cb_pd_<cap>_01` | [Phê duyệt] | Cùng cấp với CB NV (BR-AUTH-05) | — | SCR-II-03 |

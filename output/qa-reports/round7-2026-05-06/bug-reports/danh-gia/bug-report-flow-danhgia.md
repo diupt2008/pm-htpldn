@@ -50,6 +50,8 @@ R7 retest workflow ĐG HQ phát hiện **2 bug mới** + **5 bug R6 Closed** ver
 ## BUG-FUNC-DG-006 — Endpoint /vu-viec-eligible trả empty list mặc dù tồn tại VV state HOAN_THANH match đợt
 
 > **Re-test:** 2026-05-07 R8 — ⚠️ **INCONCLUSIVE**. Pool VV reset giữa R7→R8: dashboard "Vụ việc hoàn thành: 0 vụ việc" + Tab Hoàn thành rỗng. Không có data state HOAN_THANH để verify mismatch endpoint `/vu-viec-eligible` vs `/vu-viec?trangThai=HOAN_THANH`. Bug giữ Open chờ seed lại VV HOAN_THANH (≥3 VV trong date range đợt) để retest đúng pattern. Screenshot: [r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png](../../screenshots/r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png).
+>
+> **Re-test 2026-05-07 R8 verify-2 (16:47):** ⚠️ **VẪN INCONCLUSIVE**. Account cb_nv_tw_02. API probe: `GET /api/v1/vu-viecs?trangThai=HOAN_THANH` → 200 count=0 (0 VV HOAN_THANH); `GET /api/v1/vu-viecs` → 6 VV all in DA_TIEP_NHAN/DA_PHAN_CONG; `GET /api/v1/ke-hoach-danh-gias` → 0 đợt ĐG tồn tại. Cannot reproduce filter-empty-despite-data scenario. Bug giữ Open — chờ seed Phase 2 (≥3 VV state HOAN_THANH trong date range + 1 đợt ĐG state CHO_DUYET_PC) trước khi retest dev fix.
 
 ### Mô tả
 
@@ -119,6 +121,8 @@ VV list (verify VV HOAN_THANH tồn tại):
 ## BUG-FUNC-DG-007 — Dashboard KPI "Vụ việc hoàn thành: 0" sai vs thực tế 20 VV state HOAN_THANH
 
 > **Re-test:** 2026-05-07 R8 — ⚠️ **INCONCLUSIVE**. Cùng evidence với DG-006: pool VV reset, Dashboard KPI "Vụ việc hoàn thành: 0" + Tab Hoàn thành cũng rỗng → KPI=0 hiện đã match thực tế. Không có cách verify mismatch giữa Dashboard KPI và Tab list khi cả hai cùng = 0. Bug giữ Open chờ seed lại VV HOAN_THANH để retest cross-module sync. Screenshot: [r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png](../../screenshots/r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png).
+>
+> **Re-test 2026-05-07 R8 verify-2 (16:47):** ⚠️ **VẪN INCONCLUSIVE**. Dashboard endpoint `/api/v1/dashboard?nam=2026` trả `VU_VIEC_HOAN_THANH.giaTri=0` — match với API `vu-viecs?trangThai=HOAN_THANH` count=0. Cross-module sync hiện đúng vì cả 2 cùng 0. Cần seed VV HOAN_THANH (≥1 VV) để re-verify mismatch giữa KPI counter và list count. Bug giữ Open.
 
 ### Mô tả
 

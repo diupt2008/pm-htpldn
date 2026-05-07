@@ -26,11 +26,20 @@ Phát hiện **1 bug Major** trong test R7.4.A1-CG advance state happy path. BE 
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-CG-A1-001 | Major | P0 | Workflow | TC-CG-A1-05 | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:2011` + `smoke/6.4-sm-tvv.md` line 24-25, 76 + `funtion/7.4-chuyen-gia-tvv.md` TVV-011 | State sau phê duyệt = `DANG_HOAT_DONG`, spec yêu cầu `CHO_KICH_HOAT` | Open |
+| ~~BUG-CG-A1-001~~ | Major | P0 | Workflow | TC-CG-A1-05 | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:2011` + `smoke/6.4-sm-tvv.md` line 24-25, 76 + `funtion/7.4-chuyen-gia-tvv.md` TVV-011 | State sau phê duyệt = `DANG_HOAT_DONG`, spec yêu cầu `CHO_KICH_HOAT` | **Closed** |
 
 ---
 
-## BUG-CG-A1-001 — State sau CB PD phê duyệt sai spec v3.5 (`DANG_HOAT_DONG` vs `CHO_KICH_HOAT`)
+## ~~BUG-CG-A1-001~~ [CLOSED] — State sau CB PD phê duyệt sai spec v3.5 (`DANG_HOAT_DONG` vs `CHO_KICH_HOAT`)
+
+> **Re-test:** 2026-05-07 R8 verify-2 (16:47) — ✅ **PASS (Closed-verified)**. End-to-end workflow trên TVV-BTP-TW-0014 (`e4aad026-d996-45b3-8ab0-fb766adb60a0`):
+> - **Step 1** (cb_nv_tw_02 lưu nháp thẩm định, version=1) → 200 OK, state `DANG_THAM_DINH` (version=2).
+> - **Step 2** (cb_nv_tw_02 trình duyệt, version=2) → 200 OK, state `CHO_PHE_DUYET` (version=3).
+> - **Step 3** (cb_pd_tw_02 phê duyệt, version=3) → 200 OK, state **`CHO_KICH_HOAT`** (version=4) ✅ + `taiKhoanId="675d5107-6b2b-4046-a9e6-58b7a8ca3ecf"` tự cấp + `ngayCongNhan="2026-05-07"` set.
+> - SCR-IV-01 nay có 8 tab gồm "Chờ kích hoạt tài khoản" (uid=18_10) — tab UI cho state mới đã thêm.
+> - Filter API `?trangThai=CHO_KICH_HOAT` → 200 (enum hợp lệ); `?trangThai=DANG_HOAT_DONG` → count=0 (rename done); `?trangThai=HOAT_DONG` → count=8 TVV legacy.
+> - 3/3 part fix: rename `DANG_HOAT_DONG → HOAT_DONG` ✅, chèn state `CHO_KICH_HOAT` giữa CHO_PHE_DUYET → HOAT_DONG ✅, workflow phê duyệt → CHO_KICH_HOAT (KHÔNG skip thẳng vào HOAT_DONG) ✅.
+> - Screenshot SCR-IV-01 8 tabs: [r8-verify-2026-05-07-scr-iv-01-8tabs-and-donvi-label.png](../../screenshots/r8-verify-2026-05-07-scr-iv-01-8tabs-and-donvi-label.png).
 
 > **Re-test:** 2026-05-07 R7.2.5 — 🔴 **VẪN OPEN** (dev claim fix nhưng evidence không đổi).
 > - GET `/api/v1/tu-van-viens/7cb207b8-eea1-44f2-835f-ebd923dbfbc2` response `data.trangThai = "DANG_HOAT_DONG"` (chưa rename → `HOAT_DONG`, chưa thêm `CHO_KICH_HOAT`).
