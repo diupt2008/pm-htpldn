@@ -226,7 +226,7 @@ Response: {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbi
 | BUG-VT-008 | Minor | FR-VIII-14 §Error Handling | errCode mismatch toàn bộ — BE dùng `ERR-VAL-VIII-111-XX` thay SRS `ERR-VT-XX` | Open |
 | BUG-VT-009 | Medium | FR-VIII-14 §Preconditions line 610 + Processing line 625 | FE cho non-QTHT (cb_nv_tw_02) thấy button [+ Thêm mới] + mở modal CRUD (BE 403 đúng nhưng UI lộ entrypoint) | Open |
 
-**Bug file riêng:** [bug-report-r7-7-8e-vai-tro.md](../bug-reports/bug-report-r7-7-8e-vai-tro.md)
+**Bug file riêng:** [bug-report-r7-7-8e-vai-tro.md](../bug-reports/qtht-vai-tro/bug-report-r7-7-8e-vai-tro.md)
 
 ---
 

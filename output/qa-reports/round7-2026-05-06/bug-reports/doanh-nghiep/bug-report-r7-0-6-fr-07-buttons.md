@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-06 |
 | **Loại test** | Pre-test UI surface audit (R7.0.6) |
 | **Round** | R7 (post SRS update 2026-05-05) |
-| **Tài liệu tham chiếu** | [ui-surface-audit.md](../seed/ui-surface-audit.md) · [srs-fr-07-doanh-nghiep.md](../../../input/srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md) |
+| **Tài liệu tham chiếu** | [ui-surface-audit.md](../../seed/ui-surface-audit.md) · [srs-fr-07-doanh-nghiep.md](../../../../../input/srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md) |
 
 ---
 
@@ -35,7 +35,7 @@ UI surface audit R7.0.6 phát hiện 2 button trên SCR-V.III-01 (Quản lý DN)
 
 ## ~~FR07-UI-001~~ [CLOSED] — SCR-V.III-01 vẫn còn button [Thêm mới] (sai SRS update FR-07)
 
-> **Re-test:** 2026-05-06 — ✅ PASS (Closed-verified). Action bar nay chỉ render 4 button `[Tìm kiếm] [Xóa bộ lọc] [Xuất Excel] [Làm mới]`. Button [Thêm mới] đã bị BỎ. Match `srs-fr-07-doanh-nghiep.md:83+128+295`. Screenshot: [r7-0-6-fr-07-dn-buttons-RESOLVED.png](../screenshots/r7-0-6-fr-07-dn-buttons-RESOLVED.png).
+> **Re-test:** 2026-05-06 — ✅ PASS (Closed-verified). Action bar nay chỉ render 4 button `[Tìm kiếm] [Xóa bộ lọc] [Xuất Excel] [Làm mới]`. Button [Thêm mới] đã bị BỎ. Match `srs-fr-07-doanh-nghiep.md:83+128+295`. Screenshot: [r7-0-6-fr-07-dn-buttons-RESOLVED.png](../../screenshots/r7-0-6-fr-07-dn-buttons-RESOLVED.png).
 
 ### Mô tả
 
@@ -71,13 +71,13 @@ uid=40_33 button "reload Làm mới"
 
 ### Bằng chứng
 
-![FR07-UI-001 — SCR-V.III-01 vẫn còn button [Thêm mới]](../screenshots/r7-0-6-fr-07-dn-buttons-still-present.png)
+![FR07-UI-001 — SCR-V.III-01 vẫn còn button [Thêm mới]](../../screenshots/r7-0-6-fr-07-dn-buttons-still-present.png)
 
 ---
 
 ## ~~FR07-UI-002~~ [CLOSED] — SCR-V.III-01 vẫn còn button [Import Excel] (sai SRS update FR-07)
 
-> **Re-test:** 2026-05-06 — ✅ PASS (Closed-verified). Button [Import Excel] đã bị BỎ khỏi action bar. Match `srs-fr-07-doanh-nghiep.md:283-285+295`. Screenshot: [r7-0-6-fr-07-dn-buttons-RESOLVED.png](../screenshots/r7-0-6-fr-07-dn-buttons-RESOLVED.png).
+> **Re-test:** 2026-05-06 — ✅ PASS (Closed-verified). Button [Import Excel] đã bị BỎ khỏi action bar. Match `srs-fr-07-doanh-nghiep.md:283-285+295`. Screenshot: [r7-0-6-fr-07-dn-buttons-RESOLVED.png](../../screenshots/r7-0-6-fr-07-dn-buttons-RESOLVED.png).
 
 ### Mô tả
 
@@ -103,7 +103,7 @@ Action bar có button `[upload Import Excel]` (uid `40_31`) visible bên cạnh 
 
 ### Bằng chứng
 
-![FR07-UI-002 — Button [Import Excel] vẫn còn trên SCR-V.III-01](../screenshots/r7-0-6-fr-07-dn-buttons-still-present.png)
+![FR07-UI-002 — Button [Import Excel] vẫn còn trên SCR-V.III-01](../../screenshots/r7-0-6-fr-07-dn-buttons-still-present.png)
 
 Snapshot xem ở FR07-UI-001 (cùng frame).
 

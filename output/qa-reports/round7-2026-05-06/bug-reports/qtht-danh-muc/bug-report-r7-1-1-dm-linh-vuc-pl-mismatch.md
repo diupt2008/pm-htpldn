@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-06 |
 | **Loại test** | Seed pre-check (R7.2.1 trigger) |
 | **Round** | Round 7 — Apply SRS update 2026-05-05 |
-| **Tài liệu tham chiếu** | [SRS FR-VIII-01 Seed Data line 204](../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [seed-fixture.yaml v2.7.2](../../../../input/data/seed-fixture.yaml) · [todo.md R7.1.1](../../../../tasks/todo.md) |
+| **Tài liệu tham chiếu** | [SRS FR-VIII-01 Seed Data line 204](../../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [seed-fixture.yaml v2.7.2](../../../../../input/data/seed-fixture.yaml) · [todo.md R7.1.1](../../../../../tasks/todo.md) |
 
 ---
 
@@ -26,7 +26,9 @@ Phát hiện **1** lỗi data có SRS reference cụ thể khi mở dropdown "L�
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-DM-LVPL-001 | Major | P1 | Data | R7.1.1 / R7.2.1 | `srs-fr-10-quan-tri.md FR-VIII-01 Seed Data line 204` | Danh mục LINH_VUC_PL trong app không khớp 10 LV SRS — thiếu 3 (DOANH_NGHIEP/THUONG_MAI/DAU_TU) + thừa 3 non-SRS | Open |
+| BUG-DM-LVPL-001 | Major | P1 | Data | R7.1.1 / R7.2.1 | `srs-fr-10-quan-tri.md FR-VIII-01 Seed Data line 204` | Danh mục LINH_VUC_PL trong app không khớp 10 LV SRS — thiếu 3 (DOANH_NGHIEP/THUONG_MAI/DAU_TU) + thừa 3 non-SRS | Open (re-test PARTIAL FIX) |
+
+> **Re-test 2026-05-07 (sau dev claim fix):** ⚠️ PARTIAL FIX. Dev đã thêm `DOANH_NGHIEP` + `DAU_TU` (10→12 LV) nhưng vẫn **thiếu THUONG_MAI** (UI dùng `KINH_DOANH_TM` tên "Kinh doanh thương mại" — code mismatch fixture v2.7.2 yêu cầu `THUONG_MAI`). Mã `SHTT` fixture vs `SO_HUU_TRI_TUE` UI cũng mismatch. Thừa 3 non-SRS vẫn còn (HON_NHAN_GIA_DINH/KINH_DOANH_TM/KHIEU_NAI_TO_CAO). R7.2.1 vẫn block.
 
 ---
 
@@ -104,7 +106,7 @@ Dropdown render **10 LV nhưng không khớp SRS** — cụ thể có 3 mismatch
 
 **1. Ảnh chụp** (dropdown LV trong modal Thêm mẫu phản hồi, account `cb_nv_tw_01`):
 
-![BUG-DM-LVPL-001 — Dropdown LV trong modal MPH chỉ 10 options không khớp SRS](../seed/screenshots/r7-2-1-mph-dropdown-lv-missing-dn-hd.png)
+![BUG-DM-LVPL-001 — Dropdown LV trong modal MPH chỉ 10 options không khớp SRS](../../seed/screenshots/r7-2-1-mph-dropdown-lv-missing-dn-hd.png)
 
 **2. SRS quote (authoritative):**
 

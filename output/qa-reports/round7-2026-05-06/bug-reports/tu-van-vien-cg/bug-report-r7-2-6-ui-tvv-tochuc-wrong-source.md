@@ -102,11 +102,11 @@ Khi `cb_nv_tw_02` mở form Thêm mới TVV/CG (`/chuyen-gia-tvv/tao-moi`) và c
 
 **Screenshot 1:** Dropdown "Tổ chức hành nghề chính" search "Epsilon" — list "Trống":
 
-![BUG-TVV-FE-002 — Dropdown TC TV search Epsilon empty](image/bug-r7-2-6-ui-tc-search-empty.png)
+![BUG-TVV-FE-002 — Dropdown TC TV search Epsilon empty](../image/bug-r7-2-6-ui-tc-search-empty.png)
 
 **Screenshot 2:** Form filled với "Trung tâm trợ giúp pháp lý" làm workaround pick từ DM legacy:
 
-![BUG-TVV-FE-002 — Form filled với DM legacy pick](image/bug-r7-2-6-ui-form-filled.png)
+![BUG-TVV-FE-002 — Form filled với DM legacy pick](../image/bug-r7-2-6-ui-form-filled.png)
 
 ---
 

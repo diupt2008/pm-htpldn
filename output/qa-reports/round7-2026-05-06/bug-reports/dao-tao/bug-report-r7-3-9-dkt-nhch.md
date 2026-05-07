@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-07 |
 | **Loại test** | Seed (Tier 2 transactional) |
 | **Round** | Round 7 |
-| **Tài liệu tham chiếu** | [tasks/todo.md R7.3.9](../../../../tasks/todo.md) · [seed-fixture.yaml v2.7.3](../../../../input/data/seed-fixture.yaml) · [srs-update-2026-5-5/](../../../../input/srs-update-2026-5-5/) |
+| **Tài liệu tham chiếu** | [tasks/todo.md R7.3.9](../../../../../tasks/todo.md) · [seed-fixture.yaml v2.7.3](../../../../../input/data/seed-fixture.yaml) · [srs-update-2026-5-5/](../../../../../input/srs-update-2026-5-5/) |
 
 ---
 

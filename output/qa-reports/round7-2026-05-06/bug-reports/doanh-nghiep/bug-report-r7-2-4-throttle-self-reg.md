@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-06 |
 | **Loại test** | Seed batch (R7.2.4 trigger) |
 | **Round** | Round 7 — Apply SRS update 2026-05-05 |
-| **Tài liệu tham chiếu** | [SRS FR-VIII-22 line 1005](../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [seed-fixture v2.7.2](../../../../input/data/seed-fixture.yaml) · [todo R7.2.4](../../../../tasks/todo.md) |
+| **Tài liệu tham chiếu** | [SRS FR-VIII-22 line 1005](../../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [seed-fixture v2.7.2](../../../../../input/data/seed-fixture.yaml) · [todo R7.2.4](../../../../../tasks/todo.md) |
 
 ---
 
@@ -92,7 +92,7 @@ x-ratelimit-reset: 49
 
 **1. Ảnh chụp** (DN4 form filled + 429 toast):
 
-![BUG-THROTTLE-001 — DN4 Delta hit 429 sau khi DN1/2/3 PASS](image/r7-2-4-dn-04-rate-limit-429.png)
+![BUG-THROTTLE-001 — DN4 Delta hit 429 sau khi DN1/2/3 PASS](../image/r7-2-4-dn-04-rate-limit-429.png)
 
 **2. Network log** (4 attempts liên tiếp, tất cả 429):
 
@@ -163,7 +163,7 @@ GET /api/v1/danh-muc/public?loai=LOAI_DOANH_NGHIEP
 
 **1. Ảnh chụp** (form DN1 sau khi chọn dropdown — value "Doanh nghiệp nhỏ"):
 
-![BUG-DM-LOAI-DN-002 — Dropdown Loại DN render quy mô](image/r7-2-4-dn-01-alpha-submitted.png)
+![BUG-DM-LOAI-DN-002 — Dropdown Loại DN render quy mô](../image/r7-2-4-dn-01-alpha-submitted.png)
 
 **2. API response** (verify DM):
 

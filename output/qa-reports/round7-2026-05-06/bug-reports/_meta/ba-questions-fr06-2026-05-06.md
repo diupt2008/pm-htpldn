@@ -5,9 +5,9 @@
 | **Người hỏi** | QA Team (huongttt) |
 | **Người trả lời** | BA |
 | **Ngày gửi** | 2026-05-06 |
-| **SRS reference** | [`input/srs-update-2026-5-5/srs-fr-06-chi-tra.md`](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md) (v3.5, 1.414 dòng) |
-| **CHANGELOG** | [`CHANGELOG-v3-to-v3.5.md §srs-fr-06 line 714-866`](../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) |
-| **Delta map** | [`_DELTA-MAP-FR06.md`](../../../../input/srs-update-2026-5-5/_DELTA-MAP-FR06.md) |
+| **SRS reference** | [`input/srs-update-2026-5-5/srs-fr-06-chi-tra.md`](../../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md) (v3.5, 1.414 dòng) |
+| **CHANGELOG** | [`CHANGELOG-v3-to-v3.5.md §srs-fr-06 line 714-866`](../../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) |
+| **Delta map** | [`_DELTA-MAP-FR06.md`](../../../../../input/srs-update-2026-5-5/_DELTA-MAP-FR06.md) |
 | **Tổng số câu** | 2 (cả 2 đều liên quan technical debt v3.5 do BA đã chốt OUT Thay đổi 5 + 8) |
 | **Mức độ ảnh hưởng** | Q1 chặn TC CT-006 (test lần 4 bổ sung); Q2 chặn TC SLA (CT-021 + #16 SCR-V.II-01 + #3 SCR-V.II-02). Cả 2 không chặn deploy nhưng QA cần biết để viết test plan đúng. |
 
@@ -22,12 +22,12 @@
 **Vấn đề:**
 
 Sau khi BA chốt OUT **Thay đổi 5** (FR-V.II-CROSS-01 + BR-EC-15/16 — auto từ chối lần 4 bổ sung) tại CHANGELOG line 855, v3.5 chỉ giữ:
-- HO_SO_CHI_TRA `bo_sung_count` CHECK BETWEEN 0 AND 3 ([line 1184](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L1184))
-- UI counter "Lần bổ sung: {n}/3" + highlight đỏ khi n ≥ 2 ([SCR-V.II-02 #11 line 978](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L978))
-- Quy tắc tương tác ([line 1030](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L1030)): "đối chiếu giới hạn nghiệp vụ tối đa 3 lần"
+- HO_SO_CHI_TRA `bo_sung_count` CHECK BETWEEN 0 AND 3 ([line 1184](../../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L1184))
+- UI counter "Lần bổ sung: {n}/3" + highlight đỏ khi n ≥ 2 ([SCR-V.II-02 #11 line 978](../../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L978))
+- Quy tắc tương tác ([line 1030](../../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L1030)): "đối chiếu giới hạn nghiệp vụ tối đa 3 lần"
 
 **SRS KHÔNG có:**
-- Error code formal cho "request bổ sung lần 4" (không nằm trong ERR-CT-KT-01/02 ở FR-V.II-03 — [line 290-291](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L290))
+- Error code formal cho "request bổ sung lần 4" (không nằm trong ERR-CT-KT-01/02 ở FR-V.II-03 — [line 290-291](../../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L290))
 - Hành vi UI khi n=3: nút "Yêu cầu bổ sung" có disabled không?
 - Khi `bo_sung_count = 3` mà CB NV vẫn cố click "Yêu cầu bổ sung" → hệ thống làm gì?
 
@@ -52,9 +52,9 @@ Sau khi BA chốt OUT **Thay đổi 5** (FR-V.II-CROSS-01 + BR-EC-15/16 — auto
 **Vấn đề:**
 
 Sau khi BA chốt OUT **Thay đổi 8** (SLA dynamic "Còn N ngày" + BR-SLA-02) tại CHANGELOG line 856, v3.5 giữ V3 baseline "4 mức cảnh báo":
-- SCR-V.II-01 #16 SLA column ([line 926](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L926)): "C07 — 4 mức cảnh báo (80px)"
-- SCR-V.II-02 #3 Header info ([line 970](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L970)): "SLA (C07 — 4 mức cảnh báo)"
-- BR-CALC-03 ([line 1370](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L1370)): "Deadline = ngày tiếp nhận + N ngày làm việc. N lấy từ CAU_HINH_SLA"
+- SCR-V.II-01 #16 SLA column ([line 926](../../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L926)): "C07 — 4 mức cảnh báo (80px)"
+- SCR-V.II-02 #3 Header info ([line 970](../../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L970)): "SLA (C07 — 4 mức cảnh báo)"
+- BR-CALC-03 ([line 1370](../../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L1370)): "Deadline = ngày tiếp nhận + N ngày làm việc. N lấy từ CAU_HINH_SLA"
 
 **SRS KHÔNG có:**
 - Định nghĩa cụ thể 4 mức là gì (vd: <50% / 50-80% / 80-100% / >100% deadline?)
@@ -83,8 +83,8 @@ Sau khi BA chốt OUT **Thay đổi 8** (SLA dynamic "Còn N ngày" + BR-SLA-02)
 
 **Đã có answer trong SRS:** cả 3 kênh đều hợp lệ.
 
-- [Line 837](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L837): "Cổng DVC / Cổng PLQG (giao diện DN) hoặc SCR-V.II-02 (CB NV thao tác thủ công)"
-- [Line 841](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L841): "Tác nhân: Doanh nghiệp (qua DVC/Cổng PLQG) hoặc CB NV (thủ công)"
+- [Line 837](../../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L837): "Cổng DVC / Cổng PLQG (giao diện DN) hoặc SCR-V.II-02 (CB NV thao tác thủ công)"
+- [Line 841](../../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md#L841): "Tác nhân: Doanh nghiệp (qua DVC/Cổng PLQG) hoặc CB NV (thủ công)"
 
 **Test plan:**
 - Kênh DN qua DVC + DN qua Cổng PLQG: external integration → BLOCKED (cùng pattern §10 flow-module.md).
@@ -109,6 +109,6 @@ Sau khi BA chốt OUT **Thay đổi 8** (SLA dynamic "Còn N ngày" + BR-SLA-02)
 2 câu Q1 + Q2 đều liên quan đến **trade-off BA đã quyết** (OUT Thay đổi 5 + 8) → có rủi ro re-open scope. QA chỉ cần BA tick A/B/C để viết test plan đúng, KHÔNG đề xuất BA reverse decision.
 
 Khi BA trả lời, QA sẽ:
-1. Update [output/funtion/7.6-chi-tra-chi-phi.md](../../../../output/funtion/7.6-chi-tra-chi-phi.md) (CT-006, CT-018, CT-021) theo phương án chốt.
-2. Update [output/smoke/6.6-sm-chitra.md](../../../../output/smoke/6.6-sm-chitra.md) (TP-CT-02 wording).
+1. Update [output/funtion/7.6-chi-tra-chi-phi.md](../../../../funtion/7.6-chi-tra-chi-phi.md) (CT-006, CT-018, CT-021) theo phương án chốt.
+2. Update [output/smoke/6.6-sm-chitra.md](../../../../smoke/6.6-sm-chitra.md) (TP-CT-02 wording).
 3. Note SRS reference + phương án chốt vào file này (mark `RESOLVED YYYY-MM-DD`).

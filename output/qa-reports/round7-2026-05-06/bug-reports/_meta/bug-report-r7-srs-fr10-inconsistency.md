@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-06 |
 | **Loại test** | SRS Review (deep review trước khi viết test plan FR-10) |
 | **Round** | Round 7 |
-| **Tài liệu tham chiếu** | [SRS FR-10 v3.5](../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [CHANGELOG v3→v3.5 §FR-10 line 1129-1322](../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) · [Delta map FR-10](../../../../input/srs-update-2026-5-5/_DELTA-MAP-FR10.md) |
+| **Tài liệu tham chiếu** | [SRS FR-10 v3.5](../../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [CHANGELOG v3→v3.5 §FR-10 line 1129-1322](../../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) · [Delta map FR-10](../../../../../input/srs-update-2026-5-5/_DELTA-MAP-FR10.md) |
 
 ---
 
@@ -50,7 +50,7 @@ Entity `3.4.3.51 NGAY_LE` (line 2059-2072) định nghĩa schema dùng **single 
 
 ### Các bước tái hiện
 
-1. Mở [`input/srs-update-2026-5-5/srs-fr-10-quan-tri.md`](../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) line 1397-1404 (FR-VIII-29 Inputs)
+1. Mở [`input/srs-update-2026-5-5/srs-fr-10-quan-tri.md`](../../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) line 1397-1404 (FR-VIII-29 Inputs)
 2. Đối chiếu line 2059-2072 (Entity 3.4.3.51 NGAY_LE)
 3. Quan sát: 2 schema không khớp (5 cột FR vs 6 cột entity, không trùng nhau)
 
@@ -440,9 +440,9 @@ Mermaid diagram (line 2086-2096) vẽ 7 mũi tên transitions. Bảng chuyển t
 
 | Thành phần | Giá trị |
 |------------|---------|
-| File SRS chính | [`input/srs-update-2026-5-5/srs-fr-10-quan-tri.md`](../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) (2.285 dòng) |
-| CHANGELOG | [`input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md`](../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) §FR-10 line 1129-1322 |
-| Delta map | [`input/srs-update-2026-5-5/_DELTA-MAP-FR10.md`](../../../../input/srs-update-2026-5-5/_DELTA-MAP-FR10.md) |
+| File SRS chính | [`input/srs-update-2026-5-5/srs-fr-10-quan-tri.md`](../../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) (2.285 dòng) |
+| CHANGELOG | [`input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md`](../../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) §FR-10 line 1129-1322 |
+| Delta map | [`input/srs-update-2026-5-5/_DELTA-MAP-FR10.md`](../../../../../input/srs-update-2026-5-5/_DELTA-MAP-FR10.md) |
 | 2-source verify | NotebookLM HTPLDN id `e3a2681b-fdd6-4a24-917c-9ed636e8a110` (chưa query — local SRS đủ làm chuẩn cho 11 bug này) |
 | Tool review | Claude Code SRS deep review (manual cross-reference) |
 

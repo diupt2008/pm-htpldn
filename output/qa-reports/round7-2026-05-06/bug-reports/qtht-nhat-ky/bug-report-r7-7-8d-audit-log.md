@@ -26,12 +26,20 @@ Phát hiện **6** lỗi khi test FR-VIII-28 Nhật ký hệ thống.
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |---|---|---|---|---|---|---|---|
-| BUG-LOG-001 | Major | P1 | Negative | TC04 | `FR-VIII-28 §Processing bước 2` line 1348 + ERR-LOG-02 | BE thiếu validate khoảng thời gian > 90 ngày | Open |
-| BUG-LOG-002 | Major | P1 | Happy | TC05 | `FR-VIII-28 §Processing bước 6` line 1352 | Endpoint Export Excel 400 "uuid expected" — design sai | Open |
-| BUG-LOG-003 | Medium | P2 | UI/UX | TC06 | `FR-VIII-28 §Processing bước 5` line 1351 | UI page size mặc định 20/trang vs SRS 50/trang | Open |
-| BUG-LOG-004 | Medium | P2 | UI/UX | TC03 | `FR-VIII-28 §Inputs row 3` line 1339 | Filter "Người dùng" thiếu | Open |
-| BUG-LOG-005 | Minor | P3 | UI/UX | TC01 | `SCR-VIII-10` line 1827 | Cột "Đơn vị" thiếu trên table | Open |
-| BUG-LOG-006 | Minor | P3 | UI/UX | TC02-03 | `FR-VIII-28 §Inputs row 4-5` line 1340-1341 | Dropdown Module/Hành động dùng enum DB thay Tiếng Việt | Open |
+| BUG-LOG-001 | Major | P1 | Negative | TC04 | `FR-VIII-28 §Processing bước 2` line 1348 + ERR-LOG-02 | BE thiếu validate khoảng thời gian > 90 ngày | Closed |
+| BUG-LOG-002 | Major | P1 | Happy | TC05 | `FR-VIII-28 §Processing bước 6` line 1352 | Endpoint Export Excel 400 "uuid expected" — design sai | Closed |
+| BUG-LOG-003 | Medium | P2 | UI/UX | TC06 | `FR-VIII-28 §Processing bước 5` line 1351 | UI page size mặc định 20/trang vs SRS 50/trang | Closed |
+| BUG-LOG-004 | Medium | P2 | UI/UX | TC03 | `FR-VIII-28 §Inputs row 3` line 1339 | Filter "Người dùng" thiếu | Closed |
+| BUG-LOG-005 | Minor | P3 | UI/UX | TC01 | `SCR-VIII-10` line 1827 | Cột "Đơn vị" thiếu trên table | Closed |
+| BUG-LOG-006 | Minor | P3 | UI/UX | TC02-03 | `FR-VIII-28 §Inputs row 4-5` line 1340-1341 | Dropdown Module/Hành động dùng enum DB thay Tiếng Việt | Closed |
+
+> **Re-test 2026-05-07 (sau dev fix):** ✅ ALL 6 CLOSED-verified.
+> - **BUG-LOG-001**: Range 91 ngày (`tuNgay=2026-02-04&denNgay=2026-05-06`) → BE trả 422 với errCode `ERR-LOG-02` field "denNgay". FE date inputs marked `invalid="true"`. Status code 422 thay vì 400 SRS expected (minor) nhưng errCode đúng.
+> - **BUG-LOG-002**: Click [Xuất Excel] → `POST /api/v1/audit-logs/export` → 200 với `Content-Disposition: attachment; filename="audit-log-20260507.xlsx"` + `content-type: spreadsheetml.sheet`. Endpoint route đúng (POST riêng, không conflict với `:id`).
+> - **BUG-LOG-003**: Footer "50 / trang" mặc định, "1-50 / 275 mục".
+> - **BUG-LOG-004**: Filter bar có "Người dùng" combobox.
+> - **BUG-LOG-005**: Table headers có cột "Đơn vị".
+> - **BUG-LOG-006**: Dropdown Module Tiếng Việt 10 options (Xác thực/Tài khoản/Vai trò/Đào tạo/Vụ việc/Chi trả/Đánh giá/Doanh nghiệp/Hỏi đáp/Tư vấn). Dropdown Hành động Tiếng Việt 10 options (Tạo mới/Xem/Cập nhật/Xóa/Gửi/Phê duyệt/Từ chối/Công khai/Bỏ công khai/Xuất dữ liệu).
 
 ---
 
@@ -154,7 +162,7 @@ UI footer "20 / trang" mặc định, BE response `pageSize=50`. FE config sai d
 
 ### Bằng chứng
 
-![UI 20/trang vs BE pageSize=50](../functional/screenshots-r7-7-8/r7-7-8d-tc01-list-43-record.png)
+![UI 20/trang vs BE pageSize=50](../../functional/screenshots-r7-7-8/r7-7-8d-tc01-list-43-record.png)
 
 ---
 
@@ -179,7 +187,7 @@ UI filter bar 6 trường: Endpoint/IP / Module / Entity type / Hành động / 
 
 ### Bằng chứng
 
-![Filter bar thiếu Người dùng](../functional/screenshots-r7-7-8/r7-7-8d-tc01-list-43-record.png)
+![Filter bar thiếu Người dùng](../../functional/screenshots-r7-7-8/r7-7-8d-tc01-list-43-record.png)
 
 ---
 

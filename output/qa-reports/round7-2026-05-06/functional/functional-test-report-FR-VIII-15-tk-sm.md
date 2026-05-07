@@ -119,7 +119,7 @@ User chốt logic UI/BE đúng: hệ thống tự sinh MK tạm + gửi email + 
 
 > ~~BUG-TK-SM-001~~ DROPPED — user chốt 2026-05-07 logic auto-gen MK đúng, SRS doc cần fix.
 
-**Bug file riêng:** [bug-report-r7-7-8a-tk-sm.md](../bug-reports/bug-report-r7-7-8a-tk-sm.md)
+**Bug file riêng:** [bug-report-r7-7-8a-tk-sm.md](../bug-reports/qtht-tai-khoan/bug-report-r7-7-8a-tk-sm.md)
 
 ---
 

@@ -26,13 +26,22 @@ Phát hiện **7** lỗi khi test FR-VIII-14 + SCR-VIII-02 trên 11 TC (TC01-TC1
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |---|---|---|---|---|---|---|---|
-| BUG-VT-001 | Critical | P0 | Workflow/Data | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 645 + 651 | BE xóa vai trò silently khi role đang gán TK (ERR-VT-02 không trigger) | Open |
-| BUG-VT-003 | Major | P1 | UI/UX | TC01 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1517-1519 (SCR-VIII-02) | UI table thiếu 3 cột SRS: Mô tả + Số tài khoản + Số quyền | Open |
-| BUG-VT-004 | Major | P1 | UI/UX | TC03 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 644 | FE silent trên 409 — modal đóng, không toast/inline error | Open |
-| BUG-VT-005 | Medium | P2 | UI/UX | TC02/TC06 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 619 (§Inputs row 4) | Form Add/Edit modal thiếu trường Trạng thái (trang_thai bắt buộc) | Open |
-| BUG-VT-006 | Minor | P3 | UI/UX | TC02 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1522 (SCR-VIII-02) | Form Add button [Thêm] ≠ SRS [Lưu] (Form Edit lại đúng [Lưu]) | Open |
-| BUG-VT-008 | Minor | P3 | Code | TC03/TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 644-645 | errCode mismatch — BE `ERR-VAL-VIII-111-XX` thay SRS `ERR-VT-XX` | Open |
-| BUG-VT-009 | Medium | P2 | UI/UX | TC10 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 610 + 625 | FE cho non-QTHT thấy button [+ Thêm mới] + mở modal CRUD (BE 403 đúng nhưng UI lộ entrypoint) | Open |
+| BUG-VT-001 | Critical | P0 | Workflow/Data | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 645 + 651 | BE xóa vai trò silently khi role đang gán TK (ERR-VT-02 không trigger) | Open (re-test pending — need full E2E setup) |
+| BUG-VT-003 | Major | P1 | UI/UX | TC01 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1517-1519 (SCR-VIII-02) | UI table thiếu 3 cột SRS: Mô tả + Số tài khoản + Số quyền | Open (re-test FAIL) |
+| BUG-VT-004 | Major | P1 | UI/UX | TC03 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 644 | FE silent trên 409 — modal đóng, không toast/inline error | Open (re-test FAIL) |
+| BUG-VT-005 | Medium | P2 | UI/UX | TC02/TC06 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 619 (§Inputs row 4) | Form Add/Edit modal thiếu trường Trạng thái (trang_thai bắt buộc) | Open (re-test FAIL) |
+| BUG-VT-006 | Minor | P3 | UI/UX | TC02 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1522 (SCR-VIII-02) | Form Add button [Thêm] ≠ SRS [Lưu] (Form Edit lại đúng [Lưu]) | Open (re-test FAIL) |
+| BUG-VT-008 | Minor | P3 | Code | TC03/TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 644-645 | errCode mismatch — BE `ERR-VAL-VIII-111-XX` thay SRS `ERR-VT-XX` | Open (re-test FAIL) |
+| BUG-VT-009 | Medium | P2 | UI/UX | TC10 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 610 + 625 | FE cho non-QTHT thấy button [+ Thêm mới] + mở modal CRUD (BE 403 đúng nhưng UI lộ entrypoint) | Open (re-test pending — need login non-QTHT) |
+
+> **Re-test 2026-05-07 (sau dev claim fix):** ❌ 5/7 STILL OPEN, 2/7 not verified.
+> - **BUG-VT-003**: Table vẫn 5 cột (Mã/Tên/Cấp/Trạng thái/Thao tác), thiếu Mô tả/SoTK/SoQuyền. ❌ FAIL.
+> - **BUG-VT-004**: POST mã trùng `QTHT` → BE 409 ERR-VAL-VIII-111-01 đúng. FE vẫn silent: modal đóng, errors=[], no toast. ❌ FAIL.
+> - **BUG-VT-005**: Modal Thêm vai trò vẫn 4 fields (Mã/Tên/Cấp/Mô tả), thiếu trường Trạng thái. ❌ FAIL.
+> - **BUG-VT-006**: Button vẫn label `[Thêm]` (form Add). ❌ FAIL.
+> - **BUG-VT-008**: errCode vẫn `ERR-VAL-VIII-111-01` (không phải SRS `ERR-VT-01`). ❌ FAIL.
+> - **BUG-VT-001**: Skip re-test — yêu cầu full E2E (create role + assign TK qua UI multi-step + delete). Pattern modal CRUD chưa thay đổi nên khả năng cao behavior giống bug gốc. Cần re-verify riêng.
+> - **BUG-VT-009**: Skip re-test — yêu cầu login non-QTHT trong isolated context. UI button [+ Thêm mới] vẫn render trong list — chưa xác định hide cho non-QTHT.
 
 ---
 

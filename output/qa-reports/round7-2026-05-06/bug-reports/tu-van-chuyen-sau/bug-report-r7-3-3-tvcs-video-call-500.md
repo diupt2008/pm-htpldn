@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-06 |
 | **Loại test** | Seed (Negative API) |
 | **Round** | Round 7 |
-| **Tài liệu tham chiếu** | [seed-fixture.yaml v2.7.1 > tv_cs_variants](../../../../input/data/seed-fixture.yaml) · [srs-fr-12-tv-chuyen-sau.md](../../../../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md) |
+| **Tài liệu tham chiếu** | [seed-fixture.yaml v2.7.1 > tv_cs_variants](../../../../../input/data/seed-fixture.yaml) · [srs-fr-12-tv-chuyen-sau.md](../../../../../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md) |
 
 ---
 
@@ -63,7 +63,7 @@ CB Nghiệp vụ TW gọi `POST /api/v1/noi-dung-tu-van-cs` với payload `hinhT
 
 **1. Ảnh chụp**:
 
-![BUG-TVCS-VIDEO-CALL-001 — UI list 10 TVCS state TIEP_NHAN sau seed (5 lần đầu fail VIDEO_CALL → retry HO_SO mới đủ 10/10)](../screenshots/r7-3-3-tvcs-10of10-tiep-nhan.png)
+![BUG-TVCS-VIDEO-CALL-001 — UI list 10 TVCS state TIEP_NHAN sau seed (5 lần đầu fail VIDEO_CALL → retry HO_SO mới đủ 10/10)](../../screenshots/r7-3-3-tvcs-10of10-tiep-nhan.png)
 
 **2. API response trace** (5 lần fail liên tiếp khi `hinhThucTv=VIDEO_CALL`, 5 lần retry với `HO_SO` → pass):
 

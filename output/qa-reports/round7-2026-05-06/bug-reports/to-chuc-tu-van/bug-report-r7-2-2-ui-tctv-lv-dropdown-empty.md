@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-07 |
 | **Loại test** | UI Workflow (R7.2.2-UI Plan B redo) |
 | **Round** | R7 |
-| **Tài liệu tham chiếu** | [funtion/7.4b-to-chuc-tu-van.md](../../funtion/7.4b-to-chuc-tu-van.md) · `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` FR-IV-NEW-01 · CLAUDE.md "Quy trình phân loại tab trống" iron rule |
+| **Tài liệu tham chiếu** | [funtion/7.4b-to-chuc-tu-van.md](../../../../funtion/7.4b-to-chuc-tu-van.md) · `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` FR-IV-NEW-01 · CLAUDE.md "Quy trình phân loại tab trống" iron rule |
 
 ---
 
@@ -78,7 +78,7 @@ Response: {"success":true,"data":[
 
 **Screenshot:** Dropdown "Lĩnh vực pháp lý" sau khi click + type "Doanh" — list rỗng "Trống / Chưa có dữ liệu":
 
-![BUG-TCTV-FE-001 — TC TV form LV dropdown empty](image/bug-r7-2-2-ui-tctv-lv-empty.png)
+![BUG-TCTV-FE-001 — TC TV form LV dropdown empty](../image/bug-r7-2-2-ui-tctv-lv-empty.png)
 
 **Network log evidence:** xem reqid=1116 trong session log MCP — query `LINH_VUC_PHAP_LY` returns empty array.
 

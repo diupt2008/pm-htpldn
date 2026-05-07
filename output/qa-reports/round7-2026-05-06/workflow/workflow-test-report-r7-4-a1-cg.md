@@ -7,7 +7,7 @@
 
 ## Verdict
 
-⚠️ **DONE_WITH_CONCERNS** — 11/14 PASS, 1/14 ⚠️ DEVIATION (BUG-CG-A1-001 state name), 2/14 BLOCKED (TK status endpoint + audit log endpoint chưa discover, defer R7.7.8a + R7.7.8d).
+⚠️ **DONE_WITH_CONCERNS** — **13/14 PASS** (sau khi unblock TC-07 + TC-14 qua R7.7.8a + R7.7.8d ngày 2026-05-07), 1/14 ⚠️ DEVIATION (BUG-CG-A1-001 state name DANG_HOAT_DONG vs CHO_KICH_HOAT — chờ DEV BE migrate enum).
 
 ## Pool sau test
 
@@ -34,14 +34,14 @@ Filter `?loaiTvv=CG&size=100` → `total=8, byState={DANG_HOAT_DONG: 8}`.
 | TC-CG-A1-04 | DANG_THAM_DINH → CHO_PHE_DUYET (`trinhDuyet:true`) | Workflow | P0 | ✅ | TVV-0007 state v2→v3 |
 | **TC-CG-A1-05** | TVV-011 — CB PD phê duyệt → **CHO_KICH_HOAT** per spec | Workflow | P0 | ⚠️ **DEVIATION** | BE returns `DANG_HOAT_DONG`, spec yêu cầu `CHO_KICH_HOAT`. Bug **BUG-CG-A1-001** (Major) |
 | TC-CG-A1-06 | TVV-011 — Auto-tạo TK qua FR-VIII-15 step 6 | Workflow | P0 | ✅ | TVV-0007 `taiKhoanId: fdfafbed-...` post-approval |
-| TC-CG-A1-07 | TK state = CHO_KICH_HOAT (per spec) | Workflow | P0 | 🚫 **BLOCKED** | Endpoint `/api/v1/tai-khoans/{id}` 404, `/api/v1/tai-khoan/{id}` 403 cho cb_pd. Cần endpoint chuẩn → defer R7.7.8a |
+| TC-CG-A1-07 | TK state = CHO_KICH_HOAT (per spec) | Workflow | P0 | ✅ **UNBLOCKED 2026-05-07** | Qua R7.7.8a UI: endpoint `GET /api/v1/tai-khoan?trangThai=...` (singular). Tab "Chờ kích hoạt 4" gồm `probe_perm` + `probe_optlock` + `nht_04_ui` + `qa_test_tk_r778a`. 6 CG cũ TVV-0001..0006 TK `Hoạt động` (đã activate qua R7.2.9 mail). Đúng spec |
 | TC-CG-A1-08 | ngayCongNhan auto-set | Workflow | P1 | ✅ | TVV-0007 `ngayCongNhan: 2026-05-06` |
 | TC-CG-A1-09 | Mail kích hoạt gửi MailHog (TVV-012a, FR-VIII-26) | Workflow | P1 | ✅ | MailHog inbox `probe.perm@test.htpldn.vn` có mail "Hồ sơ TVV đã được phê duyệt" với `username: probe_perm` + MK tạm |
 | TC-CG-A1-10 | TVV-027 — CB PD ĐP cố phê duyệt TVV TW (BR-AUTH-05/08) | Auth | P0 | ✅ | `cb_pd_dp_02` POST `/phe-duyet` TVV-0008 → **403 ERR-AUTH-VPD-00-01** |
 | TC-CG-A1-11 | CB NV ĐP cố thẩm định TVV TW (BR-AUTH-08) | Auth | P0 | ✅ | `cb_nv_dp_02` POST `/tham-dinh` TVV-0008 → **403 ERR-AUTH-VPD-00-01** + GET detail cũng 403 |
 | TC-CG-A1-12 | Optimistic lock — stale `version: 999` → 409 | Edge | P1 | ✅ | TVV-0008 POST `/tham-dinh` `version:999` → **409 ERR-STATE-LOCK-409** "Dữ liệu đã bị thay đổi bởi người dùng khác" |
 | TC-CG-A1-13 | loai_tvv=CG preserved qua transitions | Data | P0 | ✅ | 8/8 records `loaiTvv: "CG"` |
-| TC-CG-A1-14 | Audit log entry per transition (FR-VIII-28) | Audit | P1 | 🚫 **BLOCKED** | 5 endpoint guess đều 404 (`/nhat-ky-he-thong`, `/audit-log`, `/nhat-ky`, `/tu-van-viens/{id}/lich-su`, `/tu-van-viens/{id}/audit`). UI Nhật ký HT chưa kết nối backend đúng. Defer R7.7.8d |
+| TC-CG-A1-14 | Audit log entry per transition (FR-VIII-28) | Audit | P1 | ✅ **UNBLOCKED 2026-05-07** | Qua R7.7.8d UI: endpoint `GET /api/v1/audit-logs?entityType=TU_VAN_VIEN`. Filter trả 56 entries cover 8 CG, mỗi CG có Tạo mới + 2 THAM_DINH + 1 PHE_DUYET. Screenshot [r7-7-8d-audit-tvv-transitions.png](screenshots/r7-7-8d-audit-tvv-transitions.png) |
 
 ## API endpoints xác nhận
 

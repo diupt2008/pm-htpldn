@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-07 |
 | **Loại test** | Seed via UI (R7.1.5 Phase 1) |
 | **Round** | Round 7 |
-| **Tài liệu tham chiếu** | [SRS FR-VIII-29 line 1380-1414 srs-fr-10-quan-tri.md](../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [SRS Entity §3.4.3.51 NGAY_LE line 2059-2070](../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [tasks/todo.md R7.1.5](../../../../tasks/todo.md) |
+| **Tài liệu tham chiếu** | [SRS FR-VIII-29 line 1380-1414 srs-fr-10-quan-tri.md](../../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [SRS Entity §3.4.3.51 NGAY_LE line 2059-2070](../../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [tasks/todo.md R7.1.5](../../../../../tasks/todo.md) |
 | **2-source verify** | ✅ NotebookLM Haizz-HTPLDN (id `a4ae45bf-...`) + grep SRS local — match 100% |
 
 ---
@@ -29,7 +29,9 @@ Phát hiện **1** lỗi khi seed Tết Nguyên đán Bính Ngọ qua UI Tab Ng�
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-NGAY-LE-001 | Major | P1 | UI/UX | R7.1.5 | `FR-VIII-29 §Processing bước 4` (line 1412) | Form Thêm mới ngày lễ — button [Đồng ý] click silent fail, không trigger POST + không hiện validation error | Open |
+| BUG-NGAY-LE-001 | Major | P1 | UI/UX | R7.1.5 | `FR-VIII-29 §Processing bước 4` (line 1412) | Form Thêm mới ngày lễ — button [Đồng ý] click silent fail, không trigger POST + không hiện validation error | Open (re-test FAIL) |
+
+> **Re-test 2026-05-07:** ❌ STILL OPEN. Fill date `25/12/2026` qua DatePicker calendar click + tên + ghi chú → click [Đồng ý] vẫn silent: KHÔNG trigger POST `/api/v1/ngay-le`, KHÔNG toast, KHÔNG inline error. Modal stuck open. Bug chưa được dev fix.
 
 ---
 
@@ -71,11 +73,11 @@ Modal "Thêm mới ngày lễ" trên Tab Ngày lễ SCR-VIII-06: sau khi fill đ
 
 **1. Ảnh modal sau click [Đồng ý] 3 lần — modal vẫn open, table chưa update:**
 
-![BUG-NGAY-LE-001 — Modal Thêm mới stuck sau click Đồng ý](../seed/r7-1-5-fe-submit-silent-fail.png)
+![BUG-NGAY-LE-001 — Modal Thêm mới stuck sau click Đồng ý](../../seed/r7-1-5-fe-submit-silent-fail.png)
 
 **2. Ảnh table sau reload — 5/5 record (Tết NĐ đã save qua API workaround):**
 
-![BUG-NGAY-LE-001 — Table 5/5 record sau API direct POST + reload](../seed/r7-1-5-tab-ngay-le-5-record-final.png)
+![BUG-NGAY-LE-001 — Table 5/5 record sau API direct POST + reload](../../seed/r7-1-5-tab-ngay-le-5-record-final.png)
 
 **3. Network log (full session 9 request) — KHÔNG có POST `/api/v1/ngay-le`:**
 

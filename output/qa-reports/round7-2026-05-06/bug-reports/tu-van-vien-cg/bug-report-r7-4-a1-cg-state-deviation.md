@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-06 |
 | **Loại test** | Workflow (R7.4.A1-CG) |
 | **Round** | R7 |
-| **Tài liệu tham chiếu** | [smoke/6.4-sm-tvv.md](../../smoke/6.4-sm-tvv.md) · [funtion/7.4-chuyen-gia-tvv.md](../../funtion/7.4-chuyen-gia-tvv.md) · [workflow/workflow-test-report-r7-4-a1-cg.md](../workflow/workflow-test-report-r7-4-a1-cg.md) |
+| **Tài liệu tham chiếu** | [smoke/6.4-sm-tvv.md](../../../../smoke/6.4-sm-tvv.md) · [funtion/7.4-chuyen-gia-tvv.md](../../../../funtion/7.4-chuyen-gia-tvv.md) · [workflow/workflow-test-report-r7-4-a1-cg.md](../../workflow/workflow-test-report-r7-4-a1-cg.md) |
 
 ---
 
@@ -74,7 +74,7 @@ Sau khi CB PD POST `/api/v1/tu-van-viens/{id}/phe-duyet`, BE trả `trangThai: "
 
 **1. Ảnh chụp TVV-0007 sau phê duyệt — UI hiển thị "Đang hoạt động" thay vì "Chờ kích hoạt tài khoản":**
 
-![BUG-CG-A1-001 — Header badge "Đang hoạt động" sau phê duyệt, spec yêu cầu CHO_KICH_HOAT](image/bug-cg-a1-001-state-deviation.png)
+![BUG-CG-A1-001 — Header badge "Đang hoạt động" sau phê duyệt, spec yêu cầu CHO_KICH_HOAT](../image/bug-cg-a1-001-state-deviation.png)
 
 **2. Spec quote (`smoke/6.4-sm-tvv.md` line 19-25):**
 

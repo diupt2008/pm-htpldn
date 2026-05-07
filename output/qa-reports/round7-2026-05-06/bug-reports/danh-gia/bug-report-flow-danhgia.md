@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-06 |
 | **Loại test** | Workflow E2E |
 | **Round** | Round 7 — Apply SRS update 2026-05-05 |
-| **Tài liệu tham chiếu** | [`srs-fr-08-danh-gia.md`](../../../../input/srs-v3/srs-fr-08-danh-gia.md) (FR-VI-01/02/03/04 + SCR-VI-01 + SM-DANHGIA), [workflow-test-report-DanhGiaHQ.md](../workflow/workflow-test-report-DanhGiaHQ.md), [R6 reference](../../round6-2026-05-01-postreset/bug-reports/bug-report-flow-danhgia.md) |
+| **Tài liệu tham chiếu** | [`srs-fr-08-danh-gia.md`](../../../../../input/srs-v3/srs-fr-08-danh-gia.md) (FR-VI-01/02/03/04 + SCR-VI-01 + SM-DANHGIA), [workflow-test-report-DanhGiaHQ.md](../../workflow/workflow-test-report-DanhGiaHQ.md), [R6 reference](../../../round6-2026-05-01-postreset/bug-reports/bug-report-flow-danhgia.md) |
 
 ---
 
@@ -89,9 +89,9 @@ UI render: "Không có vụ việc nào phù hợp"
 
 **1. Ảnh chụp Tab Thực hiện empty + danh sách VV /vu-viec/danh-sach hiển thị 116 mục, 20 state Hoàn thành:**
 
-![BUG-FUNC-DG-006 — Tab Thực hiện 0/0 VV mặc dù state CHO_DUYET_PC](../workflow/screenshots/r7-4-d2-b4-b6-state-cho-duyet-pc-no-vv.png)
+![BUG-FUNC-DG-006 — Tab Thực hiện 0/0 VV mặc dù state CHO_DUYET_PC](../../workflow/screenshots/r7-4-d2-b4-b6-state-cho-duyet-pc-no-vv.png)
 
-![BUG-FUNC-DG-006 — VV list 116 mục, có VV000108/105/102 state Hoàn thành dates 03-12/04 in đợt range](../workflow/screenshots/r7-4-d2-vv-list-116-with-hoanthanh.png)
+![BUG-FUNC-DG-006 — VV list 116 mục, có VV000108/105/102 state Hoàn thành dates 03-12/04 in đợt range](../../workflow/screenshots/r7-4-d2-vv-list-116-with-hoanthanh.png)
 
 **2. Network log:**
 

@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-06 |
 | **Loại test** | Seed / Functional |
 | **Round** | Round 7 |
-| **Tài liệu tham chiếu** | [todo R7.1.2](../../../../tasks/todo.md) · [seed-checklist-r7-1-2-loai-dn](../seed/seed-checklist-r7-1-2-loai-dn.md) · [SRS FR-VIII-07 line 382-399 (UC105)](../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [SRS FR-VII-01 row 6-7 + SCR-VII line 1746-1747](../../../../input/srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md) |
+| **Tài liệu tham chiếu** | [todo R7.1.2](../../../../../tasks/todo.md) · [seed-checklist-r7-1-2-loai-dn](../../seed/seed-checklist-r7-1-2-loai-dn.md) · [SRS FR-VIII-07 line 382-399 (UC105)](../../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) · [SRS FR-VII-01 row 6-7 + SCR-VII line 1746-1747](../../../../../input/srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md) |
 
 ---
 
@@ -30,7 +30,9 @@ Phát hiện **1** lỗi BE chặn seed 4 record loại hình DN (TNHH/CP/DNTN/H
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-LOAI-DN-002 | Major | P1 | Data | R7.1.2 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` FR-VIII-07 line 393, 397, 399 (UC105 — DM `LOAI_DOANH_NGHIEP` seed = SIEU_NHO/NHO/VUA) + `srs-fr-07-doanh-nghiep.md` row 6-7 (DN entity 2 field tách `loai_doanh_nghiep_id` FK + `quy_mo` enum) + SCR-VII line 1746-1747 | BE 500 khi POST DM `LOAI_DOANH_NGHIEP` + spec contradiction FR-10 (DM = quy_mo) vs FR-07 + SCR-VII (DN field "Loại hình DN" FK → UC105) | Open (re-test FAIL) |
+| BUG-LOAI-DN-002 | Major | P1 | Data | R7.1.2 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` FR-VIII-07 line 393, 397, 399 (UC105 — DM `LOAI_DOANH_NGHIEP` seed = SIEU_NHO/NHO/VUA) + `srs-fr-07-doanh-nghiep.md` row 6-7 (DN entity 2 field tách `loai_doanh_nghiep_id` FK + `quy_mo` enum) + SCR-VII line 1746-1747 | BE 500 khi POST DM `LOAI_DOANH_NGHIEP` + spec contradiction FR-10 (DM = quy_mo) vs FR-07 + SCR-VII (DN field "Loại hình DN" FK → UC105) | Closed |
+
+> **Re-test 2026-05-07:** ✅ PASS (Closed-verified). UI table có 4 record fixture chuẩn (TNHH/CP/DNTN/HKD). Probe POST `CTHD_TEST` qua UI [Thêm mới] → 201 thành công, list 4→5 mục. BE không 500. Phương án A (tách DM loại hình + quy_mo) áp dụng đúng.
 
 ---
 
@@ -85,11 +87,11 @@ QTHT (`qtht_01`) thêm record `TNHH/Công ty TNHH` qua UI modal "Thêm mới dan
 
 **1. Ảnh chụp:**
 
-![BUG-LOAI-DN-002 — Lần đầu: Modal Thêm TNHH bị toast "Dữ liệu không hợp lệ" (422)](image/bug-loai-dn-002-tnhh-rejected-toast.png)
+![BUG-LOAI-DN-002 — Lần đầu: Modal Thêm TNHH bị toast "Dữ liệu không hợp lệ" (422)](../image/bug-loai-dn-002-tnhh-rejected-toast.png)
 
-![BUG-LOAI-DN-002 — Lần đầu: Table chỉ 3 record (DN_SIEU_NHO/DN_NHO/DN_VUA), thiếu 4 loại hình](../seed/screenshots/r7-1-2-loai-dn-3-of-7-only.png)
+![BUG-LOAI-DN-002 — Lần đầu: Table chỉ 3 record (DN_SIEU_NHO/DN_NHO/DN_VUA), thiếu 4 loại hình](../../seed/screenshots/r7-1-2-loai-dn-3-of-7-only.png)
 
-![BUG-LOAI-DN-002 — Re-test 16:14: cùng table 1-3/3 (modal cancel sau khi BE 500)](image/bug-loai-dn-002-retest-still-3-records-500.png)
+![BUG-LOAI-DN-002 — Re-test 16:14: cùng table 1-3/3 (modal cancel sau khi BE 500)](../image/bug-loai-dn-002-retest-still-3-records-500.png)
 
 **2. API response:**
 
