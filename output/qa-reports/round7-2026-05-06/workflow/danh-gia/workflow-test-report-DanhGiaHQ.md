@@ -1,7 +1,7 @@
 # Workflow Test Report — Đánh giá Hiệu quả HTPLDN (FR-08)
 
-> **Module:** FR-08 Đánh giá Hiệu quả (Nhóm VI) · **SRS:** [`srs-fr-08-danh-gia.md`](../../../../input/srs-v3/srs-fr-08-danh-gia.md) — FR-VI-01 (UC83 Lập KH, line 71-150) + FR-VI-02 (UC84 Tiêu chí, line 151-220) + FR-VI-03 (UC85 Phân công, line 221-290) + FR-VI-04 (Phê duyệt PC) + SCR-VI-01 (line 735-832) + SM-DANHGIA (line 1066-1102) · **Round:** R7 · **Date:** 2026-05-06 · **Tester:** QA Automation
-> **Bug:** [`bug-report-flow-danhgia.md`](../bug-reports/bug-report-flow-danhgia.md)
+> **Module:** FR-08 Đánh giá Hiệu quả (Nhóm VI) · **SRS:** [`srs-fr-08-danh-gia.md`](../../../../../input/srs-v3/srs-fr-08-danh-gia.md) — FR-VI-01 (UC83 Lập KH, line 71-150) + FR-VI-02 (UC84 Tiêu chí, line 151-220) + FR-VI-03 (UC85 Phân công, line 221-290) + FR-VI-04 (Phê duyệt PC) + SCR-VI-01 (line 735-832) + SM-DANHGIA (line 1066-1102) · **Round:** R7 · **Date:** 2026-05-06 · **Tester:** QA Automation
+> **Bug:** [`bug-report-flow-danhgia.md`](../../bug-reports/danh-gia/bug-report-flow-danhgia.md)
 
 ---
 
@@ -58,11 +58,11 @@
 
 **Bước 1 + back-fill tiêu chí — DG-20260506-0001 state Lập kế hoạch + Tab Tiêu chí 4 records (Σ=100%)**
 
-![R7 D2 — Tab Tiêu chí có 4 tiêu chí TT17 import từ DM (40+30+20+10=100% sum), action-bar đầy đủ buttons](../seed/screenshots/r7-4-d1-DG-20260506-0001-lap-ke-hoach.png)
+![R7 D2 — Tab Tiêu chí có 4 tiêu chí TT17 import từ DM (40+30+20+10=100% sum), action-bar đầy đủ buttons](../../seed/screenshots/r7-4-d1-DG-20260506-0001-lap-ke-hoach.png)
 
 **Bước 2 — Add người ĐG: 3 dropdowns load đúng SRS (BUG-DG-003/004/005 Closed)**
 
-![R7 D2 B2 — Tab Phân công sau add 1 người ĐG (Tổng 1 người - 1 Trưởng nhóm), button Trình phê duyệt enabled](../seed/screenshots/r7-4-d2-b2-phancong-1person-trinhduyet-enabled.png)
+![R7 D2 B2 — Tab Phân công sau add 1 người ĐG (Tổng 1 người - 1 Trưởng nhóm), button Trình phê duyệt enabled](../../seed/screenshots/r7-4-d2-b2-phancong-1person-trinhduyet-enabled.png)
 
 **Bước 4 — cb_pd_tw_01 Phê duyệt PC + B6 block (state CHO_DUYET_PC + Tab Thực hiện 0 VV phù hợp)**
 

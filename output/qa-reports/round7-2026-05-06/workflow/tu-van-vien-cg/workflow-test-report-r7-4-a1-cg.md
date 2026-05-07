@@ -2,7 +2,7 @@
 
 **Ngày chạy:** 2026-05-06 R7
 **Accounts:** `cb_nv_tw_02` (thẩm định + trình duyệt) · `cb_pd_tw_02` (phê duyệt) · `cb_nv_dp_02` + `cb_pd_dp_02` (BR-AUTH-08 deny test)
-**SRS ref:** SM-TVV 10 state v3.5 ([6.4-sm-tvv.md](../../../smoke/6.4-sm-tvv.md)) · FR-IV-08/09/10 functional ([7.4-chuyen-gia-tvv.md](../../../funtion/7.4-chuyen-gia-tvv.md)) · FR-VIII-15 (auto TK) · BR-AUTH-05 + BR-AUTH-08 + BR-LEGAL-04 + BR-FLOW-04
+**SRS ref:** SM-TVV 10 state v3.5 ([6.4-sm-tvv.md](../../../../smoke/6.4-sm-tvv.md)) · FR-IV-08/09/10 functional ([7.4-chuyen-gia-tvv.md](../../../../funtion/7.4-chuyen-gia-tvv.md)) · FR-VIII-15 (auto TK) · BR-AUTH-05 + BR-AUTH-08 + BR-LEGAL-04 + BR-FLOW-04
 **Scope:** TP-TVV-01 (advance happy path) cho 6 CG — KHÔNG cover TP-02..09 (YEU_CAU_BO_SUNG/TU_CHOI/TAM_DUNG/VO_HIEU_HOA/khôi phục — thuộc R7.4.A1 gốc).
 
 ## Verdict
@@ -41,7 +41,7 @@ Filter `?loaiTvv=CG&size=100` → `total=8, byState={DANG_HOAT_DONG: 8}`.
 | TC-CG-A1-11 | CB NV ĐP cố thẩm định TVV TW (BR-AUTH-08) | Auth | P0 | ✅ | `cb_nv_dp_02` POST `/tham-dinh` TVV-0008 → **403 ERR-AUTH-VPD-00-01** + GET detail cũng 403 |
 | TC-CG-A1-12 | Optimistic lock — stale `version: 999` → 409 | Edge | P1 | ✅ | TVV-0008 POST `/tham-dinh` `version:999` → **409 ERR-STATE-LOCK-409** "Dữ liệu đã bị thay đổi bởi người dùng khác" |
 | TC-CG-A1-13 | loai_tvv=CG preserved qua transitions | Data | P0 | ✅ | 8/8 records `loaiTvv: "CG"` |
-| TC-CG-A1-14 | Audit log entry per transition (FR-VIII-28) | Audit | P1 | ✅ **UNBLOCKED 2026-05-07** | Qua R7.7.8d UI: endpoint `GET /api/v1/audit-logs?entityType=TU_VAN_VIEN`. Filter trả 56 entries cover 8 CG, mỗi CG có Tạo mới + 2 THAM_DINH + 1 PHE_DUYET. Screenshot [r7-7-8d-audit-tvv-transitions.png](screenshots/r7-7-8d-audit-tvv-transitions.png) |
+| TC-CG-A1-14 | Audit log entry per transition (FR-VIII-28) | Audit | P1 | ✅ **UNBLOCKED 2026-05-07** | Qua R7.7.8d UI: endpoint `GET /api/v1/audit-logs?entityType=TU_VAN_VIEN`. Filter trả 56 entries cover 8 CG, mỗi CG có Tạo mới + 2 THAM_DINH + 1 PHE_DUYET. Screenshot [r7-7-8d-audit-tvv-transitions.png](r7-7-8d-audit-tvv-transitions.png) |
 
 ## API endpoints xác nhận
 
@@ -58,7 +58,7 @@ Filter `?loaiTvv=CG&size=100` → `total=8, byState={DANG_HOAT_DONG: 8}`.
 
 - **Mô tả:** Sau khi CB PD POST `/phe-duyet`, BE trả `trangThai: "DANG_HOAT_DONG"`. Theo SRS update 2026-05-05 §FR-IV-NEW-04 (`srs-fr-04-chuyen-gia-tvv.md:2011`) đã rename `DANG_HOAT_DONG → HOAT_DONG` + chèn state mới `CHO_KICH_HOAT` giữa CHO_PHE_DUYET và HOAT_DONG. State cuối cùng sau phê duyệt phải là `CHO_KICH_HOAT` (chờ chủ TK click mail kích hoạt → HOAT_DONG).
 - **Bằng chứng:**
-  - Spec [smoke/6.4-sm-tvv.md](../../../smoke/6.4-sm-tvv.md) line 24-25 + line 76 + 7.4-chuyen-gia-tvv.md TVV-011.
+  - Spec [smoke/6.4-sm-tvv.md](../../../../smoke/6.4-sm-tvv.md) line 24-25 + line 76 + 7.4-chuyen-gia-tvv.md TVV-011.
   - BE response TVV-0007 sau POST `/phe-duyet`: `{trangThai: "DANG_HOAT_DONG", version: 4}`.
 - **Severity:** **Major** — block TP-TVV-09 test (CHO_KICH_HOAT → HOAT_DONG via mail). Cũng block hiển thị badge state đúng trong UI.
 
@@ -87,4 +87,4 @@ Filter `?loaiTvv=CG&size=100` → `total=8, byState={DANG_HOAT_DONG: 8}`.
 
 - API responses captured in network log (live session).
 - Pool state verified pre/post mỗi TC.
-- BUG-CG-A1-001 cần log riêng file [bug-report-r7-4-a1-cg-state-deviation.md](../bug-reports/bug-report-r7-4-a1-cg-state-deviation.md).
+- BUG-CG-A1-001 cần log riêng file [bug-report-r7-4-a1-cg-state-deviation.md](../../bug-reports/tu-van-vien-cg/bug-report-r7-4-a1-cg-state-deviation.md).

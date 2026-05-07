@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-06 |
 | **Loại test** | Workflow (R7.4.A1-CG) |
 | **Round** | R7 |
-| **Tài liệu tham chiếu** | [smoke/6.4-sm-tvv.md](../../../../smoke/6.4-sm-tvv.md) · [funtion/7.4-chuyen-gia-tvv.md](../../../../funtion/7.4-chuyen-gia-tvv.md) · [workflow/workflow-test-report-r7-4-a1-cg.md](../../workflow/workflow-test-report-r7-4-a1-cg.md) |
+| **Tài liệu tham chiếu** | [smoke/6.4-sm-tvv.md](../../../../smoke/6.4-sm-tvv.md) · [funtion/7.4-chuyen-gia-tvv.md](../../../../funtion/7.4-chuyen-gia-tvv.md) · [workflow/tu-van-vien-cg/workflow-test-report-r7-4-a1-cg.md](../../workflow/tu-van-vien-cg/workflow-test-report-r7-4-a1-cg.md) |
 
 ---
 

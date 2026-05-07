@@ -30,7 +30,7 @@ Trong autopilot scope cap, verify cấu trúc 4 Tab + KPI thẻ + table empty st
 
 ## Evidence
 
-- [r7-5-2-cross-module-dn-tab4-chi-tra.png](../seed/r7-5-2-cross-module-dn-tab4-chi-tra.png) — Tab #4 KPI thẻ + empty table
+- [r7-5-2-cross-module-dn-tab4-chi-tra.png](../../seed/r7-5-2-cross-module-dn-tab4-chi-tra.png) — Tab #4 KPI thẻ + empty table
 
 ## Acceptance R7.5.2 (todo.md)
 

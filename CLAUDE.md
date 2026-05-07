@@ -108,7 +108,7 @@ Project này chứa tài liệu QA cho Phần mềm Hỗ trợ Pháp lý Doanh n
 ## Khi log bug — BẮT BUỘC
 
 1. **Read [output/template/bug-report-template.md](output/template/bug-report-template.md) trước khi Write/Edit bug entry.** Bug entry chỉ có 6 sections: Mô tả / Bước tái hiện / KQ mong đợi / KQ thực tế / Bằng chứng / So sánh (optional permission). KHÔNG thêm Tác động / Đề xuất fix / SRS verification / Phân biệt module.
-2. **2-source SRS verify:** query NotebookLM HTPLDN (id `e3a2681b-fdd6-4a24-917c-9ed636e8a110`) + grep SRS local — mọi log/đóng/đổi severity.
+2. **2-source SRS verify:** query NotebookLM HTPLDN (id `a4ae45bf-cea0-4325-8fee-b1e0be702cf2`) + grep SRS local — mọi log/đóng/đổi severity.
 3. **Workaround = bug candidate.** Gặp 4xx/5xx → log, không skip vì "tự fix được".
 
 ## Chrome DevTools MCP — PATTERNS BẮT BUỘC (primary tool từ 2026-04-21)
