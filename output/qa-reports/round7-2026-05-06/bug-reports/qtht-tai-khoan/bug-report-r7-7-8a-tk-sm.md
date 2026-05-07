@@ -31,7 +31,10 @@ Phát hiện **2** lỗi khi test SM-TAIKHOAN (TP-TK-01..11) trên SCR-VIII-08.
 | BUG-TK-SM-002 | Major | P1 | Workflow | TP-TK-05 sau TP-TK-07 | `SM-TAIKHOAN line 2117` + BR-AUTH-07 | so_lan_sai không reset khi QTHT mở khóa thủ công | Closed |
 
 > **Re-test 2026-05-07:** ✅ PASS (Closed-verified). Khóa cb_nv_dp_03 qua UI [Khóa TK] → state TAM_KHOA → click [Mở khóa] → state HOAT_DONG. Login wrong password 1 lần qua UI form trong isolated context → BE 401 với errCode `ERR-AUTH-LOGIN-01` "Tên đăng nhập hoặc mật khẩu không đúng" (KHÔNG phải `ERR-AUTH-LOCKED-01`). Counter `so_lan_sai` đã reset về 0 đúng theo BR-AUTH-07.
-| BUG-TK-SM-003 | Minor | P3 | UI/UX | TP-TK-09 verify | `SCR-VIII-08 + SM-TAIKHOAN 5 states` | Tabs SCR-VIII-08 thiếu "Vô hiệu hóa", thay bằng "Chờ phân quyền" (legacy state v3.5) | Open |
+| BUG-TK-SM-003 | Minor | P3 | UI/UX | TP-TK-09 verify | `SCR-VIII-08 + SM-TAIKHOAN 5 states` | Tabs SCR-VIII-08 thiếu "Vô hiệu hóa", thay bằng "Chờ phân quyền" (legacy state v3.5) | Closed |
+
+> **Re-test 2026-05-07 14:00 (sau dev claim fix):**
+> - **BUG-TK-SM-003:** ✅ PASS (Closed-verified). Account qtht_02 navigate `/quan-tri/tai-khoan`. Tabs render **6 tab** đầy đủ: Tất cả 36 / Hoạt động 32 / Chờ kích hoạt 4 / Tạm khóa 0 / Chờ phân quyền 0 / **Vô hiệu hóa 0**. Tab "Vô hiệu hóa" đã được thêm. SCR-VIII-08 giờ có đủ filter cho 5 SM-TAIKHOAN states + tab "Tất cả".
 
 ---
 

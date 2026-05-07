@@ -25,9 +25,14 @@ Phát hiện **3** bug khi test FR-VIII-26 — trong đó **2 Critical** liên q
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |---|---|---|---|---|---|---|---|
-| BUG-FR26-FE-01 | **Critical** | P0 | UI/UX | TC02 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1278 + AC line 1316 | FE chưa implement page Quên mật khẩu — `/auth/forgot-password` redirect /login | Open |
-| BUG-FR26-FE-02 | **Critical** | P0 | UI/UX | TC02-TC07 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1282-1284 + AC line 1314-1315 | FE chưa implement page Reset mật khẩu — `/reset-password?token=X` redirect /login | Open |
-| BUG-FR26-001 | Minor | P3 | Code | TC04/TC06/TC07 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1295-1303 | errCode mismatch — BE `ERR-AUTH-RESET-01` / `ERR-VAL-SYS-00-01` / `ERR-VAL-VIII-CP-04` ≠ SRS `ERR-PWD-04/05/06` | Open |
+| BUG-FR26-FE-01 | **Critical** | P0 | UI/UX | TC02 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1278 + AC line 1316 | FE chưa implement page Quên mật khẩu — `/auth/forgot-password` redirect /login | Closed |
+| BUG-FR26-FE-02 | **Critical** | P0 | UI/UX | TC02-TC07 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1282-1284 + AC line 1314-1315 | FE chưa implement page Reset mật khẩu — `/reset-password?token=X` redirect /login | Closed |
+| BUG-FR26-001 | Minor | P3 | Code | TC04/TC06/TC07 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1295-1303 | errCode mismatch — BE `ERR-AUTH-RESET-01` / `ERR-VAL-SYS-00-01` / `ERR-VAL-VIII-CP-04` ≠ SRS `ERR-PWD-04/05/06` | Open (defer Minor) |
+
+> **Re-test 2026-05-07 13:50 (sau dev claim fix):**
+> - **BUG-FR26-FE-01:** ✅ PASS (Closed-verified). Navigate `/auth/forgot-password` (incognito) → page render đầy đủ form Email + button "Gửi link đặt lại mật khẩu" + link "Quay lại đăng nhập". Fill email `test.r778b@example.com` + submit → POST `/api/v1/auth/forgot-password` 200 + alert success "Yêu cầu đã được gửi. Nếu email ... đã đăng ký..., link đặt lại mật khẩu sẽ được gửi đến hộp thư của bạn. Link có hiệu lực trong 30 phút." Match SRS AC line 1316 "nhận mail link reset 30 phút". Evidence: [r7-7-8c-retest-forgot-password-page.png](r7-7-8c-retest-forgot-password-page.png).
+> - **BUG-FR26-FE-02:** ✅ PASS (Closed-verified). Navigate `/reset-password?token=8bb5433e-d5cd-4066-a80b-6ce0e19a8dc8` (token từ MailHog) → page render form: Mật khẩu mới + Xác nhận MK mới + button "Đặt lại mật khẩu" + hint warning về session revoke. Fill `NewPwd@2026` + submit → POST `/api/v1/auth/reset-password` 200 → FE auto-redirect `/login` (đúng SRS line 1290 "Đặt mật khẩu thành công, vui lòng đăng nhập"). Evidence: [r7-7-8c-retest-reset-password-page.png](r7-7-8c-retest-reset-password-page.png).
+> - **BUG-FR26-001:** ⏳ Defer Minor — chưa re-verify trực tiếp errCode body. Message Tiếng Việt từ SRS đã match (TC04 "Link đặt mật khẩu đã được sử dụng" / TC07 "Mật khẩu xác nhận không khớp"). Code mismatch không block functional, đợi BA + dev align convention chung.
 
 ---
 

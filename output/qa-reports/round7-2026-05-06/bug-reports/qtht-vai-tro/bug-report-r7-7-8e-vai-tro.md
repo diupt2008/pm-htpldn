@@ -26,13 +26,13 @@ Phát hiện **7** lỗi khi test FR-VIII-14 + SCR-VIII-02 trên 11 TC (TC01-TC1
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |---|---|---|---|---|---|---|---|
-| BUG-VT-001 | Critical | P0 | Workflow/Data | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 645 + 651 | BE xóa vai trò silently khi role đang gán TK (ERR-VT-02 không trigger) | Open (re-test pending — need full E2E setup) |
-| BUG-VT-003 | Major | P1 | UI/UX | TC01 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1517-1519 (SCR-VIII-02) | UI table thiếu 3 cột SRS: Mô tả + Số tài khoản + Số quyền | Open (re-test FAIL) |
-| BUG-VT-004 | Major | P1 | UI/UX | TC03 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 644 | FE silent trên 409 — modal đóng, không toast/inline error | Open (re-test FAIL) |
-| BUG-VT-005 | Medium | P2 | UI/UX | TC02/TC06 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 619 (§Inputs row 4) | Form Add/Edit modal thiếu trường Trạng thái (trang_thai bắt buộc) | Open (re-test FAIL) |
-| BUG-VT-006 | Minor | P3 | UI/UX | TC02 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1522 (SCR-VIII-02) | Form Add button [Thêm] ≠ SRS [Lưu] (Form Edit lại đúng [Lưu]) | Open (re-test FAIL) |
-| BUG-VT-008 | Minor | P3 | Code | TC03/TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 644-645 | errCode mismatch — BE `ERR-VAL-VIII-111-XX` thay SRS `ERR-VT-XX` | Open (re-test FAIL) |
-| BUG-VT-009 | Medium | P2 | UI/UX | TC10 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 610 + 625 | FE cho non-QTHT thấy button [+ Thêm mới] + mở modal CRUD (BE 403 đúng nhưng UI lộ entrypoint) | Open (re-test pending — need login non-QTHT) |
+| BUG-VT-001 | Critical | P0 | Workflow/Data | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 645 + 651 | BE xóa vai trò silently khi role đang gán TK (ERR-VT-02 không trigger) | Closed |
+| BUG-VT-003 | Major | P1 | UI/UX | TC01 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1517-1519 (SCR-VIII-02) | UI table thiếu 3 cột SRS: Mô tả + Số tài khoản + Số quyền | Closed |
+| BUG-VT-004 | Major | P1 | UI/UX | TC03 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 644 | FE silent trên 409 — modal đóng, không toast/inline error | Closed |
+| BUG-VT-005 | Medium | P2 | UI/UX | TC02/TC06 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 619 (§Inputs row 4) | Form Add/Edit modal thiếu trường Trạng thái (trang_thai bắt buộc) | Closed |
+| BUG-VT-006 | Minor | P3 | UI/UX | TC02 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1522 (SCR-VIII-02) | Form Add button [Thêm] ≠ SRS [Lưu] (Form Edit lại đúng [Lưu]) | Closed |
+| BUG-VT-008 | Minor | P3 | Code | TC03/TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 644-645 | errCode mismatch — BE `ERR-VAL-VIII-111-XX` thay SRS `ERR-VT-XX` | Open (defer Minor) |
+| BUG-VT-009 | Medium | P2 | UI/UX | TC10 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 610 + 625 | FE cho non-QTHT thấy button [+ Thêm mới] + mở modal CRUD (BE 403 đúng nhưng UI lộ entrypoint) | Closed |
 
 > **Re-test 2026-05-07 (sau dev claim fix):** ❌ 5/7 STILL OPEN, 2/7 not verified.
 > - **BUG-VT-003**: Table vẫn 5 cột (Mã/Tên/Cấp/Trạng thái/Thao tác), thiếu Mô tả/SoTK/SoQuyền. ❌ FAIL.
@@ -42,6 +42,15 @@ Phát hiện **7** lỗi khi test FR-VIII-14 + SCR-VIII-02 trên 11 TC (TC01-TC1
 > - **BUG-VT-008**: errCode vẫn `ERR-VAL-VIII-111-01` (không phải SRS `ERR-VT-01`). ❌ FAIL.
 > - **BUG-VT-001**: Skip re-test — yêu cầu full E2E (create role + assign TK qua UI multi-step + delete). Pattern modal CRUD chưa thay đổi nên khả năng cao behavior giống bug gốc. Cần re-verify riêng.
 > - **BUG-VT-009**: Skip re-test — yêu cầu login non-QTHT trong isolated context. UI button [+ Thêm mới] vẫn render trong list — chưa xác định hide cho non-QTHT.
+
+> **Re-test 2026-05-07 14:30 (sau dev claim fix lần 2):** ✅ 6/7 CLOSED-verified, 1/7 defer Minor.
+> - **BUG-VT-001:** ✅ PASS (Closed-verified). Setup E2E: tạo role `QA_VT_DEL_TEST_R7` qua UI [+ Thêm mới] → toast "Thêm vai trò thành công"; gán role cho `cb_nv_tw_01` qua dialog "Quản lý vai trò" (button team trên row TK list); navigate Vai trò list → role hiện Số tài khoản = 1. Click button delete (row action) → confirm popup "Bạn có chắc chắn muốn xóa vai trò này?" → click [Xóa]. **DELETE `/api/v1/vai-tro/<id>` → 409** (đúng SRS) + toast error close-circle: **"Không thể xóa. Vai trò đang được gán cho 1 tài khoản"**. Match SRS line 645 ERR-VT-02 message exactly. Role không bị xóa (table vẫn 12 mục). Evidence: [r7-7-8e-retest-vt001-409-toast.png](r7-7-8e-retest-vt001-409-toast.png).
+> - **BUG-VT-003:** ✅ PASS (Closed-verified). Table render đầy đủ **8 cột**: Mã / Tên / **Mô tả** / **Số tài khoản** (clickable link `/quan-tri/tai-khoan?vaiTroId=X`) / **Số quyền** (clickable link `/vai-tro/X/quyen-han`) / Cấp / Trạng thái / Thao tác. Đủ 7 cột SRS line 1517-1519 + 1 cột Cấp extra. Evidence: [r7-7-8e-retest-table-8-cols.png](r7-7-8e-retest-table-8-cols.png).
+> - **BUG-VT-004:** ✅ PASS (Closed-verified). Modal "Thêm vai trò" mở → fill mã trùng `QA_VT_DEL_TEST_R7` + tên "Test ma trung" → click [Lưu]. **Modal vẫn open** (không silent close) + **inline error trên field Mã** (`invalid="true"` + description) + **toast error close-circle**: "Mã vai trò 'QA_VT_DEL_TEST_R7' đã tồn tại". Match SRS line 644 ERR-VT-01 message. Evidence: [r7-7-8e-retest-vt004-409-toast-inline.png](r7-7-8e-retest-vt004-409-toast-inline.png).
+> - **BUG-VT-005:** ✅ PASS (Closed-verified). Modal Add vai trò có **5 fields**: Mã* / Tên* / Cấp / Mô tả / **Trạng thái** (switch toggle, default checked = Hoạt động). Modal Edit cũng có Trạng thái field.
+> - **BUG-VT-006:** ✅ PASS (Closed-verified). Button submit modal Add giờ là `[Lưu]` thay vì `[Thêm]` — match SRS line 1522 + consistent với Form Edit.
+> - **BUG-VT-008:** ⏳ Defer Minor — không re-verify trực tiếp errCode body lần này (session API auth expired). Message Tiếng Việt match SRS exactly cho cả VT-01 (mã trùng) và VT-02 (đang gán). Code mismatch không block functional, đợi BA + dev align.
+> - **BUG-VT-009:** ✅ PASS (Closed-verified). Login `cb_nv_tw_02` (role CB_NV_TW non-QTHT) trong isolated context → navigate `/quan-tri/vai-tro` → **redirect `/403`**. Page render: image "Unauthorized" + text "403 / Bạn không có quyền truy cập trang này. / Vai trò hiện tại: CB_NV_TW" + button "Về trang chủ" / "Quay lại". KHÔNG render page Quản lý vai trò → KHÔNG có button [+ Thêm mới] visible. FE đã check permission qua route guard. Evidence: [r7-7-8e-retest-vt009-403-redirect.png](r7-7-8e-retest-vt009-403-redirect.png).
 
 ---
 

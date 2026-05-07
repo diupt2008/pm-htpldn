@@ -32,6 +32,11 @@ Phát hiện **1 bug Major** trong test R7.4.A1-CG advance state happy path. BE 
 
 ## BUG-CG-A1-001 — State sau CB PD phê duyệt sai spec v3.5 (`DANG_HOAT_DONG` vs `CHO_KICH_HOAT`)
 
+> **Re-test:** 2026-05-07 R7.2.5 — 🔴 **VẪN OPEN** (dev claim fix nhưng evidence không đổi).
+> - GET `/api/v1/tu-van-viens/7cb207b8-eea1-44f2-835f-ebd923dbfbc2` response `data.trangThai = "DANG_HOAT_DONG"` (chưa rename → `HOAT_DONG`, chưa thêm `CHO_KICH_HOAT`).
+> - UI badge detail TVV-BTP-TW-0007 vẫn "Đang hoạt động"; tab list KHÔNG có tab "Chờ kích hoạt".
+> - Account verify: `cb_nv_tw_02` qua MCP. Evidence: ![bug-cg-a1-001-retest-2026-05-07-still-open.png](image/bug-cg-a1-001-retest-2026-05-07-still-open.png)
+
 ### Mô tả
 
 Sau khi CB PD POST `/api/v1/tu-van-viens/{id}/phe-duyet`, BE trả `trangThai: "DANG_HOAT_DONG"`. Theo SRS update 2026-05-05 §FR-IV-NEW-04 đã rename `DANG_HOAT_DONG → HOAT_DONG` và chèn state mới `CHO_KICH_HOAT` giữa `CHO_PHE_DUYET` và `HOAT_DONG`. State đúng phải là `CHO_KICH_HOAT` (chờ chủ TK click mail kích hoạt → `HOAT_DONG`). UI hiển thị badge "Đang hoạt động" sai trên TVV-BTP-TW-0007 ngay sau phê duyệt — cho phép phân công VV/HD ngay khi TK chưa kích hoạt.

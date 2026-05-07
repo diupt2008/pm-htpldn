@@ -25,11 +25,20 @@ Phát hiện **5** bug khi test FR-VIII-22 Self-reg DN.
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |---|---|---|---|---|---|---|---|
-| BUG-FR22-002 | Major | P1 | Workflow | TC02 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1032 + 1074 | FE+BE cho phép MST 13 chữ số (chi nhánh) — SRS chỉ định regex `^\d{10}$`, chi nhánh không tự đăng ký riêng | Open |
-| BUG-FR22-004 | Medium | P2 | Workflow | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1032 | BE thêm validation MST checksum theo TT 105/2020 — KHÔNG có trong SRS spec; cần BA confirm bổ sung hay drop | Open |
-| BUG-FR22-001 | Minor | P3 | UI/UX | TC01 + TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1089-1090 + 1280 | UI thiếu ô "Tên đăng nhập" readonly hiển thị MST + UI message "hiệu lực 24 giờ" ≠ SRS line 1280 "vĩnh viễn" | Open |
-| BUG-FR22-003 | Minor | P3 | Code | TC03 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1074-1079 | errCode mismatch — BE `ERR-VAL-VIII-22-XX` thay SRS `ERR-REG-XX` | Open |
-| BUG-FR22-005 | Minor | P3 | Workflow | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1070-1079 | BE warning WRN-DN-01 quy mô-lao động (NĐ 39/2018) — không có trong FR-VIII-22 §Error Handling | Open |
+| BUG-FR22-002 | Major | P1 | Workflow | TC02 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1032 + 1074 | FE+BE cho phép MST 13 chữ số (chi nhánh) — SRS chỉ định regex `^\d{10}$`, chi nhánh không tự đăng ký riêng | Closed |
+| BUG-FR22-004 | Medium | P2 | Workflow | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1032 | BE thêm validation MST checksum theo TT 105/2020 — KHÔNG có trong SRS spec; cần BA confirm bổ sung hay drop | Open (đợi BA) |
+| BUG-FR22-001 | Minor | P3 | UI/UX | TC01 + TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1089-1090 + 1280 | UI thiếu ô "Tên đăng nhập" readonly hiển thị MST + UI message "hiệu lực 24 giờ" ≠ SRS line 1280 "vĩnh viễn" | Closed (a) / Open (b) |
+| BUG-FR22-003 | Minor | P3 | Code | TC03 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1074-1079 | errCode mismatch — BE `ERR-VAL-VIII-22-XX` thay SRS `ERR-REG-XX` | Open (defer Minor) |
+| BUG-FR22-005 | Minor | P3 | Workflow | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1070-1079 | BE warning WRN-DN-01 quy mô-lao động (NĐ 39/2018) — không có trong FR-VIII-22 §Error Handling | Open (defer Minor) |
+
+> **Re-test 2026-05-07 14:10 (sau dev claim fix):**
+> - **BUG-FR22-002:** ✅ PASS (Closed-verified). Navigate `/register/doanh-nghiep` → fill MST `1234567890123` (13 chữ số chi nhánh) → inline error xuất hiện ngay: "Mã số thuế phải đúng 10 chữ số (theo TT 105/2020/TT-BTC). Chi nhánh không tự đăng ký riêng." Match SRS line 1074 ERR-REG-01a EXACTLY. FE block submit. Evidence: [r7-7-8b-retest-fr22-002-mst-13-inline-error.png](r7-7-8b-retest-fr22-002-mst-13-inline-error.png).
+> - **BUG-FR22-001(a):** ✅ PASS (Closed-verified). Field "Tên đăng nhập" có placeholder "Sẽ tự cập nhật theo Mã số thuế" + readonly. Khi fill MST `1234567890`, ô tự cập nhật value = `1234567890` đúng SRS AC line 1090.
+> - **BUG-FR22-001(b):** ⏳ Defer — không re-verify message expire token (cần register happy path success → message confirmation). Chưa rõ FE đã update "vĩnh viễn" theo SRS line 1280 hay vẫn "24 giờ".
+> - **BUG-FR22-004:** ⏳ Open (đợi BA). Submit form happy path với MST `1234567890` (10 chữ số format đúng nhưng sai checksum) → BE 422 với alert "Mã số thuế không hợp lệ (sai checksum 10 ký tự)". BE checksum validation chưa drop. Cần BA confirm bổ sung SRS hay drop rule. Evidence: [r7-7-8b-retest-fr22-004-checksum-422.png](r7-7-8b-retest-fr22-004-checksum-422.png).
+>
+> **Re-verify 2026-05-07 14:30 (cache clear + hard reload):** ❌ CONFIRMED Open. Đã clear `caches` + `localStorage` + `sessionStorage` + reload `ignoreCache:true` + isolated context fresh. Submit form happy path đầy đủ field (TNHH/Hà Nội/Thương mại và dịch vụ/Siêu nhỏ) với MST `1234567890` → POST `/api/v1/auth/register-doanh-nghiep` → **422 ERR-VAL-SYS-00-01** + alert "Mã số thuế không hợp lệ (sai checksum 10 ký tự)". BE checksum validation chưa drop sau cache clear → confirmed BE behavior thực sự, không phải cache. Đợi BA chốt phương án (A) bổ sung checksum vào SRS line 1032 hoặc (B) drop rule khỏi BE. Evidence: [r7-7-8b-cache-clear-fr22-004-still-422.png](r7-7-8b-cache-clear-fr22-004-still-422.png).
+> - **BUG-FR22-003 / BUG-FR22-005:** ⏳ Defer Minor — không re-verify trực tiếp lần này. Status không thay đổi từ R7 ban đầu.
 
 ---
 
