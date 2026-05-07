@@ -17,15 +17,15 @@
 |---|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | 0 | Pre-test (verify deploy + bug gap + fixture + spec review) | 7 | - | - | 5 | 2 | - | - |
 | 1 | Re-seed Tier 0 (DM/đơn vị/SLA/MPH/ngày lễ) | 6 | - | - | 3 | 3 | - | - |
-| 2 | Re-seed Tier 1 (TC TV/DN/TVV/CG/NHT/account) | 8 | - | - | 6 | - | 1 | 1 |
+| 2 | Re-seed Tier 1 (TC TV/DN/TVV/CG/NHT/account) | 8 | - | - | 7 | - | 1 | - |
 | 3 | Re-seed Tier 2 (transactional entry state) +**2 sub-task FR-02 v3.5** (R7.3.1.MoB + R7.3.1.TVN) | 17 | 1 | - | 5 | 3 | 5 | 3 |
 | 4 | Workflow E2E (Trụ A/B/C/D) +**2 task FR-05 v3.5** (R7.4.A3-PUBLIC + R7.4.A3-DN-BS) | 20 | 2 | - | - | 1 | - | 17 |
 | 5 | Verification (KPI/cross/SLA/audit) | 5 | 3 | - | - | - | - | 2 |
 | 6 | Workflow đầu ra hậu kỳ (Chi trả/TVN/CT) | 5 | 1 | - | - | - | 1 | 3 |
-| 7 | Functional 17 module + 2 NEW + **4 sub-task FR-06 v3.5** | 28 | 9 | - | 1 | - | 2 | 16 |
+| 7 | Functional 17 module + 2 NEW + **4 sub-task FR-06 v3.5** | 28 | 9 | - | 5 | - | 2 | 12 |
 | 8 | Cross-cutting + Profile + Permission | 5 | 5 | - | - | - | - | - |
 | Trụ E | Monitor unblock | 4 | 3 | - | - | - | - | 1 |
-| **Tổng** | | **105** | **24** | **0** | **20** | **9** | **9** | **43** |
+| **Tổng** | | **105** | **24** | **0** | **25** | **9** | **9** | **38** |
 
 ---
 
@@ -34,7 +34,7 @@
 | Module | Tasks |
 |---|---|
 | **Pre-test** | ✅ [R7.0.1](#r7-0-1) deploy · ⚠️ [R7.0.2](#r7-0-2) bug-deploy · ✅ [R7.0.3](#r7-0-3) fixture · ✅ [R7.0.4](#r7-0-4) login · ⚠️ [R7.0.6](#r7-0-6) UI-audit · ✅ [R7.0.7](#r7-0-7) SRS-FR10-review |
-| **TVV** | ⏳ [R7.2.5](#r7-2-5) seed · ⏳ [R7.4.A1](#r7-4-a1) workflow · ⏳ [R7.4.A1.5](#r7-4-a1-5) PC · ⏳ [R7.4.A2](#r7-4-a2) tiếp-nhận · ⏳ [R7.7.2](#r7-7-2) functional |
+| **TVV** | ✅ [R7.2.5](#r7-2-5) seed · ⏳ [R7.4.A1](#r7-4-a1) workflow · ⏳ [R7.4.A1.5](#r7-4-a1-5) PC · ⏳ [R7.4.A2](#r7-4-a2) tiếp-nhận · ⏳ [R7.7.2](#r7-7-2) functional |
 | **CG** | ✅ [R7.2.6](#r7-2-6) seed · ⚠️ [R7.4.A1-CG](#r7-4-a1-cg) advance · ⏳ [R7.7.2](#r7-7-2) functional (chung TVV) |
 | **NHT** 🆕 | ✅ [R7.2.7](#r7-2-7) seed (auto-tạo TK qua FR-VIII-15) · ⏳ [R7.7.4.5](#r7-7-4-5) functional |
 | **TC TV** 🆕 | ✅ [R7.2.2](#r7-2-2) seed · ✅ [R7.2.3](#r7-2-3) phê-duyệt · ⏳ [R7.7.4.6](#r7-7-4-6) functional |
@@ -59,7 +59,7 @@
 | **TV nhanh** | ⏳ [R7.6.2](#r7-6-2) tay · ⏳ [R7.6.3](#r7-6-3) PUBLIC · ⏳ [R7.7.11](#r7-7-11) functional · ⏳ [R7.E4](#r7-e4) monitor |
 | **CT HTPLDN** | 🟢 [R7.6.4](#r7-6-4) GĐ1 · ⏳ [R7.6.5](#r7-6-5) GĐ2 · ⏳ [R7.7.15](#r7-7-15) functional · 🟢 [R7.E2](#r7-e2) monitor |
 | **QTHT — Tier 0 seed** | ✅ [R7.0.5](#r7-0-5) button · ✅ [R7.1.1](#r7-1-1) LV partial-fix · ✅ [R7.1.2](#r7-1-2) Loại-DN · ✅ [R7.1.3](#r7-1-3) Đơn-vị · ✅ [R7.1.4](#r7-1-4) SLA · ⚠️ [R7.1.5](#r7-1-5) Ngày-lễ FE-silent · ✅ [R7.1.6](#r7-1-6) 9-DM 9/9 |
-| **QTHT — Tier 1 + Functional** | 🚫 [R7.2.1](#r7-2-1) MPH · ✅ [R7.2.9](#r7-2-9) mail-kích-hoạt · ✅ [R7.7.8](#r7-7-8) DM-CRUD 24/25 · ⚠️ [R7.7.8a](#r7-7-8a) TK-SM 5+1/6 · ⚠️ [R7.7.8b](#r7-7-8b) Self-reg-DN 7/8 · ⚠️ [R7.7.8c](#r7-7-8c) reset-MK 6/7 BE-only · ✅ [R7.7.8d](#r7-7-8d) Audit-log 7/7 · ⚠️ [R7.7.8e](#r7-7-8e) Vai-trò 7/11 |
+| **QTHT — Tier 1 + Functional** | 🚫 [R7.2.1](#r7-2-1) MPH · ✅ [R7.2.9](#r7-2-9) mail-kích-hoạt · ✅ [R7.7.8](#r7-7-8) DM-CRUD 24/25 · ✅ [R7.7.8a](#r7-7-8a) TK-SM 5+1/6 · ⚠️ [R7.7.8b](#r7-7-8b) Self-reg-DN 7/8 · ✅ [R7.7.8c](#r7-7-8c) reset-MK 6/7 BE-only · ✅ [R7.7.8d](#r7-7-8d) Audit-log 7/7 · ✅ [R7.7.8e](#r7-7-8e) Vai-trò 7/11 |
 | **Dashboard** | ⏳ [R7.5.1](#r7-5-1) KPI · ⏳ [R7.7.7](#r7-7-7) functional |
 | **Báo cáo** | 🟢 [R7.5.4](#r7-5-4) BC04 · ⏳ [R7.7.13](#r7-7-13) functional |
 | **SLA cảnh báo** | ⏳ [R7.5.3](#r7-5-3) banner |
@@ -130,7 +130,8 @@
 - ✅ **R7.2.4** ✏️ Seed DN — acceptance filter-based v3.5
   - **Kết quả:** PASS 36 DN cover 3 quy mô × 3 ngành (verified MCP). [seed-checklist-r7-2-4-dn.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-4-dn.md)
   - **Bug:** [bug-report-r7-2-4-throttle-self-reg.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/bug-report-r7-2-4-throttle-self-reg.md) — 0/2 đóng (Major+Medium, không block R7.7.4)
-- ⏳ <a id="r7-2-5"></a>**R7.2.5** ✏️ Seed 6 TVV TW (bỏ dia_ban_ids, MOI_DANG_KY) `[need: R7.2.3 ✅ TC TV HOAT_DONG cho FK to_chuc_chinh_id; fixture v2.7.1 bỏ dia_ban_ids]`
+- ✅ <a id="r7-2-5"></a>**R7.2.5** ✏️ Seed 6 TVV TW (bỏ dia_ban_ids, MOI_DANG_KY)
+  - **Kết quả:** PASS 6/6 TVV-BTP-TW-0009..0014 MOI_DANG_KY. Per-LV cover 5/5 (LD/Thuế/KDTM/SHTT/ĐĐ); DN/TM N/A do BUG-DM-LVPL-001. [seed-checklist-r7-2-5-tvv-tw.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-5-tvv-tw.md)
 - ✅ <a id="r7-2-6"></a>**R7.2.6** ✏️ Seed 6 CG TW (`loai_tvv=CG`, MOI_DANG_KY)
   - **Kết quả:** PASS 6/6 TVV-BTP-TW-0001..0006 cover 6 LV (DN/TM/LĐ/Thuế/SHTT/ĐĐ). [seed-checklist-r7-2-6-cg-tw.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-2-6-cg-tw.md)
 - ✅ <a id="r7-2-7"></a>**R7.2.7** 🆕 Seed 3 NHT qua FR-IV-NHT-01 (qtht_02 — CB_NV_TW không có quyền)
@@ -182,10 +183,10 @@
 
 ### 🟦 Trụ A — TVV → PC → CG → VV → HD → TVCS
 
-- ⏳ <a id="r7-4-a1"></a>**R7.4.A1** ✏️ Workflow TVV (SM 9→**10 state**, thêm CHO_KICH_HOAT, hệ thống tự cấp TK qua FR-VIII-15 step 6) `[need: R7.2.5 ⏳ + R7.2.6 ✅; spec: 7.4-chuyen-gia-tvv.md + 6.4-sm-tvv.md (sync 2026-05-06)]`
+- ⏳ <a id="r7-4-a1"></a>**R7.4.A1** ✏️ Workflow TVV (SM 9→**10 state**, thêm CHO_KICH_HOAT, hệ thống tự cấp TK qua FR-VIII-15 step 6) `[need: R7.2.5 ✅ + R7.2.6 ✅; spec: 7.4-chuyen-gia-tvv.md + 6.4-sm-tvv.md (sync 2026-05-06)]`
 - ⚠️ <a id="r7-4-a1-cg"></a>**R7.4.A1-CG** ✏️ Advance 8 CG → DANG_HOAT_DONG + 14 TC (BR-AUTH-05/08 + LEGAL-04 + opt-lock)
   - **Kết quả:** 13/14 PASS (TC-07+14 unblock 7/5 qua R7.7.8a+d), 1 ⚠️ DEVIATION state name spec v3.5. [workflow-test-report-r7-4-a1-cg.md](../output/qa-reports/round7-2026-05-06/workflow/workflow-test-report-r7-4-a1-cg.md)
-  - **Bug:** [bug-report-r7-4-a1-cg-state-deviation.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-r7-4-a1-cg-state-deviation.md) — 0/1 đóng (BUG-CG-A1-001 Major Open: state DANG_HOAT_DONG vs CHO_KICH_HOAT spec)
+  - **Bug:** [bug-report-r7-4-a1-cg-state-deviation.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-r7-4-a1-cg-state-deviation.md) — 0/1 đóng (BUG-CG-A1-001 Major Open: state DANG_HOAT_DONG vs CHO_KICH_HOAT spec). **Re-test 2026-05-07: VẪN OPEN** — API + UI evidence không đổi.
 - ⏳ <a id="r7-4-a1-5"></a>**R7.4.A1.5** ✏️ Đợt 2 PC TVV backfill — verify dropdown "Người xử lý" có TAI_KHOAN role NHT mới sau khi NHT tách entity `[need: R7.4.A1 ⏳ + R7.4.A1-CG ⚠️; verify 2 BE bug Open R6 (CHPC-001/002) còn không sau dev deploy]`
 - ⏳ <a id="r7-4-a2"></a>**R7.4.A2** 🆕 Tiếp nhận TVV (FR-IV-13) — 3 transition mới (MOI_DANG_KY→CHO_THAM_DINH, YEU_CAU_BO_SUNG→DANG_THAM_DINH, TU_CHOI→CHO_THAM_DINH) `[need: R7.4.A1 ≥1 TVV MOI_DANG_KY]`
 - ⏳ <a id="r7-4-a3"></a>**R7.4.A3** ✏️ Workflow VV (FR-05 v3.5 refactor — bỏ `nguoi_ho_tro_id`, thay 3 cột phân công + 2 thẻ Cá nhân/Tổ chức + SLA 15 ngày + CB PD từ chối → DANG_XU_LY) `[need: R7.2.9 ✅ NHT active + R7.2.3 ✅ TC TV HOAT_DONG; spec mới: 7.5-vu-viec-htpl.md v3.0 + 6.5-sm-vuviec.md (sync 2026-05-06)]`
@@ -265,22 +266,22 @@
 - ✅ <a id="r7-7-8"></a>**R7.7.8** ✏️ QTHT 14 DM CRUD functional (DM-only scope; FR-VIII-01..09/11/12/13/18/19/29)
   - **Kết quả:** PASS 24/25 TC (DM1 10/10 + DM6 BR-CALC-04 3/3 + DM14 UPDATE/DELETE + 11 DM smoke). 1 BLOCK CREATE NGAY_LE (BUG-NGAY-LE-001 known). [functional-test-report-QTHT-14DM.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-QTHT-14DM.md)
   - **Bug:** Không có bug mới R7.7.8. 4 bug đã log từ trước (CTHT-001/002, LOAI-DN-002, NGAY-LE-001) Open chờ dev fix.
-- ⚠️ <a id="r7-7-8a"></a>**R7.7.8a** 🆕 TAI_KHOAN SM 5 states (TP-TK-01..11)
-  - **Kết quả:** PASS 5/6 + 1 partial. Counter reset đã fix (re-test 2026-05-07). [functional-test-report-FR-VIII-15-tk-sm.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-FR-VIII-15-tk-sm.md)
-  - **Bug:** [bug-report-r7-7-8a-tk-sm.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/bug-report-r7-7-8a-tk-sm.md) — 1/2 đóng (BUG-TK-SM-002 Closed; BUG-TK-SM-003 Minor Open).
+- ✅ <a id="r7-7-8a"></a>**R7.7.8a** 🆕 TAI_KHOAN SM 5 states (TP-TK-01..11)
+  - **Kết quả:** PASS 6/6 — TK-SM-003 tab Vô hiệu hóa fix (re-test 2026-05-07). [functional-test-report-FR-VIII-15-tk-sm.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-FR-VIII-15-tk-sm.md)
+  - **Bug:** [bug-report-r7-7-8a-tk-sm.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/bug-report-r7-7-8a-tk-sm.md) — 2/2 đóng (TK-SM-002 + 003 Closed-verified 2026-05-07).
   - **Cần có sẵn:** TP-04 ⏳ R7.7.8b/R7.2.6 ✅; TP-02/03 cần legacy seed; TP-08/11 P2 SQL backdate.
 - ⚠️ <a id="r7-7-8b"></a>**R7.7.8b** 🆕 FR-VIII-22 Self-reg DN E2E
-  - **Kết quả:** ⚠️ 7/8 PASS + 1 defer rate-limit (TC04 email trùng). TC08 happy create TK CHO_KICH_HOAT. [functional-test-report-FR-VIII-22-self-reg-dn.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-FR-VIII-22-self-reg-dn.md)
-  - **Bug:** [bug-report-r7-7-8b-self-reg-dn.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/bug-report-r7-7-8b-self-reg-dn.md) — 0/5 đóng (1 Major MST 13 chữ + 1 Medium checksum + 3 Minor)
-- ⚠️ <a id="r7-7-8c"></a>**R7.7.8c** 🆕 FR-VIII-26 reset MK + kích hoạt lần đầu
-  - **Kết quả:** ⚠️ 6/7 PASS BE + 1 defer (TC03 token expired P2). 2 Critical FE missing pages. [functional-test-report-FR-VIII-26-reset-mk.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-FR-VIII-26-reset-mk.md)
-  - **Bug:** [bug-report-r7-7-8c-reset-mk.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/bug-report-r7-7-8c-reset-mk.md) — 0/3 đóng (2 Critical FE chưa implement Quên MK + Reset MK + 1 Minor errCode)
+  - **Kết quả:** ⚠️ 7/8 PASS + 1 defer (re-test 2026-05-07 FR22-002 + 001a Closed). [functional-test-report-FR-VIII-22-self-reg-dn.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-FR-VIII-22-self-reg-dn.md)
+  - **Bug:** [bug-report-r7-7-8b-self-reg-dn.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/bug-report-r7-7-8b-self-reg-dn.md) — 2/5 đóng (FR22-002 + 001a Closed; FR22-004 đợi BA; 003/005 defer Minor)
+- ✅ <a id="r7-7-8c"></a>**R7.7.8c** 🆕 FR-VIII-26 reset MK + kích hoạt lần đầu
+  - **Kết quả:** PASS 6/7 + 1 defer — 2 Critical FE pages Closed (re-test 2026-05-07). [functional-test-report-FR-VIII-26-reset-mk.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-FR-VIII-26-reset-mk.md)
+  - **Bug:** [bug-report-r7-7-8c-reset-mk.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/bug-report-r7-7-8c-reset-mk.md) — 2/3 đóng (FR26-FE-01 + FE-02 Closed; FR26-001 Minor defer)
 - ✅ <a id="r7-7-8d"></a>**R7.7.8d** 🆕 FR-VIII-28 Audit log functional
   - **Kết quả:** PASS 7/7 sau dev fix (90-day + Export + page 50 + filter Người dùng + cột Đơn vị + dropdown Tiếng Việt). [functional-test-report-FR-VIII-28-audit-log.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-FR-VIII-28-audit-log.md)
   - **Bug:** [bug-report-r7-7-8d-audit-log.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-nhat-ky/bug-report-r7-7-8d-audit-log.md) — 6/6 đóng (re-test 2026-05-07 ALL Closed-verified)
-- ⚠️ <a id="r7-7-8e"></a>**R7.7.8e** 🆕 FR-VIII-14 Vai trò CRUD (VAI_TRO entity, SCR-VIII-02)
-  - **Kết quả:** ⚠️ 7/11 PASS — TC02/04/05/06/07/09/11 PASS; TC01/03/10 partial; TC08 FAIL Critical. [functional-test-report-FR-VIII-14-vai-tro.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-FR-VIII-14-vai-tro.md)
-  - **Bug:** [bug-report-r7-7-8e-vai-tro.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-vai-tro/bug-report-r7-7-8e-vai-tro.md) — 0/7 đóng (re-test 2026-05-07: 5 FAIL still open + 2 not verified BUG-VT-001/009)
+- ✅ <a id="r7-7-8e"></a>**R7.7.8e** 🆕 FR-VIII-14 Vai trò CRUD (VAI_TRO entity, SCR-VIII-02)
+  - **Kết quả:** PASS 11/11 — re-test 2026-05-07 6 bug Closed (VT-001/003/004/005/006/009). [functional-test-report-FR-VIII-14-vai-tro.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-FR-VIII-14-vai-tro.md)
+  - **Bug:** [bug-report-r7-7-8e-vai-tro.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-vai-tro/bug-report-r7-7-8e-vai-tro.md) — 6/7 đóng (VT-001/003/004/005/006/009 Closed; VT-008 Minor defer)
 - ⏳ <a id="r7-7-9"></a>**R7.7.9** ✏️ Đánh giá Hiệu quả HTPL functional 46 TC v3.5 (10 FR)
   - **Cần có sẵn:** R7.4.D2 ⚠️ + R7.4.D2a/D2b ✅
 - 🟢 <a id="r7-7-10"></a>**R7.7.10** ✏️ Biểu mẫu v3.5 — 7 TC cũ + ~6 TC mới (Switch + 4 trường + BR-PUBLIC) `[~0% — ready, was R6.7.10 ⚠️ 71%; spec v3.5 — file 7.9 chưa sync, dùng SRS làm authoritative]`
