@@ -15,11 +15,11 @@ Folder này chứa smoke test specs theo format **self-contained 4 bước** —
 | # | Module | File | Account | Menu sidebar | Functional spec |
 |---|--------|------|---------|--------------|-----------------|
 | 6.1 | Dashboard (Tổng quan) | [6.1-smoke-dashboard.md](6.1-smoke-dashboard.md) | canbo_tw | Tổng quan / Dashboard / Trang chủ | [7.1](../funtion/7.1-dashboard.md) |
-| 6.2 | Hỏi đáp Pháp lý | [6.2-smoke-hoidap.md](6.2-smoke-hoidap.md) | canbo_tw | Quản lý hỏi đáp pháp lý | [7.2](../funtion/7.2-hoi-dap-phap-ly.md) |
+| 6.2 | Hỏi đáp Pháp luật ✏️ v3.5 | [6.2-smoke-hoidap.md](6.2-smoke-hoidap.md) | canbo_tw | Quản lý hỏi đáp pháp luật | [7.2](../funtion/7.2-hoi-dap-phap-ly.md) |
 | 6.3 | Đào tạo, Tập huấn | [6.3-smoke-daotao.md](6.3-smoke-daotao.md) | canbo_tw | Quản lý đào tạo, tập huấn → Khóa học | [7.3](../funtion/7.3-dao-tao-tap-huan.md) |
 | 6.4 | Chuyên gia / TVV | [6.4-smoke-tvv.md](6.4-smoke-tvv.md) | canbo_tw | Quản lý chuyên gia / tư vấn viên | [7.4](../funtion/7.4-chuyen-gia-tvv.md) |
 | 6.5 | Vụ việc HTPL | [6.5-smoke-vuviec.md](6.5-smoke-vuviec.md) | canbo_tw | Quản lý vụ việc hỗ trợ pháp lý | [7.5](../funtion/7.5-vu-viec-htpl.md) |
-| 6.6 | Chi trả Chi phí | [6.6-smoke-chitra.md](6.6-smoke-chitra.md) | canbo_tw | Quản lý chi trả chi phí | [7.6](../funtion/7.6-chi-tra-chi-phi.md) |
+| 6.6 | Chi trả Chi phí ✏️ v3.5 | [6.6-smoke-chitra.md](6.6-smoke-chitra.md) | cb_nv_tw_01 | Quản lý chi trả chi phí | [7.6](../funtion/7.6-chi-tra-chi-phi.md) |
 | 6.7 | Doanh nghiệp được HT | [6.7-smoke-doanhnghiep.md](6.7-smoke-doanhnghiep.md) | canbo_tw | Quản lý doanh nghiệp được hỗ trợ | [7.7](../funtion/7.7-quan-ly-doanh-nghiep.md) |
 | 6.8 | Đánh giá Hiệu quả | [6.8-smoke-danhgia.md](6.8-smoke-danhgia.md) | canbo_tw | Đánh giá hiệu quả hỗ trợ pháp lý | [7.8](../funtion/7.8-danh-gia.md) |
 | 6.9 | Biểu mẫu, Hợp đồng | [6.9-smoke-bieumau.md](6.9-smoke-bieumau.md) | canbo_tw | Quản lý thư viện biểu mẫu | [7.9](../funtion/7.9-bieu-mau.md) |

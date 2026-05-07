@@ -55,7 +55,7 @@ Trước khi seed data cho bất kỳ module nào, nắm thứ tự tạo data h
 | 0 | `DANH_MUC`, `DON_VI`, `TAI_KHOAN` | M0 QTHT (SCR-VIII-xx) | Master data cho phân quyền + dropdown — prereq cho TẤT CẢ module (BƯỚC 1) |
 | 1 | `DOANH_NGHIEP` (DN), `TU_VAN_VIEN` (TVV), `BIEU_MAU`, `CT_HTPLDN` (GĐ1 Kế hoạch) | §1, §2, §3, §4 | Master actor + tài liệu nền + khung chỉ đạo — prereq cho §5/§6/§7/§8/§10/§12 (BƯỚC 2) |
 | 2 | `VU_VIEC`, `HOI_DAP`, `TV_CHUYEN_SAU_YC`, `KHOA_HOC` | §5, §6, §7, §8 | Transactional hub — BƯỚC 3 giao dịch cốt lõi |
-| 3 | `HOP_DONG_TV`, `HO_SO_CHI_TRA`, `DANH_GIA_HQ`, `KHO_CAU_HOI` (TU_DONG) | §9, §10, §11, §12 | Downstream — BƯỚC 4 hậu kỳ (phụ thuộc Tier 2) |
+| 3 | `HOP_DONG_TV`, `HO_SO_CHI_TRA`, `KE_HOACH_DANH_GIA`, `KHO_CAU_HOI` (TU_DONG) | §9, §10, §11, §12 | Downstream — BƯỚC 4 hậu kỳ (phụ thuộc Tier 2) |
 | 4 | `DOT_BAO_CAO_CT` (GĐ2 CT HTPLDN), `BAO_CAO`, Dashboard aggregate, API outbound | §13, §14, §15, §16 | Output — BƯỚC 5 đầu ra (phụ thuộc Tier 1+2+3) |
 
 **Bảng Entity Map chi tiết** (mỗi entity tạo ở SCR nào, đọc ở SCR nào, quan hệ 1:N/N:N): xem file riêng [`input/data/entity-map.md`](./data/entity-map.md).
@@ -181,21 +181,33 @@ Module Chương trình HTPLDN có **2 giai đoạn tách biệt về nhân quả
 ## [BƯỚC 3 — GIAO DỊCH CỐT LÕI]
 
 ### 5. FLOW TẠO DỮ LIỆU LUỒNG "VỤ VIỆC TRỢ GIÚP PHÁP LÝ" (SM-VUVIEC)
-Luồng gốc có 12 trạng thái. Luồng đồng bộ DN nộp hồ sơ qua DVC (`MỚI TẠO` → `CHỜ TIẾP NHẬN`) **hiện chưa test được do thiếu integration với DVC**. Tester dùng luồng thủ công ở Bước 1 — CB NV nhập thủ công trên `SCR-V.I-02` → **bypass** 2 state đầu, bản ghi khởi tạo thẳng ở trạng thái `ĐÃ TIẾP NHẬN`.
+Luồng có **12 trạng thái** (SRS v3.5 update 2026-05-06): `MOI_TAO`, `CHO_TIEP_NHAN`, `DA_TIEP_NHAN`, `DANG_KIEM_TRA`, `YEU_CAU_BO_SUNG`, `TU_CHOI`, `DA_PHAN_CONG`, `DANG_XU_LY`, `CHO_PHE_DUYET`, `DA_DUYET`, `HOAN_THANH`, `DA_DANH_GIA`. Luồng đồng bộ DN nộp hồ sơ qua DVC (`MỚI TẠO` → `CHỜ TIẾP NHẬN`) **hiện chưa test được do thiếu integration với DVC**. Tester dùng luồng thủ công ở Bước 1 — CB NV nhập thủ công trên `SCR-V.I-02` → **bypass** 2 state đầu, bản ghi khởi tạo thẳng ở trạng thái `ĐÃ TIẾP NHẬN`.
 
-Account cần chuẩn bị: `Cán bộ Nghiệp vụ (CB NV)`, `Tư vấn viên (TVV)`, `Cán bộ Phê duyệt (CB PD)`.
+⚠️ **Update 2026-05-06 (FR-05 v3.5 — cite `srs-update-2026-5-5/srs-fr-05-vu-viec.md`):**
+- **SLA mặc định = 15 ngày làm việc** (NĐ 55/2019 Điều 8 Khoản 1 — DNNVV) — đổi từ 10 ngày v3 (Thay đổi 1).
+- **Bỏ field `nguoi_ho_tro_id`** khỏi entity VU_VIEC. Thay bằng 3 cột phân công: `loai_doi_tuong_xu_ly` ENUM CA_NHAN/TO_CHUC, `nguoi_xu_ly_id` FK→TAI_KHOAN, `to_chuc_tu_van_id` FK→TO_CHUC_TU_VAN (Thay đổi 8). Khi tạo entry DA_TIEP_NHAN: 3 cột NULL — chỉ set sau Bước 3.
+- **Thêm 5 cột công khai** (default `cong_khai=0` khi entry — chỉ set khi CB PD click [Công khai] sau DA_DUYET/HOAN_THANH): `cong_khai`, `anh_dai_dien`, `thoi_gian_dang_tai`, `mo_ta_cong_khai`, `file_dinh_kem_cong_khai` (Thay đổi 2 + FR-V.I-NEW-05).
+- **2 self-loop SM mới (cờ overlay):** `CONG_KHAI` + `HUY_CONG_KHAI` trên `DA_DUYET` HOẶC `HOAN_THANH` — KHÔNG phải state riêng (xem Bước Phụ 1 dưới).
+- **CB PD từ chối phê duyệt → `DANG_XU_LY`** (NHT sửa KQ rồi trình lại) — KHÔNG còn `→ TU_CHOI` đóng VV như v3 (Thay đổi 11).
+- **Đánh giá VV (FR-V.I-17 / UC67)**: thang **0-10** (KHÁC thang TVV 1.0-5.0 ở FR-04). CHỈ {CB_NV, DN} được chấm — loại CB_PD theo CSV UC67. UNIQUE(vu_viec_id, loai_nguoi_danh_gia) — mỗi VV tối đa 1 đánh giá CB_NV + 1 đánh giá DN (Thay đổi 12).
+- **DN bổ sung HS qua chuyên trang VNeID Tier 2** (FR-V.I-NEW-02) — formal hoá transition `YEU_CAU_BO_SUNG → DANG_KIEM_TRA` với DN là actor (Thay đổi 4).
+
+Account cần chuẩn bị: `Cán bộ Nghiệp vụ (CB NV)`, `Tư vấn viên (TVV) / Chuyên gia (CG) / Người hỗ trợ (NHT) — cá nhân`, hoặc `Tổ chức tư vấn (TC TV)`, `Cán bộ Phê duyệt (CB PD)`, `Doanh nghiệp (DN — auth Tier 2 VNeID)`.
 
 | Bước | Account thao tác | Trạng thái chuyển | Thao tác thực hiện trên màn hình |
 | :--- | :--- | :--- | :--- |
-| **1 (Thủ công — thay cho "DN nộp qua DVC → Chờ tiếp nhận → Tiếp nhận")** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `ĐÃ TIẾP NHẬN` (**bypass** `MỚI TẠO` và `CHỜ TIẾP NHẬN`) | CB NV mở danh sách Vụ việc → click **[+ Thêm mới / Nhập thủ công]** trên `SCR-V.I-02`. Nhập hộ DN: thông tin DN liên kết, lĩnh vực pháp lý, nội dung yêu cầu tư vấn, nguồn (`TRỰC TIẾP` / `ĐIỆN THOẠI`), upload giấy tờ. Lưu → bản ghi khởi tạo thẳng ở `DA_TIEP_NHAN`. |
+| **1 (Thủ công — thay cho "DN nộp qua DVC → Chờ tiếp nhận → Tiếp nhận")** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `ĐÃ TIẾP NHẬN` (**bypass** `MỚI TẠO` và `CHỜ TIẾP NHẬN`) | CB NV mở danh sách Vụ việc → click **[+ Thêm mới / Nhập thủ công]** trên `SCR-V.I-02`. Nhập hộ DN: chọn DN liên kết (lookup theo MST — KHÔNG nhập tay 4 field DN info, FR-V.I-04 Thay đổi 16), lĩnh vực pháp lý, nội dung yêu cầu tư vấn, kênh (`TRỰC TIẾP` / `ĐIỆN THOẠI`), upload `file_dinh_kem` (PDF/DOC/DOCX/XLS/XLSX ≤20MB/file). Lưu → bản ghi khởi tạo thẳng ở `DA_TIEP_NHAN` với `cong_khai=0`, 3 cột phân công NULL. |
 | **2** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐÃ TIẾP NHẬN` ➔ `ĐANG KIỂM TRA` | Trong chi tiết vụ việc, nhấn nút **[Kiểm tra Hồ sơ]**. Giao diện mở phần checklist 6 hạng mục hồ sơ. |
-| **3** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG KIỂM TRA` ➔ `ĐÃ PHÂN CÔNG` | Tích chọn ĐẠT cho các hạng mục. Nhấn **[Hoàn tất Kiểm tra]**. Sau đó nhấn **[Phân công NHT]** — dropdown chọn **NHT** (entity riêng `NGUOI_HO_TRO` theo SRS update 2026-05-05, KHÔNG phải `loai_tvv=NHT` cũ) đang `HOAT_DONG`, scope theo `linh_vuc_pl` + `don_vi_id` (BR-AUTH-08). Lưu. |
-| **4** | **Tư vấn viên** (TVV) | `ĐÃ PHÂN CÔNG` ➔ `ĐANG XỬ LÝ` | Log out CB NV. **Đăng nhập bằng Account TVV** vừa được phân công. Mở vụ việc, nhấn nút **[Chấp nhận]** tham gia hỗ trợ. |
-| **5** | **Tư vấn viên** (TVV) | Giữ nguyên `ĐANG XỬ LÝ` | TVV thực hiện công việc, upload văn bản tư vấn và nhập nội dung tại khu vực "Cập nhật Kết quả". |
-| **6** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG XỬ LÝ` ➔ `CHỜ PHÊ DUYỆT` | Log out TVV. **Đăng nhập lại CB NV**. Kiểm tra kết quả của TVV, nhập kết luận cuối của CB NV và nhấn **[Trình Phê duyệt]**. Hồ sơ nhảy sang Tab **"Chờ PD"**. |
-| **7** | **Cán bộ Phê duyệt** (CB PD cùng cấp) | `CHỜ PHÊ DUYỆT` ➔ `ĐÃ DUYỆT` | Log out CB NV. **Đăng nhập bằng Account CB PD** (cùng cấp với CB NV). Mở tab Chờ PD, xem chi tiết và nhấn nút **[Phê duyệt]**. Hồ sơ nhảy sang Tab **"Hoàn thành"**. |
+| **3** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG KIỂM TRA` ➔ `ĐÃ PHÂN CÔNG` | Tích chọn ĐẠT cho các hạng mục. Nhấn **[Hoàn tất Kiểm tra]**. Mở modal phân công (FR-V.I-09) — **2 thẻ**: (a) **Cá nhân** — chọn TAI_KHOAN có vai trò TVV/CG (qua TU_VAN_VIEN.tai_khoan_id) HOẶC NHT (qua NGUOI_HO_TRO.tai_khoan_id), state `HOAT_DONG`, lọc theo `linh_vuc_pl` (KHÔNG dùng "địa bàn" — NĐ 77/2008 Đ.19 TVV scope toàn quốc); (b) **Tổ chức tư vấn** — chọn TO_CHUC_TU_VAN state `HOAT_DONG`, sau đó load danh sách TVV thuộc tổ chức để chọn người cụ thể (constraint TU_VAN_VIEN.to_chuc_chinh_id = to_chuc_tu_van_id — fail → `ERR-PC-06`). Lưu → tạo bản ghi `PHAN_CONG_VU_VIEC` với `trang_thai='CHO_XAC_NHAN'` + cập nhật VU_VIEC: `loai_doi_tuong_xu_ly`, `nguoi_xu_ly_id`, `to_chuc_tu_van_id` (nếu TO_CHUC). |
+| **4** | **Cá nhân được phân công** (TVV/CG/NHT — TAI_KHOAN ở `nguoi_xu_ly_id`) | `ĐÃ PHÂN CÔNG` ➔ `ĐANG XỬ LÝ` | Log out CB NV. **Đăng nhập bằng cá nhân được phân công** (TVV/CG cá nhân ngoài hoặc NHT cán bộ HTPL nội bộ; nếu loại=TO_CHUC thì là TVV cụ thể thuộc tổ chức). Mở vụ việc, nhấn nút **[Chấp nhận]** → PHAN_CONG_VU_VIEC.trang_thai='CHAP_NHAN', VU_VIEC sang `DANG_XU_LY`. |
+| **5** | **Cá nhân được phân công** | Giữ nguyên `ĐANG XỬ LÝ` | Người xử lý thực hiện công việc, upload văn bản tư vấn và nhập nội dung tại khu vực "Cập nhật Kết quả". |
+| **6** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG XỬ LÝ` ➔ `CHỜ PHÊ DUYỆT` | Log out cá nhân được phân công. **Đăng nhập lại CB NV**. Kiểm tra kết quả, nhập kết luận cuối và nhấn **[Trình Phê duyệt]**. Hồ sơ nhảy sang Tab **"Chờ PD"**. |
+| **7** | **Cán bộ Phê duyệt** (CB PD cùng cấp — BR-AUTH-05) | `CHỜ PHÊ DUYỆT` ➔ `ĐÃ DUYỆT` | Log out CB NV. **Đăng nhập bằng Account CB PD** (cùng cấp với CB NV). Mở tab Chờ PD, xem chi tiết và nhấn nút **[Phê duyệt]**. Hồ sơ nhảy sang Tab **"Hoàn thành"**. |
+| *(Nhánh 7-từ chối)* | **Cán bộ Phê duyệt** | `CHỜ PHÊ DUYỆT` ➔ `ĐANG XỬ LÝ` (**KHÔNG** `→ TU_CHOI` đóng VV — Thay đổi 11) | Nếu chất lượng KQ chưa đạt → CB PD nhập lý do từ chối ≥10 ký tự (BR-FLOW-04). VV quay về `DANG_XU_LY` để cá nhân được phân công sửa KQ rồi CB NV trình lại. Ghi `LICH_SU_VU_VIEC.hanh_dong='TU_CHOI_DUYET'`. |
 | **8** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐÃ DUYỆT` ➔ `HOÀN THÀNH` | **Đăng nhập lại CB NV**. Mở hồ sơ, nhấn **[Cập nhật KQ cuối]** để chính thức đóng hồ sơ. |
-| *(Phụ)* | CB NV hoặc DN | `HOÀN THÀNH` ➔ `ĐÃ ĐÁNH GIÁ` | Trong màn hình chi tiết, mở khu vực "Đánh giá", nhập điểm **1-5** (DECIMAL 3,1 — SRS update 2026-05-05 đổi từ 0-10) và lưu. |
+| *(Phụ — Đánh giá UC67)* | CB_NV hoặc DN (auth Tier 2 VNeID) — **KHÔNG cho CB_PD** (CSV UC67) | `HOÀN THÀNH` ➔ `ĐÃ ĐÁNH GIÁ` | Trong màn hình chi tiết, mở accordion "Đánh giá", nhập 3 tiêu chí điểm **0-10** (chất lượng / thời gian / thái độ) — `diem_tong` AUTO=AVG. Lưu → tạo bản ghi `DANH_GIA_VU_VIEC` với `loai_nguoi_danh_gia` ∈ {CB_NV, DN}. UNIQUE(vu_viec_id, loai_nguoi_danh_gia) chặn chấm 2 lần cùng loại → ERR-DG-VV-04. |
+| *(Phụ 1 — CONG_KHAI cờ overlay, 2 self-loop SM)* | CB PD cùng cấp (BR-AUTH-05) | `ĐÃ DUYỆT` hoặc `HOÀN THÀNH` ↻ self-loop (cờ overlay `cong_khai=0→1` / `1→0`) | CB PD soạn `mo_ta_cong_khai` riêng (≤2000 ký tự — KHÔNG auto-extract từ mo_ta nội bộ), upload `anh_dai_dien` (jpg/png/gif ≤5MB) + chọn `file_dinh_kem_cong_khai` (≤10 file ≤20MB/file) trong số file đã review phù hợp công khai. Nhấn **[Công khai]** → BE gọi API Cổng PLQG (whitelist 9 fields BR-PUBLIC-04 — ẨN tên DN/MST/CCCD/SĐT/email/địa chỉ/mo_ta nội bộ/file nghiệp vụ/noi_dung_tu_van). API OK → set `cong_khai=1` + `thoi_gian_dang_tai=NOW()` (BR-EC-20: KHÔNG set trước khi API OK). Badge xanh "Đã công khai" hiển thị trên SCR-V.I-03 + SCR-V.I-04. Hủy: nhấn **[Hủy công khai]** + nhập `ly_do_huy` ≥20 ký tự → set `cong_khai=0`, clear `thoi_gian_dang_tai=NULL`, gỡ khỏi chuyên trang. Ghi LICH_SU_VU_VIEC `hanh_dong='CONG_KHAI'` / `'HUY_CONG_KHAI'`. |
+| *(Phụ 2 — FR-V.I-NEW-02 DN bổ sung HS)* | DN (auth Tier 2 VNeID) | `YÊU CẦU BỔ SUNG` ➔ `ĐANG KIỂM TRA` | DN đăng nhập chuyên trang qua VNeID Tier 2. Mở SCR-V.I-04 "Vụ việc của tôi" → click VV có badge "Cần bổ sung" → form upload `file_bo_sung[]` (PDF/DOC/DOCX/XLS/XLSX/JPG/PNG ≤20MB/file, tổng ≤100MB, max 10 file, quét virus) + `ghi_chu` ≤5000 ký tự. BE check: (1) trạng thái VV=`YEU_CAU_BO_SUNG`, (2) DN là chủ sở hữu VV, (3) chưa quá hạn `(NOW() - ngay_yeu_cau_bo_sung) ≤ cau_hinh_sla.bo_sung_timeout` (BR-EC-16). Lưu → set `trang_thai=DANG_KIEM_TRA`, gửi thông báo CB NV phụ trách, ghi LICH_SU_VU_VIEC `hanh_dong='BO_SUNG_HS', vai_tro='DN'`. 4 mã lỗi: ERR-VV-BS-01..04. |
 
 ---
 
@@ -217,14 +229,26 @@ Luồng có 9 trạng thái, tính năng đặc biệt là có sự tự động
 
 ---
 
-### 7. FLOW LUỒNG "TƯ VẤN CHUYÊN SÂU" (SM-TVCS) - Nhóm X.1
+### 7. FLOW LUỒNG "TƯ VẤN PHÁP LUẬT CHUYÊN SÂU" (SM-TVCS) - Nhóm X.1 `[RENAMED 2026-05-06 v3.5 — Thay đổi 1]`
 Luồng tư vấn 1-1 riêng biệt giữa DN và Chuyên gia giỏi. Luồng đồng bộ DN đẩy yêu cầu từ Cổng PLQG qua API Inbound **hiện chưa test được**. Tester dùng luồng thủ công ở Bước 1 — CB NV tự tạo form yêu cầu trên CMS.
 
 **Phân loại BƯỚC 3:** Module phụ thuộc DN (Y) + TVV/CG (Y), optional VV link → giao dịch cốt lõi song song với Vụ việc/Hỏi đáp, KHÔNG phải hậu kỳ.
 
+> **⚠️ CẬP NHẬT 2026-05-06 (apply SRS update srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md v3.5 — 13 thay đổi):**
+> - **SM-TVCS giữ 7 state nhưng default đổi sang `TIEP_NHAN`** (Thay đổi 3) — thay 4 state cũ (CHO_XU_LY/DANG_XU_LY/DA_XU_LY/DONG). Enum: `TIEP_NHAN/PHAN_CONG/DANG_TU_VAN/HOAN_THANH/CHO_PHE_DUYET/DA_DUYET/HUY`.
+> - **Entity rename:** `NOI_DUNG_TU_VAN_CS` → `TU_VAN_CHUYEN_SAU` (Thay đổi 2). Endpoint API rename `/api/v1/noi-dung-tu-van-cs` → `/api/v1/tu-van-chuyen-sau`.
+> - **3 entity owned mới:** `HO_SO_PHAP_LY_DN` (3.4.3.46) / `TU_LIEU_PHAP_LY_VV` (3.4.3.47) / `DANH_GIA_CHAT_LUONG_TV` (3.4.3.48) — Thay đổi 5.
+> - **Thêm field `don_vi_id` cơ quan tiếp nhận** (BR-ROUTE-TVCS-01 — Thay đổi 6): DN từ Cổng chọn / mặc định Sở TP tỉnh DN; CB NV nhập tay = đơn vị CB đăng nhập.
+> - **5 trường công khai chuyên trang** (Thay đổi 7 + BR-PUBLIC-01/02/03): `cong_khai/anh_dai_dien/thoi_gian_dang_tai/mo_ta_cong_khai/file_dinh_kem_cong_khai` — chỉ enable khi `trang_thai=DA_DUYET`. Thêm Bước 6 mới: CB NV bật Công khai → push API Cổng PLQG.
+> - **Bỏ field `hinh_thuc_tv` ở cấp Vụ việc TVCS** (Thay đổi 12) — đã move sang `PHIEN_TU_VAN.hinh_thuc` (Bước 3).
+> - **Thêm field `hop_dong_tv_id`** link sang HOP_DONG_TV (Thay đổi 13) — TVCS DA_DUYET có thể link sang HĐ TV nhóm 14.
+> - **NHT có 📝 RU* trên HSPL_DN** scoped theo VV được phân công (Thay đổi 10).
+> - **BR-AUTH-01 đổi sang 2-tier** (Thay đổi 11): Tier 1 nội bộ + Tier 2 VNeID, **bỏ VNPT eKYC**.
+> - Chi tiết delta: [`CHANGELOG-v3-to-v3.5.md §srs-fr-12`](../srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) line 1416-1604. Bảng workflow dưới (Bước 1-5) là **R6 cũ** — KHÔNG refactor lại trong session này, sẽ thêm Bước 6 (Công khai) khi test phase R7 chạm tới (xem [tasks/todo.md R7.4.A5](../../tasks/todo.md)).
+
 | Bước | Account thao tác | Trạng thái chuyển | Thao tác thực hiện trên màn hình |
 | :--- | :--- | :--- | :--- |
-| **1 (Thủ công — thay cho "Cổng PLQG đẩy qua API Inbound")** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `TIẾP NHẬN` | CB NV mở module Tư vấn chuyên sâu → click **[+ Thêm mới]** trên `SCR-X1-02`. Nhập hộ DN: DN liên kết, chủ đề, nội dung vấn đề, mức độ ưu tiên. Lưu → bản ghi tạo với trạng thái `TIEP_NHAN`. **⚠️ SRS update 2026-05-05:** field `hinh_thuc_tv` orphan ĐÃ BỎ khỏi TU_VAN_CHUYEN_SAU — hình thức tư vấn (Video/Điện thoại/Hồ sơ) quản lý ở cấp `PHIEN_TU_VAN.hinh_thuc` khi CG bắt đầu phiên (Bước 3). |
+| **1 (Thủ công — thay cho "Cổng PLQG đẩy qua API Inbound")** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `TIEP_NHAN` | CB NV mở module Tư vấn pháp luật chuyên sâu → click **[+ Thêm mới]** trên `SCR-X1-02`. Nhập hộ DN: DN liên kết, **Cơ quan tiếp nhận `don_vi_id`** (`[NEW v3.5]` — default = đơn vị CB đăng nhập), chủ đề, nội dung vấn đề, mức độ ưu tiên. Lưu → bản ghi tạo với trạng thái `TIEP_NHAN`. **⚠️ FR-12 v3.5 Thay đổi 12:** field `hinh_thuc_tv` ĐÃ BỎ khỏi `TU_VAN_CHUYEN_SAU` — hình thức tư vấn (Video/Điện thoại/Hồ sơ) quản lý ở cấp `PHIEN_TU_VAN.hinh_thuc` khi CG bắt đầu phiên (Bước 3). |
 | **2** | **Cán bộ Nghiệp vụ** (CB NV) | `TIẾP NHẬN` ➔ `PHÂN CÔNG` | Mở chi tiết yêu cầu, chọn đích danh 1 Chuyên gia (CG) từ danh sách gợi ý và nhấn **[Phân công CG]**. |
 | **3** | **Chuyên gia** (CG) | `PHÂN CÔNG` ➔ `ĐANG TƯ VẤN` | Log out CB NV. **Đăng nhập bằng Account Chuyên gia**. Mở yêu cầu, nhấn **[Chấp nhận]** và bắt đầu tư vấn (tạo phiên Video Call/Điện thoại/Hồ sơ). |
 | **4** | **Chuyên gia** (CG) | `ĐANG TƯ VẤN` ➔ `HOÀN THÀNH` ➔ `CHỜ PHÊ DUYỆT` | Upload văn bản kết quả tư vấn và tích checkbox "Hoàn thành". Hệ thống **tự động (Auto-transition)** chuyển thẳng sang `CHỜ PHÊ DUYỆT` và báo cho CB PD. |
@@ -359,7 +383,7 @@ Module CRUD thuần — KHÔNG có state machine, KHÔNG có phê duyệt. Trạ
 ---
 
 ### 10. FLOW LUỒNG "CHI TRẢ CHI PHÍ TƯ VẤN" (SM-CHITRA) - Nhóm V.II
-Luồng thanh toán tiền cho TVV và DN sau khi hoàn thành Vụ việc.
+Luồng thanh toán tiền cho TVV và DN sau khi hoàn thành Vụ việc. **Update 2026-05-06 (FR-06 v3.5):** 10 trạng thái + 14 transition + 14 FR (thêm FR-V.II-14 DN bổ sung qua DVC). Cite: [`srs-update-2026-5-5/srs-fr-06-chi-tra.md`](../srs-update-2026-5-5/srs-fr-06-chi-tra.md).
 
 > **🚫 KHÔNG CÓ LUỒNG THỦ CÔNG — Module DUY NHẤT chặn CB NV nhập tay**
 > - Hồ sơ chi trả **BẮT BUỘC** phải đổ về từ Cổng DVC qua trục LGSP. CB NV không có nút [+ Thêm mới] trên SCR chi trả.
@@ -367,30 +391,43 @@ Luồng thanh toán tiền cho TVV và DN sau khi hoàn thành Vụ việc.
 > - **Negative test bắt buộc:** verify CB NV **KHÔNG thấy** nút "Thêm mới" trên `SCR-V.II-01`. Nếu thấy = BUG (vi phạm spec).
 > - **Seed preset:** P3 (Chi trả E2E) — **đang BLOCKED** do chưa có integration LGSP/DVC. Khi BE có test API inject hoặc seed bản ghi ở `CHỜ TIẾP NHẬN`, preset P3 trong [Phụ lục 2](#phụ-lục-2-seed-data-presets--happy-path-e2e) cover bước 2 trở đi.
 
+> **🆕 v3.5 changes:** **CB PD "Từ chối" = trả về `Đang thẩm định`** (KHÔNG phải Từ chối cuối, lý do ≥10 ký tự, BR-FLOW-04). **+1 FR mới FR-V.II-14**: DN bổ sung HS qua DVC/Cổng PLQG hoặc CB NV thủ công. **+2 entity owned mới** (`THAM_DINH_HO_SO` 1:1 + `PHE_DUYET_CHI_TRA` N:1, lưu nhiều lần CB PD trả về). **+ sub-flow DN rút hồ sơ** (`Chờ tiếp nhận` → `Hủy`, `[GAP-V.II-03]`). **BA OUT:** auto-từ-chối quá hạn / lần 4 bổ sung (Thay đổi 5) + SLA dynamic (Thay đổi 8 — giữ V3 "4 mức cảnh báo C07"). 2 vấn đề chờ BA confirm — xem [`ba-questions-fr06-2026-05-06.md`](../../output/qa-reports/round7-2026-05-06/bug-reports/ba-questions-fr06-2026-05-06.md).
+
 | Bước | Account thao tác | Trạng thái chuyển | Thao tác thực hiện trên màn hình |
 | :--- | :--- | :--- | :--- |
-| **1** | **Doanh nghiệp** / **Hệ thống DVC** | Không có ➔ `CHỜ TIẾP NHẬN` | DN nộp Mẫu 01 NĐ55 kèm chứng từ hóa đơn qua Cổng Dịch vụ công (DVC). *(Hiện chặn test do chưa có integration DVC)* |
-| **2** | **Cán bộ Nghiệp vụ** (CB NV) | `CHỜ TIẾP NHẬN` ➔ `ĐANG KIỂM TRA` | Đăng nhập CB NV, mở hồ sơ và nhấn **[Tiếp nhận]**. |
-| **3** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG KIỂM TRA` ➔ `ĐANG ĐÁNH GIÁ` | Kiểm tra checklist 18 trường trên Mẫu 01 hợp lệ. Nhấn Xác nhận kết quả ĐẠT. |
-| **4** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG ĐÁNH GIÁ` ➔ `ĐANG THẨM ĐỊNH` | Hệ thống tự động tính mức hỗ trợ (100% / 30% / 10%) và trần năm theo quy mô DN. CB NV xem và nhấn **[Xác nhận đánh giá]**. |
-| **5** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG THẨM ĐỊNH` ➔ `CHỜ PHÊ DUYỆT` | Đối chiếu hóa đơn chứng từ, chốt số tiền đề xuất và nhấn **[Trình phê duyệt]**. |
-| **6** | **Cán bộ Phê duyệt** (CB PD cùng cấp) | `CHỜ PHÊ DUYỆT` ➔ `ĐÃ DUYỆT` | Log out CB NV. **Đăng nhập CB PD**. Xem xét hồ sơ và nhấn **[Phê duyệt]**, chốt số tiền được duyệt thực chi. |
-| **7** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐÃ DUYỆT` ➔ `ĐÃ THANH TOÁN` | Log out CB PD. **Đăng nhập lại CB NV**. Khi Kho bạc chuyển tiền xong, nhập Số tiền thực trả + Ngày thanh toán + Mã biên nhận rồi nhấn **[Cập nhật thanh toán]**. |
+| **1** | **Doanh nghiệp** / **Hệ thống DVC** | Không có ➔ `CHỜ TIẾP NHẬN` | DN nộp Mẫu 01 NĐ55 kèm chứng từ hóa đơn qua Cổng Dịch vụ công (DVC). FR-V.II-01 inbound qua LGSP với JWT + mTLS (BR-AUTH-09). Auto-gen mã `CT-{YYYYMMDD}-{SEQ}` (BR-DATA-04). **UNIQUE `ma_ho_so_dvc`** (idempotent — ERR-CT-02 HTTP 409 nếu trùng). *(Hiện chặn test do chưa có integration DVC)* |
+| **2** | **Cán bộ Nghiệp vụ** (CB NV) | `CHỜ TIẾP NHẬN` ➔ `ĐANG KIỂM TRA` | FR-V.II-02 sub-flow Tiếp nhận `[GAP-V.II-02]`. Đăng nhập CB NV, mở hồ sơ và nhấn **[Tiếp nhận]**. Hệ thống ghi `ngay_tiep_nhan = NOW()`, `nguoi_tiep_nhan_id = current_user.id`. |
+| **2-rút** *(phụ)* | **Doanh nghiệp** (qua DVC) hoặc **CB NV hủy hộ** | `CHỜ TIẾP NHẬN` ➔ `HỦY` | FR-V.II-02 sub-flow DN rút `[GAP-V.II-03]`. Chỉ rút được khi chưa qua `Đang đánh giá`. Hệ thống ghi `ly_do_huy = 'DN_RUT_HO_SO'`, gửi TB CB NV nếu đã gán. ERR-CT-RUT-01 nếu cố rút sau khi đã chuyển `Đang kiểm tra`. |
+| **3** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG KIỂM TRA` ➔ `ĐANG ĐÁNH GIÁ` | FR-V.II-03. Kiểm tra checklist 18 trường trên Mẫu 01 hợp lệ. Nhấn Xác nhận kết quả "Đạt". |
+| **3-bổ-sung** *(phụ)* | CB NV → DN | `ĐANG KIỂM TRA` ➔ `YÊU CẦU BỔ SUNG` ⇄ `ĐANG KIỂM TRA` | FR-V.II-03 (CB NV bấm "Yêu cầu bổ sung", `bo_sung_count++`, `ngay_yeu_cau_bo_sung = NOW()`). FR-V.II-14 (DN bổ sung qua DVC/Cổng PLQG hoặc CB NV thủ công, ≤5 ngày LV; file PDF/DOC/DOCX/JPG/PNG ≤10MB; ERR-CT-BS-01/02/03). Tối đa 3 lần (`bo_sung_count` CHECK 0-3). **Hành vi lần 4 chờ BA confirm Q1** (auto-từ-chối đã bị OUT — Thay đổi 5). |
+| **3-từ-chối** *(phụ)* | CB NV | `ĐANG KIỂM TRA` ➔ `TỪ CHỐI` | FR-V.II-03. Kiểm tra "Không đạt" → ghi `ly_do_tu_choi`, `thoi_gian_tu_choi`, `nguoi_tu_choi_id`. |
+| **4** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG ĐÁNH GIÁ` ➔ `ĐANG THẨM ĐỊNH` | FR-V.II-05. Hệ thống tự động tính mức hỗ trợ (100% / 30% / 10%) và trần năm theo quy mô DN (BR-CALC-01/02). CB NV xem và nhấn **[Xác nhận đánh giá]**. |
+| **5** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐANG THẨM ĐỊNH` ➔ `CHỜ PHÊ DUYỆT` | FR-V.II-09 + FR-V.II-11. Đối chiếu 4 mục checklist (số liệu / phí TV / quy mô / trần năm), chốt KQ thẩm định "Đạt" → tạo `THAM_DINH_HO_SO` (1:1 với HSCT). Nhấn **[Trình phê duyệt]** — TB CB PD cùng cấp (BR-AUTH-05). |
+| **5-từ-chối** *(phụ)* | CB NV | `ĐANG THẨM ĐỊNH` ➔ `TỪ CHỐI` | FR-V.II-09. Thẩm định "Không đạt" + nhận xét → ghi `ly_do_tu_choi = "THAM_DINH: " + nhan_xet`. |
+| **6** | **Cán bộ Phê duyệt** (CB PD cùng cấp) | `CHỜ PHÊ DUYỆT` ➔ `ĐÃ DUYỆT` | FR-V.II-12. Log out CB NV. **Đăng nhập CB PD**. Xem xét hồ sơ và nhấn **[Phê duyệt]**, chốt số tiền được duyệt thực chi. Tạo bản ghi `PHE_DUYET_CHI_TRA quyet_dinh=DUYET`. TB CB NV + TVV + DN. |
+| **6-trả-về** *(phụ)* | CB PD | `CHỜ PHÊ DUYỆT` ➔ `ĐANG THẨM ĐỊNH` | **CB PD "Từ chối" = trả về CB NV điều chỉnh (KHÔNG phải Từ chối cuối)**. Modal nhập lý do ≥10 ký tự (BR-FLOW-04). Tạo bản ghi `PHE_DUYET_CHI_TRA quyet_dinh=TU_CHOI`. TB CB NV (KHÔNG TB TVV/DN). CB NV điều chỉnh xong có thể Trình PD lại — N:1 cho phép nhiều bản ghi lịch sử. |
+| **7** | **Cán bộ Nghiệp vụ** (CB NV) | `ĐÃ DUYỆT` ➔ `ĐÃ THANH TOÁN` | FR-V.II-13. Log out CB PD. **Đăng nhập lại CB NV**. Khi Kho bạc chuyển tiền xong, nhập Số tiền thực trả (≤ `so_tien_duoc_duyet`) + Ngày thanh toán + Mã biên nhận rồi nhấn **[Cập nhật thanh toán]**. |
+| **7-từ-chối** *(phụ)* | CB NV | `ĐÃ DUYỆT` ➔ `TỪ CHỐI` | FR-V.II-13. Nếu Kho bạc không chuyển → ghi `ly_do_tu_choi = "THANH_TOAN: " + ly_do`. |
 
 ---
 
-### 11. FLOW LUỒNG "ĐÁNH GIÁ HIỆU QUẢ" (SM-DANHGIA) - Nhóm VI
-Luồng lập báo cáo 21a/21b theo TT17 định kỳ 6 tháng / 1 năm. **Phụ thuộc:** Vụ việc (§5 BƯỚC 3) đã hoàn thành trong kỳ. **Seed preset:** P4 (Đánh giá HQ đủ mẫu — chạy P2 ×3 để có ≥3 VV `HOÀN THÀNH`) — xem [Phụ lục 2](#phụ-lục-2-seed-data-presets--happy-path-e2e). **Lưu ý double-state**: SM state = `LAP_KE_HOACH` / DB bản ghi state = `NHAP` — test cần assert cả 2.
+### 11. FLOW LUỒNG "THEO DÕI ĐÁNH GIÁ HIỆU QUẢ HỖ TRỢ PHÁP LÝ" (SM-DANHGIA) - Nhóm VI
+Luồng lập báo cáo 21a/21b theo TT17 định kỳ 6 tháng / 1 năm. **Phụ thuộc:** Vụ việc (§5 BƯỚC 3) đã hoàn thành trong kỳ. **Seed preset:** P4 (Đánh giá HQ đủ mẫu — chạy P2 ×3 để có ≥3 VV `HOAN_THANH`) — xem [Phụ lục 2](#phụ-lục-2-seed-data-presets--happy-path-e2e).
+
+> **⚠️ Update 2026-05-06 (FR-08 v3.5):** Module rename "Kế hoạch đánh giá" → "Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý". Entity rename `DOT_DANH_GIA / DANH_GIA_HQ` → `KE_HOACH_DANH_GIA`. SM thống nhất 8 state v3.5 (Thay đổi 5, GAP-VI-01) — bỏ double-state `NHAP/LAP_KE_HOACH` cũ, **DB enum = SM state = `LAP_KE_HOACH`**. Bổ sung `co_quan_duoc_danh_gia_id` 1:1 (Thay đổi 2) + `file_dinh_kem` (Thay đổi 4) + FR-VI-10 read-only cho CB NV cơ quan được ĐG (Thay đổi 3) + state `HUY` (transition `LAP_KE_HOACH/PHAN_CONG/THUC_HIEN/BAO_CAO → HUY`). Cite: `srs-update-2026-5-5/srs-fr-08-danh-gia.md` §5 line 1117-1167.
 
 | Bước | Account thao tác | Trạng thái chuyển | Thao tác thực hiện trên màn hình |
 | :--- | :--- | :--- | :--- |
-| **1 (Thủ công)** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ SM `LẬP KẾ HOẠCH` / DB `NHAP` | Vào module Đánh giá → click **[+ Tạo đợt đánh giá]** trên `SCR-VI-01`. Nhập tên đợt, kỳ đánh giá (6 tháng / năm), nhập trọng số các tiêu chí (tổng = 100%). Lưu. |
-| **2** | **Cán bộ Nghiệp vụ** (CB NV) | `LẬP KẾ HOẠCH` ➔ `PHÂN CÔNG` | Vào tab Phân công, chọn cán bộ/chuyên gia làm Đánh giá viên. |
-| **3** | **Cán bộ Nghiệp vụ** (CB NV) | `PHÂN CÔNG` ➔ `CHỜ DUYỆT PC` | Nhấn **[Trình duyệt PC]** để gửi danh sách phân công. |
-| **4** | **Cán bộ Phê duyệt** (CB PD) | `CHỜ DUYỆT PC` ➔ `THỰC HIỆN` | **Đăng nhập CB PD** để **[Phê duyệt]** danh sách phân công. Lúc này hệ thống tự động lọc các Vụ việc đã hoàn thành trong kỳ đẩy vào danh sách chờ chấm điểm. |
-| **5** | **CB NV (Đánh giá viên)** | `THỰC HIỆN` ➔ `BÁO CÁO` | **Đăng nhập Account được phân công**. Chấm điểm 0-10 cho từng vụ việc. Khi tất cả vụ việc được chấm xong, hệ thống tự động sinh báo cáo TT17 và chuyển sang trạng thái BAO_CAO. |
-| **6** | **Cán bộ Nghiệp vụ** (CB NV) | `BÁO CÁO` ➔ `CHỜ PHÊ DUYỆT` | Xem Báo cáo TT17 được tự sinh, bổ sung nhận xét văn bản và nhấn **[Trình phê duyệt]**. |
-| **7** | **Cán bộ Phê duyệt** (CB PD) | `CHỜ PHÊ DUYỆT` ➔ `HOÀN THÀNH` | **Đăng nhập CB PD**. Nhấn **[Phê duyệt]** để chốt báo cáo cuối cùng của đợt đánh giá. |
+| **1 (Thủ công)** | **Cán bộ Nghiệp vụ** (CB NV) | (Tạo mới) ➔ `LAP_KE_HOACH` | Vào module **Theo dõi Đánh giá Hiệu quả HTPL** → click **[+ Tạo đợt đánh giá]** trên `SCR-VI-01`. Nhập tên đợt, mục tiêu, tần suất (SO_BO_6_THANG/TRON_NAM), từ ngày/đến ngày, đối tượng (VU_VIEC/DAO_TAO/TONG_HOP), **chọn `co_quan_duoc_danh_gia_id`** (DON_VI 1:1, BẮT BUỘC, có thể khác đơn vị CB NV), upload `file_dinh_kem` (PDF/DOC/DOCX/XLS/XLSX ≤20MB, optional). Lưu nháp ➔ DB `LAP_KE_HOACH`. |
+| **2** | **Cán bộ Nghiệp vụ** (CB NV) | `LAP_KE_HOACH` ➔ `PHAN_CONG` | Vào Tab 1 Tiêu chí — thêm tiêu chí, set trọng số (SUM = 100% BR-CALC-04). Sang Tab 2 Phân công, chọn cán bộ/chuyên gia làm Đánh giá viên (≥1 TRUONG_NHOM, ≥1 DANH_GIA_VIEN). |
+| **3** | **Cán bộ Nghiệp vụ** (CB NV) | `PHAN_CONG` ➔ `CHO_DUYET_PC` | Nhấn **[Trình phê duyệt]** để gửi danh sách phân công. **BR-NOTIF-01** gửi TB CB PD (mở rộng FR-VI-03 v3.5). |
+| **4** | **Cán bộ Phê duyệt** (CB PD) | `CHO_DUYET_PC` ➔ `THUC_HIEN` | **Đăng nhập CB PD** cùng cấp (BR-AUTH-05) → **[Phê duyệt PC]**. Hệ thống auto-fill người duyệt, thời gian. **BR-NOTIF-01** gửi TB CB NV trình (mở rộng FR-VI-04 v3.5). Hoặc **[Từ chối PC]** + lý do ≥10 ký tự (BR-FLOW-04) → quay `PHAN_CONG`. |
+| **5** | **CB NV / Đánh giá viên** | `THUC_HIEN` ➔ `BAO_CAO` | Sang Tab 3 Thực hiện chấm điểm — chọn VV HOAN_THANH trong kỳ (multi-select), chấm điểm 0-`diem_toi_da` cho từng tiêu chí. Khi tất cả VV đã chấm xong, hệ thống auto SET `BAO_CAO`. |
+| **6 (Phụ)** | **Cán bộ Nghiệp vụ** (CB NV) | Giữ `BAO_CAO` (lập BC) | Sang Tab 4 Báo cáo — xem auto-fill 13 cột số liệu (số TVV, khóa tập huấn, hội nghị, VV, hồ sơ chi trả, KP). Bổ sung nhận xét chung, kiến nghị, KP hoạt động khác / xã hội hóa. Lưu BC. |
+| **7** | **Cán bộ Nghiệp vụ** (CB NV) | `BAO_CAO` ➔ `CHO_PHE_DUYET` | Nhấn **[Trình duyệt BC]**. **BR-NOTIF-01** gửi TB CB PD (mở rộng FR-VI-08 v3.5). |
+| **8** | **Cán bộ Phê duyệt** (CB PD) | `CHO_PHE_DUYET` ➔ `HOAN_THANH` | **Đăng nhập CB PD**. Nhấn **[Phê duyệt BC]** để chốt báo cáo cuối cùng. **BR-NOTIF-01** gửi TB CB NV trình (FR-VI-09 v3 + v3.5). Hoặc **[Từ chối BC]** + lý do ≥10 ký tự → quay `BAO_CAO`. |
+| **9 (Read-only)** | **CB NV thuộc `co_quan_duoc_danh_gia_id`** (FR-VI-10 mới) | Giữ `HOAN_THANH` | Sau khi đợt `HOAN_THANH`, CB NV thuộc cơ quan được ĐG mở SCR-VI-01 Tab Báo cáo (chế độ read-only) để xem KQ. CB NV cơ quan KHÁC bị 403 (`ERR-DG-10`). KH chưa `HOAN_THANH` → ERR-DG-11. |
+| *(Phụ — HUY)* | **CB NV / CB PD** | `LAP_KE_HOACH/PHAN_CONG/THUC_HIEN/BAO_CAO` ➔ `HUY` | Khi đợt phát sinh sự cố không thể tiếp tục — nhập lý do hủy, soft-delete. Audit log ghi nhận. KHÔNG hủy được khi đã `HOAN_THANH`. |
 
 ---
 
@@ -483,7 +520,7 @@ Không có màn hình UI — chỉ gồm 18 endpoint outbound (cho Cổng PLQG /
 | `GET /api/v1/hoi-dap` | FR-02 Hỏi đáp | `CONG_KHAI` | Public |
 | `GET /api/v1/kho-cau-hoi` (full-text) | FR-13 TV Nhanh | `DA_DUYET` + `hieu_luc=1` | Public |
 | `GET /api/v1/tu-van-chuyen-sau` | FR-12 TV CS | `HOAN_THANH` (metadata-only) | Public |
-| `GET /api/v1/bieu-mau` | FR-09 Biểu mẫu | `la_cong_khai=1` | Public |
+| `GET /api/v1/bieu-mau` | FR-09 Biểu mẫu | `cong_khai=1` (v3.5 rename CR-01) | Public |
 | `GET /api/v1/chuong-trinh-htpldn` | FR-15 CT HTPLDN | `DA_CONG_BO` (GĐ1) | Public |
 | `GET /api/v1/dao-tao` | FR-03 Đào tạo | `DA_CONG_KHAI` | Public |
 | `POST /api/v1/vu-viec` (inbound) | FR-05 từ DVC | — | JWT LGSP |
@@ -514,7 +551,7 @@ Bảng dưới tóm tắt Bước 1 thủ công (thay cho bước đồng bộ) 
 | 8.4 | Giảng viên | 3 | ✅ | `DANG_HOAT_DONG` | — (thuần thủ công) | Tab Giảng viên |
 | 9 | Hợp đồng tư vấn | 4 | ✅ | `DANG_THUC_HIEN` (enum default §3.4.3.13) | — (thuần thủ công) | `SCR-X3-01` |
 | 10 | **Chi trả (SM-CHITRA)** | 4 | ❌ | — **(không cho phép thủ công)** | DN nộp Mẫu 01 qua DVC/LGSP | — |
-| 11 | Đánh giá HQ (SM-DANHGIA) | 4 | ✅ | SM=`LAP_KE_HOACH` / DB=`NHAP` | — (thuần thủ công) | `SCR-VI-01` |
+| 11 | Theo dõi Đánh giá Hiệu quả HTPL (SM-DANHGIA, FR-08 v3.5) | 4 | ✅ | `LAP_KE_HOACH` (8 state + HUY) | — (thuần thủ công) | `SCR-VI-01` |
 | 12A | Phiên TV nhanh (SM-TVNHANH) | 4 | ❌ | — **(không cho phép thủ công)** | DN gửi từ khung chat Cổng PLQG | — |
 | 12B | Kho Q&A | 4 | ✅ | `CHO_DUYET`, nguồn=`THU_CONG` | Auto đẩy từ Hỏi đáp (nguồn=TU_DONG) | `SCR-X2-01` |
 | 13 | CT HTPLDN — GĐ2 Đợt BC | 5 | ✅ | `TAO_DOT` | — (thuần thủ công) | `SCR-XI-01` (Tab Đợt báo cáo) |
@@ -525,7 +562,7 @@ Bảng dưới tóm tắt Bước 1 thủ công (thay cho bước đồng bộ) 
 **Kết luận quan trọng cho QA:**
 - **14 / 16 mục** có thể test được ngay bằng luồng thủ công. Chỉ duy nhất **Chi trả (§10)** và **Phiên TV nhanh (§12A)** bị BLOCK đến khi có integration Cổng PLQG/DVC/LGSP. §16 API phụ thuộc upstream có state target → chỉ test được khi upstream đã seed đủ.
 - Khi test negative cho Chi trả: verify **KHÔNG có nút [+ Thêm mới]** trên SCR chi trả. Nếu có = BUG.
-- Module `Đánh giá hiệu quả` có **double-state** (SM=`LAP_KE_HOACH` vs DB field=`NHAP`) — test cần assert cả 2.
+- Module `Theo dõi Đánh giá Hiệu quả HTPL` (FR-08 v3.5) — đã thống nhất 8 state SM = DB enum (`LAP_KE_HOACH/PHAN_CONG/CHO_DUYET_PC/THUC_HIEN/BAO_CAO/CHO_PHE_DUYET/HOAN_THANH/HUY`). Bỏ double-state cũ `NHAP/LAP_KE_HOACH` — assert 1 lần với enum DB v3.5.
 - Module `Vụ việc HTPL` luồng thủ công **bypass 2 state** (`MỚI TẠO` và `CHỜ TIẾP NHẬN`), khởi tạo thẳng ở `DA_TIEP_NHAN`. Khi integration DVC xong, cần test lại full 9 step.
 - Module `Kho Q&A`: nguồn `TU_DONG` (auto từ Hỏi đáp) bỏ qua phê duyệt; nguồn `THU_CONG` (CB NV nhập tay) bắt buộc CB PD duyệt. Test phải tách rõ 2 path.
 - Module `CT HTPLDN` **tách 2 giai đoạn** (§4 ở BƯỚC 2 vs §13 ở BƯỚC 5). GĐ1 test độc lập ngay sau QTHT; GĐ2 chỉ chạy khi CT đã `DANG_THUC_HIEN` **và** LỚP 3+4 đã có số liệu trong kỳ.

@@ -1,6 +1,8 @@
 # Round 7 — Apply SRS update 2026-05-05 + partial reset DB (2026-05-06)
 
-> **Lý do tồn tại:** Dev deploy 5 SRS update batch 2026-05-05 (FR-03 đào tạo, FR-04 CG/TVV/NHT/TC TV, FR-07 DN, FR-10 quản trị, FR-12 TVCS) + partial reset DB. Round 7 = re-seed Tier 0/1/2 cho actor mới + workflow E2E + functional 17 module + 2 NEW (NHT, TC TV) + cross-cutting + permission.
+> **Lý do tồn tại:** Dev deploy 5 SRS update batch 2026-05-05 (FR-03 đào tạo, FR-04 CG/TVV/NHT/TC TV, FR-07 DN, FR-10 quản trị, FR-12 TVCS) + partial reset DB + **6 SRS v3.5 update 2026-05-06 batch 2** (FR-05 vụ việc, FR-06 chi trả, FR-08 đánh giá, FR-09 biểu mẫu, FR-12 TVCS đầy đủ stack, FR-16 API). Round 7 = re-seed Tier 0/1/2 cho actor mới + workflow E2E + functional 17 module + 2 NEW (NHT, TC TV) + cross-cutting + permission.
+
+> **🆕 FR-06 Chi trả v3.5 PREP DONE 2026-05-06:** [funtion/7.6](../../funtion/7.6-chi-tra-chi-phi.md) (35 TC), [smoke/6.6](../../smoke/6.6-sm-chitra.md) (11 paths), R7.7.12 4 subtask sync. **2 BA Q chờ chốt** — [bug-reports/ba-questions-fr06-2026-05-06.md](bug-reports/ba-questions-fr06-2026-05-06.md): Q1 hành vi lần 4 bổ sung, Q2 SLA ngưỡng % deadline. Module BLOCKED end-to-end do thiếu LGSP integration. **R7.7.12.1 smoke regression IMPACT** (FR-07/08/11/13 × 5 phút) chạy được ngay.
 > **Round 6 frozen:** [`../round6-2026-05-01-postreset/`](../round6-2026-05-01-postreset/) — frozen, làm history reference.
 > **Plan trigger:** [`../../../tasks/plan-r7-trigger.md`](../../../tasks/plan-r7-trigger.md) · **Todo:** [`../../../tasks/todo.md`](../../../tasks/todo.md) · **Delta map:** [`../../../input/srs-update-2026-5-5/_DELTA-MAP-*.md`](../../../input/srs-update-2026-5-5/) · **Fixture:** v2.7.1
 

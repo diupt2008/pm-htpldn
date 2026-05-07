@@ -46,11 +46,11 @@
 | # | FR | Module | Spec funtion | Spec smoke | Smoke report | Functional report | Permission report | TC chi tiết | Trạng thái tổng |
 |---|----|--------|--------------|------------|--------------|--------------------|-------------------|--------------|------------------|
 | 1 | FR-01 | Dashboard | ✅ | ✅ | 🔴 chưa chạy | 🔴 chưa chạy | 🔴 chưa chạy | ❌ | 🔴 Chưa chạy Round 3 |
-| 2 | FR-02 | Hỏi đáp Pháp lý | ✅ | ✅ + SM | 🔴 chưa chạy | 🔴 chưa chạy | 🔴 chưa chạy | ✅ Đã viết (R2) | 🔴 Chưa chạy Round 3 |
+| 2 | FR-02 | Hỏi đáp Pháp luật `[v3.5]` | ✅ | ✅ + SM | 🔴 chưa chạy | 🔴 chưa chạy | 🔴 chưa chạy | ✅ Đã viết (R2) | 🔴 Chưa chạy Round 3 |
 | 3 | FR-03 | Đào tạo, Tập huấn | ✅ | ✅ | 🔴 chưa chạy | 🔴 chưa chạy | 🔴 chưa chạy | ❌ | 🔴 Chưa chạy Round 3 |
 | 4 | FR-04 | Chuyên gia/TVV | ✅ | ✅ + SM | 🔴 chưa chạy | 🔴 chưa chạy | 🔴 chưa chạy | 🟡 Folder rỗng | 🔴 Chưa chạy Round 3 |
 | 5 | FR-05 | Vụ việc HTPL | ✅ | ✅ + SM | 🔴 chưa chạy | 🔴 chưa chạy | 🔴 chưa chạy | ❌ | 🔴 Chưa chạy Round 3 |
-| 6 | FR-06 | Chi trả Chi phí | ✅ | ✅ + SM | 🔴 chưa chạy | 🔴 chưa chạy | 🔴 chưa chạy | ❌ | 🔴 Chưa chạy Round 3 |
+| 6 | FR-06 | Chi trả Chi phí ✏️ v3.5 | ✅ v3.5 sync 14 FR | ✅ v3.5 11 paths SM-CHITRA | 🔴 chưa chạy | 🔴 chưa chạy (35 TC) | 🔴 chưa chạy (4 entity × 7 role) | ❌ | 🟠 PREP DONE — chờ BA Q1+Q2 + LGSP integration |
 | 7 | FR-07 | Quản lý Doanh nghiệp | ✅ | ✅ | 🔴 chưa chạy | 🔴 chưa chạy | 🔴 chưa chạy | ❌ | 🔴 Chưa chạy Round 3 |
 | 8 | FR-08 | Đánh giá Hiệu quả | ✅ | ✅ | 🔴 chưa chạy | 🔴 chưa chạy | 🔴 chưa chạy | ❌ | 🔴 Chưa chạy Round 3 |
 | 9 | FR-09 | Biểu mẫu | ✅ | ✅ | 🔴 chưa chạy | 🔴 chưa chạy | 🔴 chưa chạy | ❌ | 🔴 Chưa chạy Round 3 |
@@ -71,11 +71,11 @@
 | FR | Module | Đã test | Report path | # Bug | Đã gửi dev | Ngày gửi | Kênh | Trạng thái fix | Ghi chú |
 |----|--------|---------|-------------|-------|-----------|----------|------|----------------|---------|
 | FR-01 | Dashboard | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
-| FR-02 | Hỏi đáp Pháp lý | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
+| FR-02 | Hỏi đáp Pháp luật `[v3.5]` | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
 | FR-03 | Đào tạo, Tập huấn | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
 | FR-04 | Chuyên gia/TVV | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
 | FR-05 | Vụ việc HTPL | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
-| FR-06 | Chi trả Chi phí | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
+| FR-06 | Chi trả Chi phí ✏️ v3.5 | 🟠 PREP DONE 2026-05-06 | [funtion/7.6-chi-tra-chi-phi.md](funtion/7.6-chi-tra-chi-phi.md) (35 TC) | 0 (2 BA Q ⏳) | `[ ]` | — | — | — | v3.5 sync 10 file QA done. R7.7.12.1 smoke regression IMPACT chạy được ngay. R7.6.1 + R7.7.12.2/3 conditional LGSP. CT-006 + CT-021 ⏳ chờ BA Q1+Q2. Xem [ba-questions-fr06](qa-reports/round7-2026-05-06/bug-reports/ba-questions-fr06-2026-05-06.md). |
 | FR-07 | Quản lý Doanh nghiệp | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
 | FR-08 | Đánh giá Hiệu quả | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
 | FR-09 | Biểu mẫu | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
@@ -92,7 +92,7 @@
 | FR | Module | Kết quả | Report path | # Bug | Đã gửi dev | Ngày gửi | Kênh | Trạng thái fix | Ghi chú |
 |----|--------|---------|-------------|-------|-----------|----------|------|----------------|---------|
 | FR-01 | Dashboard | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
-| FR-02 | Hỏi đáp Pháp lý | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
+| FR-02 | Hỏi đáp Pháp luật `[v3.5]` | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
 | FR-03 | Đào tạo, Tập huấn | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
 | FR-04 | Chuyên gia/TVV | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
 | FR-05 | Vụ việc HTPL | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
@@ -115,7 +115,7 @@
 | FR | Module | Section ma trận | Đã test | Report path | # Bug | Đã gửi dev | Ngày gửi | Kênh | Trạng thái fix | Ghi chú |
 |----|--------|-----------------|---------|-------------|-------|-----------|----------|------|----------------|---------|
 | FR-01 | Dashboard | — | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | Chưa có entity trong permission-matrix |
-| FR-02 | Hỏi đáp Pháp lý | Section 2 | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
+| FR-02 | Hỏi đáp Pháp luật `[v3.5]` | Section 2 | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
 | FR-03 | Đào tạo, Tập huấn | Section 8.1 | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
 | FR-04 | Chuyên gia/TVV | Section 3 | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
 | FR-05 | Vụ việc HTPL | Section 4 | 🔴 chưa chạy | — | — | `[ ]` | — | — | — | |
@@ -136,7 +136,7 @@
 | FR | Module | Đã tạo TC | File TC | Ghi chú |
 |----|--------|-----------|---------|---------|
 | FR-01 | Dashboard | 🔴 | — | |
-| FR-02 | Hỏi đáp Pháp lý | ✅ | [test-cases/hoi-dap/](test-cases/hoi-dap/) | 7 file TC (01-07) + `edge-case-review-FR02.md` + `00-test-plan-overview.md` — viết xong 2026-04-18 |
+| FR-02 | Hỏi đáp Pháp luật `[v3.5]` | ✅ | [test-cases/hoi-dap/](test-cases/hoi-dap/) | 7 file TC (01-07) + `edge-case-review-FR02.md` + `00-test-plan-overview.md` — viết xong 2026-04-18 |
 | FR-03 | Đào tạo, Tập huấn | 🔴 | — | |
 | FR-04 | Chuyên gia/TVV | 🟡 folder rỗng | [test-cases/CG-TVV/](test-cases/CG-TVV/) | Folder đã tạo nhưng chưa có file TC nào |
 | FR-05 | Vụ việc HTPL | 🔴 | — | |
@@ -189,7 +189,7 @@
 | **— Round 2 (2026-04-16 → 2026-04-20) —** | | | | | |
 | 2026-04-18 | Smoke test | _(điền)_ | _(điền)_ | _(điền)_ | |
 | 2026-04-18 | Quản trị Hệ thống (QTHT) | _(điền)_ | _(điền)_ | _(điền)_ | Lần 1: gửi `bug-report-qtht-final.md` |
-| 2026-04-18 | Hỏi đáp Pháp lý | _(điền)_ | _(điền)_ | _(điền)_ | |
+| 2026-04-18 | Hỏi đáp Pháp luật `[v3.5]` | _(điền)_ | _(điền)_ | _(điền)_ | |
 | 2026-04-18 | Chuyên gia/TVV | _(điền)_ | _(điền)_ | _(điền)_ | |
 | 2026-04-18 | Doanh nghiệp | _(điền)_ | _(điền)_ | _(điền)_ | |
 | 2026-04-18 | Chi trả Chi phí | _(điền)_ | _(điền)_ | _(điền)_ | Đợt 2 |

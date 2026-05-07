@@ -38,7 +38,7 @@ Password mặc định: `Secret@123`.
   - [⑩ FR-14 · Hợp đồng Tư vấn (Nhóm X.3)](#toc-fr14)
   - [⑪ FR-06 · Chi trả Chi phí (Nhóm V.II)](#toc-fr06)
   - [⑫ FR-13 · Tư vấn Nhanh (Nhóm X.2)](#toc-fr13)
-  - [⑬ FR-08 · Đánh giá Hiệu quả (Nhóm VI)](#toc-fr08)
+  - [⑬ FR-08 · Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý (Nhóm VI)](#toc-fr08)
 - [LỚP 5 — TỔNG HỢP & ĐẦU RA](#toc-lop5)
   - [⑭-bis FR-15 · Chương trình HTPLDN — Giai đoạn 2: Đợt Báo cáo](#toc-fr15-gd2)
   - [⑭ FR-11 · Báo cáo Thống kê (Nhóm IX)](#toc-fr11)
@@ -64,19 +64,26 @@ Password mặc định: `Secret@123`.
 ### ① FR-10 · Quản trị Hệ thống (Nhóm VIII) 🔑
 **Login:** `qtht_01` (QTHT) — duy nhất được CRUD ở đây.
 
-**Màn hình (SCR-VIII-01..10) theo SRS FR-10 §3:**
-- SCR-VIII-01: **Quản lý Danh mục** (14 tab dọc bên trái)
+**Màn hình (SCR-VIII-01..10) theo SRS FR-10 v3.5 §3:**
+- SCR-VIII-01: **Quản lý Danh mục** (14 tab dọc bên trái — bỏ Tổ chức TV)
 - SCR-VIII-02: **Quản lý Vai trò**
-- SCR-VIII-03: **Quản lý Tài khoản NSD**
+- SCR-VIII-03: **Quản lý Tài khoản NSD** (5 trạng thái + nút "Phân quyền" cho TK CHO_PHAN_QUYEN — fix C.5)
 - SCR-VIII-04: **Phân quyền Chức năng**
-- SCR-VIII-05: **Phân quyền Dữ liệu**
-- SCR-VIII-06: Cấu hình Hệ thống (MH-10.7 — 4 tab)
-- SCR-VIII-07: Đăng nhập (MH-10.8b)
-- SCR-VIII-08 / SCR-VIII-08a: Đăng ký TK / QTHT duyệt TK đăng ký
+- SCR-VIII-05: **Phân quyền Dữ liệu** (cây 2 tầng)
+- SCR-VIII-06: Cấu hình Hệ thống (MH-10.7 — 4 tab, Tab 3 Mẫu phản hồi áp Mô hình B Hybrid 2 tầng)
+- SCR-VIII-07: Đăng nhập (MH-10.8b — Tier 1 nội bộ + Tier 2 SSO VNeID, bỏ VNPT eKYC)
+- SCR-VIII-08: Đăng ký TK doanh nghiệp (chỉ DN tự đăng ký, form 21 trường, username = MST)
+- SCR-VIII-08a: ⚠️ QTHT duyệt TK đăng ký — **dead UI** sau FR-VIII-22 bypass CHO_PHAN_QUYEN. Chờ BA Q3 chốt xóa hay giữ
 - SCR-VIII-09: Đăng xuất
-- SCR-VIII-10: Nhật ký Hệ thống (MH-10.10)
+- SCR-VIII-10: Nhật ký Hệ thống (MH-10.10 — FR-VIII-28 mới)
 
-> **Lưu ý DM Cơ quan/Đơn vị (UC103 — tree view phân cấp TW→BN→ĐP) KHÔNG có màn riêng** — là thành phần đặc biệt bên trong tab "Cơ quan ĐV" của SCR-VIII-01 (srs-fr-10 §3 dòng 1237-1244).
+**FR mới SRS v3.5 (apply 2026-05-06):**
+- **FR-VIII-26**: Quên mật khẩu / Kích hoạt TK lần đầu — workflow chung cho TVV/CG/NHT/DN/CB
+- **FR-VIII-28**: Nhật ký Hệ thống `[GAP-VIII-02]` — filter, paginate 50/trang, cap 90 ngày
+- **FR-VIII-29**: Quản lý ngày lễ `[GAP-VIII-05]` — entity NGAY_LE + import Excel + calendar
+- **FR-VIII-06 (Tổ chức TV)**: chuyển sang FR-04 thành FR-IV-NEW-01
+
+> **Lưu ý DM Cơ quan/Đơn vị (UC103 — tree view 2 tầng TW→{BN,ĐP} ngang cấp song song theo BR-AUTH-02) KHÔNG có màn riêng** — là thành phần đặc biệt bên trong tab "Cơ quan ĐV" của SCR-VIII-01 (srs-fr-10 v3.5 §3 dòng 1475-1482). **CẢNH BÁO:** đổi từ "3 cấp TW→BN→ĐP" v3 thành "2 tầng TW→{BN, ĐP}" v3.5 — BN không có cấp con, ĐP trỏ trực tiếp lên TW (không qua BN).
 
 **📑 Tabs SCR-VIII-01 Quản lý Danh mục — 14 tab dọc bên trái (theo SRS FR-10 §3 dòng 1221):**
 
@@ -86,7 +93,7 @@ Password mặc định: `Secret@123`.
 | Loại hình HT | `DANH_MUC WHERE loai='LOAI_HINH_HT'` (UC100) | — | Luôn |
 | Chương trình HT | `DANH_MUC WHERE loai='CHUONG_TRINH_HT'` | — | Luôn |
 | Tình trạng VV | `DANH_MUC WHERE loai='TINH_TRANG_VV'` | — | Luôn |
-| **Cơ quan ĐV** | `DON_VI` (tree-view) | **Tree 3 cấp TW→BN→ĐP** + form chi tiết bên phải + nút [+ Thêm đơn vị con] mỗi node (UC103) | Luôn |
+| **Cơ quan ĐV** | `DON_VI` (tree-view) | **Tree 2 tầng TW→{BN,ĐP} ngang cấp song song** (BR-AUTH-02 v3.5) + form chi tiết bên phải + nút [+ Thêm đơn vị con] trên TW (BN không có cấp con). Thêm cột `tinh_thanh_id` FK DM TINH_THANH (mã GSO 01-63 theo QĐ 124/2004) | Luôn |
 | ~~Tổ chức tư vấn~~ | ⚠️ **Đã tách entity riêng** `TO_CHUC_TU_VAN` (SRS update 2026-05-05) — xem §FR-04 mục ③. Quản lý ở SCR-IV-NEW-01/02/03 thuộc Nhóm IV, KHÔNG còn ở danh mục `DANH_MUC`. Cite: `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:2178` | NĐ77/2008 + NĐ55/2019 Đ.10 | — |
 | Loại DN | `DANH_MUC WHERE loai='LOAI_DN'` | SIEU_NHO/NHO/VUA | Luôn |
 | Hồ sơ đề nghị HT | `DANH_MUC WHERE loai='HO_SO_DE_NGHI_HT'` (UC106) | Checklist 6 hạng mục cho FR-V.I-06 | Luôn |
@@ -97,14 +104,15 @@ Password mặc định: `Secret@123`.
 | Loại hình tiếp nhận | `DANH_MUC WHERE loai='LOAI_HINH_TIEP_NHAN'` | — | Luôn |
 | Kênh tiếp nhận | `DANH_MUC WHERE loai='KENH_TIEP_NHAN'` | — | Luôn |
 
-**📑 Tabs SCR-VIII-06 Cấu hình hệ thống — 4 tab:**
+**📑 Tabs SCR-VIII-06 Cấu hình hệ thống — 4 tab (sau user chốt 2026-05-06: bỏ Phân công + thêm Ngày lễ):**
 
 | Tab | Entity | Data | Điều kiện hiển thị |
 |-----|--------|------|--------------------|
 | **Thời hạn xử lý (SLA)** | `CAU_HINH_SLA` | Bảng cấu hình thời hạn xử lý cho 4 loại yêu cầu: **FR-02 Hỏi đáp / FR-05 Vụ việc / FR-06 Chi trả / FR-12 Tư vấn chuyên sâu**. Mỗi loại cấu hình các trường: **Số ngày làm việc để xử lý** (`deadline_ngay_lv`), **Ngưỡng cảnh báo mức 1** (`canh_bao_muc_1`, % so với SLA, vd 70%), **Ngưỡng cảnh báo mức 2** (`canh_bao_muc_2`, vd 90%), **Ngưỡng quá hạn nghiêm trọng** (`qua_han_nghiem_trong`, vd 120%), công tắc bật/tắt gửi thông báo qua **Email** / **In-app** | Luôn |
-| **Phân công mặc định** | `CAU_HINH_PHAN_CONG` (FR-II-NEW-01) | Bảng quy tắc gợi ý người xử lý khi có yêu cầu mới (SRS §3.4.3.48). Mỗi quy tắc gồm các trường: **Lĩnh vực PL** (`linh_vuc_id`, chọn từ danh mục Lĩnh vực), **Người xử lý** (`nguoi_xu_ly_id`, 1 tài khoản cụ thể), **Loại yêu cầu áp dụng** (`loai_yeu_cau` — 1 trong 4 giá trị: `HOI_DAP` / `VU_VIEC` / `TU_VAN_CS` / `TAT_CA`, mặc định `TAT_CA`), **Độ ưu tiên** (`uu_tien`, mặc định `1`), **Trạng thái quy tắc** (`trang_thai`: `KICH_HOAT` hoặc `VO_HIEU_HOA`), **Đơn vị** (`don_vi_id`). Khi CB NV phân công cho yêu cầu thuộc **FR-02 Hỏi đáp / FR-05 Vụ việc / FR-12 Tư vấn chuyên sâu**, hệ thống đọc bảng này để gợi ý người xử lý phù hợp theo lĩnh vực + độ ưu tiên | Luôn |
-| **Mẫu phản hồi** | `MAU_PHAN_HOI` | Kho mẫu câu trả lời dùng lại (cho module **FR-02 Hỏi đáp**), phân loại theo lĩnh vực pháp luật. Mỗi mẫu gồm: **Tên mẫu** (`ten_mau`), **Lĩnh vực** (`linh_vuc_id`), **Nội dung mẫu** (`noi_dung`, soạn bằng Rich Text editor — có format đậm/nghiêng/bullet), **Trạng thái** (`trang_thai`) | Luôn |
+| ~~**Phân công mặc định**~~ | ⚠️ **DEPRECATED 2026-05-06** — User chốt **bỏ hẳn feature**. Entity `CAU_HINH_PHAN_CONG` + FR-II-NEW-01 không còn dùng. **Cross-module impact:** FR-02 Hỏi đáp / FR-05 Vụ việc / FR-12 TVCS bỏ dropdown gợi ý người xử lý → chọn manual hoặc cơ chế khác (chờ BA verify) | — |
+| **Mẫu phản hồi** | `MAU_PHAN_HOI` | Kho mẫu câu trả lời dùng lại (cho module **FR-02 Hỏi đáp**), phân loại theo lĩnh vực pháp luật. Mỗi mẫu gồm: **Tên mẫu** (`ten_mau`), **Lĩnh vực** (`linh_vuc_id`), **Nội dung mẫu** (`noi_dung`, soạn bằng Rich Text editor — có format đậm/nghiêng/bullet), **Trạng thái** (`trang_thai`). Áp Mô hình B Hybrid 2 tầng (CĐT chốt 2026-05-02) | Luôn |
 | **Quy trình hỗ trợ** | ⚠️ **Tên entity chưa verify** — srs-fr-10 §3 dòng 1423-1430 mô tả Tab này nhưng KHÔNG định nghĩa entity cụ thể trong §3.4.3 | Bảng CRUD các bước trong quy trình hỗ trợ pháp lý linh hoạt. Mỗi bước gồm: **Thứ tự**, **Tên bước**, **SLA riêng cho bước** (số ngày làm việc), **Quy tắc phân công tự động**. **Lưu ý khi sửa quy trình:** hồ sơ đang xử lý vẫn giữ snapshot quy trình cũ; chỉ hồ sơ tạo mới (sau thời điểm thay đổi) mới áp dụng quy trình mới | Luôn (chỉ QTHT) |
+| **Ngày lễ** `[NEW 2026-05-06]` | `NGAY_LE` (FR-VIII-29) | Bảng CRUD ngày lễ + import Excel + calendar view. Schema chờ BA Q1 chốt (FR Inputs `ngay_bat_dau`/`ngay_ket_thuc`/`lap_lai_hang_nam` vs entity 3.4.3.51 `ngay`/`nam`/`loai`). Hỗ trợ tính SLA trừ ngày lễ theo BR-CALC-03 | Luôn (chỉ QTHT) |
 
 **Xem chi tiết cần dữ liệu từ:** KHÔNG cần module khác (module gốc).
 
@@ -114,8 +122,9 @@ Password mặc định: `Secret@123`.
 
 | Thao tác | Actor | Trigger | Màn hình | Dữ liệu nhập | Nguồn dropdown / Filter |
 |----------|-------|---------|----------|--------------|-------------------------|
-| **🖐️ Tạo Đơn vị** | `qtht_01` | [+ Thêm đơn vị con] trên node tree | **SCR-VIII-01** tab "Cơ quan ĐV" (UC103) | `ma_don_vi`, `ten_don_vi`, `cap ∈ {TW, BN, DP}`, `don_vi_cha_id`, địa chỉ, ĐT, email | `don_vi_cha_id` ← **cây DON_VI hiện có** (tree picker — cấp con phải là cấp cha +1) |
-| **🖐️ Tạo Tài khoản** | `qtht_01` | [+ Thêm TK] | **SCR-VIII-03** Quản lý Tài khoản NSD | `username` (unique), `email`, `ho_ten`, `vai_tro_id`, `don_vi_id` | `vai_tro_id` ← `VAI_TRO` (quản lý ở SCR-VIII-02); `don_vi_id` ← **DON_VI filter theo cấp của vai trò** |
+| **🖐️ Tạo Đơn vị** | `qtht_01` | [+ Thêm đơn vị con] trên node TW | **SCR-VIII-01** tab "Cơ quan ĐV" (UC103) | `ma_don_vi`, `ten_don_vi`, `cap ∈ {TW, BN, DP}`, `don_vi_cha_id`, `tinh_thanh_id` (mới v3.5), địa chỉ, ĐT, email | `don_vi_cha_id` ← **cây DON_VI 2 tầng**: NULL khi cap=TW; **PHẢI = TW** khi cap=BN hoặc cap=DP (BR-AUTH-02). Tạo ĐP với cha = BN → ERR-DV-02 |
+| **🖐️ Tạo Tài khoản** | `qtht_01` | [+ Thêm TK] | **SCR-VIII-03** Quản lý Tài khoản NSD | `username` (theo BR-AUTH-USERNAME-01: DN auto = MST 10 chữ số; CB nội bộ QTHT đặt; TVV/CG auto local-part email; NHT do CB NV nhập), `email` (unique trên TAI_KHOAN.email — BR-AUTH-EMAIL-01), `ho_ten`, mật khẩu (≥8 ký tự + hoa + thường + số + **ký tự đặc biệt** `[GAP-VIII-04]`), `vai_tro_id`, `don_vi_id`. State entry: CHO_KICH_HOAT (gửi mail kích hoạt qua FR-VIII-26) | `vai_tro_id` ← `VAI_TRO` (quản lý ở SCR-VIII-02); `don_vi_id` ← **DON_VI filter theo cấp của vai trò** |
+| **🖐️ Phân quyền cho TK CHO_PHAN_QUYEN** (mới v3.5 fix C.5) | `qtht_01` | Nút "Phân quyền" trong cột Hành động (SCR-VIII-03 row 16) | SCR-VIII-03 | Gán `vai_tro` + `don_vi_id` cho TK ở state CHO_PHAN_QUYEN → chuyển HOAT_DONG | ⚠️ **BLOCKED chờ BA Q3** — sau FR-VIII-22 bypass, scenario nào còn trigger CHO_PHAN_QUYEN? Xem [bug-report-r7-srs-fr10-inconsistency.md](../../output/qa-reports/round7-2026-05-06/bug-reports/bug-report-r7-srs-fr10-inconsistency.md) BUG-SRS-FR10-003 |
 | **🖐️ Tạo Vai trò** | `qtht_01` | [+ Thêm vai trò] | **SCR-VIII-02** Quản lý Vai trò | `ten_vai_tro`, `mo_ta`, danh sách quyền hạn | `quyen_ids[]` ← danh sách quyền (set ở SCR-VIII-04) |
 | **🖐️ Phân quyền chức năng** | `qtht_01` | Gán quyền | **SCR-VIII-04** Phân quyền Chức năng | Mapping vai_tro × quyen | — |
 | **🖐️ Phân quyền dữ liệu** | `qtht_01` | Gán scope | **SCR-VIII-05** Phân quyền Dữ liệu | Scope `{don_vi_id, phạm vi đọc/ghi}` cho mỗi vai trò | `don_vi_id` ← DON_VI |
@@ -123,7 +132,8 @@ Password mặc định: `Secret@123`.
 | Kích hoạt / Vô hiệu hóa Đơn vị | `qtht_01` | Toggle trạng thái | SCR-VIII-01 tab Cơ quan ĐV | — | Cảnh báo "Thay đổi cấp/đơn vị cha sẽ cập nhật chính sách phân quyền" khi đổi cấp/cha (srs-fr-10 §3 row 20) |
 | Vô hiệu hóa Tài khoản | `qtht_01` | Toggle | SCR-VIII-03 | — | Guard: TK không đang phân công VV/Hỏi Đáp |
 | **🖐️ Cấu hình SLA** | `qtht_01` | Form | SCR-VIII-06 Tab 1 (SLA) | Thời hạn xử lý (ngày làm việc) cho từng module: **Hỏi đáp** (`deadline_hoi_dap`), **Vụ việc** (`deadline_vu_viec`, mặc định `10`), **Chi trả** (`deadline_chi_tra`), **Hạn bổ sung hồ sơ** (`bo_sung_timeout` — xem BR-EC-16) | Nhập số ngày LV |
-| **🖐️ Cấu hình Phân công** | `qtht_01` | [+ Thêm mapping] | SCR-VIII-06 Tab 2 (Phân công mặc định) | **Lĩnh vực PL** (`linh_vuc_id`), **Người xử lý** (`nguoi_xu_ly_id` — 1 tài khoản), **Loại yêu cầu áp dụng** (`loai_yeu_cau` ∈ `HOI_DAP` / `VU_VIEC` / `TU_VAN_CS` / `TAT_CA`), **Độ ưu tiên** (`uu_tien`, mặc định `1`), **Đơn vị** (`don_vi_id`) | Entity `CAU_HINH_PHAN_CONG` (FR-II-NEW-01) — mỗi dòng là 1 quy tắc gợi ý, được dùng làm nguồn dropdown phân công cho **FR-02 Hỏi đáp / FR-05 Vụ việc / FR-12 Tư vấn chuyên sâu** |
+| ~~**🖐️ Cấu hình Phân công**~~ | ⚠️ **DEPRECATED 2026-05-06** — User chốt bỏ feature. Entity `CAU_HINH_PHAN_CONG` + FR-II-NEW-01 không còn dùng | — | — | — | — |
+| **🖐️ Cấu hình Ngày lễ** `[NEW 2026-05-06]` | `qtht_01` | [+ Thêm ngày lễ] hoặc Import Excel | SCR-VIII-06 Tab 4 (Ngày lễ — gộp vào Cấu hình HT theo user chốt 2026-05-06) | Schema chờ BA Q1 — nếu theo FR Inputs: `ten_ngay_le`, `ngay_bat_dau`, `ngay_ket_thuc`, `mo_ta`, `lap_lai_hang_nam`. Nếu theo entity 3.4.3.51: `ngay` (single), `nam`, `ten_ngay_le`, `loai`, `ghi_chu` | — |
 | **🖐️ Tạo Mẫu phản hồi** | `qtht_01` | Form | SCR-VIII-06 Tab 3 (Mẫu phản hồi) | **Tên mẫu** (`ten_mau`), **Lĩnh vực** (`linh_vuc_id`), **Nội dung mẫu** (`noi_dung_mau`, Rich text) | `linh_vuc_id` ← danh mục `LINH_VUC_PL` (FR-10) |
 
 ---
@@ -218,14 +228,14 @@ Password mặc định: `Secret@123`.
 | **Hồ sơ** | Dữ liệu TVV hiện tại: `TU_VAN_VIEN` + `HO_SO_TU_VAN_VIEN` (§3.4.3.28, 1-1) + danh sách tổ chức đối tác `TVV_TO_CHUC` (§3.4.3.4b, N-N) | Hiển thị 5 accordion con ở chế độ chỉ đọc (cùng cấu trúc với form SCR-IV-02): Cá nhân / Nghề nghiệp / Tổ chức & Mạng lưới / File đính kèm / Ghi chú | Luôn |
 | **Thẩm định** | Lưu vào `HO_SO_TU_VAN_VIEN.trang_thai_tham_dinh` (`CHUA_THAM_DINH` / `DANG_THAM_DINH` / `DAT` / `KHONG_DAT`) + `HO_SO_TU_VAN_VIEN.ket_qua_tham_dinh` (text). **Lưu ý:** SRS không có entity `THAM_DINH_TVV` riêng — kết quả thẩm định lưu ngay trong `HO_SO_TU_VAN_VIEN` | Form chấm thẩm định theo 4 nhóm tiêu chí: **Pháp lý** (Pass/Fail), **Năng lực**, **Hiệu quả**, **Mạng lưới**. Mỗi tiêu chí lấy từ `TIEU_CHI_DANH_GIA` (§3.4.3.42) với `nhom_tieu_chi='THAM_DINH_TVV'`. Cuối form có trường **Kết luận** | Chỉ hiển thị khi TVV đang ở trạng thái `DANG_THAM_DINH` hoặc `CHO_PHE_DUYET` |
 | **Năng lực** | Lưu trong các cột của `HO_SO_TU_VAN_VIEN`: `bang_cap_chi_tiet`, `chung_chi_chi_tiet`, `kinh_nghiem_chi_tiet` (cả 3 đều là JSON array kiểu `text(long)`, §3.4.3.28) + `noi_dung_tom_tat` | Hiển thị chi tiết bằng cấp / chứng chỉ / kinh nghiệm dạng cấu trúc JSON + đoạn tóm tắt năng lực | Luôn |
-| **Lịch sử hỗ trợ** | Tổng hợp từ 3 nguồn: **FR-05 Vụ việc** (`VU_VIEC WHERE nguoi_ho_tro_id=<current>`), **FR-12 Tư vấn chuyên sâu** (`NOI_DUNG_TU_VAN_CS WHERE chuyen_gia_id=<current>`, §3.4.3.9), và bảng lịch sử `LICH_SU_HO_TRO_TVV` (§3.4.3.30) | Bảng các vụ việc + nội dung TV chuyên sâu TVV đã tham gia + 3 chỉ số KPI (Tổng VV, Đã hoàn thành, Điểm trung bình) + timeline thời gian | Luôn |
+| **Lịch sử hỗ trợ** | Tổng hợp từ 3 nguồn: **FR-05 Vụ việc** (`VU_VIEC WHERE nguoi_ho_tro_id=<current>`), **FR-12 Tư vấn pháp luật chuyên sâu** (`TU_VAN_CHUYEN_SAU WHERE chuyen_gia_id=<current>`, §3.4.3.9 — ⚠️ **rename 2026-05-06 FR-12 v3.5 Thay đổi 2** từ `NOI_DUNG_TU_VAN_CS`), và bảng lịch sử `LICH_SU_HO_TRO_TVV` (§3.4.3.30) | Bảng các vụ việc + nội dung TV pháp luật chuyên sâu TVV đã tham gia + 3 chỉ số KPI (Tổng VV, Đã hoàn thành, Điểm trung bình) + timeline thời gian | Luôn |
 | **Đánh giá** | 2 nguồn (theo SRS update 2026-05-05): (a) `DANH_GIA_TU_VAN_VIEN` thẩm định nội bộ FR-IV-06 — Nhóm 1 Pháp lý boolean Đạt/Không đạt, Nhóm 2 Năng lực 1-5, Nhóm 3 Hiệu quả 1-5 (nullable), Nhóm 4 Mạng lưới boolean (cite `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:2110-2117`); (b) `DANH_GIA_SAU_VU_VIEC` đánh giá DN sau VV FR-IV-09 — 3 tiêu chí 1-5 (chuyên môn / thái độ / đúng hạn), TB lưu ở `TU_VAN_VIEN.diem_danh_gia_tb` (DECIMAL 1.0-5.0, cite `:2013` + `:2138-2157`) | **Tab hiển thị 2 section:** (1) Kết quả thẩm định nội bộ (4 nhóm tiêu chí); (2) Đánh giá từ DN sau vụ việc (3 tiêu chí 1-5) + Nhận xét + Ngày ĐG. Form tạo ĐG mới chỉ mở khi user có quyền chấm | Luôn |
 
 **Xem chi tiết cần dữ liệu từ:**
 - **FR-10 Quản trị** → danh mục Lĩnh vực PL, Tổ chức tư vấn, Học vị, Chức danh
 - **FR-10 Quản trị** → cây Đơn vị `DON_VI` (Sở TP quản lý TVV cấp ĐP)
 - **FR-05 Vụ việc** → `VU_VIEC` (cho tab Lịch sử hỗ trợ)
-- **FR-12 Tư vấn chuyên sâu** → `YEU_CAU_TV_CS` (cho tab Lịch sử của Chuyên gia)
+- **FR-12 Tư vấn pháp luật chuyên sâu** `[RENAMED v3.5 Thay đổi 1]` → `TU_VAN_CHUYEN_SAU` (rename từ `NOI_DUNG_TU_VAN_CS` / `YEU_CAU_TV_CS` — FR-12 v3.5 Thay đổi 2) cho tab Lịch sử của Chuyên gia
 
 **🖐️ Nhập tay:** ✅ **Có, 2 kênh:**
 - **Tự đăng ký (NHT public)** — NHT đăng ký tham gia MLTV qua form public — trạng thái ban đầu `MOI_DANG_KY`
@@ -281,7 +291,7 @@ Password mặc định: `Secret@123`.
 | **🖐️ Tạo biểu mẫu** | `cb_nv_<cap>_01` | [+ Thêm biểu mẫu] | SCR-VII-02 | `ten`, `linh_vuc_id` (Y), `loai_bieu_mau_id`, file đính kèm (doc/docx/xls/xlsx/pdf), `mo_ta`, `version` | `linh_vuc_id` ← FR-10 DANH_MUC LINH_VUC_PL<br>`loai_bieu_mau_id` ← FR-10 DANH_MUC loại LOAI_BIEU_MAU |
 | **🖐️ Upload version mới** | `cb_nv_<cap>_01` | [+ Version] | SCR-VII-02 | File mới + ghi chú thay đổi | Version cũ auto archive |
 | **🖐️ Import hàng loạt** (UC97) | `cb_nv_<cap>_01` | [Nhập hàng loạt] | SCR-VII-03 | `thu_muc_id` + multi-file (max 50 file, ≤20MB/file, tổng ≤500MB). Báo cáo: "N thành công / M lỗi" | `thu_muc_id` ← thư mục BIEU_MAU hiện có |
-| Công khai | `cb_nv_<cap>_01` | Toggle `la_cong_khai` | SCR-VII-02 | — | Đẩy API Cổng PLQG (FR-16) |
+| Công khai | `cb_nv_<cap>_01` | Switch "Công khai trên Cổng PLQG" → toggle `cong_khai` (v3.5 rename CR-01) | SCR-VII-02 | `anh_dai_dien` (jpg/png/gif ≤5MB), `mo_ta_cong_khai` (text long), `file_dinh_kem_cong_khai` (file[] PDF/DOC/DOCX/XLS/XLSX ≤20MB). Auto-fill `thoi_gian_dang_tai`=NOW() (BR-PUBLIC-03). | Đẩy API Cổng PLQG (FR-16) — filter outbound rename `cong_khai=1` |
 | Xóa | `cb_nv_<cap>_01` | [Xóa] | SCR-VII-01 | — | Guard: nếu đang công khai, phải unpublish trước |
 
 **Đầu ra:** Share API FR-XII (FR-16) cho Cổng PLQG.
@@ -376,17 +386,21 @@ Password mặc định: `Secret@123`.
 | **Nội dung Yêu cầu** | Chính bản ghi VV: `VU_VIEC WHERE id=<current>` | **Tiêu đề** (`tieu_de`), **Mô tả** (`mo_ta`), **Lĩnh vực PL** (`linh_vuc_id`), **Loại hình HT** (`loai_hinh_ht_id`), **Vướng mắc**, **Ghi chú** | Luôn |
 | **Tài liệu Đính kèm** | Các file gắn với VV: `FILE_DINH_KEM WHERE entity='VU_VIEC' AND entity_id=<current>` | Danh sách file (tên / loại / kích thước / ngày upload) + nút [Upload thêm] | Luôn |
 | **Kết quả Kiểm tra (FR-V.I-06 = UC56)** | `KIEM_TRA_VV WHERE vu_viec_id=<current>` | Checklist 6 hạng mục (Đạt / Không đạt), các hạng mục lấy từ danh mục cấu hình ở **UC106 "DM Hồ sơ đề nghị HT" (FR-10 Quản trị)**: **Mẫu 01 NĐ55**, **Giấy ĐKKD**, **Quy mô DN**, **Hợp đồng TV**, **Văn bản TV đầy đủ**, **Văn bản TV loại BMKD** + ô **Kết luận** + ô **Lý do** + **Đếm số lần yêu cầu bổ sung** (tối đa 3 — quy tắc `BR-EC-15`) | Chỉ hiển thị khi VV đã qua trạng thái `DANG_KIEM_TRA` |
-| **Phân công NHT/TVV** | `PHAN_CONG WHERE vu_viec_id=<current>` + join sang `TU_VAN_VIEN` | Thông tin TVV được phân công: Tên TVV, lĩnh vực chuyên môn, địa bàn, ngày phân công, **trạng thái xác nhận tham gia** (`CHO_XAC_NHAN` / `DA_XAC_NHAN` / `TU_CHOI`) | Chỉ hiển thị khi VV đã qua `DA_PHAN_CONG` |
+| **Phân công xử lý** | `PHAN_CONG_VU_VIEC WHERE vu_viec_id=<current>` (entity owned mới — SRS update 2026-05-06) + join `TAI_KHOAN` (qua `nguoi_xu_ly_id`) + `TO_CHUC_TU_VAN` (qua `to_chuc_tu_van_id` nếu loại=TO_CHUC) | **2 thẻ phân công** (FR-V.I-09 refactor — Thay đổi 8): (a) `loai_doi_tuong_xu_ly='CA_NHAN'` → hiển thị Tên cá nhân (TVV/CG/NHT), lĩnh vực chuyên môn, **đơn vị quản lý** (Sở TP/Bộ ngành công nhận — KHÔNG dùng "địa bàn" do NĐ 77/2008 Đ.19); (b) `loai_doi_tuong_xu_ly='TO_CHUC'` → hiển thị Tên tổ chức + TVV cụ thể được cử (constraint `to_chuc_chinh_id` match). Cộng thêm: ngày phân công, **`trang_thai`** (`CHO_XAC_NHAN` / `CHAP_NHAN` / `TU_CHOI`), `ly_do_tu_choi` nếu có. | Chỉ hiển thị khi VV đã qua `DA_PHAN_CONG` |
 | **Kết quả Hỗ trợ** | `KET_QUA_HO_TRO WHERE vu_viec_id=<current>` | **Nội dung kết quả** (TVV cập nhật), **File kết quả**, **Kết luận cuối cùng** (CB NV tổng hợp) | Chỉ hiển thị khi VV đã qua `DANG_XU_LY` |
 | **Phê duyệt** | `PHE_DUYET WHERE entity='VU_VIEC' AND entity_id=<current>` | **Quyết định** (Duyệt / Từ chối), **Người phê duyệt** (`nguoi_phe_duyet_id`), **Thời gian**, **Lý do từ chối** (nếu có) | Chỉ hiển thị khi VV đã qua `CHO_PHE_DUYET` |
-| **Đánh giá** | `DANH_GIA_VV WHERE vu_viec_id=<current>` | **Điểm đánh giá** (`diem_danh_gia`, thang 0-10) theo 3 tiêu chí: **Chất lượng** / **Thời gian** / **Thái độ** + **Điểm tổng** + **Nhận xét** | Chỉ hiển thị khi VV ở `HOAN_THANH` hoặc `DA_DANH_GIA` |
+| **Đánh giá** | `DANH_GIA_VU_VIEC WHERE vu_viec_id=<current>` (entity owned mới — SRS update 2026-05-06 Thay đổi 12+17) | **Điểm đánh giá** thang **0-10** (KHÁC thang TVV 1.0-5.0 ở FR-04) theo 3 tiêu chí: **Chất lượng** (`diem_chat_luong`) / **Thời gian** (`diem_thoi_gian`) / **Thái độ** (`diem_thai_do`) — `diem_tong` AUTO=AVG(3 điểm). Cộng `nhan_xet` ≤2000 ký tự, `loai_nguoi_danh_gia` ENUM **CHỈ {CB_NV, DN}** (loại CB_PD theo CSV UC67). UNIQUE(`vu_viec_id`, `loai_nguoi_danh_gia`) — chấm 2 lần cùng loại → `ERR-DG-VV-04` | Chỉ hiển thị khi VV ở `HOAN_THANH` hoặc `DA_DANH_GIA` |
+
+> **🆕 Cờ overlay Công khai (FR-V.I-NEW-05 — NEW 2026-05-06, KHÔNG phải accordion riêng):**
+> Trên SCR-V.I-03 khi VV ở `DA_DUYET` hoặc `HOAN_THANH` xuất hiện **Badge xanh dương "Đã công khai"** + tooltip "Đã công khai trên Cổng PLQG ngày dd/mm/yyyy" (chỉ hiển thị khi `cong_khai=1`) + 2 nút **[Công khai]** / **[Hủy công khai]** chỉ hiển thị cho **CB PD cùng cấp** (BR-AUTH-05). Click [Công khai] → form soạn `mo_ta_cong_khai` ≤2000 ký tự (CB PD soạn riêng — KHÔNG auto-extract từ mo_ta nội bộ) + upload `anh_dai_dien` (jpg/png/gif ≤5MB) + chọn `file_dinh_kem_cong_khai` (≤10 file ≤20MB/file). BE check BR-PUBLIC-01 + gọi API Cổng PLQG (whitelist 9 fields BR-PUBLIC-04 — ẨN 6 fields nhạy cảm: tên DN/người đại diện, CCCD/MST, mo_ta nội bộ, file_dinh_kem nghiệp vụ, noi_dung_tu_van, SĐT/email/địa chỉ DN — anonymize NQ 03/2017). API OK → set `cong_khai=1` + `thoi_gian_dang_tai=NOW()` (BR-EC-20: KHÔNG set trước API OK). 9 mã lỗi `ERR-CK-VV-01..10`.
 
 **Xem chi tiết cần dữ liệu từ:**
-- **FR-07 Doanh nghiệp** → `DOANH_NGHIEP` (để chọn `doanh_nghiep_id`)
-- **FR-04 CG/TVV** → 2 entity tách (SRS update 2026-05-05): (a) `TU_VAN_VIEN` cho TVV/CG cá nhân ngoài (`loai_tvv ∈ ('TVV','CG')`); (b) `NGUOI_HO_TRO` cho NHT cán bộ HTPL nội bộ (NĐ 55/2019 Đ.7). Dropdown phân công VV (UC59) hiển thị 2 thẻ "Cá nhân tư vấn" (TU_VAN_VIEN) + "Người hỗ trợ pháp lý" (NGUOI_HO_TRO). Cite: `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:1998` + `:2032`
+- **FR-07 Doanh nghiệp** → `DOANH_NGHIEP` (lookup theo MST từ session DN auth Tier 2 VNeID — KHÔNG nhập tay 4 field DN info, FR-V.I-04 Thay đổi 16)
+- **FR-04 CG/TVV** → 3 entity (SRS update 2026-05-06 v3.5): (a) `TU_VAN_VIEN` cho TVV/CG cá nhân ngoài (`loai_tvv ∈ ('TVV','CG')` — bỏ NHT khỏi enum); (b) `NGUOI_HO_TRO` cho NHT cán bộ HTPL nội bộ (NĐ 55/2019 Đ.7); (c) `TO_CHUC_TU_VAN` cho tổ chức tư vấn (Công ty Luật / VP Luật sư / Trung tâm TVPL). **Modal phân công VV (UC59 / FR-V.I-09)** hiển thị **2 thẻ** (Thay đổi 8): "Cá nhân" (TVV/CG/NHT qua TAI_KHOAN) + "Tổ chức tư vấn" (TO_CHUC_TU_VAN — sau khi chọn TC, load TVV thuộc tổ chức để chọn người cụ thể). Cite: `srs-update-2026-5-5/srs-fr-05-vu-viec.md` FR-V.I-09 + `srs-fr-04-chuyen-gia-tvv.md:1998` + `:2032`
 - **FR-10 Quản trị** → danh mục Lĩnh vực (`linh_vuc_id`), Loại hình HT (`loai_hinh_ht_id`)
-- **FR-10 Quản trị** → `CAU_HINH_SLA` (thời hạn xử lý 10 ngày làm việc theo NĐ55 Điều 9)
-- **FR-10 Quản trị** → `TAI_KHOAN` (`nguoi_tiep_nhan_id`, `nguoi_phe_duyet_id`)
+- **FR-10 Quản trị** → `CAU_HINH_SLA` (thời hạn xử lý **15 ngày làm việc** theo **NĐ55 Điều 8 Khoản 1** — DNNVV; update 2026-05-06 từ 10 ngày v3 — Thay đổi 1)
+- **FR-10 Quản trị** → `TAI_KHOAN` (`nguoi_tiep_nhan_id`, `nguoi_phe_duyet_id`, `nguoi_xu_ly_id` qua entity PHAN_CONG_VU_VIEC mới)
+- **FR-10 Quản trị** → `TO_CHUC_TU_VAN` (`to_chuc_tu_van_id` cho phân công loại=TO_CHUC)
 - **FR-14 Hợp đồng tư vấn** → `HOP_DONG_TU_VAN` (liên kết 2 chiều qua `hop_dong_tv_id`)
 
 **🖐️ Nhập tay:** ✅ **Có — UC54 "Nhập hồ sơ yêu cầu thủ công"** tại **SCR-V.I-02**:
@@ -402,21 +416,23 @@ Password mặc định: `Secret@123`.
 | — | `MOI_TAO` | System | **DN gửi qua DVC (UC52, API inbound)** | Mẫu 01 NĐ55 (18 trường) | — | API inbound |
 | — | `CHO_TIEP_NHAN` | System | **DVC / Hệ thống khác (UC55, API nhận)** | Payload nhận qua trục LGSP, kèm: **Hệ thống nguồn** (`he_thong_nguon`, chọn từ danh mục), **Mã hồ sơ gốc bên hệ thống nguồn** (`ma_ho_so_nguon`) | `he_thong_nguon` ← danh mục `HE_THONG_NGUON` (FR-10 Quản trị) | API nhận từ ngoài |
 | — | `DA_TIEP_NHAN` | `cb_nv_<cap>_01` | **🖐️ Thêm thủ công (UC54) — kênh `TRUC_TIEP` / `BUU_CHINH` / `DIEN_THOAI`** | **Tiêu đề** (`tieu_de`), **Mô tả** (`mo_ta`), **DN** (`doanh_nghiep_id`), **Lĩnh vực PL** (`linh_vuc_id`), **Loại hình HT** (`loai_hinh_ht_id`), **Kênh tiếp nhận** (`kenh_tiep_nhan`), **Độ ưu tiên** (`uu_tien`, thang 1-5), **Lý do ưu tiên** (`ly_do_uu_tien`) | `doanh_nghiep_id` ← **FR-07 Doanh nghiệp** (dropdown có search); `linh_vuc_id` + `loai_hinh_ht_id` ← danh mục của **FR-10 Quản trị** | **SCR-V.I-02** Form nhập tay (bỏ qua 2 trạng thái `MOI_TAO` + `CHO_TIEP_NHAN`, vào thẳng `DA_TIEP_NHAN`) |
-| `CHO_TIEP_NHAN` | `DA_TIEP_NHAN` | `cb_nv_<cap>_01` | [Tiếp nhận] | Hệ thống tự gán **Người tiếp nhận** (`nguoi_tiep_nhan_id`) + **Ngày tiếp nhận** (`ngay_tiep_nhan`) + **Hạn xử lý** (`deadline` = 10 ngày làm việc theo NĐ55 Điều 9) | `CAU_HINH_SLA` ← **FR-10 Quản trị** | SCR-V.I-03 |
+| `CHO_TIEP_NHAN` | `DA_TIEP_NHAN` | `cb_nv_<cap>_01` | [Tiếp nhận] | Hệ thống tự gán **Người tiếp nhận** (`nguoi_tiep_nhan_id`) + **Ngày tiếp nhận** (`ngay_tiep_nhan`) + **Hạn xử lý** (`deadline` = **15 ngày làm việc** theo **NĐ55 Điều 8 Khoản 1** — DNNVV; update 2026-05-06) | `CAU_HINH_SLA` ← **FR-10 Quản trị** | SCR-V.I-03 |
 | `DA_TIEP_NHAN` | `DANG_KIEM_TRA` | `cb_nv_<cap>_01` | [Bắt đầu kiểm tra] (UC56, FR-V.I-06) | Checklist 6 hạng mục lấy từ cấu hình UC106: **Mẫu 01**, **Giấy ĐKKD**, **Quy mô DN**, **HĐ Tư vấn**, **Văn bản TV đầy đủ**, **Văn bản TV loại BMKD** | — | SCR-V.I-03 |
-| `DANG_KIEM_TRA` | `DA_PHAN_CONG` | `cb_nv_<cap>_01` | **Phân công TVV/NHT (UC59, FR-V.I-09)** | **Người hỗ trợ** (`nguoi_ho_tro_id`, bắt buộc) | Dropdown chọn TVV từ `TU_VAN_VIEN` — áp dụng quy tắc ưu tiên `BR-CALC-05` (theo NĐ55 Điều 4) với các điều kiện lọc:<br>• TVV đang `DANG_HOAT_DONG` **VÀ** có `la_cong_khai = 1`<br>• **Lĩnh vực chuyên môn** khớp `linh_vuc_id` của VV<br>• **Địa bàn** phù hợp (cùng Sở TP — lọc kép theo `BR-AUTH-10`)<br>• **Ưu tiên theo NĐ55 Điều 4**: (1) DN do phụ nữ làm chủ, (2) DN có nhiều LĐ nữ, (3) DN có ≥30% LĐ khuyết tật, (4) FIFO (DN nộp trước xử lý trước)<br>• CB NV được quyền override nếu muốn chọn TVV khác gợi ý | SCR-V.I-03 Modal phân công NHT/TVV |
-| `DANG_KIEM_TRA` | `YEU_CAU_BO_SUNG` | `cb_nv_<cap>_01` | Thiếu HS | Danh sách item thiếu | — | SCR-V.I-03 |
+| `DANG_KIEM_TRA` | `DA_PHAN_CONG` | `cb_nv_<cap>_01` | **Phân công xử lý (UC59, FR-V.I-09 — refactor 2026-05-06)** | **3 cột phân công** (Thay đổi 8 — bỏ `nguoi_ho_tro_id`):<br>• `loai_doi_tuong_xu_ly` ENUM `('CA_NHAN','TO_CHUC')` (bắt buộc)<br>• `nguoi_xu_ly_id` FK→TAI_KHOAN (bắt buộc cả 2 loại)<br>• `to_chuc_tu_van_id` FK→TO_CHUC_TU_VAN (REQUIRED khi loại=TO_CHUC) | **Modal 2 thẻ** (FR-V.I-09 Inputs 5 fields):<br>**Thẻ Cá nhân** — TAI_KHOAN có vai trò TVV/CG (qua TU_VAN_VIEN.tai_khoan_id, state HOAT_DONG, đã công khai) HOẶC NHT (qua NGUOI_HO_TRO.tai_khoan_id, state HOAT_DONG)<br>**Thẻ Tổ chức tư vấn** — TO_CHUC_TU_VAN state HOAT_DONG; sau chọn TC → load danh sách TVV thuộc tổ chức để chọn người cụ thể (constraint `TU_VAN_VIEN[nguoi_xu_ly_id].to_chuc_chinh_id = to_chuc_tu_van_id` — fail → ERR-PC-06)<br>**Quy tắc ưu tiên `BR-CALC-04`** (NĐ55 Điều 4): (1) DN do phụ nữ làm chủ +3, (2) DN nhiều LĐ nữ +2, (3) DN ≥30% LĐ khuyết tật +2, (4) FIFO +1<br>**Lọc:** lĩnh vực khớp `linh_vuc_id`; **KHÔNG dùng "địa bàn"** (NĐ 77/2008 Đ.19 — TVV scope toàn quốc)<br>CB NV được override gợi ý<br>**Mã lỗi:** ERR-PC-01..02, ERR-PC-05..07 + WRN-PC-01 | SCR-V.I-03 Modal phân công 2 thẻ |
+| `DANG_KIEM_TRA` | `YEU_CAU_BO_SUNG` | `cb_nv_<cap>_01` | Thiếu HS | Danh sách item thiếu + set `ngay_yeu_cau_bo_sung=NOW()` (FR-V.I-NEW-02 + BR-EC-16) | — | SCR-V.I-03 |
 | `DANG_KIEM_TRA` | `TU_CHOI` | `cb_nv_<cap>_01` | Không đạt | Lý do từ chối | — | SCR-V.I-03 |
-| `YEU_CAU_BO_SUNG` | `DANG_KIEM_TRA` | DN | Bổ sung HS (qua DVC) | File bổ sung | — | API inbound |
-| `YEU_CAU_BO_SUNG` | `TU_CHOI` | System | **Auto (BR-EC-16)**: quá `bo_sung_timeout` ngày LV, hoặc >3 lần bổ sung (BR-EC-15) | — | `CAU_HINH_SLA.bo_sung_timeout` ← FR-10 | Auto |
-| `DA_PHAN_CONG` | `DANG_XU_LY` | `tvv_01` / `nht_01` | Xác nhận tham gia | — | — | SCR-V.I-03 |
-| `DA_PHAN_CONG` | `DA_TIEP_NHAN` | `tvv_01` / `nht_01` | Từ chối phân công | Lý do | — | SCR-V.I-03 (quay lại chọn TVV khác) |
-| `DANG_XU_LY` | `CHO_PHE_DUYET` | `cb_nv_<cap>_01` | [Trình duyệt] | Guard: TVV đã cập nhật KQ | — | SCR-V.I-03 |
+| `YEU_CAU_BO_SUNG` | `DANG_KIEM_TRA` | **DN (auth Tier 2 VNeID)** | **DN bổ sung HS qua chuyên trang (FR-V.I-NEW-02 — formal hoá 2026-05-06 Thay đổi 4)** | `file_bo_sung[]` PDF/DOC/DOCX/XLS/XLSX/JPG/PNG ≤20MB/file, tổng ≤100MB, max 10 file (quét virus); `ghi_chu` ≤5000 ký tự | DN auth qua VNeID Tier 2 trên SCR-V.I-04 → click VV badge "Cần bổ sung" → form upload | SCR-V.I-04 chuyên trang DN |
+| `YEU_CAU_BO_SUNG` | `TU_CHOI` | System | **Auto (BR-EC-16)**: quá `bo_sung_timeout` ngày LV (Thay đổi 6 OUT — chỉ có quy tắc UI v3 + BR-EC-15) | — | `CAU_HINH_SLA.bo_sung_timeout` ← FR-10 | Auto |
+| `DA_PHAN_CONG` | `DANG_XU_LY` | Cá nhân tại `nguoi_xu_ly_id` (TVV/CG/NHT) | [Chấp nhận] tham gia | PHAN_CONG_VU_VIEC.trang_thai='CHAP_NHAN', `ngay_xac_nhan=NOW()` | — | SCR-V.I-03 |
+| `DA_PHAN_CONG` | `DA_TIEP_NHAN` | Cá nhân tại `nguoi_xu_ly_id` | [Từ chối phân công] | Lý do (PHAN_CONG_VU_VIEC.trang_thai='TU_CHOI', `ly_do_tu_choi`). Thay đổi 5 OUT — placeholder, dev implement theo UI v3 | — | SCR-V.I-03 (quay lại chọn người khác) |
+| `DANG_XU_LY` | `CHO_PHE_DUYET` | `cb_nv_<cap>_01` | [Trình duyệt] | Guard: cá nhân được phân công đã cập nhật KQ | — | SCR-V.I-03 |
 | `CHO_PHE_DUYET` | `DA_DUYET` | `cb_pd_<cap>_01` | [Duyệt] | Cùng cấp (BR-AUTH-05) — chỉ CB PD cùng đơn vị với CB NV trình | — | SCR-V.I-03 |
-| `CHO_PHE_DUYET` | `DANG_XU_LY` | `cb_pd_<cap>_01` | [Từ chối] | `ly_do` ≥10 ký tự (BR-FLOW-04) | — | SCR-V.I-03 |
+| `CHO_PHE_DUYET` | `DANG_XU_LY` | `cb_pd_<cap>_01` | **[Từ chối]** (Thay đổi 11 — KHÔNG còn `→ TU_CHOI` đóng VV như v3) | `ly_do` ≥10 ký tự (BR-FLOW-04). Cá nhân được phân công sửa KQ → CB NV trình lại. Ghi LICH_SU_VU_VIEC `hanh_dong='TU_CHOI_DUYET'` | — | SCR-V.I-03 |
 | `DA_DUYET` | `HOAN_THANH` | `cb_nv_<cap>_01` | [Đóng hồ sơ] | `ket_qua_tom_tat`, `ngay_hoan_thanh` | — | SCR-V.I-03 |
-| `HOAN_THANH` | `DA_DANH_GIA` | `cb_nv_<cap>_01` / người chấm | Thuộc đợt ĐG (UC67) | `diem_danh_gia` (0-10) | Chấm trong đợt FR-08 | SCR-VI-01 Tab Thực hiện chấm điểm |
-| `TU_CHOI` | `DA_TIEP_NHAN` | `qtht_01` / `cb_nv_<cap>_01` | Admin override / DN khiếu nại | Lý do mở lại | — | SCR-V.I-03 |
+| `HOAN_THANH` | `DA_DANH_GIA` | CB_NV hoặc DN — **KHÔNG cho CB_PD** (CSV UC67) | UC67 đánh giá VV (FR-V.I-17) | 3 tiêu chí điểm **0-10** (chất lượng / thời gian / thái độ) — `diem_tong` AUTO=AVG. UNIQUE(`vu_viec_id`, `loai_nguoi_danh_gia`) — chấm 2 lần cùng loại → ERR-DG-VV-04 | Tạo bản ghi `DANH_GIA_VU_VIEC` | SCR-V.I-03 accordion #8 |
+| `DA_DUYET` ↻ self-loop | `DA_DUYET` (cờ overlay `cong_khai=0→1` / `1→0`) | `cb_pd_<cap>_01` | **[Công khai] / [Hủy công khai]** trên DA_DUYET (FR-V.I-NEW-05) | Công khai: soạn `mo_ta_cong_khai` ≤2000 ký tự + upload `anh_dai_dien` jpg/png/gif ≤5MB + chọn `file_dinh_kem_cong_khai` ≤10 file ≤20MB; BE check BR-PUBLIC-01 + gọi API Cổng PLQG (whitelist 9 fields BR-PUBLIC-04 — ẨN tên DN/MST/CCCD/SĐT/email/địa chỉ/mo_ta nội bộ/file nghiệp vụ/noi_dung_tu_van — anonymize NQ 03/2017). API OK → set `cong_khai=1` + `thoi_gian_dang_tai=NOW()` (BR-EC-20). Hủy: `ly_do_huy` ≥20 ký tự → set `cong_khai=0`, clear `thoi_gian_dang_tai=NULL`, gỡ Cổng PLQG. 9 mã lỗi ERR-CK-VV-01..10 | — | SCR-V.I-03 |
+| `HOAN_THANH` ↻ self-loop | `HOAN_THANH` (cờ overlay `cong_khai=0→1` / `1→0`) | `cb_pd_<cap>_01` | **[Công khai] / [Hủy công khai]** trên HOAN_THANH (FR-V.I-NEW-05) | Tương tự self-loop trên DA_DUYET | — | SCR-V.I-03 |
+| `TU_CHOI` | `DA_TIEP_NHAN` | `qtht_01` / `cb_nv_<cap>_01` | Admin override / DN khiếu nại (Thay đổi 5 OUT — placeholder FR-V.I-xx, dev implement theo UI v3) | Lý do mở lại | — | SCR-V.I-03 |
 
 **Đầu ra → module sau:** FR-14 HĐ (gắn 1 VV = 1..N HĐ) · FR-06 Chi trả (cần VV `HOAN_THANH`) · FR-08 Đánh giá (chỉ VV `HOAN_THANH`).
 
@@ -506,11 +522,11 @@ Password mặc định: `Secret@123`.
 
 | Accordion | Entity + Filter | Data | Điều kiện hiển thị |
 |-----------|-----------------|------|--------------------|
-| **Thông tin cơ bản** | `NOI_DUNG_TU_VAN_CS` + join sang `DOANH_NGHIEP`, `TU_VAN_VIEN` | **Mã nội dung** (tự sinh), **Doanh nghiệp** (dropdown có search — khi chọn, hệ thống tự hiện MST / địa chỉ / người đại diện từ **FR-07 Doanh nghiệp**), **Chuyên gia** (dropdown lọc TVV đang `DANG_HOAT_DONG` từ **FR-04 CG/TVV** — khi chọn hiện chuyên môn / SĐT / email), **Lĩnh vực PL** (từ danh mục **FR-10 Quản trị**), **Ngày tư vấn**, **Ghi chú** (tối đa 2000 ký tự) | Luôn |
-| **Nội dung tư vấn** | `NOI_DUNG_TU_VAN_CS WHERE id=<current>` | **Nội dung tư vấn chi tiết** (soạn bằng **Rich Text Editor**, tối đa 50KB) + **Tóm tắt** (tối đa 500 ký tự) | Luôn |
+| **Thông tin cơ bản** | `TU_VAN_CHUYEN_SAU` (rename từ `NOI_DUNG_TU_VAN_CS` — FR-12 v3.5 Thay đổi 2) + join sang `DOANH_NGHIEP`, `TU_VAN_VIEN`, `DON_VI` (cơ quan tiếp nhận BR-ROUTE-TVCS-01 — FR-12 v3.5 Thay đổi 6), `HOP_DONG_TV` (link nhóm 14 — FR-12 v3.5 Thay đổi 13) | **Mã nội dung** (tự sinh), **Doanh nghiệp** (dropdown có search — khi chọn, hệ thống tự hiện MST / địa chỉ / người đại diện từ **FR-07 Doanh nghiệp**), **Chuyên gia** (dropdown lọc TVV đang `HOAT_DONG` rename từ `DANG_HOAT_DONG` theo FR-04 v3.5 từ **FR-04 CG/TVV** — khi chọn hiện chuyên môn / SĐT / email), **Lĩnh vực PL** (từ danh mục **FR-10 Quản trị**), **Cơ quan tiếp nhận** (`don_vi_id` — DN gửi từ Cổng chọn / mặc định Sở TP tỉnh DN, CB NV nhập tay = đơn vị CB đăng nhập — Thay đổi 6), **Ngày tư vấn**, **Ghi chú** (tối đa 2000 ký tự). ⚠️ **Bỏ field `hinh_thuc_tv` ở cấp Vụ việc** (FR-12 v3.5 Thay đổi 12 — đã move sang `PHIEN_TU_VAN.hinh_thuc`) | Luôn |
+| **Nội dung tư vấn** | `TU_VAN_CHUYEN_SAU WHERE id=<current>` | **Nội dung tư vấn chi tiết** (soạn bằng **Rich Text Editor**, tối đa 50KB) + **Tóm tắt** (tối đa 500 ký tự) | Luôn |
 | **Tư liệu PL liên kết** (UC152 — Quản lý tư liệu pháp lý của vụ việc, FR-X.1-06) | `TU_LIEU_PHAP_LY_VV WHERE noi_dung_tv_id=<current>` (entity §3.4.2 srs-v3.md:1025 — `Tư liệu pháp lý của vụ việc`) | Bảng tư liệu pháp lý gắn với nội dung TV — cột: **Tên** / **Loại** / **Trạng thái** (`NHAP` / `CONG_KHAI`) / **Số file** / **Hành động** + nút [+ Thêm tư liệu] thao tác inline | Luôn |
 | **Đánh giá chất lượng** (UC153 — Tiếp nhận đánh giá chất lượng TV với CG, FR-X.1-07) | `DANH_GIA_CHAT_LUONG_TV WHERE tu_van_cs_id=<current>` (entity §3.4.2 srs-v3.md:1026 — `Đánh giá chất lượng tư vấn với chuyên gia`) | Bảng đánh giá DN — cột: **Mã ĐG** / **Điểm** (thang 1-5 sao) / **Nhận xét DN** / **Ngày đánh giá**. Hiển thị thêm **Điểm trung bình** + **Tổng số lượt đánh giá**. Dữ liệu đến từ **API nhận từ Cổng PLQG** (DN đánh giá ngay trên Cổng) | Chỉ hiển thị ở chế độ "Xem chi tiết" |
-| **Nhật ký thao tác** | `AUDIT_LOG WHERE entity='NOI_DUNG_TU_VAN_CS' AND entity_id=<current>` | Timeline các thao tác: `dd/mm/yyyy HH:mm` · Người thực hiện · Hành động (bao gồm cả chuyển trạng thái + thao tác CUD — tạo/sửa/xóa) | Chỉ hiển thị ở chế độ "Xem chi tiết" |
+| **Nhật ký thao tác** | `AUDIT_LOG WHERE entity='TU_VAN_CHUYEN_SAU' AND entity_id=<current>` (rename entity per FR-12 v3.5 Thay đổi 2) | Timeline các thao tác: `dd/mm/yyyy HH:mm` · Người thực hiện · Hành động (bao gồm cả chuyển trạng thái + thao tác CUD — tạo/sửa/xóa + công khai/hủy công khai per BR-PUBLIC-01/02/03) | Chỉ hiển thị ở chế độ "Xem chi tiết" |
 
 **Action buttons theo trạng thái (action-bar cố định):**
 - `TIEP_NHAN`: [Hủy] [Lưu] [Phân công CG →]
@@ -674,18 +690,18 @@ Password mặc định: `Secret@123`.
 - SCR-V.II-01: Danh sách hồ sơ chi trả
 - SCR-V.II-02: Chi tiết hồ sơ (8 section — progressive disclose theo SM-CHITRA)
 
-**📑 Section SCR-V.II-02 Chi tiết Hồ sơ Chi trả — 8 section:**
+**📑 Section SCR-V.II-02 Chi tiết Hồ sơ Chi trả — 8 section:** *(Update 2026-05-06 v3.5 — đồng bộ entity tên chuẩn `THAM_DINH_HO_SO` + `PHE_DUYET_CHI_TRA` + 9 fields lifecycle HSCT)*
 
 | Section | Entity + Filter | Data | Điều kiện hiển thị |
 |---------|-----------------|------|--------------------|
-| **Thông tin DN** (read-only) | DN nộp hồ sơ: `DOANH_NGHIEP WHERE id=<ho_so.doanh_nghiep_id>` | Tên DN, MST, địa chỉ, loại DN, **Quy mô DN** (trường quan trọng — quyết định mức hỗ trợ theo `BR-CALC-01`), người đại diện. Dữ liệu tự động lấy từ payload DVC gửi sang | Luôn |
-| **Thông tin tư vấn** (read-only) | `VU_VIEC WHERE id=<ho_so.vu_viec_id>` + join `TU_VAN_VIEN` + `HOP_DONG_TU_VAN` | **Vướng mắc** (mô tả VV gốc lấy từ **FR-05 Vụ việc**), **Tên TVV**, **Phí tư vấn**, **Số tiền DN đề nghị chi trả** (`so_tien_de_nghi`), **Số HĐ tư vấn** (lấy từ **FR-14 Hợp đồng**) | Luôn |
-| **Kiểm tra Hồ sơ** | `KIEM_TRA_HS_CHI_TRA WHERE ho_so_id=<current>` | Checklist 18 trường theo Mẫu 01 NĐ55 (mỗi trường tick Đạt / Không đạt), ô **Kết quả kiểm tra**, ô **Lý do** (nếu không đạt), **Đếm số lần yêu cầu bổ sung** (tối đa 3 lần) | Chỉ hiển thị khi hồ sơ ở trạng thái `DANG_KIEM_TRA` |
-| **Đánh giá Tiêu chí** | `DANH_GIA_HO_SO WHERE ho_so_id=<current>` | **Mức hỗ trợ (%)** (`muc_ho_tro_phan_tram`) — áp dụng quy tắc `BR-CALC-01` theo quy mô DN, **Trần hỗ trợ/năm** (`tran_ho_tro_nam`), **Đã chi trong năm** (`da_chi_trong_nam`), **Số tiền được duyệt** (`so_tien_duoc_duyet` — hệ thống **tự tính theo công thức `BR-CALC-02`**: `MIN(so_tien_de_nghi, phi_tu_van × muc_ho_tro%, tran_ho_tro_nam − da_chi_trong_nam)`), **Ghi chú** | Chỉ hiển thị khi hồ sơ ở trạng thái `DANG_DANH_GIA` |
-| **Thẩm định** | `THAM_DINH_HS WHERE ho_so_id=<current>` | Checklist đối chiếu (khớp số liệu, quy mô DN), ô **Kết quả thẩm định**, ô **Lý do**, nút [Trình phê duyệt] | Chỉ hiển thị khi hồ sơ ở trạng thái `DANG_THAM_DINH` |
-| **Phê duyệt** | `PHE_DUYET WHERE entity='HO_SO_CHI_TRA' AND entity_id=<current>` | Hiển thị tóm tắt số tiền được duyệt + nút [Duyệt] / [Từ chối] (chỉ CB PD cùng cấp với CB NV trình mới action được) | Chỉ hiển thị khi hồ sơ ở trạng thái `CHO_PHE_DUYET` |
-| **Cập nhật Thanh toán** | `HO_SO_CHI_TRA` | **Số tiền thực chi** (`so_tien_thuc_tra`, phải ≤ `so_tien_duoc_duyet`), **Ngày thanh toán** (`ngay_thanh_toan`), **Số biên nhận** (`so_bien_nhan`), **Ghi chú** | Chỉ hiển thị khi hồ sơ ở trạng thái `DA_DUYET` |
-| **Timeline audit log** | `AUDIT_LOG WHERE entity='HO_SO_CHI_TRA' AND entity_id=<current>` | Lịch sử chuyển trạng thái + thao tác CUD + phê duyệt theo timeline thời gian | Luôn |
+| **Thông tin DN** (read-only) | DN nộp hồ sơ: `DOANH_NGHIEP WHERE id=<ho_so.doanh_nghiep_id>` | Tên DN, MST, địa chỉ, loại DN, **Quy mô DN** (badge nhãn Việt "Siêu nhỏ"/"Nhỏ"/"Vừa" map từ enum `quy_mo_dn` — quyết định mức hỗ trợ theo `BR-CALC-01`), người đại diện. Dữ liệu tự động lấy từ payload DVC gửi sang | Luôn |
+| **Thông tin tư vấn** (read-only) | `VU_VIEC WHERE id=<ho_so.vu_viec_id>` + join `TU_VAN_VIEN` + `HOP_DONG_TU_VAN` | **Vướng mắc** (mô tả VV gốc lấy từ **FR-05 Vụ việc**), **Tên TVV**, **Phí tư vấn** (>0), **Số tiền DN đề nghị chi trả** (`so_tien_de_nghi`>0), **Số HĐ tư vấn** (lấy từ **FR-14 Hợp đồng**) | Luôn |
+| **Kiểm tra Hồ sơ** | Field trong `HO_SO_CHI_TRA`: `bo_sung_count`, `ngay_yeu_cau_bo_sung`, `ly_do_tu_choi` | Checklist 18 trường theo Mẫu 01 NĐ55 (mỗi trường tick Đạt / Không đạt), Radio kết quả 3 lựa chọn ("Đạt" / "Yêu cầu bổ sung" / "Không đạt"), ô **Lý do** (bắt buộc khi ≠ "Đạt"), **Đếm lần bổ sung "{n}/3"** (highlight đỏ ≥2 lần) — `bo_sung_count` CHECK 0-3, hành vi lần 4 chờ BA Q1 | Chỉ hiển thị khi hồ sơ ở trạng thái `DANG_KIEM_TRA` |
+| **Đánh giá Tiêu chí** | `DANH_GIA_HO_SO_CHI_TRA WHERE ho_so_id=<current>` | **Mức hỗ trợ (%)** (`muc_ho_tro_phan_tram` auto-calc) — áp dụng `BR-CALC-01` theo quy mô DN, **Trần hỗ trợ/năm** (`tran_ho_tro_nam`), **Đã chi trong năm** (`da_chi_trong_nam`), **Số tiền được duyệt** (auto-calc theo `BR-CALC-02`: `MIN(so_tien_de_nghi, phi_tu_van × muc_ho_tro%, tran_ho_tro_nam − da_chi_trong_nam)`), **Ghi chú đánh giá** | Chỉ hiển thị khi hồ sơ ở trạng thái `DANG_DANH_GIA` |
+| **Thẩm định** | `THAM_DINH_HO_SO WHERE ho_so_chi_tra_id=<current>` (1:1, **entity owned mới v3.5**) | Checklist 4 mục đối chiếu (số liệu / phí TV / quy mô / trần năm), Radio kết quả ("Đạt" / "Không đạt"), ô **Lý do không đạt** (bắt buộc khi `KHONG_DAT`), **Số tiền đề xuất**, nút [Trình phê duyệt] | Chỉ hiển thị khi hồ sơ ở trạng thái `DANG_THAM_DINH` |
+| **Phê duyệt** | `PHE_DUYET_CHI_TRA WHERE ho_so_chi_tra_id=<current>` (N:1, **entity owned mới v3.5** — cho phép nhiều bản ghi nếu CB PD trả về nhiều lần) | Tóm tắt số tiền được duyệt + 2 nút action: **[Phê duyệt]** (DUYET → DA_DUYET) / **[Từ chối — trả về thẩm định]** (TU_CHOI → DANG_THAM_DINH, lý do ≥10 ký tự BR-FLOW-04). **CHỈ CB PD cùng cấp** (`user.don_vi_id = hs.don_vi_id`, BR-AUTH-05) mới action được | Chỉ hiển thị khi hồ sơ ở trạng thái `CHO_PHE_DUYET` |
+| **Cập nhật Thanh toán** | `HO_SO_CHI_TRA` | **Số tiền thực chi** (`so_tien_thuc_tra` >0 và ≤ `so_tien_duoc_duyet` BR-EC-22), **Ngày thanh toán** (`ngay_thanh_toan`), **Số biên nhận** (`so_bien_nhan`), **Ghi chú thanh toán**. Nếu Kho bạc không chuyển → ghi `ly_do_tu_choi = "THANH_TOAN: " + ly_do` → DA_DUYET → TU_CHOI | Chỉ hiển thị khi hồ sơ ở trạng thái `DA_DUYET` |
+| **Lịch sử + Timeline** | `AUDIT_LOG WHERE entity='HO_SO_CHI_TRA' AND entity_id=<current>` + lifecycle fields HSCT | "Ngày tiếp nhận"/"Người tiếp nhận", "Thời gian phê duyệt"/"Người phê duyệt", "Thời gian từ chối"/"Người từ chối", "Lý do từ chối", "Lý do hủy"; danh sách bản ghi `PHE_DUYET_CHI_TRA` (mọi lần CB PD trả về); timeline audit log | Luôn |
 
 **Xem chi tiết cần dữ liệu từ:**
 - **FR-05 Vụ việc** → `VU_VIEC` ở trạng thái `HOAN_THANH` (bắt buộc — không có VV hoàn thành thì không tạo được hồ sơ chi trả)
@@ -700,23 +716,25 @@ Password mặc định: `Secret@123`.
 - **Hệ quả QA:** Muốn test FR-06, phải có mock DVC/LGSP gửi request vào — hoặc backend team tạo dữ liệu trực tiếp trong DB. Không có UI để tạo hồ sơ từ đầu.
 - CB NV chỉ bắt đầu can thiệp từ trạng thái `CHO_TIEP_NHAN` (đã có sẵn từ DVC) → các bước tiếp nhận/đánh giá/thẩm định/trình duyệt phía sau vẫn thao tác tay bình thường.
 
-**Transition (SM-CHITRA):**
+**Transition (SM-CHITRA — 14 transition v3.5):** *(Update 2026-05-06 — đồng bộ enum 10 trạng thái + sub-flow [GAP-V.II-01/02/03] + CB PD trả về DANG_THAM_DINH + bỏ row auto-từ-chối Thay đổi 5 OUT)*
 
 | Từ | Đến | Actor | Trigger | Dữ liệu nhập | Nguồn dropdown / Filter | Màn nguồn |
 |----|-----|-------|---------|--------------|-------------------------|-----------|
-| — | `CHO_TIEP_NHAN` | DN | **Nộp Mẫu 01 NĐ55 qua DVC (UC68, API nhận)** — **NGUỒN DUY NHẤT** | Mẫu 01 gồm 18 trường: **Mã hồ sơ DVC** (`ma_ho_so_dvc`), **MST** (`ma_so_thue`), **VV gốc** (`vu_viec_id`), **Phí tư vấn** (`phi_tu_van`), **Số tiền đề nghị** (`so_tien_de_nghi`), chứng từ,... | — | API nhận từ ngoài (❌ **KHÔNG có màn nhập tay trong CMS**) |
-| — | `CHO_TIEP_NHAN` | DN | **Nhập trực tiếp (chuyên trang Cổng PLQG — không phải CMS)** | DN login vào chuyên trang, submit Mẫu 01 qua API (tuân theo `BR-AUTH-11`) | — | Chuyên trang DN trên Cổng PLQG (không phải CMS) |
-| `CHO_TIEP_NHAN` | `DANG_KIEM_TRA` | `cb_nv_<cap>_01` | [Tiếp nhận] | — | Hệ thống tự điền `vu_viec_id`, `doanh_nghiep_id`, `tu_van_vien_id` từ Mẫu 01 — các trường này đều là FK trỏ sang **FR-05 Vụ việc** / **FR-07 Doanh nghiệp** / **FR-04 CG/TVV** (hệ thống validate các FK này có tồn tại) | SCR-V.II-02 |
-| `DANG_KIEM_TRA` | `DANG_DANH_GIA` | `cb_nv_<cap>_01` | Đạt checklist | Tick checklist (giống cấu trúc UC106 của FR-05) | — | SCR-V.II-02 |
-| `DANG_KIEM_TRA` | `YEU_CAU_BO_SUNG` | `cb_nv_<cap>_01` | Thiếu hồ sơ | Liệt kê danh sách thiếu + hệ thống gửi thông báo về DVC | — | SCR-V.II-02 |
-| `YEU_CAU_BO_SUNG` | `DANG_KIEM_TRA` | DN | Bổ sung qua DVC | DN upload file bổ sung qua DVC | — | API nhận từ ngoài |
-| `YEU_CAU_BO_SUNG` | `TU_CHOI` | System | **Tự động (BR-EC-16)** — khi quá hạn `bo_sung_timeout` hoặc DN đã bổ sung >3 lần (`BR-EC-15`) | — | `CAU_HINH_SLA` ← **FR-10 Quản trị** | Auto |
-| `DANG_DANH_GIA` | `DANG_THAM_DINH` | `cb_nv_<cap>_01` | Đánh giá mức hỗ trợ | Hệ thống tra cứu **Quy mô DN** (`quy_mo_dn`) từ **FR-07 Doanh nghiệp** → áp dụng `BR-CALC-01` (tỷ lệ mức hỗ trợ theo quy mô: **DN siêu nhỏ**: 100% chi phí, trần 3 triệu/năm · **DN nhỏ**: tối đa 30%, trần 5 triệu/năm · **DN vừa**: tối đa 10%, trần 10 triệu/năm — theo NĐ18/2026) → áp dụng công thức `BR-CALC-02`: `so_tien_duoc_duyet = MIN(so_tien_de_nghi, phi_tu_van × muc_ho_tro%, tran_ho_tro_nam − da_chi_trong_nam)`. **Lưu ý:** trần hỗ trợ reset về 0 vào ngày 1/1 hằng năm | `quy_mo_dn` ← **FR-07 Doanh nghiệp** | SCR-V.II-02 Section Đánh giá |
-| `DANG_THAM_DINH` | `CHO_PHE_DUYET` | `cb_nv_<cap>_01` | [Trình duyệt] | Guard: KQ thẩm định đạt | — | SCR-V.II-02 Section Thẩm định |
-| `CHO_PHE_DUYET` | `DA_DUYET` | `cb_pd_<cap>_01` | [Duyệt] | `so_tien_duyet`, ghi chú (cùng cấp BR-AUTH-05) | — | SCR-V.II-02 |
-| `CHO_PHE_DUYET` | `DANG_THAM_DINH` | `cb_pd_<cap>_01` | [Từ chối] | `ly_do_tu_choi` ≥10 ký tự (BR-FLOW-04) | — | SCR-V.II-02 |
-| `DA_DUYET` | `DA_THANH_TOAN` | `cb_nv_<cap>_01` | Cập nhật thanh toán | **Số tiền thực chi** (`so_tien_thuc_tra`, phải ≤ `so_tien_duyet`), **Ngày thanh toán** (`ngay_thanh_toan`), **Số biên nhận** (`so_bien_nhan`) | — | SCR-V.II-02 Section Thanh toán |
-| `CHO_TIEP_NHAN` | `HUY` | DN | Rút hồ sơ (điều kiện: hồ sơ chưa chuyển qua `DANG_DANH_GIA`) | — | — | API nhận từ ngoài |
+| — | `CHO_TIEP_NHAN` | DN qua DVC | **FR-V.II-01 — Nộp Mẫu 01 NĐ55 qua DVC** — **NGUỒN DUY NHẤT** | Mẫu 01 gồm 18 trường: **Mã hồ sơ DVC** (`ma_ho_so_dvc` UNIQUE — idempotent ERR-CT-02 HTTP 409), **MST** (`ma_so_thue`), **VV gốc** (`vu_viec_id`), **Phí tư vấn** (`phi_tu_van`>0), **Số tiền đề nghị** (`so_tien_de_nghi`>0), chứng từ. JWT + mTLS (BR-AUTH-09). Auto-gen `CT-{YYYYMMDD}-{SEQ}` (BR-DATA-04) | — | API inbound LGSP (❌ **KHÔNG có màn nhập tay trong CMS**) |
+| `CHO_TIEP_NHAN` | `DANG_KIEM_TRA` | `cb_nv_<cap>_01` | **FR-V.II-02 [Tiếp nhận] `[GAP-V.II-02]`** | Hệ thống ghi `ngay_tiep_nhan = NOW()`, `nguoi_tiep_nhan_id = current_user.id`. Tự điền `vu_viec_id`/`doanh_nghiep_id`/`tu_van_vien_id` từ Mẫu 01 (FK validate sang FR-05/07/04) | — | SCR-V.II-02 |
+| `CHO_TIEP_NHAN` | `HUY` | DN qua DVC / `cb_nv_<cap>_01` hủy hộ | **FR-V.II-02 [Rút hồ sơ] `[GAP-V.II-03]`** — chỉ rút khi chưa qua `DANG_DANH_GIA` | Ghi `ly_do_huy = 'DN_RUT_HO_SO'`, TB CB NV nếu đã gán. ERR-CT-RUT-01 nếu ngoài state cho phép | — | API inbound DVC / SCR-V.II-02 |
+| `DANG_KIEM_TRA` | `DANG_DANH_GIA` | `cb_nv_<cap>_01` | **FR-V.II-03** Đạt checklist | Tick checklist 18 trường + Radio "Đạt" | — | SCR-V.II-02 section Kiểm tra |
+| `DANG_KIEM_TRA` | `YEU_CAU_BO_SUNG` | `cb_nv_<cap>_01` | **FR-V.II-03** Cần bổ sung | Lý do (bắt buộc, ERR-CT-KT-02) + danh sách thiếu. Ghi `ngay_yeu_cau_bo_sung = NOW()`, `bo_sung_count++` (CHECK 0-3). TB DN qua DVC (FR-V.II-04 outbound) | — | SCR-V.II-02 section Kiểm tra |
+| `DANG_KIEM_TRA` | `TU_CHOI` | `cb_nv_<cap>_01` | **FR-V.II-03** Không đạt | Lý do bắt buộc. Ghi `ly_do_tu_choi`, `thoi_gian_tu_choi`, `nguoi_tu_choi_id` | — | SCR-V.II-02 section Kiểm tra |
+| `YEU_CAU_BO_SUNG` | `DANG_KIEM_TRA` | DN qua DVC/Cổng PLQG hoặc `cb_nv_<cap>_01` thủ công | **FR-V.II-14 `[GAP-V.II-01]`** Bổ sung HS | `file_bo_sung[]` (PDF/DOC/DOCX/JPG/PNG ≤10MB) + `ghi_chu`. Guard: ≤5 ngày LV kể từ `ngay_yeu_cau_bo_sung` (ERR-CT-BS-03), file hợp lệ (ERR-CT-BS-02), state đúng (ERR-CT-BS-01) | — | API inbound DVC / Cổng PLQG / SCR-V.II-02 |
+| ~~`YEU_CAU_BO_SUNG` → `TU_CHOI` auto~~ | — | — | **❌ BỎ trong v3.5** (Thay đổi 5 OUT) — không còn auto-từ-chối quá hạn / lần 4. Hành vi lần 4 chờ BA Q1 | — | — | — |
+| `DANG_DANH_GIA` | `DANG_THAM_DINH` | `cb_nv_<cap>_01` | **FR-V.II-05** [Xác nhận đánh giá] | Hệ thống tra `quy_mo_dn` ← **FR-07** → BR-CALC-01 (Siêu nhỏ 100%/3M, Nhỏ 30%/5M, Vừa 10%/10M — NĐ18/2026) → BR-CALC-02 `so_tien_duoc_duyet = MIN(so_tien_de_nghi, phi_tu_van × muc_ho_tro%, tran_ho_tro_nam − da_chi_trong_nam)`. Trần reset 1/1 hằng năm | `quy_mo_dn` ← **FR-07** | SCR-V.II-02 section Đánh giá |
+| `DANG_THAM_DINH` | `CHO_PHE_DUYET` | `cb_nv_<cap>_01` | **FR-V.II-09 + FR-V.II-11** [Trình phê duyệt] | Tạo bản ghi `THAM_DINH_HO_SO` 1:1 với `ket_qua_tham_dinh = DAT`, checklist 4 mục JSON (số liệu / phí TV / quy mô / trần năm). TB CB PD cùng cấp (BR-AUTH-05) | — | SCR-V.II-02 section Thẩm định |
+| `DANG_THAM_DINH` | `TU_CHOI` | `cb_nv_<cap>_01` | **FR-V.II-09** Thẩm định Không đạt | Nhận xét bắt buộc. Ghi `ly_do_tu_choi = "THAM_DINH: " + nhan_xet`, `thoi_gian_tu_choi`, `nguoi_tu_choi_id` | — | SCR-V.II-02 section Thẩm định |
+| `CHO_PHE_DUYET` | `DA_DUYET` | `cb_pd_<cap>_01` | **FR-V.II-12** [Phê duyệt] | `so_tien_duyet` bắt buộc (ERR-CT-PD-03), `ghi_chu_duyet` optional. BR-AUTH-05 cùng đơn vị (`user.don_vi_id = hs.don_vi_id`). Ghi `nguoi_phe_duyet_id`, `ngay_phe_duyet`. Tạo `PHE_DUYET_CHI_TRA quyet_dinh=DUYET`. TB CB NV + TVV + DN | — | SCR-V.II-02 section Phê duyệt |
+| `CHO_PHE_DUYET` | `DANG_THAM_DINH` | `cb_pd_<cap>_01` | **FR-V.II-12** [Từ chối — trả về thẩm định] (KHÔNG phải Từ chối cuối) | `ly_do_tu_choi` ≥10 ký tự (BR-FLOW-04, ERR-CT-PD-02). Tạo `PHE_DUYET_CHI_TRA quyet_dinh=TU_CHOI` (N:1 cho phép nhiều lần). TB CB NV (KHÔNG TB TVV/DN). KHÔNG ghi `thoi_gian_tu_choi` (vì đây là trả về, không phải Từ chối cuối) | — | SCR-V.II-02 section Phê duyệt |
+| `DA_DUYET` | `DA_THANH_TOAN` | `cb_nv_<cap>_01` | **FR-V.II-13** [Cập nhật thanh toán] | `so_tien_thuc_tra` (>0 và ≤ `so_tien_duoc_duyet` BR-EC-22, ERR-CT-TT-02), `ngay_thanh_toan` bắt buộc, `so_bien_nhan` optional. TB TVV + DN | — | SCR-V.II-02 section Thanh toán |
+| `DA_DUYET` | `TU_CHOI` | `cb_nv_<cap>_01` | **FR-V.II-13** Từ chối thanh toán | Lý do bắt buộc. Ghi `ly_do_tu_choi = "THANH_TOAN: " + ly_do`, `thoi_gian_tu_choi`, `nguoi_tu_choi_id`. Áp dụng khi Kho bạc không chuyển tiền | — | SCR-V.II-02 section Thanh toán |
 
 ---
 
@@ -770,23 +788,24 @@ Password mặc định: `Secret@123`.
 ---
 
 <a id="toc-fr08"></a>
-### ⑬ FR-08 · Đánh giá Hiệu quả (Nhóm VI)
+### ⑬ FR-08 · Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý (Nhóm VI)
 **Login:**
 - Lập đợt + chọn VV + phân công: `cb_nv_<cap>_01` (mỗi 6 tháng/năm)
 - Chấm điểm: `cb_nv_<cap>_01` hoặc `cg_01` được phân công (`Người đánh giá`)
 - Duyệt phân công + duyệt BC: `cb_pd_<cap>_01`
+- **Nhận kết quả ĐG (FR-VI-10 mới v3.5, read-only):** `cb_nv_<cap>_01` thuộc `co_quan_duoc_danh_gia_id` (CB NV của cơ quan được đánh giá, có thể khác đơn vị CB NV tạo đợt)
 
 **Màn hình xem chi tiết:**
-- SCR-VI-01: **Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1)** — 1 màn duy nhất gộp danh sách + chi tiết 4 tab + form chấm điểm (srs-fr-08 §3 dòng 735). SCR-VI-02/03 KHÔNG tồn tại trong SRS v2.1.
+- SCR-VI-01: **Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1)** — 1 màn duy nhất gộp danh sách + chi tiết 4 tab + form chấm điểm (srs-update-2026-5-5/srs-fr-08-danh-gia.md §3 line 781-887 v3.5). SCR-VI-02/03 KHÔNG tồn tại trong SRS.
 
 **📑 Tabs SCR-VI-01 (khi xem chi tiết 1 đợt ĐG) — 4 tab:**
 
 | Tab | Entity + Filter | Data | Điều kiện hiển thị |
 |-----|-----------------|------|--------------------|
-| **Tiêu chí** | Các tiêu chí của đợt: `TIEU_CHI_DOT_DG WHERE dot_dg_id=<current>` + tiêu chí master từ `TIEU_CHI_DANH_GIA` (FR-10 Quản trị) | Bảng tiêu chí — cột: **Tên** / **Mô tả** / **Điểm tối đa** / **Trọng số** (`trong_so`) / **Thứ tự**. Hiển thị **Tổng trọng số realtime** — cảnh báo đỏ nếu ≠ 100%, **chặn cứng** khi nhấn trình duyệt nếu tổng chưa đủ 100% | Luôn |
-| **Phân công** | `PHAN_CONG_DANH_GIA WHERE dot_dg_id=<current>` | Bảng phân công — cột: **Người ĐG** / **Vai trò** (`TRUONG_NHOM` / `DANH_GIA_VIEN`) / **Lĩnh vực phụ trách** / **Số đợt đã tham gia**. Các điều kiện chặn: **≥1 người** + **≥1 Trưởng nhóm** + không được phân công trùng lặp. Nút [Trình duyệt phân công] / [Duyệt phân công] | Luôn |
-| **Thực hiện chấm điểm** | `KET_QUA_DANH_GIA WHERE ke_hoach_id=<current>` (§3.4.3.35 — đây là tên chính thống trong Master SRS; srs-fr-08 detail dùng tên khác là `VU_VIEC_DANH_GIA` — xem ⚠️ flag AMBIGUOUS ở đầu phần FR-08) | **Chọn VV vào đợt** (`vu_viec_id`, lọc VV đã `HOAN_THANH` trong kỳ + cùng đơn vị); form chấm điểm gồm: **Điểm tổng** (`diem_tong`, thang 0-100), **Chi tiết điểm** (`chi_tiet_diem`, JSON theo từng tiêu chí), **Nhận xét** (`nhan_xet`), **Trạng thái** (`trang_thai` ∈ `CHUA_DANH_GIA` / `DA_DANH_GIA`). Hiển thị **KPI cards**: Tổng VV / Điểm TB / Tỷ lệ đạt SLA | Luôn |
-| **Báo cáo** | `BAO_CAO_DANH_GIA WHERE dot_dg_id=<current>` | KPI cards + bảng tổng hợp + biểu đồ (Radar / Bar) + các trường: **Nhận xét tổng thể** (`nhan_xet_tong_the`), **Kinh phí hoạt động khác** (`kp_hoat_dong_khac`), **Kinh phí xã hội hóa** (`kp_xa_hoi_hoa`), **Kiến nghị** (`kien_nghi`) + nút [Trình duyệt BC] + [Xuất Word/Excel theo mẫu 21a/21b TT17/2025] | Luôn hiển thị. Chỉ cho sửa khi đợt đã ở trạng thái chấm xong |
+| **Tiêu chí** | Các tiêu chí của đợt: `TIEU_CHI_DANH_GIA WHERE ke_hoach_danh_gia_id=<current>` + tiêu chí master từ `TIEU_CHI_DANH_GIA` (FR-10 Quản trị, `nhom_tieu_chi='HIEU_QUA_HTPL'`) | Bảng tiêu chí — cột: **Tên** / **Mô tả** / **Điểm tối đa** / **Trọng số** (`trong_so`) / **Thứ tự**. Hiển thị **Tổng trọng số realtime** — cảnh báo đỏ nếu ≠ 100%, **chặn cứng** khi nhấn trình duyệt nếu tổng chưa đủ 100% | Luôn |
+| **Phân công** | `PHAN_CONG_DANH_GIA WHERE ke_hoach_danh_gia_id=<current>` | Bảng phân công — cột: **Người ĐG** / **Vai trò** (`TRUONG_NHOM` / `DANH_GIA_VIEN`) / **Lĩnh vực phụ trách** / **Số đợt đã tham gia**. Các điều kiện chặn: **≥1 người** + **≥1 Trưởng nhóm** + không được phân công trùng lặp. Nút [Trình duyệt phân công] / [Duyệt phân công] | Luôn |
+| **Thực hiện chấm điểm** | `KET_QUA_DANH_GIA WHERE ke_hoach_id=<current>` (entity §4 line 1021-1044 srs-fr-08 v3.5) | **Chọn VV vào đợt** (`vu_viec_id`, lọc VV đã `HOAN_THANH` trong kỳ + cùng đơn vị); form chấm điểm gồm: **Điểm tổng** (`diem_tong`, thang 0-100), **Chi tiết điểm** (`chi_tiet_diem`, JSON theo từng tiêu chí), **Nhận xét** (`nhan_xet`), **Trạng thái** (`trang_thai` ∈ `CHUA_DANH_GIA` / `DA_DANH_GIA`). Hiển thị **KPI cards**: Tổng VV / Điểm TB / Tỷ lệ đạt SLA | Luôn |
+| **Báo cáo** | `BAO_CAO_DANH_GIA WHERE ke_hoach_id=<current>` (1:1 với KE_HOACH_DANH_GIA) | KPI cards + bảng tổng hợp + biểu đồ (Radar / Bar) + các trường: **Nhận xét tổng thể** (`nhan_xet_tong_the`), **Kinh phí hoạt động khác** (`kp_hoat_dong_khac`), **Kinh phí xã hội hóa** (`kp_xa_hoi_hoa`), **Kiến nghị** (`kien_nghi`) + nút [Trình duyệt BC] + [Xuất Word/Excel theo mẫu 21a/21b TT17/2025] | Luôn hiển thị. Chỉ cho sửa khi đợt đã ở trạng thái chấm xong. **FR-VI-10 v3.5:** read-only cho CB NV thuộc `co_quan_duoc_danh_gia_id` khi đợt `HOAN_THANH` |
 
 **Xem chi tiết cần dữ liệu từ:**
 - **FR-05 Vụ việc** → `VU_VIEC` ở trạng thái `HOAN_THANH` (chỉ được chọn VV đã hoàn thành vào đợt chấm)
@@ -797,28 +816,25 @@ Password mặc định: `Secret@123`.
 - Lập kế hoạch đợt (UC83), chọn VV, phân công người chấm, chấm điểm từng tiêu chí (UC85), viết nhận xét tổng, nhập kinh phí hoạt động khác/xã hội hóa, trình BC — **không có kênh API**.
 - Điểm tự tính (BR-CALC-04 có trọng số), nhưng người ĐG vẫn nhập thủ công `diem` + `nhan_xet` cho từng VV × từng tiêu chí.
 
-**Transition (SM-DANHGIA — 7 state theo SRS Master §C.6):**
+**Transition (SM-DANHGIA — 8 state v3.5 + HUY, đã đồng bộ):**
 
-> ⚠️ **TODO (AMBIGUOUS — SRS tự mâu thuẫn 3 phiên bản):**
-> - **Phiên bản 1 (DB ENUM):** 6 state — `DU_THAO / CHO_DUYET_PHAN_CONG / DA_DUYET_PHAN_CONG / DANG_THUC_HIEN / HOAN_THANH / HUY` (default `DU_THAO`). Nguồn: srs-v3.md §3.4.3.34 dòng 2169 + srs-fr-08-danh-gia.md dòng 957.
-> - **Phiên bản 2 (Workflow Master Phụ lục C.6):** 7 state — `LAP_KE_HOACH / PHAN_CONG / CHO_DUYET_PC / THUC_HIEN / BAO_CAO / CHO_PHE_DUYET / HOAN_THANH`. Nguồn: srs-v3.md §C.6 dòng 4343-4372.
-> - **Phiên bản 3 (UI filter dropdown):** 9 trạng thái — `NHAP / DA_LAP_KH / CHO_DUYET_PC / DA_DUYET_PC / DANG_DANH_GIA / DA_DANH_GIA / DA_LAP_BC / CHO_DUYET_BC / DA_DUYET_BC`. Nguồn: srs-fr-08-danh-gia.md dòng 751.
->
-> **3 phiên bản tên state khác hoàn toàn nhau** (không phải subset/superset). **Dùng Master C.6 (7 state) làm gốc cho test transition; cần CĐT chốt 1 phiên bản canonical trước khi implement DB + UI.**
+> ✅ **Resolved 2026-05-06 (FR-08 v3.5 Thay đổi 5, GAP-VI-01):** SRS v3 từng có 3 phiên bản tên state mâu thuẫn (6/7/9 state). v3.5 chốt 1 bộ canonical **8 state** lấy từ §5 làm source of truth + bổ sung HUY. Bỏ toàn bộ tên state cũ `NHAP / DA_LAP_KH / DA_DUYET_PC / DANG_DANH_GIA / DA_DANH_GIA / DA_LAP_BC / CHO_DUYET_BC / DA_DUYET_BC` — KHÔNG còn dùng. DB enum CHECK = SM state = `LAP_KE_HOACH / PHAN_CONG / CHO_DUYET_PC / THUC_HIEN / BAO_CAO / CHO_PHE_DUYET / HOAN_THANH / HUY`. Default `LAP_KE_HOACH`. Cite: `srs-update-2026-5-5/srs-fr-08-danh-gia.md` §4 line 1009 + §5 line 1117-1167.
 
 | Từ | Đến | Actor | Trigger | Dữ liệu nhập | Nguồn dropdown / Filter | Màn nguồn |
 |----|-----|-------|---------|--------------|-------------------------|-----------|
-| — | `LAP_KE_HOACH` | `cb_nv_<cap>_01` | **🖐️ Tạo đợt ĐG (UC83, FR-VI-01, BR-LEGAL-08)** | **Kỳ đánh giá** (`ky_danh_gia` — 6 tháng hoặc năm), **Tần suất** (`tan_suat`), **Đối tượng đánh giá** (`doi_tuong`), **Phạm vi đơn vị** + thêm các tiêu chí đợt (tổng trọng số phải = 100%) | `don_vi_id` hệ thống tự lấy từ user; dropdown tiêu chí lấy từ `TIEU_CHI_DANH_GIA` (**FR-10 Quản trị**) | SCR-VI-01 (consolidated) |
+| — | `LAP_KE_HOACH` | `cb_nv_<cap>_01` | **🖐️ Tạo đợt ĐG (UC83, FR-VI-01, BR-LEGAL-08)** | **Tên đợt** (`ten_dot`), **Mục tiêu** (`muc_tieu`), **Tần suất** (`tan_suat` ∈ `SO_BO_6_THANG/TRON_NAM`), **Từ ngày** (`tu_ngay`), **Đến ngày** (`den_ngay`), **Đối tượng** (`doi_tuong` ∈ `VU_VIEC/DAO_TAO/TONG_HOP`), **Cơ quan được ĐG** (`co_quan_duoc_danh_gia_id` FK→DON_VI 1:1 BẮT BUỘC v3.5), **File đính kèm** (`file_dinh_kem` PDF/DOC/DOCX/XLS/XLSX ≤20MB optional v3.5) | `don_vi_id` hệ thống tự lấy từ user; `co_quan_duoc_danh_gia_id` dropdown DON_VI (cùng cấp/cấp dưới); dropdown tiêu chí lấy từ `TIEU_CHI_DANH_GIA` (**FR-10 Quản trị**) | SCR-VI-01 (consolidated) |
 | `LAP_KE_HOACH` | `PHAN_CONG` | `cb_nv_<cap>_01` | **Phân công người chấm (UC85, FR-VI-03)** | **Người đánh giá** (`nguoi_danh_gia_id`), **Vai trò** (`vai_tro` ∈ `DANH_GIA_VIEN` / `TRUONG_NHOM`), **Lĩnh vực phụ trách** (`linh_vuc_phu_trach[]`, chọn nhiều), **Ghi chú** (`ghi_chu`) | Dropdown chọn tài khoản từ `TAI_KHOAN` (§3.4.3.7) — lọc cùng đơn vị (`BR-AUTH-01`/`BR-AUTH-08`); hệ thống **gợi ý** theo lĩnh vực phụ trách + số đợt đã tham gia. **Điều kiện chặn:** phải có ≥1 `TRUONG_NHOM`, không được phân công trùng lặp | SCR-VI-01 Tab Phân công |
-| `PHAN_CONG` | `CHO_DUYET_PC` | `cb_nv_<cap>_01` | [Trình duyệt phân công] (FR-VI-03, BR-AUTH-05) | **Điều kiện chặn:** đã có danh sách phân công + tổng trọng số các tiêu chí = 100% | — | SCR-VI-01 |
-| `CHO_DUYET_PC` | `THUC_HIEN` | `cb_pd_<cap>_01` | [Duyệt phân công] (FR-VI-04/05) | CB PD phải cùng cấp với CB NV trình (`BR-AUTH-05`); hệ thống audit log + cho phép chọn VV | — | SCR-VI-01 |
-| `CHO_DUYET_PC` | `PHAN_CONG` | `cb_pd_<cap>_01` | [Từ chối phân công] (BR-FLOW-04) | **Lý do từ chối** (`ly_do`, ≥10 ký tự) | — | SCR-VI-01 |
-| — (đang ở `THUC_HIEN`) | — | `cb_nv_<cap>_01` | **Chọn VV vào đợt (UC87)** | **Danh sách VV** (`vu_viec_ids[]`, multi-select) | Dropdown lọc `VU_VIEC` với các điều kiện: `trang_thai=HOAN_THANH` + `ngay_hoan_thanh` nằm trong kỳ đánh giá + thuộc phạm vi đơn vị (`BR-AUTH-08`). Nếu VV đã ở đợt khác, hệ thống **cảnh báo** nhưng vẫn cho phép chọn lại | SCR-VI-01 Tab Thực hiện / modal chọn VV |
-| — (đang ở `THUC_HIEN`) | — | Người được phân công | Chấm điểm từng VV theo từng tiêu chí | **Tiêu chí** (`tieu_chi_id`), **Điểm** (`diem`, 0 ≤ điểm ≤ `diem_toi_da`), **Nhận xét** (`nhan_xet`, ≤1000 ký tự), **Nhận xét tổng thể** (`nhan_xet_tong_the`, ≤2000 ký tự); hỗ trợ **Lưu nháp** (đặt cờ `is_draft=1`) | Tiêu chí ← `TIEU_CHI_DANH_GIA` (**FR-10 Quản trị**); `diem_toi_da` lấy từ chính tiêu chí đó | SCR-VI-01 Tab Thực hiện (form chấm inline) |
+| `PHAN_CONG` | `CHO_DUYET_PC` | `cb_nv_<cap>_01` | [Trình duyệt phân công] (FR-VI-03, BR-AUTH-05, BR-NOTIF-01 mở rộng v3.5) | **Điều kiện chặn:** đã có danh sách phân công + tổng trọng số các tiêu chí = 100%. Gửi TB CB PD. | — | SCR-VI-01 |
+| `CHO_DUYET_PC` | `THUC_HIEN` | `cb_pd_<cap>_01` | [Duyệt phân công] (FR-VI-04, BR-NOTIF-01 mở rộng v3.5) | CB PD phải cùng cấp với CB NV trình (`BR-AUTH-05`); hệ thống audit log + cho phép chọn VV. Gửi TB CB NV. | — | SCR-VI-01 |
+| `CHO_DUYET_PC` | `PHAN_CONG` | `cb_pd_<cap>_01` | [Từ chối phân công] (FR-VI-04, BR-FLOW-04, BR-NOTIF-01 mở rộng v3.5) | **Lý do từ chối** (`ly_do`, ≥10 ký tự). Gửi TB CB NV. | — | SCR-VI-01 |
+| — (đang ở `THUC_HIEN`) | — | `cb_nv_<cap>_01` | **Chọn VV vào đợt (UC87, FR-VI-05)** | **Danh sách VV** (`vu_viec_ids[]`, multi-select) | Dropdown lọc `VU_VIEC` với các điều kiện: `trang_thai=HOAN_THANH` + `ngay_hoan_thanh` nằm trong kỳ đánh giá + thuộc phạm vi đơn vị (`BR-AUTH-08`). Nếu VV đã ở đợt khác, hệ thống **cảnh báo** nhưng vẫn cho phép chọn lại | SCR-VI-01 Tab Thực hiện / modal chọn VV |
+| — (đang ở `THUC_HIEN`) | — | Người được phân công | Chấm điểm từng VV theo từng tiêu chí (UC88, FR-VI-06) | **Tiêu chí** (`tieu_chi_id`), **Điểm** (`diem`, 0 ≤ điểm ≤ `diem_toi_da`), **Nhận xét** (`nhan_xet`, ≤1000 ký tự), **Nhận xét tổng thể** (`nhan_xet_tong_the`, ≤2000 ký tự); hỗ trợ **Lưu nháp** (đặt cờ `is_draft=1`) | Tiêu chí ← `TIEU_CHI_DANH_GIA` (**FR-10 Quản trị**); `diem_toi_da` lấy từ chính tiêu chí đó | SCR-VI-01 Tab Thực hiện (form chấm inline) |
 | `THUC_HIEN` | `BAO_CAO` | System / `cb_nv_<cap>_01` | **Tự động khi tất cả VV đã chấm xong** (FR-VI-06/07, `BR-CALC-04`) | Hệ thống tự sinh báo cáo theo mẫu TT17 + tính **điểm trung bình có trọng số** | — | Auto |
-| `BAO_CAO` | `CHO_PHE_DUYET` | `cb_nv_<cap>_01` | [Trình BC] (FR-VI-08) | **Điều kiện chặn:** BC có đủ dữ liệu. Trường bắt buộc: **Kinh phí hoạt động khác** (`kp_hoat_dong_khac`, ≥0), **Kinh phí xã hội hóa** (`kp_xa_hoi_hoa`, ≥0), **Nhận xét tổng thể** (`nhan_xet_tong_the`, Rich text), **Kiến nghị** (`kien_nghi`) | — | SCR-VI-01 Tab Báo cáo |
-| `CHO_PHE_DUYET` | `HOAN_THANH` | `cb_pd_<cap>_01` | [Duyệt BC] (FR-VI-09, BR-AUTH-05) | Cùng cấp | — | SCR-VI-01 |
-| `CHO_PHE_DUYET` | `BAO_CAO` | `cb_pd_<cap>_01` | [Từ chối BC] (FR-VI-09, BR-FLOW-04) | `ly_do` ≥10 ký tự | — | SCR-VI-01 |
+| `BAO_CAO` | `CHO_PHE_DUYET` | `cb_nv_<cap>_01` | [Trình BC] (FR-VI-08, BR-NOTIF-01 mở rộng v3.5) | **Điều kiện chặn:** BC có đủ dữ liệu. Trường bắt buộc: **Kinh phí hoạt động khác** (`kp_hoat_dong_khac`, ≥0), **Kinh phí xã hội hóa** (`kp_xa_hoi_hoa`, ≥0), **Nhận xét tổng thể** (`nhan_xet_tong_the`, Rich text), **Kiến nghị** (`kien_nghi`). Gửi TB CB PD. | — | SCR-VI-01 Tab Báo cáo |
+| `CHO_PHE_DUYET` | `HOAN_THANH` | `cb_pd_<cap>_01` | [Duyệt BC] (FR-VI-09, BR-AUTH-05, BR-NOTIF-01) | Cùng cấp. Gửi TB CB NV. | — | SCR-VI-01 |
+| `CHO_PHE_DUYET` | `BAO_CAO` | `cb_pd_<cap>_01` | [Từ chối BC] (FR-VI-09, BR-FLOW-04, BR-NOTIF-01) | `ly_do` ≥10 ký tự. Gửi TB CB NV. | — | SCR-VI-01 |
+| — (đã ở `HOAN_THANH`) | — | **CB NV thuộc `co_quan_duoc_danh_gia_id`** (FR-VI-10 mới v3.5) | **Nhận kết quả đánh giá (read-only)** | Truy cập SCR-VI-01 Tab Báo cáo. Read-only mọi field. | Lọc KH ở trạng thái `HOAN_THANH` + `co_quan_duoc_danh_gia_id = user.don_vi_id` | SCR-VI-01 |
+| `LAP_KE_HOACH` / `PHAN_CONG` / `THUC_HIEN` / `BAO_CAO` | `HUY` | `cb_nv_<cap>_01` hoặc `cb_pd_<cap>_01` | **Hủy đợt (GAP-VI-01)** | **Lý do hủy** (`ly_do_huy` text). Audit log + soft-delete. KHÔNG hủy được khi đã `HOAN_THANH`. | — | SCR-VI-01 |
 
 **Đầu ra:** Báo cáo mẫu TT17/2025/TT-BTP → đẩy vào FR-11 + FR-01.
 
@@ -908,10 +924,10 @@ Password mặc định: `Secret@123`.
 |----------------|---------------|-------|
 | `/api/v1/hoi-dap` + `/search` | **FR-02 Hỏi đáp** — chỉ trả về bản ghi đã `CONG_KHAI` | Public |
 | `/api/v1/dao-tao` + `/search` | **FR-03 Đào tạo** — chỉ trả về CTĐT / Khóa học đã công khai | Public |
-| `/api/v1/tu-van-vien` + `/search` | **FR-04 CG/TVV** — lọc `trang_thai=DANG_HOAT_DONG` **VÀ** `la_cong_khai=1` | Public |
+| `/api/v1/tu-van-vien` + `/search` | **FR-04 CG/TVV** — lọc `trang_thai=DANG_HOAT_DONG` **VÀ** `cong_khai=1` (v3.5 rename CR-01) | Public |
 | `/api/v1/vu-viec` + `/search` | **FR-05 Vụ việc** — chỉ trả metadata (không trả nội dung chi tiết) | Public |
 | `/api/v1/danh-gia` + `/search` | **FR-08 Đánh giá** — chỉ trả báo cáo đánh giá đã duyệt | Public |
-| `/api/v1/bieu-mau` + `/search` | **FR-09 Biểu mẫu** — lọc `la_cong_khai=1` (kèm endpoint download: `/bieu-mau/{id}/download`) | Public |
+| `/api/v1/bieu-mau` + `/search` | **FR-09 Biểu mẫu** — lọc `cong_khai=1` (v3.5 rename CR-01, kèm endpoint download: `/bieu-mau/{id}/download`) | Public |
 | `/api/v1/tu-van-chuyen-sau` + `/search` | **FR-12 Tư vấn chuyên sâu** — lọc `trang_thai=HOAN_THANH`, chỉ trả metadata (KHÔNG trả văn bản tư vấn chi tiết) | Public |
 | `/api/v1/chuong-trinh-htpl` + `/search` | **FR-15 CT HTPLDN** — lọc `trang_thai=DA_CONG_BO` | Public |
 | `/api/v1/ho-so-pl-dn` + `/search` | **FR-12 Tư vấn chuyên sâu** → `HO_SO_PHAP_LY_DN` (hồ sơ pháp lý gắn với DN) | Public |
@@ -1007,7 +1023,7 @@ Password mặc định: `Secret@123`.
 <a id="toc-cot-nguon"></a>
 ### Cột "Nguồn dropdown / Filter"
 - Mô tả dropdown/modal chọn value lấy data từ **entity nào của module nào**, kèm filter `WHERE ...` cụ thể.
-- Ví dụ: `← FR-04 filter trang_thai=DANG_HOAT_DONG AND la_cong_khai=1 AND linh_vuc khớp`
+- Ví dụ: `← FR-04 filter trang_thai=DANG_HOAT_DONG AND cong_khai=1 AND linh_vuc khớp` (v3.5 rename CR-01)
 - Nếu ghi "—" nghĩa là transition không có dropdown (chỉ confirm hoặc free-form input).
 
 <a id="toc-cot-mannguon"></a>

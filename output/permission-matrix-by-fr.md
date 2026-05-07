@@ -1,10 +1,18 @@
 # Ma trận phân quyền CRUD — FR × Entity × Role
 
 > **Nguồn:** SRS v3.1 §3.4.2 + **SRS update 2026-05-05** (`srs-update-2026-5-5/`)
-> **Ngày trích:** 2026-04-16 | **Cập nhật 2026-04-21:** bổ sung Dashboard (FR-01) cho CB_NV/CB_PD + KHO_CAU_HOI chuyển FR-12 → FR-13 | **Cập nhật 2026-05-06:** apply SRS update FR-04 — thêm 3 entity mới (DANH_GIA_SAU_VU_VIEC, NGUOI_HO_TRO, TO_CHUC_TU_VAN) + 7 FR mới (FR-IV-CROSS-01, FR-IV-NEW-01/02/04, FR-IV-NHT-01/02/03)
+> **Ngày trích:** 2026-04-16 | **Cập nhật 2026-04-21:** bổ sung Dashboard (FR-01) cho CB_NV/CB_PD + KHO_CAU_HOI chuyển FR-12 → FR-13 | **Cập nhật 2026-05-06:** apply SRS update FR-04 — thêm 3 entity mới (DANH_GIA_SAU_VU_VIEC, NGUOI_HO_TRO, TO_CHUC_TU_VAN) + 7 FR mới (FR-IV-CROSS-01, FR-IV-NEW-01/02/04, FR-IV-NHT-01/02/03) | **Cập nhật 2026-05-06 (FR-05 v3.5):** thêm **2 FR mới** FR-V.I-NEW-02 (DN bổ sung HS) + FR-V.I-NEW-05 (Công khai VV) + **3 entity owned mới** (PHAN_CONG_VU_VIEC, DANH_GIA_VU_VIEC, LICH_SU_VU_VIEC). | **Cập nhật 2026-05-06 (FR-12 v3.5):** rename entity NOI_DUNG_TU_VAN_CS → TU_VAN_CHUYEN_SAU (Thay đổi 2) + đổi tên menu "Tư vấn chuyên sâu" → "Tư vấn pháp luật chuyên sâu" (Thay đổi 1) + thêm **3 entity owned mới** (HO_SO_PHAP_LY_DN 3.4.3.46 / TU_LIEU_PHAP_LY_VV 3.4.3.47 / DANH_GIA_CHAT_LUONG_TV 3.4.3.48 — Thay đổi 5) + 7 state SM-TVCS mới (Thay đổi 3) + 4 BR mới BR-ROUTE-TVCS-01 + BR-PUBLIC-01/02/03 (Thay đổi 6+7) + NHT 📝 RU* trên HSPL_DN (Thay đổi 10).
 > **View đối ứng:** [permission-matrix.md](permission-matrix.md) (Role × Entity) | [permission-matrix-by-role.md](permission-matrix-by-role.md) (Role × Function pivot)
-> **Tổng entity:** **49 entity** (46 cũ + NGUOI_HO_TRO + TO_CHUC_TU_VAN + NGAY_LE) | **Role:** 11
+> **Tổng entity:** **52 entity** (46 cũ + NGUOI_HO_TRO + TO_CHUC_TU_VAN + NGAY_LE + **PHAN_CONG_VU_VIEC + DANH_GIA_VU_VIEC + LICH_SU_VU_VIEC**) | **Role:** 11
 > **Ghi chú:** FR-01 Dashboard là *view* (tổng hợp data từ các entity khác), không phải entity trong §3.4.2 — thêm dòng "Dashboard (Nhóm I — view)" để đối chiếu test quyền truy cập.
+
+> **📋 FR-05 v3.5 permission delta (NEW 2026-05-06 — cite `srs-update-2026-5-5/srs-fr-05-vu-viec.md`):**
+> - **FR-V.I-NEW-02 (DN bổ sung HS):** DN auth Tier 2 VNeID có quyền 🔌 C† trên VU_VIEC (transition `YEU_CAU_BO_SUNG → DANG_KIEM_TRA` qua SCR-V.I-04). KHÁC: chỉ chính DN sở hữu VV (BR-AUTH-04 + ERR-VV-BS-04 cho DN khác).
+> - **FR-V.I-NEW-05 (Công khai VV):** CB PD cùng cấp với CB NV xử lý (BR-AUTH-05) ✅ CRU* trên field `cong_khai` + 4 cột công khai. CB NV/QTHT/khác ❌ nút [Công khai]. Public read qua Cổng PLQG: 9 fields whitelist (BR-PUBLIC-04). Guest 👁️ R public.
+> - **FR-V.I-09 refactor:** CB NV ✅ CRU* trên `PHAN_CONG_VU_VIEC` (modal 2 thẻ Cá nhân/Tổ chức); cá nhân được phân công 📝 RU* (xác nhận/từ chối qua `trang_thai`).
+> - **FR-V.I-17 (UC67 đánh giá):** CHỈ {CB_NV, DN} ✅ CRU* trên `DANH_GIA_VU_VIEC` (loại CB_PD theo CSV UC67) + UNIQUE per `loai_nguoi_danh_gia`.
+> - **BR-AUTH-08 update (V4-CHƯA-SỬA #1):** Cấp **TW thêm exception** xem toàn quốc — không filter `don_vi_id` (giống QTHT).
+> - **2 SCR DN mới** dùng để DN tự xem VV của mình (V.I-04) + nhận thông báo (V.I-05) — backend cố định lọc theo DN auth, ẩn tên cá nhân CB (NĐ 13/2023).
 
 ---
 
@@ -39,15 +47,24 @@
 
 ---
 
-## 2. FR-02 — Hỏi đáp Pháp lý
+## 2. FR-02 — Hỏi đáp Pháp luật
 
-> **SRS §3.2.2, Nhóm II** | 3 entity
+> **SRS §3.2.2, Nhóm II** | 3 entity | **Update 2026-05-06 (v3.5)** — đổi tên "pháp lý" → "pháp luật" (Thay đổi 2 FR-11 ITEM-14)
 
 | Entity | QTHT | CB_NV_TW | CB_NV_BN | CB_NV_DP | CB_PD_TW | CB_PD_BN | CB_PD_DP | DN | NHT | TVV | CG |
 |--------|------|----------|----------|----------|----------|----------|----------|----|-----|-----|----|
 | HOI_DAP | 👁️ R | ✅ CRU\*D | ✅ CRU\*D | ✅ CRU\*D | 👁️ R | 👁️ R* | 👁️ R* | 🔌 C† | ❌ | ❌ | ❌ |
 | PHAN_HOI | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | 📝 RU* | 📝 RU* | 📝 RU* | ❌ | ❌ | ❌ | ❌ |
-| MAU_PHAN_HOI | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | ❌ | ❌ | ❌ |
+| MAU_PHAN_HOI `[CHANGED v3.5]` | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | ❌ | ❌ | ❌ |
+
+> **Note v3.5 (FR-02 update 2026-05-06):**
+> - **MAU_PHAN_HOI áp Mô hình B Hybrid 2 tầng** (FR-II-NEW-02): scope đổi từ `don_vi_id` sang `pham_vi_ap_dung × cấp user`. CB_NV_TW chỉ tạo được mẫu `TW_QUOC_GIA` (mã quyền `MPH_CREATE_TW`); CB_NV_BN tạo `BN_RIENG` (`MPH_CREATE_BN`); CB_NV_DP tạo `DP_RIENG` (`MPH_CREATE_DP`). **Read** (`MPH_READ`): TW thấy tất cả; BN thấy `TW_QUOC_GIA` + mẫu BN của mình; ĐP thấy `TW_QUOC_GIA` + mẫu ĐP của mình. Ngoại lệ BR-AUTH-08: ĐP đọc cross-don_vi mẫu TW.
+> - **HOI_DAP + PHAN_HOI thêm 5 trường công khai chuẩn CR-01:** `cong_khai`/`anh_dai_dien`/`thoi_gian_dang_tai`/`mo_ta_cong_khai`/`file_dinh_kem_cong_khai`. Vai trò Công khai/Hủy CK **chỉ CB Phê duyệt cùng cấp** (BR-FLOW-05 thu hẹp — CB NV bị chặn).
+> - **HOI_DAP thêm `don_vi_id` (CR-06):** DN chọn cơ quan tiếp nhận khi gửi từ Cổng PLQG (default Sở TP tỉnh DN). Scope CRUD scoped theo `don_vi_id` bản ghi (không phải `don_vi_id` user).
+> - **HOI_DAP enum `kenh_tiep_nhan` thêm `TVN_BRIDGE`** (auto-fill từ FR-13 ESCALATE) + **state HUY mới** (8→9 state SM-HOIDAP).
+> - **BR-FLOW-06 mới:** Đóng hồ sơ thủ công, KHÔNG auto-close — CB NV cùng đơn vị HOẶC CB PD cùng cấp click "Đóng hồ sơ" trên SCR-II-02.
+> - **BR-FLOW-03 mở rộng:** cấm sửa/xóa cả `DA_DUYET + CONG_KHAI + HOAN_THANH`. Bản ghi đã CONG_KHAI phải Hủy CK trước, vẫn không xóa được.
+> - **CAU_HINH_PHAN_CONG entity bỏ khỏi FR-02** — chuyển sang FR-10 MH-10.7 (FR-II-NEW-01 chuyển sang QTHT).
 
 ---
 
@@ -109,35 +126,61 @@
 
 ## 6. FR-06 — Chi trả Chi phí
 
-> **SRS §3.2.6 (Nhóm VI)** | 2 entity
+> **SRS §3.2.6 (Nhóm V.II)** — [`srs-update-2026-5-5/srs-fr-06-chi-tra.md`](../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md) v3.5 | **4 entity** (+THAM_DINH_HO_SO + PHE_DUYET_CHI_TRA mới)
+>
+> **🔴 SRS v3.5 update 2026-05-06:** +1 FR mới FR-V.II-14 (DN bổ sung HS qua DVC/Cổng PLQG hoặc CB NV thủ công, ≤5 ngày LV, max 3 lần). +2 entity owned (`THAM_DINH_HO_SO` 1:1, `PHE_DUYET_CHI_TRA` N:1 cho phép CB PD trả về nhiều lần). DN có thêm quyền Update HSCT qua FR-V.II-14 + FR-V.II-02 [GAP-V.II-03] (rút HS) — đổi 🔌 C†R* → 🔌 C†RU*. CB PD "Từ chối" = trả về DANG_THAM_DINH (BR-FLOW-04 lý do ≥10 ký tự) — tạo bản ghi PHE_DUYET_CHI_TRA mỗi lần (do đó CR* chứ không update). 2 vấn đề chờ BA confirm — xem [`ba-questions-fr06-2026-05-06.md`](qa-reports/round7-2026-05-06/bug-reports/ba-questions-fr06-2026-05-06.md).
 
 | Entity | QTHT | CB_NV_TW | CB_NV_BN | CB_NV_DP | CB_PD_TW | CB_PD_BN | CB_PD_DP | DN | NHT | TVV | CG |
 |--------|------|----------|----------|----------|----------|----------|----------|----|-----|-----|----|
-| HO_SO_CHI_TRA | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 📝 RU* | 📝 RU* | 📝 RU* | 🔌 C†R* | ❌ | 👁️ R* | ❌ |
+| HO_SO_CHI_TRA | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 📝 RU* | 📝 RU* | 📝 RU* | 🔌 C†RU* `[CHANGED v3.5]` | ❌ | 👁️ R* | ❌ |
 | DANH_GIA_HO_SO_CHI_TRA | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | 📝 RU* | 📝 RU* | 📝 RU* | ❌ | ❌ | ❌ | ❌ |
+| THAM_DINH_HO_SO `[NEW v3.5]` | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | ❌ | ❌ | ❌ |
+| PHE_DUYET_CHI_TRA `[NEW v3.5]` | 👁️ R | 👁️ R | 👁️ R | 👁️ R | ✅ CR* (BR-AUTH-05) | ✅ CR* (BR-AUTH-05) | ✅ CR* (BR-AUTH-05) | ❌ | ❌ | ❌ | ❌ |
+
+**Ghi chú v3.5:**
+- DN quyền 🔌 C†RU* trên HO_SO_CHI_TRA: Create qua DVC inbound FR-V.II-01; Update file_bo_sung[] qua FR-V.II-14 (YEU_CAU_BO_SUNG, ≤5 ngày LV); Update rút hồ sơ qua FR-V.II-02 [GAP-V.II-03] (CHO_TIEP_NHAN → HUY).
+- THAM_DINH_HO_SO: CB NV tạo + sửa (1:1 với HSCT, ket_qua_tham_dinh DAT/KHONG_DAT/CAN_BO_SUNG). CB PD chỉ R để xem lúc phê duyệt.
+- PHE_DUYET_CHI_TRA: N:1 — mỗi quyết định CB PD (DUYET hoặc TU_CHOI=trả về) tạo bản ghi mới. CB PD chỉ Create (không Update — immutable history). CB NV R để xem lịch sử trả về.
 
 ---
 
 ## 7. FR-07 — Doanh nghiệp
 
-> **SRS §3.2.7 (Nhóm VII)** | 1 entity
+> **SRS §3.2.7 (Nhóm V.III)** — [`srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md`](../input/srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md) v3.5 | **2 entity** (DOANH_NGHIEP + DOANH_NGHIEP_LINH_VUC mới)
+>
+> **🔴 SRS v3.5 update 2026-05-06 — CB_NV_TW/BN/DP bỏ quyền Create:** DN tạo qua DN tự đăng ký FR-VIII-22 (FR-10). CB NV chỉ còn R/U/D scoped theo BR-AUTH-08. KHÔNG còn Import Excel (FR-V.III-NEW-01 BỎ).
 
 | Entity | QTHT | CB_NV_TW | CB_NV_BN | CB_NV_DP | CB_PD_TW | CB_PD_BN | CB_PD_DP | DN | NHT | TVV | CG |
 |--------|------|----------|----------|----------|----------|----------|----------|----|-----|-----|----|
-| DOANH_NGHIEP | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 👁️ R* | 👁️ R* | 👁️ R* | 📝 RU* | ❌ | ❌ | ❌ |
+| DOANH_NGHIEP | 👁️ R | 📝 RUD* | 📝 RUD* | 📝 RUD* | 👁️ R* | 👁️ R* | 👁️ R* | 📝 RU* | ❌ | ❌ | ❌ |
+| DOANH_NGHIEP_LINH_VUC `[NEW v3.5]` | 👁️ R | 📝 RUD* | 📝 RUD* | 📝 RUD* | 👁️ R* | 👁️ R* | 👁️ R* | 📝 RU* | ❌ | ❌ | ❌ |
+
+> **Ghi chú v3.5:**
+> - DOANH_NGHIEP_LINH_VUC là bảng nối M-N (DN ↔ DANH_MUC loai='LINH_VUC_KINH_DOANH'). Quyền theo DN cha — sửa DN = sửa lĩnh vực liên quan.
+> - DN tạo entity mới qua **FR-VIII-22 self-reg** (TK-first registration, username = MST 10 chữ số). Sau kích hoạt qua FR-VIII-26 → DN có quyền RU* trên DOANH_NGHIEP của chính mình.
+> - Email: `TAI_KHOAN.email` UNIQUE login (khóa) + `DOANH_NGHIEP.email` không UNIQUE (BR-AUTH-EMAIL-01). DN đổi `DOANH_NGHIEP.email` không cần OTP (BR-AUTH-EMAIL-01).
 
 ---
 
-## 8. FR-08 — Đánh giá Hiệu quả Hỗ trợ
+## 8. FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
-> **SRS §3.2.8 (Nhóm VIII.2)** | 4 entity
+> **SRS §3.2 Nhóm VI** (`srs-update-2026-5-5/srs-fr-08-danh-gia.md` v3.5) | 4 entity owned + FR-VI-01 đến **FR-VI-10**
+>
+> **⚠️ Update 2026-05-06 (FR-08 v3.5):** Module rename "Kế hoạch đánh giá" → **"Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý"**. Entity rename `DOT_DANH_GIA / DANH_GIA_HQ` → `KE_HOACH_DANH_GIA`. SM-DANHGIA thống nhất 8 state v3.5: `LAP_KE_HOACH/PHAN_CONG/CHO_DUYET_PC/THUC_HIEN/BAO_CAO/CHO_PHE_DUYET/HOAN_THANH/HUY` (state cũ NHAP/DA_LAP_KH/DA_DUYET_PC/DANG_DANH_GIA/DA_DANH_GIA/DA_LAP_BC/CHO_DUYET_BC/DA_DUYET_BC bỏ).
+>
+> **🆕 FR-VI-10 "Nhận kết quả đánh giá" (mới v3.5, GAP-VI-04):** Read-only cho **CB NV thuộc `co_quan_duoc_danh_gia_id`** (cơ quan được đánh giá, có thể KHÁC `don_vi_id` cơ quan thực hiện ĐG) — chỉ khi đợt ở `HOAN_THANH`. Truy cập SCR-VI-01 Tab Báo cáo. Cấp quyền (column "FR-VI-10 scope"): R\* trên KE_HOACH_DANH_GIA + KET_QUA_DANH_GIA + BAO_CAO_DANH_GIA scoped theo `co_quan_duoc_danh_gia_id = user.don_vi_id` AND `trang_thai = HOAN_THANH`.
 
 | Entity | QTHT | CB_NV_TW | CB_NV_BN | CB_NV_DP | CB_PD_TW | CB_PD_BN | CB_PD_DP | DN | NHT | TVV | CG |
 |--------|------|----------|----------|----------|----------|----------|----------|----|-----|-----|----|
-| KE_HOACH_DANH_GIA | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 📝 RU* | 📝 RU* | 📝 RU* | ❌ | ❌ | ❌ | ❌ |
-| KET_QUA_DANH_GIA | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | ❌ | ❌ | ❌ |
+| KE_HOACH_DANH_GIA | 👁️ R | ✅ CRUD* + 👁️ R\*\* | ✅ CRUD* + 👁️ R\*\* | ✅ CRUD* + 👁️ R\*\* | 📝 RU* | 📝 RU* | 📝 RU* | ❌ | ❌ | ❌ | ❌ |
+| KET_QUA_DANH_GIA | 👁️ R | ✅ CRU* + 👁️ R\*\* | ✅ CRU* + 👁️ R\*\* | ✅ CRU* + 👁️ R\*\* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | ❌ | ❌ | ❌ |
 | TIEU_CHI_DANH_GIA | ✅ CRUD | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | ❌ | ❌ | ❌ | ❌ |
-| BAO_CAO_DANH_GIA | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | 📝 RU* | 📝 RU* | 📝 RU* | ❌ | ❌ | ❌ | ❌ |
+| BAO_CAO_DANH_GIA | 👁️ R | ✅ CRU* + 👁️ R\*\* | ✅ CRU* + 👁️ R\*\* | ✅ CRU* + 👁️ R\*\* | 📝 RU* | 📝 RU* | 📝 RU* | ❌ | ❌ | ❌ | ❌ |
+
+> **Chú thích scope CB_NV (FR-08 v3.5):**
+> - `CRUD*` / `CRU*` — scope theo `don_vi_id` (cơ quan thực hiện ĐG, role mặc định FR-VI-01..09).
+> - `👁️ R**` (NEW v3.5) — scope theo `co_quan_duoc_danh_gia_id` (cơ quan được ĐG, FR-VI-10), chỉ trên đợt ở trạng thái `HOAN_THANH`. Read-only — KHÔNG cho update/create/delete.
+> - 1 user CB NV có thể có CẢ 2 scope nếu thuộc cơ quan thực hiện ĐG đồng thời được cử vào cơ quan khác — verify isolation.
 
 ---
 
@@ -154,7 +197,7 @@
 
 ## 10. FR-10 — Quản trị Hệ thống (QTHT)
 
-> **SRS §3.2.10 (Nhóm VIII)** | 9 entity
+> **SRS §3.2.10 (Nhóm VIII) v3.5** | **10 entity** (thêm NGAY_LE từ SRS update 2026-05-05 — FR-VIII-29 `[GAP-VIII-05]`)
 
 | Entity | QTHT | CB_NV_TW | CB_NV_BN | CB_NV_DP | CB_PD_TW | CB_PD_BN | CB_PD_DP | DN | NHT | TVV | CG |
 |--------|------|----------|----------|----------|----------|----------|----------|----|-----|-----|----|
@@ -164,9 +207,10 @@
 | QUYEN_HAN | ✅ CRUD | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | ❌ | ❌ | ❌ | ❌ |
 | DON_VI | ✅ CRUD | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R |
 | CAU_HINH_SLA | ✅ CRUD | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | ❌ | ❌ | ❌ | ❌ |
+| **NGAY_LE** `[NEW v3.5]` | ✅ CRUD | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | AUDIT_LOG | 👁️ R | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | ❌ | ❌ | ❌ |
 | THONG_BAO | 👁️ R | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* |
-| CAU_HINH_PHAN_CONG | ✅ CRUD | ✅ CRU* | ✅ CRU* | ✅ CRU* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | ❌ | ❌ | ❌ |
+| ~~CAU_HINH_PHAN_CONG~~ `[DEPRECATED 2026-05-06]` | — | — | — | — | — | — | — | — | — | — | — |
 
 ---
 
@@ -180,15 +224,24 @@
 
 ---
 
-## 12. FR-12 — Tư vấn Chuyên sâu
+## 12. FR-12 — Tư vấn pháp luật chuyên sâu `[RENAMED 2026-05-06 v3.5 — Thay đổi 1]`
 
-> **SRS §3.2.12 (Nhóm X.1)** | 3 entity (KHO_CAU_HOI đã chuyển sang FR-13)
+> **SRS §3.2.15 (Nhóm X.1)** | **6 entity** (3 cũ + 3 mới owned từ FR-12 v3.5: HO_SO_PHAP_LY_DN/TU_LIEU_PHAP_LY_VV/DANH_GIA_CHAT_LUONG_TV — Thay đổi 5)
+> **Update 2026-05-06 (FR-12 v3.5):** rename entity `NOI_DUNG_TU_VAN_CS` → `TU_VAN_CHUYEN_SAU` (Thay đổi 2); thêm 3 entity owned 3.4.3.46/47/48 (Thay đổi 5); 5 trường công khai chuyên trang trên TVCS + Tư liệu PL VV (Thay đổi 7 + BR-PUBLIC-01/02/03); BR-ROUTE-TVCS-01 routing TVCS theo cơ quan DN chọn (Thay đổi 6); NHT có 📝 RU* trên HSPL_DN scoped theo VV phân công (Thay đổi 10).
 
 | Entity | QTHT | CB_NV_TW | CB_NV_BN | CB_NV_DP | CB_PD_TW | CB_PD_BN | CB_PD_DP | DN | NHT | TVV | CG |
 |--------|------|----------|----------|----------|----------|----------|----------|----|-----|-----|----|
 | TU_VAN_CHUYEN_SAU | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 📝 RU* | 📝 RU* | 📝 RU* | 👁️ R* | ❌ | 👁️ R* | ✅ CRU* |
 | PHIEN_TU_VAN | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | 👁️ R* | 📝 RU* |
 | LICH_SU_TRAO_DOI_TV | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | 👁️ R* | 👁️ R* | 👁️ R* | 🔌 C†R* | ❌ | ❌ | ✅ CRU* |
+| HO_SO_PHAP_LY_DN `[NEW v3.5]` | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 📝 RU* | ❌ | ❌ |
+| TU_LIEU_PHAP_LY_VV `[NEW v3.5]` | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | ❌ | ❌ | ❌ |
+| DANH_GIA_CHAT_LUONG_TV `[NEW v3.5]` | 👁️ R | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 🔌 C† | ❌ | ❌ | ❌ |
+
+> **Ghi chú entity v3.5:**
+> - `HO_SO_PHAP_LY_DN` (3.4.3.46, FR-X.1-04 UC150 + FR-X.1-05 UC151): nhận từ Cổng PLQG qua API inbound (BR-NOTIF-01); NHT 📝 RU* scoped theo VV được phân công cho NHT trong cơ quan của mình (Thay đổi 10 — chỉ R+U, KHÔNG C/D, ngoài scope → 403). DN 👁️ R* thấy HSPL của chính DN qua portal.
+> - `TU_LIEU_PHAP_LY_VV` (3.4.3.47, FR-X.1-06 UC152): công khai trực tiếp lên Cổng PLQG, KHÔNG cần phê duyệt (BR-FLOW-07). 4 trường công khai bổ sung (đã có sẵn `cong_khai`): `anh_dai_dien`, `thoi_gian_dang_tai`, `mo_ta_cong_khai`, `file_dinh_kem_cong_khai`. State: NHAP / CONG_KHAI.
+> - `DANH_GIA_CHAT_LUONG_TV` (3.4.3.48, FR-X.1-07 UC153 — API inbound only): DN gửi điểm 1-5 + nhận xét qua API Cổng PLQG sau khi TVCS đạt DA_DUYET. Idempotent với `ma_danh_gia_cong` UNIQUE + `hanh_dong` ENUM (TAO_MOI/CAP_NHAT/GUI_LAI). KHÔNG gộp vào BR-CALC-06 (thang TVV 1-5) theo Thay đổi 14 OUT.
 
 ---
 

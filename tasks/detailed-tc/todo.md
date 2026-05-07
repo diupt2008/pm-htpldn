@@ -148,10 +148,12 @@
 - 🚫 **B** — Chạy khi A ✅ + Trụ E1 unblock + W3.3 ✅
   - **Output:** `output/execution-test/hop-dong-tv/` (cần tạo)
 
-### W4.2 Chi trả (FR-06, ~70 TC)
+### W4.2 Chi trả (FR-06, ~75 TC) ✏️ v3.5
 
-- 📝 **A** — Viết TC mới
-- 🚫 **B** — Chạy khi A ✅ + E3 + Vụ việc Hoàn thành (W3.2)
+- 📝 **A** — Viết TC mới (high-level đã có ở [output/funtion/7.6-chi-tra-chi-phi.md](../../output/funtion/7.6-chi-tra-chi-phi.md) — 35 TC v3.5 PREP DONE 2026-05-06; detailed TC ~75 cần viết khi BA chốt 2 câu Q1+Q2)
+- 🚫 **B** `[block: chờ A ✅ + E3 + W3.2 VV HOÀN THÀNH + LGSP integration + BA chốt 2 câu Q1+Q2]` — Chạy khi unblock
+  - **v3.5 scope:** SM-CHITRA 10 state + 14 transition + 2 entity owned mới (THAM_DINH_HO_SO 1:1 + PHE_DUYET_CHI_TRA N:1) + FR-V.II-14 DN bổ sung qua DVC + CB PD trả về DANG_THAM_DINH (KHÔNG TU_CHOI cuối) + UI tiếng Việt thuần.
+  - **BA questions:** [ba-questions-fr06-2026-05-06.md](../../output/qa-reports/round7-2026-05-06/bug-reports/ba-questions-fr06-2026-05-06.md) (Q1 hành vi lần 4 + Q2 SLA 4 mức)
   - **Output:** `output/execution-test/chi-tra/` (cần tạo)
 
 ### W4.3 TV Nhanh (FR-13, ~60 TC)

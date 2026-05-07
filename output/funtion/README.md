@@ -8,23 +8,23 @@
 
 | # | Module | File | FR | Tổng TC | P0 | P1 | P2 |
 |---|--------|------|----|---------|----|----|-----|
-| 7.1 | Dashboard | [7.1-dashboard.md](7.1-dashboard.md) | 11 | 34 | 14 | 17 | 3 |
-| 7.2 | Hỏi đáp Pháp lý | [7.2-hoi-dap-phap-ly.md](7.2-hoi-dap-phap-ly.md) | 13 | 36 | 11 | 21 | 4 |
-| 7.3 | Đào tạo, Tập huấn | [7.3-dao-tao-tap-huan.md](7.3-dao-tao-tap-huan.md) | 22 | 40 | 14 | 24 | 2 |
+| 7.1 | Dashboard ✏️ v3.5 | [7.1-dashboard.md](7.1-dashboard.md) | 11 | 51 | 22 | 24 | 5 |
+| 7.2 | Hỏi đáp Pháp luật ✏️ v3.5 | [7.2-hoi-dap-phap-ly.md](7.2-hoi-dap-phap-ly.md) | 13 | 57 (60 - 3 deprecated) | 27 | 26 | 4 |
+| 7.3 | Đào tạo, Tập huấn ✏️ v3.5 | [7.3-dao-tao-tap-huan.md](7.3-dao-tao-tap-huan.md) | 24 | 65 (68 - 3 deprecated Hướng B) | 22 | 37 | 6 |
 | 7.4 | Chuyên gia/TVV | [7.4-chuyen-gia-tvv.md](7.4-chuyen-gia-tvv.md) | 13 | 31 | 10 | 17 | 4 |
 | 7.5 | Vụ việc HTPL | [7.5-vu-viec-htpl.md](7.5-vu-viec-htpl.md) | 19 | 35 | 14 | 16 | 5 |
-| 7.6 | Chi trả Chi phí | [7.6-chi-tra-chi-phi.md](7.6-chi-tra-chi-phi.md) | 13 | 30 | 13 | 13 | 4 |
+| 7.6 | Chi trả Chi phí ✏️ v3.5 | [7.6-chi-tra-chi-phi.md](7.6-chi-tra-chi-phi.md) | 14 | 35 | 15 | 16 | 4 |
 | 7.7 | Quản lý Doanh nghiệp | [7.7-quan-ly-doanh-nghiep.md](7.7-quan-ly-doanh-nghiep.md) | 3 | 18 | 4 | 11 | 3 |
 | 7.8 | Đánh giá Hiệu quả | [7.8-danh-gia.md](7.8-danh-gia.md) | 9 | 40 | 14 | 22 | 4 |
-| 7.9 | Thư viện Biểu mẫu, Hợp đồng | [7.9-bieu-mau.md](7.9-bieu-mau.md) | 8 | 38 | 11 | 25 | 2 |
+| 7.9 | Thư viện Biểu mẫu ✏️ v3.5 | [7.9-bieu-mau.md](7.9-bieu-mau.md) | 7 | 47 (3 TC HĐTV moved → 7.14) | 17 | 28 | 2 |
 | 7.10 | Quản trị Hệ thống | [7.10-quan-tri-he-thong.md](7.10-quan-tri-he-thong.md) | 25 | 32 | 12 | 17 | 3 |
-| 7.11 | Báo cáo Thống kê | [7.11-bao-cao-thong-ke.md](7.11-bao-cao-thong-ke.md) | 23 | 38 | 12 | 22 | 4 |
+| 7.11 | Báo cáo Thống kê ✏️ v3.5 | [7.11-bao-cao-thong-ke.md](7.11-bao-cao-thong-ke.md) | 23 | 40 | 12 | 23 | 5 |
 | 7.12 | Tư vấn Chuyên sâu | [7.12-tu-van-chuyen-sau.md](7.12-tu-van-chuyen-sau.md) | 7 | 44 | 16 | 25 | 3 |
-| 7.13 | Tư vấn Nhanh | [7.13-tu-van-nhanh.md](7.13-tu-van-nhanh.md) | 5 | 39 | 12 | 25 | 2 |
-| 7.14 | Hợp đồng Tư vấn | [7.14-hop-dong-tv.md](7.14-hop-dong-tv.md) | 2 | 29 | 9 | 18 | 2 |
-| 7.15 | Chương trình HTPLDN | [7.15-chuong-trinh-HTPLDN.md](7.15-chuong-trinh-HTPLDN.md) | 11 | 42 | 14 | 23 | 5 |
+| 7.13 | Tư vấn Nhanh ✏️ v3.5 | [7.13-tu-van-nhanh.md](7.13-tu-van-nhanh.md) | 6 | 44 | 14 | 28 | 2 |
+| 7.14 | Hợp đồng Tư vấn ✏️ v3.5 | [7.14-hop-dong-tv.md](7.14-hop-dong-tv.md) | 2 | 34 | 10 | 22 | 2 |
+| 7.15 | Chương trình HTPLDN ✏️ v3.5 | [7.15-chuong-trinh-HTPLDN.md](7.15-chuong-trinh-HTPLDN.md) | 11 | 44 | 15 | 24 | 5 |
 | 7.16 | API Kết nối Chia sẻ Dữ liệu | [7.16-API-ket-noi-chia-se.md](7.16-API-ket-noi-chia-se.md) | 18 | 42 | 13 | 24 | 5 |
-| | **Tổng** | | **202** | **568** | **193** | **320** | **55** |
+| | **Tổng** | | **205** | **659** | **237** | **360** | **62** |
 
 ## Tham chiếu tới tài liệu chiến lược gốc
 

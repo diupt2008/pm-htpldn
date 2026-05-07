@@ -2,9 +2,9 @@
 
 ## Phần mềm Hỗ trợ Pháp lý Doanh nghiệp (PM HTPLDN)
 
-**Ngày lập:** 2026-04-15 (refactor 2026-04-17, A1-A5 patch 2026-04-20, Dashboard 7.1 2026-04-20, **v3.0 seed-workflow-functional 2026-04-23**, **v3.1 SRS update 2026-05-05**)
-**Phiên bản:** 3.1
-**Dựa trên:** SRS v3.1 (2026-04-03) + **3 SRS update từ srs-update-2026-5-5/** (FR-04/FR-07/FR-10) + flow-module.md + seed-fixture.yaml **v2.7.0**
+**Ngày lập:** 2026-04-15 (refactor 2026-04-17, A1-A5 patch 2026-04-20, Dashboard 7.1 2026-04-20, **v3.0 seed-workflow-functional 2026-04-23**, **v3.1 SRS update 2026-05-05**, **v3.2 FR-05 update 2026-05-06**, **v3.3 FR-02 update 2026-05-06**)
+**Phiên bản:** 3.3
+**Dựa trên:** SRS v3.1 (2026-04-03) + **5 SRS update từ srs-update-2026-5-5/** (FR-02/FR-04/FR-05 v3.5/FR-07/FR-10) + flow-module.md + seed-fixture.yaml **v2.7.2-2026-05-06-lv-fix**
 
 > **Breaking change v3.0 (2026-04-23):** Đảo thứ tự phase test — tách **Seed fixture** (pure, entry state only) khỏi **Workflow test** (walk full lifecycle). Thứ tự mới: **Smoke → Seed → Workflow → Functional → Auth → Edge**. Xóa công thức Min count A1 + schema Data Readiness 8-cột (A2/A3) — không còn cần vì seed dùng 6 variant cố định/entity trong `input/data/seed-fixture.yaml`.
 
@@ -15,6 +15,23 @@
 > - **1 FR bỏ (FR-07):** FR-V.III-NEW-01 Import DN từ Excel — DN tự đăng ký TK-first qua FR-VIII-22.
 > - **Run order test thay đổi:** FR-10 (TK + kích hoạt) test TRƯỚC FR-04 (NHT/TVV/TCTV) + FR-07 (DN self-reg) — vì self-reg + kích hoạt là nền tảng.
 > - **Tham chiếu chi tiết:** [`../input/srs-update-2026-5-5/_DELTA-MAP-FR04.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR04.md), [`_DELTA-MAP-FR07.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR07.md), [`_DELTA-MAP-FR10.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR10.md).
+
+> **Update v3.2 (2026-05-06) — apply SRS update FR-05 v3.5 (14 thay đổi IN + V4-CHƯA-SỬA #1):**
+> - **Scope mở rộng từ 49 → 52 entity:** thêm 3 entity owned mới (PHAN_CONG_VU_VIEC + DANH_GIA_VU_VIEC + LICH_SU_VU_VIEC).
+> - **2 FR mới (FR-05 v3.5):** `FR-V.I-NEW-02` (DN bổ sung HS qua chuyên trang VNeID Tier 2) + `FR-V.I-NEW-05` (Công khai VV lên Cổng PLQG — whitelist 9 fields BR-PUBLIC-04 ẨN tên DN/MST/CCCD/SĐT/email/địa chỉ/mo_ta nội bộ/file nghiệp vụ/noi_dung_tu_van — anonymize NQ 03/2017).
+> - **2 SCR DN mới:** SCR-V.I-04 (Danh sách VV của tôi — chế độ DN) + SCR-V.I-05 (Thông báo của tôi — polling 30s) — backend filter theo DN auth, ẩn tên cá nhân CB (NĐ 13/2023).
+> - **VU_VIEC entity refactor:** bỏ `nguoi_ho_tro_id` cũ → 3 cột phân công mới (`loai_doi_tuong_xu_ly` ENUM CA_NHAN/TO_CHUC + `nguoi_xu_ly_id` FK→TAI_KHOAN + `to_chuc_tu_van_id` FK→TO_CHUC_TU_VAN); thêm 5 cột công khai + `file_dinh_kem` formal + `ngay_yeu_cau_bo_sung`.
+> - **SLA mặc định VV:** 10 → **15 ngày làm việc** (NĐ 55/2019 Đ.8 K.1 — DNNVV; cite chưa web-verify).
+> - **2 self-loop SM mới (cờ overlay):** `CONG_KHAI` + `HUY_CONG_KHAI` trên DA_DUYET / HOAN_THANH — KHÔNG phải state riêng.
+> - **CB PD từ chối → DANG_XU_LY** (KHÔNG TU_CHOI đóng VV như v3 — Thay đổi 11). Test case cũ verify TU_CHOI → INVALID, cần redesign.
+> - **UC67 đánh giá VV (FR-V.I-17):** thang **0-10** (KHÁC thang TVV 1.0-5.0); CHỈ {CB_NV, DN} chấm — loại CB_PD theo CSV UC67; UNIQUE per loại.
+> - **DN auth Tier 2 VNeID** ở FR-V.I-02/04/14: lookup DN từ session/MST + check BR-CALC-04 prerequisite (DN nữ/LĐ nữ/KT) trước khi tạo VV.
+> - **DON_VI 2 tầng:** TW cấp 1; BN/ĐP cấp 2 ngang cấp song song (BN không có ĐP trực thuộc).
+> - **BR-AUTH-01 2-tier:** Tier 1 nội bộ + Tier 2 SSO VNeID — bỏ VNPT eKYC.
+> - **BR-AUTH-08 V4-CHƯA-SỬA #1 fix:** thêm exception "Cán bộ Trung ương" (xem toàn quốc, giống QTHT).
+> - **TVV bỏ field `dia_ban_hoat_dong`** (NĐ 77/2008 Đ.19 — TVV scope toàn quốc); `loai_tvv` chỉ còn `('TVV','CG')` — bỏ NHT.
+> - **YAML fix:** seed-fixture.yaml fix pre-existing structural bug (promote `cap_tai_khoan_cg_nht_r5` + `cap_tai_khoan_prereq` ra root level — pre-existing từ R7, không do FR-05 update).
+> - **Tham chiếu chi tiết:** [`../input/srs-update-2026-5-5/_DELTA-MAP-FR05.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR05.md) + [test plan refactor 7.5-vu-viec-htpl.md](funtion/7.5-vu-viec-htpl.md) (72 TC, 9 cluster).
 
 ---
 
@@ -69,15 +86,15 @@
 |---|--------|----------|----------|-------|
 | 1 | Dashboard (Tổng quan hệ thống) | srs-fr-01-dashboard.md | UC 1-9 | 11 |
 | 2 | Quản trị Hệ thống | srs-fr-10-quan-tri.md | UC 99-119, 191-194 | 25 |
-| 3 | Quản lý Hỏi đáp Pháp lý | srs-fr-02-hoi-dap.md | UC 10-19 | 13 |
+| 3 | Quản lý Hỏi đáp Pháp luật `[v3.5]` | srs-update-2026-5-5/srs-fr-02-hoi-dap.md | UC 10-19 | 13 |
 | 4 | Quản lý Chuyên gia/TVV | srs-fr-04-chuyen-gia-tvv.md | UC 39-50 | 13 |
 | 5 | Quản lý Vụ việc HTPL | srs-fr-05-vu-viec.md | UC 51-67 | 19 |
-| 6 | Quản lý Chi trả Chi phí | srs-fr-06-chi-tra.md | UC 68-80 | 13 |
-| 7 | Quản lý Doanh nghiệp | srs-fr-07-doanh-nghiep.md | UC 81-82 | 3 |
+| 6 | Quản lý Chi trả Chi phí | srs-fr-06-chi-tra.md | UC 68-80 + GAP | 14 |
+| 7 | Quản lý Doanh nghiệp | srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md (v3.5) | UC 81-82 | 2 |
 | 8 | Quản lý Đào tạo, Tập huấn | srs-fr-03-dao-tao.md | UC 20-38 + UC mới | 22 |
 | 9 | Đánh giá Hiệu quả Hỗ trợ | srs-fr-08-danh-gia.md | UC 83-91 | 9 |
 | 10 | Thư viện Biểu mẫu, Hợp đồng | srs-fr-09-bieu-mau.md | UC 92-98, 163 | 8 |
-| 11 | Quản lý Nội dung Tư vấn Chuyên sâu | srs-fr-12-tv-chuyen-sau.md | UC 147-153 | 7 |
+| 11 | Quản lý Tư vấn pháp luật chuyên sâu `[RENAMED v3.5]` | srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md | UC 147-153 | 7 |
 | 12 | Tư vấn Nhanh | srs-fr-13-tv-nhanh.md | UC 158-162 | 5 |
 | 13 | Báo cáo Thống kê | srs-fr-11-bao-cao.md | UC 120-142 | 23 |
 | 14 | Quản lý Hợp đồng Tư vấn | srs-fr-14-hop-dong-tv.md | UC 163-163e | 2 |
@@ -94,7 +111,7 @@
 | Account | Role SRS | Đơn vị | Cấp | Ghi chú |
 |---------|----------|--------|-----|---------|
 | admin | QTHT | Cục BTTP - Bộ Tư pháp | TW | Quản trị hệ thống TW |
-| qtht_tw / qtht_bn / qtht_dp | QTHT | Cục BTTP / Bộ KH&ĐT / Sở TP HN | TW/BN/DP | Quản trị hệ thống 3 cấp |
+| qtht_01 / qtht_02 / qtht_03 | QTHT | Cục BTTP (single role per SRS §3.4.2 — không split TW/BN/DP) | — | Quản trị hệ thống. `_01` primary, `_02` fallback, `_03` permission test. Convention 2026-04-24 |
 | canbo_tw / canbo_bn / canbo_tinh | CB_NV | Cục BTTP / Bộ KH&ĐT / Sở TP HN | TW/BN/DP | Cán bộ nghiệp vụ |
 | lanhdao_tw / lanhdao_bn / lanhdao_dp | CB_PD | Cục BTTP / Bộ KH&ĐT / Sở TP HN | TW/BN/DP | Cán bộ phê duyệt |
 | nht_user | NHT | — | Portal | Người hỗ trợ |
@@ -167,7 +184,7 @@ GĐ 1: Pure Seed (theo seed-fixture.yaml — Tier 0 → 1 → 2 → 3 → 4)
 │   └── HO_SO_PHAP_LY_DN (FR-X.1-04 UC150, tạo tại M5) — phủ SCR-V.III-02 tab #2
 ├── Tier 3 downstream (phụ thuộc Tier 2 đã qua state đích):
 │   ├── M7 HOP_DONG_TV (cần VV HOÀN THÀNH + TVV ĐANG HOẠT ĐỘNG)
-│   ├── M9 DANH_GIA_HQ (cần VV HOÀN THÀNH trong kỳ)
+│   ├── M9 KE_HOACH_DANH_GIA (rename FR-08 v3.5; cần VV HOAN_THANH trong kỳ)
 │   ├── M10B KHO_CAU_HOI thủ công (nguon=THU_CONG, SCR-X2-01); nguon=TU_DONG auto-push từ HOI_DAP DA_DUYET (BR-FLOW-10)
 │   └── BLOCKED: M8 HO_SO_CHI_TRA (chờ LGSP/DVC) + M10A TV_NHANH_PHIEN (chờ Cổng PLQG integration)
 ├── Tier 4 output (read-only aggregate, chạy khi upstream đủ data trong kỳ):
@@ -277,7 +294,7 @@ Test Pattern cho mỗi chức năng:
 | DI-06 | NHT chỉ thấy VV được phân công | nht_user | Chỉ thấy VU_VIEC đã được phân công (📝 RU*), lọc kép BR-AUTH-10 |
 | DI-06b | TVV không thấy VU_VIEC | tvv_user | TVV = ❌ trên VU_VIEC. Chỉ thấy HO_SO_VU_VIEC + KET_QUA_VU_VIEC được phân công |
 | DI-07 | CB PD cùng cấp mới duyệt được | lanhdao_bn | Chỉ duyệt được bản ghi do CB BN tạo |
-| DI-08 | QTHT xem được business modules nhưng không sửa | qtht_tw | Thấy danh sách Hỏi đáp/VV/Chi trả/DN (👁️ R) nhưng KHÔNG có nút Tạo/Sửa/Xóa |
+| DI-08 | QTHT xem được business modules nhưng không sửa | qtht_01 | Thấy danh sách Hỏi đáp/VV/Chi trả/DN (👁️ R) nhưng KHÔNG có nút Tạo/Sửa/Xóa |
 | DI-09 | DN không truy cập CMS UI | dn_user | Truy cập CMS URL → bị chặn. DN chỉ tương tác qua API (🔌 C†) |
 
 ---
@@ -289,10 +306,10 @@ Test Pattern cho mỗi chức năng:
 
 | SM | Entity | States | Module | Test Paths (SM) | Smoke spec (gate check) |
 |----|--------|--------|--------|-----------------|-------------------------|
-| SM-HOIDAP | HOI_DAP | 9 | Hỏi đáp PL | [smoke/6.2-sm-hoidap.md](smoke/6.2-sm-hoidap.md) — 7 paths | [smoke-specs/6.2-smoke-hoidap.md](smoke-specs/6.2-smoke-hoidap.md) |
+| SM-HOIDAP `[v3.5]` | HOI_DAP | 9 | Hỏi đáp Pháp luật | [smoke/6.2-sm-hoidap.md](smoke/6.2-sm-hoidap.md) — 11 paths | [smoke-specs/6.2-smoke-hoidap.md](smoke-specs/6.2-smoke-hoidap.md) |
 | SM-TVV | TU_VAN_VIEN | 9 | CG/TVV | [smoke/6.4-sm-tvv.md](smoke/6.4-sm-tvv.md) — 8 paths | [smoke-specs/6.4-smoke-tvv.md](smoke-specs/6.4-smoke-tvv.md) |
 | SM-VUVIEC | VU_VIEC | 12 | Vụ việc | [smoke/6.5-sm-vuviec.md](smoke/6.5-sm-vuviec.md) — 9 paths | [smoke-specs/6.5-smoke-vuviec.md](smoke-specs/6.5-smoke-vuviec.md) |
-| SM-CHITRA | HO_SO_CHI_TRA | 10 | Chi trả | [smoke/6.6-sm-chitra.md](smoke/6.6-sm-chitra.md) — 9 paths | [smoke-specs/6.6-smoke-chitra.md](smoke-specs/6.6-smoke-chitra.md) |
+| SM-CHITRA | HO_SO_CHI_TRA | 10 | Chi trả | [smoke/6.6-sm-chitra.md](smoke/6.6-sm-chitra.md) — 11 paths (v3.5) | [smoke-specs/6.6-smoke-chitra.md](smoke-specs/6.6-smoke-chitra.md) |
 | SM-TAIKHOAN | TAI_KHOAN | 4 | Quản trị HT | [smoke/6.10-sm-taikhoan.md](smoke/6.10-sm-taikhoan.md) — 7 paths | [smoke-specs/6.10-smoke-taikhoan.md](smoke-specs/6.10-smoke-taikhoan.md) |
 | SM-KHOAHOC | KHOA_HOC | 9 | Đào tạo, Tập huấn | (paths gộp trong [funtion/7.3-dao-tao-tap-huan.md](funtion/7.3-dao-tao-tap-huan.md); SM detail xem [`flow-module.md` §8.1](../input/flow-module.md)) | [smoke-specs/6.3-smoke-daotao.md](smoke-specs/6.3-smoke-daotao.md) |
 | SM-KH-CTHTPL | CHUONG_TRINH_HTPL | 8 | Chương trình HTPLDN | (paths gộp trong [funtion/7.15-chuong-trinh-HTPLDN.md](funtion/7.15-chuong-trinh-HTPLDN.md) §Test Case Matrix Nhóm 3a — 13 TC) | [smoke-specs/6.15-smoke-chuong-trinh-HTPLDN.md](smoke-specs/6.15-smoke-chuong-trinh-HTPLDN.md) |
@@ -408,7 +425,7 @@ Các state KHÔNG thể đạt qua UI trong GĐ 1 (seed) hoặc GĐ 2 (workflow)
 > **Chi tiết:** [funtion/7.1-dashboard.md](funtion/7.1-dashboard.md)
 > **Tổng TC:** 34 (P0: 14, P1: 17, P2: 3) — read-only aggregation layer hiển thị 9 KPI (UC1-UC9) + 2 KPI bổ sung (KPI-03 tỷ lệ HS bổ sung, KPI-04 thời gian xử lý TB theo ngày LV — BR-CALC-03) + 2 biểu đồ (UC8 bar+line điểm hài lòng + tỷ lệ SLA BR-SLA-05, UC9 donut tỷ lệ đạt chứng nhận + điểm TB). FR-I-CROSS-02 Auto-refresh 60s kết hợp Page Visibility API (pause khi tab ẩn). Module KHÔNG có entity riêng, KHÔNG có state machine — đọc từ HOI_DAP (SM-HOIDAP `MOI`), VU_VIEC (SM-VUVIEC theo nhóm trạng thái), KHOA_HOC (SM-KHOAHOC `DANG_DIEN_RA/KET_THUC`), TU_VAN_VIEN (SM-TVV `DANG_HOAT_DONG`), KET_QUA_DANH_GIA, KET_QUA_DAO_TAO, CAU_HINH_SLA. Phân quyền 3 cấp TW/BN/ĐP (BR-AUTH-01/03/04/08): TW toàn quốc, BN chỉ BN mình, ĐP chỉ ĐP mình — dropdown đơn vị TW chọn bất kỳ, BN/ĐP read-only. Bộ lọc `tu_ngay`/`den_ngay`/`nam`/`don_vi_id` đồng bộ URL. Click thẻ KPI → drill-down `/hoi-dap/danh-sach` / `/vu-viec/danh-sach` / `/dao-tao/khoa-hoc` / `/chuyen-gia-tvv/danh-sach` (trừ 2 KPI bổ sung — không drill-down). Cross-module: chạy SAU 7.2/7.3/7.4/7.5/7.8 để có data nguồn. TC 5 nhóm: Happy (5) + Negative (4) + Workflow gồm filter/auto-refresh/drill-down (11) + Authorization (7) + Cross-module so khớp count với module đích (7).
 
-### 7.2 Module: Hỏi đáp Pháp lý (13 FR)
+### 7.2 Module: Hỏi đáp Pháp luật (13 FR) `[v3.5]`
 
 > **Chi tiết:** [funtion/7.2-hoi-dap-phap-ly.md](funtion/7.2-hoi-dap-phap-ly.md)
 > **Tổng TC:** 36 (P0: 11, P1: 21, P2: 4) — workflow tiếp nhận → trả lời → phê duyệt → công khai, mẫu phản hồi, phân công, SLA.
@@ -428,35 +445,41 @@ Các state KHÔNG thể đạt qua UI trong GĐ 1 (seed) hoặc GĐ 2 (workflow)
 > **Chi tiết:** [funtion/7.5-vu-viec-htpl.md](funtion/7.5-vu-viec-htpl.md)
 > **Tổng TC:** 35 (P0: 14, P1: 16, P2: 5) — workflow nghiệp vụ lõi, phân công NHT theo NĐ55, auto-reject lần 4, immutability sau duyệt.
 
-### 7.6 Module: Chi trả Chi phí (13 FR)
+### 7.6 Module: Chi trả Chi phí (14 FR)
 
 > **Chi tiết:** [funtion/7.6-chi-tra-chi-phi.md](funtion/7.6-chi-tra-chi-phi.md)
-> **Tổng TC:** 30 (P0: 13, P1: 13, P2: 4) — tính mức hỗ trợ theo quy mô DN (BR-CALC-01), over-cap, annual reset, immutability.
+> **SRS v3.5:** [`srs-update-2026-5-5/srs-fr-06-chi-tra.md`](../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md) — apply 9 thay đổi B1 (BA chốt OUT 4 thay đổi 5/8/12/13).
+> **Apply SRS v3.5 (2026-05-06):** 13→14 FR. **+FR-V.II-14** DN bổ sung HS qua DVC/Cổng PLQG hoặc CB NV thủ công (PRE ≤5 ngày LV, max 3 lần). **+2 entity owned mới** `THAM_DINH_HO_SO` (1:1) + `PHE_DUYET_CHI_TRA` (N:1, cho phép CB PD trả về nhiều lần). **HO_SO_CHI_TRA +9 fields lifecycle** (`ngay_tiep_nhan`, `nguoi_tiep_nhan_id`, `thoi_gian_tu_choi`, `nguoi_tu_choi_id`, `ly_do_huy`, `bo_sung_count` CHECK 0-3, `ngay_yeu_cau_bo_sung`...) + UNIQUE `ma_ho_so_dvc`. **CB PD "Từ chối" = trả về DANG_THAM_DINH** (lý do ≥10 ký tự, KHÔNG phải Từ chối cuối). **+2 sub-flow FR-V.II-02** Tiếp nhận `[GAP-V.II-02]` + DN rút `[GAP-V.II-03]`. **SM-CHITRA 10 trạng thái đồng bộ enum** (bỏ `MOI`/`DA_TIEP_NHAN`/`CHO_THAM_DINH`/`DA_THAM_DINH`/`TU_CHOI_THAM_DINH`/`TU_CHOI_THANH_TOAN`). **UI tiếng Việt thuần** SCR-V.II-01/02 (badge "Siêu nhỏ/Nhỏ/Vừa", state Việt). **DON_VI 2 tầng**. **BA OUT:** auto từ chối lần 4 (BR-EC-15) + SLA dynamic (BR-SLA-02) + BR-FLOW-04 mở rộng + section "Lịch sử thay đổi". 2 vấn đề chờ BA confirm — xem [`ba-questions-fr06-2026-05-06.md`](qa-reports/round7-2026-05-06/bug-reports/ba-questions-fr06-2026-05-06.md).
+> **Tổng TC:** **35** (P0: 15, P1: 16, P2: 4) — 30 v3 baseline + 5 TC v3.5 mới: **CT-032 DN rút HS** (`[GAP-V.II-03]`) + **CT-033 FR-V.II-14 DN bổ sung qua DVC** + **CT-034 UNIQUE `ma_ho_so_dvc`** (HTTP 409 ERR-CT-02) + **CT-035 UI tiếng Việt thuần**. CT-006 + CT-021 đánh dấu ⏳ chờ BA confirm. Module BLOCKED end-to-end do thiếu integration LGSP/DVC.
 
-### 7.7 Module: Quản lý Doanh nghiệp (3 FR)
+### 7.7 Module: Quản lý Doanh nghiệp (2 FR)
 
 > **Chi tiết:** [funtion/7.7-quan-ly-doanh-nghiep.md](funtion/7.7-quan-ly-doanh-nghiep.md)
-> **Tổng TC:** 18 (P0: 4, P1: 11, P2: 3) — master data DN, CRUD + guard xóa, Import/Export Excel, phân loại quy mô NĐ39/2018.
+> **SRS v3.5:** [`srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md`](../input/srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md) — apply 10 thay đổi cherry-pick (2026-05-06).
+> **Apply SRS v3.5 (2026-05-06):** 3→2 FR. **BỎ FR-V.III-NEW-01 Import DN từ Excel** + SCR-V.III-03 Wizard 3 bước (BA chốt). **BỎ "Thêm mới" CMS** — DN tạo qua FR-VIII-22 self-reg (FR-10), CB NV bỏ quyền Create chỉ còn R/U/D scoped. **+ entity DOANH_NGHIEP_LINH_VUC (M-N)** — UI Lĩnh vực KD đổi sang multi-select. **+ trường `tong_nguon_von`** (NĐ39/2018 đủ 3 chỉ số cho BR-CALC-05). **`tinh_thanh_id` FK → DANH_MUC** (loai='TINH_THANH', mã GSO 01-63 theo QĐ 124/2004/QĐ-TTg). **Email Phương án B** (BR-AUTH-EMAIL-01): `TAI_KHOAN.email` UNIQUE login + `DOANH_NGHIEP.email` không UNIQUE, đổi độc lập không cần OTP. Sync 4 cặp tên trường (`giay_cn_dkkd`/`loai_dn_id`/`chuc_vu_dai_dien`/`dien_thoai`).
+> **Tổng TC:** **17 active** (P0: 6, P1: 9, P2: 2) + 3 OUT-OF-SCOPE (DN-010/011/012 Import Excel) + 1 defer Tier 3 (DN-020 VNeID) + 1 defer Tier 2 (DN-004 self-reg chờ BA chốt 3 hard block FR-10). 4 TC v3.5 mới: **DN-021 `tong_nguon_von`** + **DN-022 multi-select Lĩnh vực KD** + **DN-023 `tinh_thanh_id` source DANH_MUC** + **DN-024 sync 4 cặp tên trường**. Master data: 36 DN dev pre-seed (verified MCP 2026-05-06, cover 3 quy mô × 3 ngành nghề).
 
-### 7.8 Module: Đánh giá Hiệu quả Hỗ trợ (9 FR)
+### 7.8 Module: Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý (10 FR — FR-08 v3.5)
 
 > **Chi tiết:** [funtion/7.8-danh-gia.md](funtion/7.8-danh-gia.md)
-> **Tổng TC:** 40 (P0: 14, P1: 22, P2: 4) — lập KH đánh giá (sơ bộ 6 tháng / tròn năm — BR-LEGAL-08), thiết lập tiêu chí (SUM trọng số = 100% — BR-CALC-04), phân công + phê duyệt PC, chọn VV HOAN_THANH, chấm điểm auto-tính xếp loại, lập BC TT17/2025 + phê duyệt BC, immutability sau DANG_DANH_GIA.
+> **Tổng TC:** 46 (P0: 17, P1: 24, P2: 5) — lập KH đánh giá (sơ bộ 6 tháng / tròn năm — BR-LEGAL-08), thiết lập tiêu chí (SUM trọng số = 100% — BR-CALC-04), phân công + phê duyệt PC, chọn VV HOAN_THANH, chấm điểm auto-tính xếp loại, lập BC TT17/2025 + phê duyệt BC, immutability sau `THUC_HIEN`. **Update 2026-05-06 (FR-08 v3.5):** rename module + entity (`DOT_DANH_GIA → KE_HOACH_DANH_GIA`); **+FR-VI-10 "Nhận kết quả đánh giá"** read-only cho CB NV thuộc `co_quan_duoc_danh_gia_id` khi đợt `HOAN_THANH`; SM-DANHGIA thống nhất 8 state v3.5 + HUY (bỏ 9 state cũ NHAP/DA_LAP_KH/...); 2 field mới `co_quan_duoc_danh_gia_id` 1:1 + `file_dinh_kem`; BR-NOTIF-01 mở rộng FR-VI-03/04/08/09.
 
 ### 7.9 Module: Thư viện Biểu mẫu, Hợp đồng (8 FR)
 
 > **Chi tiết:** [funtion/7.9-bieu-mau.md](funtion/7.9-bieu-mau.md)
 > **Tổng TC:** 38 (P0: 11, P1: 25, P2: 2) — CRUD thư mục + biểu mẫu 2 cấp, upload file doc/docx/xls/xlsx (max 20MB, virus scan), preview online, công khai trực tiếp lên Cổng PLQG KHÔNG cần phê duyệt (BR-FLOW-07, SM-BIEUMAU: NHAP↔CONG_KHAI↔AN), import hàng loạt ≤50 file, API chia sẻ với Cổng PLQG, CRUD HĐ Tư vấn auto-gen mã HDTV-YYYYMMDD-SEQ (liên kết vụ việc V).
 
-### 7.10 Module: Quản trị Hệ thống (25 FR)
+### 7.10 Module: Quản trị Hệ thống (27 FR)
 
 > **Chi tiết:** [funtion/7.10-quan-tri-he-thong.md](funtion/7.10-quan-tri-he-thong.md)
-> **Tổng TC:** 32 (P0: 12, P1: 17, P2: 3) — xác thực, CRUD danh mục, tài khoản, vai trò, audit log, authorization.
+> **Apply SRS v3.5 (2026-05-06):** 25→27 FR (thêm FR-VIII-26 Quên MK / VIII-28 Nhật ký HT / VIII-29 Ngày lễ; FR-VIII-06 Tổ chức TV chuyển sang FR-04). 14 DM (bỏ Tổ chức TV). SM-TAIKHOAN 5 trạng thái (thêm CHO_PHAN_QUYEN). DON_VI 2 tầng. Auth 2-tier (bỏ VNPT eKYC). Mật khẩu thêm ký tự đặc biệt.
+> **Tổng TC:** **31 Tier 1 active** + 6 Tier 2 parking (chờ BA chốt 3 câu hard block — xem [bug-report-r7-srs-fr10-inconsistency.md](qa-reports/round7-2026-05-06/bug-reports/bug-report-r7-srs-fr10-inconsistency.md)) + Tier 3 skip (VNeID + SCR-VIII-08a). Tier 1: xác thực Tier 1 nội bộ, CRUD 14 DM, DON_VI 2 tầng, TK CRUD + 5 states + nút Phân quyền, vai trò, audit log, authorization 7 roles, BR-SLA-02 4 nhãn FE.
 
-### 7.12 Module: Tư vấn Chuyên sâu (7 FR)
+### 7.12 Module: Tư vấn pháp luật chuyên sâu (7 FR) `[RENAMED 2026-05-06 v3.5 — Thay đổi 1]`
 
 > **Chi tiết:** [funtion/7.12-tu-van-chuyen-sau.md](funtion/7.12-tu-van-chuyen-sau.md)
-> **Tổng TC:** 44 (P0: 16, P1: 25, P2: 3) — vòng đời TVCS 7 state (SM-TVCS: TIEP_NHAN → PHAN_CONG → DANG_TU_VAN → HOAN_THANH → CHO_PHE_DUYET → DA_DUYET + HUY), phân công CG + SLA timeout 2 ngày LV, phê duyệt CB PD cùng cấp (BR-FLOW-04 từ chối cần lý do), 3 UC loại M API inbound từ Cổng PLQG (TVCS UC149 / HSPL UC151 / Đánh giá CL UC153 idempotent), CRUD HSPL DN (auto-gen HSPL-YYYYMMDD-SEQ) + tư liệu PL công khai trực tiếp Cổng PLQG (BR-FLOW-07), auto-save draft trả lời CG mỗi 30s, immutability sau DA_DUYET, cross-module cập nhật điểm TB chuyên gia (↔ module 7.4 TVV), upsert DN theo MST (↔ module 7.7 DN), liên kết vụ việc (↔ module 7.5 VV).
+> **Tổng TC:** **61 (P0: 23, P1: 34, P2: 4)** — vòng đời TVCS 7 state (SM-TVCS: TIEP_NHAN → PHAN_CONG → DANG_TU_VAN → HOAN_THANH → CHO_PHE_DUYET → DA_DUYET + HUY), phân công CG + SLA timeout 2 ngày LV, phê duyệt CB PD cùng cấp (BR-FLOW-04 từ chối cần lý do + BR-AUTH-05 cùng cấp), 3 UC loại M API inbound từ Cổng PLQG (TVCS UC149 / HSPL UC151 / Đánh giá CL UC153 idempotent), CRUD HSPL DN (auto-gen HSPL-YYYYMMDD-SEQ) + tư liệu PL công khai trực tiếp Cổng PLQG (BR-FLOW-07), auto-save draft trả lời CG mỗi 30s, immutability sau DA_DUYET, cross-module cập nhật điểm TB chuyên gia (↔ module 7.4 TVV), upsert DN theo MST (↔ module 7.7 DN), liên kết vụ việc (↔ module 7.5 VV).
+> **Update 2026-05-06 (FR-12 v3.5):** apply 13 thay đổi — đổi tên menu (Thay đổi 1); rename entity `NOI_DUNG_TU_VAN_CS` → `TU_VAN_CHUYEN_SAU` (Thay đổi 2); 7 khối Xử lý chi tiết theo SM cho FR-X.1-01 (Thay đổi 4); **3 entity owned mới** `HO_SO_PHAP_LY_DN` (3.4.3.46) / `TU_LIEU_PHAP_LY_VV` (3.4.3.47) / `DANH_GIA_CHAT_LUONG_TV` (3.4.3.48) — Thay đổi 5; thêm `don_vi_id` cơ quan tiếp nhận + **BR-ROUTE-TVCS-01** (Thay đổi 6); 5 trường công khai chuyên trang + **BR-PUBLIC-01/02/03** (Thay đổi 7); 6 khối Xử lý còn thiếu cho FR-X.1-04/06 (Thay đổi 8); 3 đầu mối tiếp nhận từ Cổng PLQG (Thay đổi 9); **NHT có 📝 RU* trên HSPL_DN** scoped theo VV phân công (Thay đổi 10); **BR-AUTH-01 đổi 2-tier**, bỏ VNPT eKYC (Thay đổi 11); bỏ field `hinh_thuc_tv` ở cấp Vụ việc (Thay đổi 12); link `hop_dong_tv_id` sang FR-14 Hợp đồng TV (Thay đổi 13). **17 TC mới TV-045..061** cover công khai chuyên trang (TV-045..048), routing cơ quan tiếp nhận (TV-049..052), NHT permission HSPL (TV-053..054), HSPL Xem chi tiết + Xuất Excel (TV-055..056), Tư liệu PL Sửa khi công khai + Tìm kiếm (TV-057..058), cross-module link Hợp đồng TV (TV-059), API outbound filter cong_khai + don_vi_id (TV-060..061). Cite: [`srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md`](../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md) v3.5 + [CHANGELOG-v3-to-v3.5.md](../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) §srs-fr-12.
 
 ### 7.13 Module: Tư vấn Nhanh (5 FR)
 
@@ -466,7 +489,7 @@ Các state KHÔNG thể đạt qua UI trong GĐ 1 (seed) hoặc GĐ 2 (workflow)
 ### 7.11 Module: Báo cáo Thống kê (23 FR)
 
 > **Chi tiết:** [funtion/7.11-bao-cao-thong-ke.md](funtion/7.11-bao-cao-thong-ke.md)
-> **Tổng TC:** 38 (P0: 12, P1: 22, P2: 4) — read-only aggregation layer 23 loại BC (UC120 → UC142) trong 1 màn hình unified SCR-IX-01. Module KHÔNG có state machine nghiệp vụ (entity `BAO_CAO` chỉ có 3 trạng thái kỹ thuật `DANG_TAO → HOAN_THANH | LOI` của job xuất). Tất cả FR-IX kế thừa template TPL-REPORT-FULL (input kỳ + đơn vị + format xuất, processing 10 bước, output bảng + biểu đồ). 4 cụm BC: Vụ việc (UC121-124, 130-133), Chi phí (UC134-138 — kèm so sánh trần NĐ55), Đào tạo + CG-TVV (UC125-129), CT HTPLDN (UC139-142) + UC120 Hỏi đáp + UC128 Đánh giá. BR áp dụng: BR-AUTH-08 phân quyền dữ liệu 3 cấp TW/BN/ĐP, BR-RPT-01 chỉ tính bản ghi đã duyệt, BR-DATA-06 max 50K rows xuất, BR-SLA-02 4 mức cảnh báo cho BC VV đang xử lý, BR-DATA-05 audit log xem/xuất BC. Cross-module: BC đọc từ HOI_DAP/VU_VIEC/KHOA_HOC/TU_VAN_VIEN/HO_SO_CHI_TRA/DOT_DANH_GIA/CHUONG_TRINH_HTPL/DOANH_NGHIEP — module BC chạy SAU 7.2/7.3/7.4/7.5/7.6/7.7/7.8 đã có data `DA_DUYET`. Xuất XLSX/DOCX theo TT17/2025.
+> **Tổng TC:** 38 (P0: 12, P1: 22, P2: 4) — read-only aggregation layer 23 loại BC (UC120 → UC142) trong 1 màn hình unified SCR-IX-01. Module KHÔNG có state machine nghiệp vụ (entity `BAO_CAO` chỉ có 3 trạng thái kỹ thuật `DANG_TAO → HOAN_THANH | LOI` của job xuất). Tất cả FR-IX kế thừa template TPL-REPORT-FULL (input kỳ + đơn vị + format xuất, processing 10 bước, output bảng + biểu đồ). 4 cụm BC: Vụ việc (UC121-124, 130-133), Chi phí (UC134-138 — kèm so sánh trần NĐ55), Đào tạo + CG-TVV (UC125-129), CT HTPLDN (UC139-142) + UC120 Hỏi đáp + UC128 Theo dõi Đánh giá Hiệu quả HTPL. BR áp dụng: BR-AUTH-08 phân quyền dữ liệu 3 cấp TW/BN/ĐP, BR-RPT-01 chỉ tính bản ghi đã duyệt, BR-DATA-06 max 50K rows xuất, BR-SLA-02 4 mức cảnh báo cho BC VV đang xử lý, BR-DATA-05 audit log xem/xuất BC. Cross-module: BC đọc từ HOI_DAP/VU_VIEC/KHOA_HOC/TU_VAN_VIEN/HO_SO_CHI_TRA/**KE_HOACH_DANH_GIA (rename FR-08 v3.5 từ `DOT_DANH_GIA`)**/CHUONG_TRINH_HTPL/DOANH_NGHIEP — module BC chạy SAU 7.2/7.3/7.4/7.5/7.6/7.7/7.8 đã có data `DA_DUYET`/`HOAN_THANH` (state cũ `DA_DUYET_BC` → `HOAN_THANH` SM-DANHGIA v3.5). Xuất XLSX/DOCX theo TT17/2025.
 
 ### 7.14 Module: Hợp đồng Tư vấn (2 FR)
 
@@ -481,7 +504,7 @@ Các state KHÔNG thể đạt qua UI trong GĐ 1 (seed) hoặc GĐ 2 (workflow)
 ### 7.16 Module: API Kết nối Chia sẻ Dữ liệu (18 FR)
 
 > **Chi tiết:** [funtion/7.16-API-ket-noi-chia-se.md](funtion/7.16-API-ket-noi-chia-se.md)
-> **Tổng TC:** 42 (P0: 13, P1: 24, P2: 5) — 18 API outbound (9 cặp chia sẻ + tìm kiếm) cho Cổng PLQG qua REST JSON kết nối trực tiếp (không LGSP), bảo mật 2 lớp mTLS + JWT Bearer RS256 (BR-INTG-02), rate limit 100 req/min/consumer (BR-INTG-03), response time < 3s (BR-INTG-04). Module KHÔNG có màn hình CMS, KHÔNG có state machine (read-only outbound) — thay vào đó filter theo trạng thái publishable của entity nguồn (BR-INTG-07): HOI_DAP `DA_DUYET`, KHOA_HOC publishable, TU_VAN_VIEN `DANG_HOAT_DONG`, VU_VIEC `HOAN_THANH/DA_DUYET`, DOT_DANH_GIA `DA_DUYET_BC`, BIEU_MAU `CONG_KHAI+la_cong_khai=1`, NOI_DUNG_TU_VAN_CS `HOAN_THANH` (metadata only), CHUONG_TRINH_HTPL `DA_CONG_BO` (kế hoạch only), DOANH_NGHIEP công khai. TC phân 5 nhóm loại (Happy/Negative/Workflow/Auth/Cross-module) + 3 cụm (A Infrastructure 16 TC, B Per-pair 20 TC, C Workflow+Auth+Cross 6 TC). BR-SEC-01 loại trừ thông tin nhạy cảm (CMND/CCCD/SĐT/địa chỉ cá nhân khi expose TVV; MST/địa chỉ chi tiết khi expose VV). Công cụ test: Postman/Bruno + curl+jq + k6 (rate-limit & p95) + OpenSSL s_client (mTLS). Cross-module: đọc từ 7.2/7.3/7.4/7.5/7.7/7.8/7.9/7.12 + module CT HTPLDN — chạy SAU các module đó đã có data publishable. Phân quyền: DN = 🔌 C† (chỉ qua API, không qua CMS, DI-09).
+> **Tổng TC:** 42 (P0: 13, P1: 24, P2: 5) — 18 API outbound (9 cặp chia sẻ + tìm kiếm) cho Cổng PLQG qua REST JSON kết nối trực tiếp (không LGSP), bảo mật 2 lớp mTLS + JWT Bearer RS256 (BR-INTG-02), rate limit 100 req/min/consumer (BR-INTG-03), response time < 3s (BR-INTG-04). Module KHÔNG có màn hình CMS, KHÔNG có state machine (read-only outbound) — thay vào đó filter theo trạng thái publishable của entity nguồn (BR-INTG-07): HOI_DAP `DA_DUYET`, KHOA_HOC publishable, TU_VAN_VIEN `DANG_HOAT_DONG`, VU_VIEC `HOAN_THANH/DA_DUYET`, **KE_HOACH_DANH_GIA `HOAN_THANH`** (rename FR-08 v3.5 từ `DOT_DANH_GIA DA_DUYET_BC`), BIEU_MAU `CONG_KHAI+cong_khai=1` (v3.5 rename CR-01), NOI_DUNG_TU_VAN_CS `HOAN_THANH` (metadata only), CHUONG_TRINH_HTPL `DA_CONG_BO` (kế hoạch only), DOANH_NGHIEP công khai. TC phân 5 nhóm loại (Happy/Negative/Workflow/Auth/Cross-module) + 3 cụm (A Infrastructure 16 TC, B Per-pair 20 TC, C Workflow+Auth+Cross 6 TC). BR-SEC-01 loại trừ thông tin nhạy cảm (CMND/CCCD/SĐT/địa chỉ cá nhân khi expose TVV; MST/địa chỉ chi tiết khi expose VV). Công cụ test: Postman/Bruno + curl+jq + k6 (rate-limit & p95) + OpenSSL s_client (mTLS). Cross-module: đọc từ 7.2/7.3/7.4/7.5/7.7/7.8/7.9/7.12 + module CT HTPLDN — chạy SAU các module đó đã có data publishable. Phân quyền: DN = 🔌 C† (chỉ qua API, không qua CMS, DI-09).
 
 ### 7.17 Tổng hợp Test Cases
 
@@ -489,21 +512,21 @@ Các state KHÔNG thể đạt qua UI trong GĐ 1 (seed) hoặc GĐ 2 (workflow)
 |--------|----|----|-----|------|
 | Dashboard | 14 | 17 | 3 | 34 |
 | Quản trị HT | 12 | 17 | 3 | 32 |
-| Hỏi đáp PL | 11 | 21 | 4 | 36 |
+| Hỏi đáp Pháp luật `[v3.5]` | 27 | 26 | 4 | 57 (60 - 3 deprecated) |
 | CG/TVV | 10 | 17 | 4 | 31 |
 | Vụ việc HTPL | 14 | 16 | 5 | 35 |
 | Chi trả Chi phí | 13 | 13 | 4 | 30 |
-| Doanh nghiệp | 4 | 11 | 3 | 18 |
+| Doanh nghiệp | 6 | 9 | 2 | 17 (+3 OUT v3.5 Import + 2 defer Tier 2/3) |
 | Đào tạo, Tập huấn | 14 | 24 | 2 | 40 |
 | Đánh giá Hiệu quả | 14 | 22 | 4 | 40 |
 | Thư viện Biểu mẫu | 11 | 25 | 2 | 38 |
-| Tư vấn Chuyên sâu | 16 | 25 | 3 | 44 |
+| Tư vấn pháp luật chuyên sâu `[RENAMED v3.5]` | 23 | 34 | 4 | 61 (44 cũ + 17 v3.5 mới) |
 | Tư vấn Nhanh | 12 | 25 | 2 | 39 |
 | Báo cáo Thống kê | 12 | 22 | 4 | 38 |
 | Hợp đồng Tư vấn | 9 | 18 | 2 | 29 |
 | Chương trình HTPLDN | 14 | 23 | 5 | 42 |
 | API Kết nối Chia sẻ | 13 | 24 | 5 | 42 |
-| **Tổng** | **193** | **320** | **55** | **568** |
+| **Tổng** | **200** | **329** | **56** | **585** (+17 TVCS v3.5) |
 
 > **Phân quyền — 2 tầng test (cập nhật 2026-04-24 — tách round):**
 > - **Tầng 1: 40 TC authorization trong §7** = smoke-level — verify nhanh mỗi role có/không có quyền trên module đó (chạy cùng functional test ở Round 4 P4 mỗi module).

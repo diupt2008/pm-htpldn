@@ -22,23 +22,39 @@ scope: "5 vòng deep review file 02-thu-tu-module.md + flow-module.md vs SRS can
 
 ---
 
-## 🔴 LỖI A — SM-HOIDAP thiếu state `DA_PHAN_CONG`
+## 🔴 LỖI A — srs-fr-02 v3.5 sao chép nhầm state `DA_PHAN_CONG` từ template VU_VIEC sang HOI_DAP `[ROOT CAUSE: typo SRS — không phải feature pending]`
 
-**Module:** FR-02 Hỏi đáp Pháp lý (Nhóm II) · Entity: `HOI_DAP`
+**Module:** FR-02 Hỏi đáp Pháp luật (Nhóm II) · Entity: `HOI_DAP`
 
-**Vị trí có state `DA_PHAN_CONG`:**
-- [`input/srs-v3/srs-fr-02-hoi-dap.md:423`](../input/srs-v3/srs-fr-02-hoi-dap.md) — FR-II-06 (UC15) Phân công xử lý câu hỏi, Processing step 7:
-  > "Cập nhật HOI_DAP: người xử lý, trạng thái = DA_PHAN_CONG"
-- [`input/srs-v3/srs-fr-02-hoi-dap.md:441`](../input/srs-v3/srs-fr-02-hoi-dap.md) — Output FR-II-06: trang_thai = `'DA_PHAN_CONG'`
-- [`input/srs-v3/srs-fr-02-hoi-dap.md:302, 357, 401, 471`](../input/srs-v3/srs-fr-02-hoi-dap.md) — filter cứng `trang_thai IN (TIEP_NHAN, DA_PHAN_CONG, DANG_XU_LY)`
+**Status:** Deep review 2026-05-07 cross-check 5 nguồn → xác định **đây là lỗi typo cherry-pick từ v4, không phải feature design pending**. Master truth ĐÃ CÓ — không cần BA chốt giữ/bỏ, chỉ cần BA fix typo trong file FR-02.
 
-**Vị trí KHÔNG khai báo state `DA_PHAN_CONG`:**
-- [`input/srs-v3/srs-v3.md:1140`](../input/srs-v3/srs-v3.md) — Master §3.4.3.1 DB ENUM: `CHECK IN ('MOI','TIEP_NHAN','DANG_XU_LY','DA_TRA_LOI','CHO_PHE_DUYET','DA_DUYET','CONG_KHAI','HOAN_THANH','HUY')` — 9 state, **không có DA_PHAN_CONG**
-- [`input/srs-v3/srs-v3.md:4140`](../input/srs-v3/srs-v3.md) — Phụ lục C.1 transition table: `TIEP_NHAN → DANG_XU_LY` (CB NV phân công NHT/TVV) — chuyển trực tiếp, **không qua DA_PHAN_CONG**
+**Cross-check 5 nguồn:**
 
-**Câu hỏi cho BA:**
-- (a) Bổ sung `DA_PHAN_CONG` vào DB ENUM Master §3.4.3.1 + Phụ lục C.1 (thêm 2 transition: `TIEP_NHAN → DA_PHAN_CONG` + `DA_PHAN_CONG → DANG_XU_LY`); HOẶC
-- (b) Xóa cite DA_PHAN_CONG khỏi srs-fr-02 (chuyển trực tiếp `TIEP_NHAN → DANG_XU_LY`)?
+| Nguồn | DA_PHAN_CONG dùng cho entity nào? | Status |
+|---|---|---|
+| Master [`srs-v3.md:1367`](../input/srs-update-2026-5-5/srs-v3.md) CHECK constraint | **VU_VIEC** (12 state) | ✅ Canonical — đây là state của VU_VIEC |
+| Master [`srs-v3.md:4985-5011`](../input/srs-update-2026-5-5/srs-v3.md) SM-VUVIEC diagram + transition table | **VU_VIEC** transition `DANG_KIEM_TRA → DA_PHAN_CONG → DANG_XU_LY` | ✅ Canonical |
+| [`02-thu-tu-module.md:421/426/427`](../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) bảng SM transition | **VU_VIEC** (FR-V.I-09/10) | ✅ Canonical |
+| [`flow-module.md:184`](../input/quy-trinh-nghiep-vu/flow-module.md) SM-VUVIEC 12 state | **VU_VIEC** | ✅ Canonical |
+| [`srs-fr-02-hoi-dap.md:1341`](../input/srs-update-2026-5-5/srs-fr-02-hoi-dap.md) CHECK constraint HOI_DAP | **HOI_DAP** = 9 state KHÔNG có DA_PHAN_CONG | ✅ Canonical — đây là truth cho HOI_DAP |
+| [`srs-fr-02-hoi-dap.md:1488-1521`](../input/srs-update-2026-5-5/srs-fr-02-hoi-dap.md) SM-HOIDAP diagram + transition | TIEP_NHAN → DANG_XU_LY trực tiếp | ✅ Canonical |
+| [`srs-fr-02-hoi-dap.md:317/385/400/404/448/474/498/502/509/511`](../input/srs-update-2026-5-5/srs-fr-02-hoi-dap.md) FR-II-04/05/06 dùng DA_PHAN_CONG | ❌ **Typo — sao chép nhầm template từ FR-V.I-09 VU_VIEC** | 🔴 BA fix |
+
+**Bằng chứng đã có cảnh báo:** [`02-thu-tu-module.md:487`](../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) ghi rõ:
+> "Master SRS §C.1 enum có 9 state nhưng KHÔNG có `DA_PHAN_CONG`; tuy nhiên srs-fr-02 UC15 (FR-II-06) lại set `trang_thai = 'DA_PHAN_CONG'` sau phân công. Đây là conflict trong SRS — cần CĐT thống nhất. **Bảng dưới bám Master (phân công trực tiếp `TIEP_NHAN → DANG_XU_LY`).**"
+
+→ Người viết 02-thu-tu-module.md đã spot từ trước và quyết định bám Master. Đây là **typo cherry-pick**, không phải feature ambiguous.
+
+**Yêu cầu BA (cosmetic — không block test, chỉ cần fix typo SRS):**
+- BA xóa DA_PHAN_CONG khỏi 7 vị trí typo trong [`srs-fr-02-hoi-dap.md`](../input/srs-update-2026-5-5/srs-fr-02-hoi-dap.md):
+  - Line 317 (FR-II-04 filter): `IN (TIEP_NHAN, DA_PHAN_CONG, DANG_XU_LY)` → `IN (TIEP_NHAN, DANG_XU_LY)`
+  - Line 385 (FR-II-04 ERR-TH-03): bỏ `DA_PHAN_CONG`
+  - Line 400, 404 (FR-II-05 SCR-II-01 filter): bỏ `DA_PHAN_CONG`
+  - Line 448 (FR-II-06 Precondition): `trang_thai IN (TIEP_NHAN, DA_PHAN_CONG)` → `trang_thai = TIEP_NHAN`
+  - Line 474, 498, 502, 509, 511 (FR-II-06 Processing/Output/Postcondition/AC): `trạng thái = DA_PHAN_CONG` → `trạng thái = DANG_XU_LY`
+- Lý do: Master `srs-v3.md` + entity CHECK constraint trong cùng file FR-02 + SM-HOIDAP diagram đều canonical = HOI_DAP chỉ 9 state, không có DA_PHAN_CONG.
+
+**Impact lên test plan FR-02 v3.5:** ✅ **KHÔNG block** — test plan hiện tại đã giả định bỏ DA_PHAN_CONG (theo Master), khớp với truth. HD-030/049/050 mô tả `TIEP_NHAN → DANG_XU_LY` đúng. SM smoke 9 state đúng. 7 tabs SCR-II-01 ([Đang xử lý] gộp TIEP_NHAN+DANG_XU_LY) đúng theo SRS line 1029. Không cần thay đổi gì.
 
 ---
 
@@ -61,25 +77,19 @@ scope: "5 vòng deep review file 02-thu-tu-module.md + flow-module.md vs SRS can
 
 ---
 
-## 🔴 LỖI C — SM-DANHGIA có 3 phiên bản state name khác nhau hoàn toàn
+## ✅ LỖI C — SM-DANHGIA 3 phiên bản state name (RESOLVED 2026-05-06 trong FR-08 v3.5)
 
-**Module:** FR-08 Đánh giá Hiệu quả (Nhóm VI) · Entity: `KE_HOACH_DANH_GIA`
+**Module:** FR-08 Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý (Nhóm VI) · Entity: `KE_HOACH_DANH_GIA`
 
-**Phiên bản 1 — DB ENUM (6 state):** `DU_THAO / CHO_DUYET_PHAN_CONG / DA_DUYET_PHAN_CONG / DANG_THUC_HIEN / HOAN_THANH / HUY` (default `DU_THAO`)
-- [`input/srs-v3/srs-v3.md:2169`](../input/srs-v3/srs-v3.md) — Master §3.4.3.34
-- [`input/srs-v3/srs-fr-08-danh-gia.md:957`](../input/srs-v3/srs-fr-08-danh-gia.md) — Detail file: cùng 6 state
+**Trạng thái:** ✅ **RESOLVED 2026-05-06** trong `srs-update-2026-5-5/srs-fr-08-danh-gia.md` v3.5 (Thay đổi 5, GAP-VI-01).
 
-**Phiên bản 2 — Workflow Master Phụ lục C.6 (7 state):** `LAP_KE_HOACH / PHAN_CONG / CHO_DUYET_PC / THUC_HIEN / BAO_CAO / CHO_PHE_DUYET / HOAN_THANH`
-- [`input/srs-v3/srs-v3.md:4348-4358`](../input/srs-v3/srs-v3.md) — Phụ lục C.6 Mermaid diagram + transition table
+**Quyết định BA:** Chốt **8 state** lấy từ §5 (Phụ lục C.6 cũ — 7 state) làm source of truth + bổ sung **HUY**: `LAP_KE_HOACH / PHAN_CONG / CHO_DUYET_PC / THUC_HIEN / BAO_CAO / CHO_PHE_DUYET / HOAN_THANH / HUY`. DB enum CHECK = SM state. Default `LAP_KE_HOACH`.
 
-**Phiên bản 3 — UI Filter dropdown (9 trạng thái):** `NHAP / DA_LAP_KH / CHO_DUYET_PC / DA_DUYET_PC / DANG_DANH_GIA / DA_DANH_GIA / DA_LAP_BC / CHO_DUYET_BC / DA_DUYET_BC`
-- [`input/srs-v3/srs-fr-08-danh-gia.md:751`](../input/srs-v3/srs-fr-08-danh-gia.md) — Filter bar dropdown (SCR-VI-01)
+- ❌ Phiên bản 1 cũ (6 state DU_THAO/...) — BỎ.
+- ❌ Phiên bản 3 cũ (9 trạng thái UI NHAP/DA_LAP_KH/...) — BỎ.
+- ✅ Phiên bản 2 (7 state §C.6) + HUY = canonical.
 
-**Câu hỏi cho BA:**
-- 3 phiên bản tên state khác nhau hoàn toàn (không phải subset/superset). Phiên bản nào canonical?
-- Nếu chốt phiên bản 2 (C.6 workflow): cần update DB ENUM §3.4.3.34 + UI filter dropdown
-- Nếu chốt phiên bản 1 (DB ENUM): cần rewrite Phụ lục C.6 + UI filter
-- Hay kết hợp: DB lưu 1 set state, UI filter hiển thị nhãn khác?
+**Cite:** `srs-update-2026-5-5/srs-fr-08-danh-gia.md` §4 line 1009 (CHECK constraint) + §5 line 1117-1167 (SM-DANHGIA Mermaid + bảng trạng thái + bảng chuyển trạng thái).
 
 ---
 
@@ -213,7 +223,7 @@ scope: "5 vòng deep review file 02-thu-tu-module.md + flow-module.md vs SRS can
 
 | ID | Loại | Module | Đề xuất hành động | Mức độ ưu tiên |
 | :--- | :---: | :--- | :--- | :---: |
-| A | 🔴 LỖI | FR-02 Hỏi đáp | Bổ sung DA_PHAN_CONG vào DB ENUM + C.1, hoặc xóa khỏi srs-fr-02 | Cao |
+| A | 🔴 LỖI `[ROOT CAUSE: typo SRS]` | FR-02 Hỏi đáp | **BA xóa DA_PHAN_CONG khỏi 7 vị trí typo** trong srs-fr-02-hoi-dap.md (line 317/385/400/404/448/474/498/502/509/511) — sao chép nhầm template từ FR-V.I-09 VU_VIEC. Truth canonical: HOI_DAP 9 state KHÔNG có DA_PHAN_CONG (Master + CHECK + SM trong cùng file FR-02 đều thống nhất). | **Thấp — cosmetic, KHÔNG block test plan FR-02** (test plan hiện tại đã đúng theo truth) |
 | B | 🔴 LỖI | FR-03 Đào tạo | Bổ sung transition `DA_DUYET → DA_CONG_KHAI` vào C.2 | Cao |
 | C | 🔴 LỖI | FR-08 Đánh giá | Chốt 1 phiên bản canonical state name (3 phiên bản hiện có) | Cao |
 | D | 🔴 LỖI | FR-12 TVCS | Quyết định UC147/148/151 còn hay loại bỏ; xóa note conflict | Cao |

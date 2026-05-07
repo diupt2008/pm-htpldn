@@ -16,12 +16,12 @@ Tách từ [test-strategy.md §6](../test-strategy.md#6-test-theo-state-machine)
 
 | # | State Machine | File | Trạng thái | Test Paths | Module liên quan |
 |---|---------------|------|------------|------------|------------------|
-| 6.2 | SM-HOIDAP (Hỏi đáp) | [6.2-sm-hoidap.md](6.2-sm-hoidap.md) | 9 | 7 | [§7.2](../funtion/7.2-hoi-dap-phap-ly.md) |
+| 6.2 | SM-HOIDAP (Hỏi đáp Pháp luật) ✏️ v3.5 | [6.2-sm-hoidap.md](6.2-sm-hoidap.md) | 9 | 11 | [§7.2](../funtion/7.2-hoi-dap-phap-ly.md) |
 | 6.4 | SM-TVV (Tư vấn viên) | [6.4-sm-tvv.md](6.4-sm-tvv.md) | 9 | 8 | [§7.4](../funtion/7.4-chuyen-gia-tvv.md) |
 | 6.5 | SM-VUVIEC (Vụ việc) | [6.5-sm-vuviec.md](6.5-sm-vuviec.md) | 12 | 9 | [§7.5](../funtion/7.5-vu-viec-htpl.md) |
-| 6.6 | SM-CHITRA (Chi trả) | [6.6-sm-chitra.md](6.6-sm-chitra.md) | 10 | 9 | [§7.6](../funtion/7.6-chi-tra-chi-phi.md) |
+| 6.6 | SM-CHITRA (Chi trả) ✏️ v3.5 | [6.6-sm-chitra.md](6.6-sm-chitra.md) | 10 | 11 | [§7.6](../funtion/7.6-chi-tra-chi-phi.md) |
 | 6.10 | SM-TAIKHOAN (Tài khoản) | [6.10-sm-taikhoan.md](6.10-sm-taikhoan.md) | 4 | 7 | [§7.10](../funtion/7.10-quan-tri-he-thong.md) |
-| | **Tổng** | | **44** | **40** | |
+| | **Tổng** | | **44** | **44** | |
 
 *Module 6.3 (Đào tạo), 6.7 (Doanh nghiệp), 6.8 (Đánh giá), 6.9 (Biểu mẫu), 6.12 (TVCS), 6.13 (TV Nhanh) có SM spec nằm trong file functional `output/funtion/7.X-*.md` — không tách file SM riêng. Entity Doanh nghiệp (6.7) không có state machine.*
 

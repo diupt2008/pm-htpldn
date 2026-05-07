@@ -10,7 +10,11 @@
 >
 > **Update 2026-05-06 (SRS update FR-04):** Thêm 7 FR mới × 11 role cho Nhóm IV: `FR-IV-CROSS-01` (Tổng hợp điểm ĐG), `FR-IV-NEW-01/02/04` (TC TV), `FR-IV-NHT-01/02/03` (NHT). Mỗi role block FR-04 giờ có **19 row** (12 cũ + 7 mới). Cite: `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md`.
 
-> **Generate:** 2026-04-21 | Roles: 11 | Entities: 46 | Functions: 198
+> **Update 2026-05-06 (SRS update FR-05 v3.5):** Thêm 2 FR mới × 11 role cho Nhóm V.I: `FR-V.I-NEW-02` (DN bổ sung HS qua VNeID Tier 2 — chỉ DN sở hữu VV có quyền 🔌 C†) + `FR-V.I-NEW-05` (Công khai VV — chỉ CB PD cùng cấp ✅ CRU*, các role khác ❌ nút [Công khai]). Thêm 2 SCR DN mới: SCR-V.I-04 (Danh sách VV của tôi) + SCR-V.I-05 (Thông báo của tôi) — chế độ DN qua chuyên trang Tier 2 VNeID, ẩn tên cá nhân CB theo NĐ 13/2023. FR-V.I-09 refactor: modal 2 thẻ Cá nhân/Tổ chức tư vấn. FR-V.I-17 (UC67 đánh giá): CHỈ {CB_NV, DN} chấm — loại CB_PD per CSV UC67. Mỗi role block FR-05 thêm 2 row (cho 2 FR NEW). Cite: `srs-update-2026-5-5/srs-fr-05-vu-viec.md` Thay đổi 2/4/8/12/19.
+
+> **Update 2026-05-06 (SRS update FR-12 v3.5):** Đổi tên menu "Tư vấn chuyên sâu" → **"Tư vấn pháp luật chuyên sâu"** (Thay đổi 1) — sửa 11 heading FR-12 mỗi role. Rename entity `NOI_DUNG_TU_VAN_CS` → `TU_VAN_CHUYEN_SAU` ở cột Entity các row FR-X.1-01/02 (Thay đổi 2). Update entity ở cột FR-X.1-04 → `HO_SO_PHAP_LY_DN` (định nghĩa mới 3.4.3.46), FR-X.1-06 → `TU_LIEU_PHAP_LY_VV` (3.4.3.47), FR-X.1-07 → `DANH_GIA_CHAT_LUONG_TV` (3.4.3.48) — Thay đổi 5. NHT có 📝 RU* trên `HO_SO_PHAP_LY_DN` scoped theo VV phân công (Thay đổi 10). Cite: `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md`.
+
+> **Generate:** 2026-04-21 | Roles: 11 | Entities: **55** (46 cũ + 3 FR-04/07/10 update 2026-05-05 + 3 FR-05 update 2026-05-06: PHAN_CONG_VU_VIEC + DANH_GIA_VU_VIEC + LICH_SU_VU_VIEC + 3 FR-12 update 2026-05-06: HO_SO_PHAP_LY_DN + TU_LIEU_PHAP_LY_VV + DANH_GIA_CHAT_LUONG_TV) | Functions: 198+
 
 ## Mục đích
 
@@ -64,17 +68,17 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | FR | Module | # Chức năng | Entity chính |
 |----|--------|-------------|--------------|
 | FR-01 | Dashboard | 9 | `HOI_DAP`, `KHOA_HOC`, `TU_VAN_VIEN`, `VU_VIEC` |
-| FR-02 | Hỏi đáp Pháp lý | 12 | `CAU_HINH_PHAN_CONG`, `HOI_DAP`, `MAU_PHAN_HOI` |
+| FR-02 | Hỏi đáp Pháp luật `[v3.5]` | 12 | `HOI_DAP` (+5 trường công khai CR-01 + `don_vi_id` CR-06 + `tu_van_nhanh_goc_id` + `loai_doi_tuong_xu_ly` + `to_chuc_tu_van_id`; enum kênh thêm `TVN_BRIDGE`; SM 9 state thêm `HUY`), `PHAN_HOI` (+5 trường công khai CR-01), `MAU_PHAN_HOI` (Mô hình B Hybrid 2 tầng — `pham_vi_ap_dung` ∈ `TW_QUOC_GIA / BN_RIENG / DP_RIENG`) — FR-II-NEW-01 (Cấu hình phân công) chuyển sang FR-10 MH-10.7 |
 | FR-03 | Đào tạo, Tập huấn | 23 | `BAI_GIANG`, `CHUNG_NHAN`, `CHUONG_TRINH_DAO_TAO`, `DANG_KY_DAO_TAO`, `DE_KIEM_TRA`, `DE_XUAT_DAO_TAO`, `GIANG_VIEN`, `KHOA_HOC`, `NGAN_HANG_CAU_HOI` |
 | FR-04 | Chuyên gia / Tư vấn viên | 12 | `TU_VAN_VIEN`, `VU_VIEC` |
 | FR-05 | Vụ việc HTPL | 18 | `CAU_HINH_SLA`, `KET_QUA_VU_VIEC`, `THONG_BAO`, `TU_VAN_VIEN`, `VU_VIEC` |
-| FR-06 | Chi trả Chi phí | 13 | `HO_SO_CHI_TRA`, `THONG_BAO` |
-| FR-07 | Doanh nghiệp | 3 | `DOANH_NGHIEP`, `DON_VI` |
+| FR-06 | Chi trả Chi phí `[v3.5]` | 14 | `HO_SO_CHI_TRA` (+9 fields lifecycle + UNIQUE `ma_ho_so_dvc`), `DANH_GIA_HO_SO_CHI_TRA`, `THAM_DINH_HO_SO` (1:1 v3.5 mới), `PHE_DUYET_CHI_TRA` (N:1 v3.5 mới), `THONG_BAO` — +FR-V.II-14 DN bổ sung qua DVC/Cổng PLQG |
+| FR-07 | Doanh nghiệp | 2 | `DOANH_NGHIEP`, `DOANH_NGHIEP_LINH_VUC` (M-N v3.5) — bỏ `FR-V.III-NEW-01` Import Excel + 1 entity DON_VI ref đổi sang DANH_MUC TINH_THANH |
 | FR-08 | Đánh giá Hiệu quả | 9 | `AUDIT_LOG`, `BAO_CAO_DANH_GIA`, `DANH_MUC`, `KET_QUA_DANH_GIA`, `KE_HOACH_DANH_GIA`, `VU_VIEC` |
-| FR-09 | Biểu mẫu | 8 | `BIEU_MAU`, `HOP_DONG_TU_VAN`, `THU_MUC_BIEU_MAU` |
-| FR-10 | Quản trị Hệ thống | 25 | `CAU_HINH_SLA`, `DANH_MUC`, `DON_VI`, `TAI_KHOAN`, `TIEU_CHI_DANH_GIA`, `VAI_TRO` |
+| FR-09 | Biểu mẫu `[v3.5]` | 7 | `BIEU_MAU` (+4 trường công khai: `cong_khai`/`anh_dai_dien`/`thoi_gian_dang_tai`/`mo_ta_cong_khai`/`file_dinh_kem_cong_khai`), `THU_MUC_BIEU_MAU` (enum `NHAP/CONG_KHAI/AN`) — `HOP_DONG_TU_VAN` đã chuyển sang FR-14 |
+| FR-10 | Quản trị Hệ thống | 26 | `CAU_HINH_SLA`, `DANH_MUC`, `DON_VI`, `NGAY_LE` (gộp vào Cấu hình HT 2026-05-06), `TAI_KHOAN`, `TIEU_CHI_DANH_GIA`, `VAI_TRO` |
 | FR-11 | Báo cáo Thống kê | 23 | `BAO_CAO` |
-| FR-12 | Tư vấn Chuyên sâu | 7 | `DANH_MUC`, `DOANH_NGHIEP`, `TU_VAN_VIEN` |
+| FR-12 | Tư vấn pháp luật chuyên sâu `[RENAMED v3.5]` | 7 | `TU_VAN_CHUYEN_SAU`, `PHIEN_TU_VAN`, `LICH_SU_TRAO_DOI_TV`, `HO_SO_PHAP_LY_DN` `[NEW v3.5]`, `TU_LIEU_PHAP_LY_VV` `[NEW v3.5]`, `DANH_GIA_CHAT_LUONG_TV` `[NEW v3.5]`, `DOANH_NGHIEP`, `TU_VAN_VIEN` (ref) |
 | FR-13 | Tư vấn Nhanh | 5 | `DANH_MUC`, `KHO_CAU_HOI` |
 | FR-14 | Hợp đồng Tư vấn | 2 | `HOP_DONG_TU_VAN`, `TU_VAN_VIEN` |
 | FR-15 | Chương trình HTPLDN | 11 | `BAO_CAO_CT_HTPL`, `CHUONG_TRINH_HTPL` |
@@ -105,11 +109,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-I-08` | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 | 9 | `FR-I-09` | Biểu đồ chất lượng đào tạo | UC9 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 
-### ✅ FR-02 — Hỏi đáp Pháp lý
+### ✅ FR-02 — Hỏi đáp Pháp luật
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp lý | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp luật | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 2 | `FR-II-02` | Tìm kiếm hỏi đáp tổng hợp | UC11 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 3 | `FR-II-03` | Tiếp nhận xử lý hỏi đáp | UC12 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 4 | `FR-II-04` | Quản lý thông tin tiếp nhận xử lý | UC13 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
@@ -119,7 +123,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-II-08` | Quản lý công khai phản hồi | UC17 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 9 | `FR-II-09` | Quản lý câu hỏi đã xử lý | UC18 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 10 | `FR-II-10` | Tìm kiếm câu hỏi đã xử lý | UC19 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 11 | `FR-II-NEW-01` | Cấu hình lĩnh vực ↔ phân công xử lý | UCmới | — | `CAU_HINH_PHAN_CONG` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
+| 11 | ~~`FR-II-NEW-01`~~ `[DEPRECATED 2026-05-06]` | ⚠️ User chốt bỏ feature — entity CAU_HINH_PHAN_CONG không còn dùng | ~~UCmới~~ | — | ~~`CAU_HINH_PHAN_CONG`~~ | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
 | 12 | `FR-II-NEW-02` | Quản lý mẫu câu hỏi/phản hồi | UCmới | — | `MAU_PHAN_HOI` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-03 — Đào tạo, Tập huấn
@@ -214,6 +218,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 11 | `FR-V.II-11` | Trình phê duyệt hồ sơ thanh toán | UC78 | SCR-V | `HO_SO_CHI_TRA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 12 | `FR-V.II-12` | Phê duyệt hồ sơ thanh toán | UC79 | SCR-V | `HO_SO_CHI_TRA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 13 | `FR-V.II-13` | Cập nhật kết quả xử lý hồ sơ | UC80 | SCR-V | `HO_SO_CHI_TRA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 14 | `FR-V.II-14` `[NEW v3.5]` | DN bổ sung hồ sơ chi trả qua DVC/Cổng PLQG `[GAP-V.II-01]` | — | SCR-V.II-02 | `HO_SO_CHI_TRA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-07 — Doanh nghiệp
 
@@ -221,21 +226,22 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
 | 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL | UC81 | SCR-V | `DOANH_NGHIEP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 2 | `FR-V.III-02` | Tìm kiếm DN | UC82 | SCR-V | `DON_VI` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
-| 3 | `FR-V.III-NEW-01` | Import DN từ Excel | UCmới | SCR-V | `DOANH_NGHIEP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | ~~`FR-V.III-NEW-01`~~ | ~~Import DN từ Excel~~ **DEPRECATED v3.5 (BA chốt 2026-05-05 — BỎ Import Excel CMS)** | — | — | ~~`DOANH_NGHIEP`~~ | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
-### ✅ FR-08 — Đánh giá Hiệu quả
+### ✅ FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
-| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
+| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 10 | `FR-VI-10` | Nhận kết quả đánh giá `[NEW v3.5]` | (chưa có UC, GAP-VI-04) | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (Tab Báo cáo, read-only) | `KE_HOACH_DANH_GIA` + `KET_QUA_DANH_GIA` + `BAO_CAO_DANH_GIA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-09 — Biểu mẫu
 
@@ -259,7 +265,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 3 | `FR-VIII-03` | Quản lý danh mục chương trình hỗ trợ | UC101 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
 | 4 | `FR-VIII-04` | Quản lý danh mục tình trạng vụ việc | UC102 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
 | 5 | `FR-VIII-05` | Quản lý danh mục cơ quan đơn vị quản lý | UC103 | SCR-VIII-01: Quản lý Danh mục | `DON_VI` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
-| 6 | `FR-VIII-06` | Quản lý danh mục tổ chức tư vấn | UC104 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
+| 6 | ~~`FR-VIII-06`~~ | ⚠️ **CHUYỂN sang FR-04** thành FR-IV-NEW-01 (entity riêng `TO_CHUC_TU_VAN`) — SRS update 2026-05-05 CR-02 | ~~UC104~~ | — | — | — | — | — |
 | 7 | `FR-VIII-07` | Quản lý danh mục loại doanh nghiệp | UC105 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
 | 8 | `FR-VIII-08` | Quản lý danh mục hồ sơ đề nghị hỗ trợ | UC106 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
 | 9 | `FR-VIII-09` | Quản lý danh mục hồ sơ đề nghị thanh toán | UC107 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
@@ -275,10 +281,13 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 19 | `FR-VIII-19` | Quản lý danh mục kênh tiếp nhận | UC117 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
 | 20 | `FR-VIII-20` | Quản lý đăng nhập | UC118 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
 | 21 | `FR-VIII-21` | Quản lý đăng xuất | UC119 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
-| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC191 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
-| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC192 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
-| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC193 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
-| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC194 | — | `TAI_KHOAN` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
+| 22 | `FR-VIII-22` | Đăng ký tài khoản DN — Self-registration (chỉ DN, username = MST 10 chữ số, form 21 trường, bypass CHO_PHAN_QUYEN) | UC120 | SCR-VIII-08: Đăng ký TK DN | `TAI_KHOAN` + `DOANH_NGHIEP` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
+| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID (chỉ DN/TVV/CG/NHT — BR-AUTH-09 cấm CB nội bộ) | UC121 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
+| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC122 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
+| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID (chỉ DN/TVV/CG/NHT) | UC123 | — | `TAI_KHOAN` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
+| 26 | `FR-VIII-26` `[NEW v3.5]` | Quên mật khẩu / Kích hoạt TK lần đầu (workflow chung — DN/TVV/CG/NHT/CB; trigger chuyển SM-TVV/SM-NHT từ CHO_KICH_HOAT → HOAT_DONG) | — | SCR-VIII-07 (link "Quên mật khẩu") + form đặt MK | `TAI_KHOAN` | `CRU` | ✅ F | ✓C+R+U / ✗D |
+| 27 | `FR-VIII-28` `[NEW v3.5 GAP-VIII-02]` | Nhật ký hệ thống (filter, paginate 50/trang, cap 90 ngày, export Excel) | — | SCR-VIII-10: Nhật ký Hệ thống | `AUDIT_LOG` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 28 | `FR-VIII-29` `[NEW v3.5 GAP-VIII-05]` | Quản lý ngày lễ (CRUD + import Excel + calendar view) | — | SCR-VIII-06 hoặc DM con | `NGAY_LE` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
 
 ### ✅ FR-11 — Báo cáo Thống kê
 
@@ -308,7 +317,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
-### ✅ FR-12 — Tư vấn Chuyên sâu
+### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
@@ -400,11 +409,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-I-08` | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 | 9 | `FR-I-09` | Biểu đồ chất lượng đào tạo | UC9 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 
-### ✅ FR-02 — Hỏi đáp Pháp lý
+### ✅ FR-02 — Hỏi đáp Pháp luật
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp lý | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
+| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp luật | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 2 | `FR-II-02` | Tìm kiếm hỏi đáp tổng hợp | UC11 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 3 | `FR-II-03` | Tiếp nhận xử lý hỏi đáp | UC12 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 4 | `FR-II-04` | Quản lý thông tin tiếp nhận xử lý | UC13 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
@@ -414,7 +423,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-II-08` | Quản lý công khai phản hồi | UC17 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 9 | `FR-II-09` | Quản lý câu hỏi đã xử lý | UC18 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 10 | `FR-II-10` | Tìm kiếm câu hỏi đã xử lý | UC19 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
-| 11 | `FR-II-NEW-01` | Cấu hình lĩnh vực ↔ phân công xử lý | UCmới | — | `CAU_HINH_PHAN_CONG` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 11 | ~~`FR-II-NEW-01`~~ `[DEPRECATED 2026-05-06]` | ⚠️ User chốt bỏ feature — entity CAU_HINH_PHAN_CONG không còn dùng | ~~UCmới~~ | — | ~~`CAU_HINH_PHAN_CONG`~~ | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 12 | `FR-II-NEW-02` | Quản lý mẫu câu hỏi/phản hồi | UCmới | — | `MAU_PHAN_HOI` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 
 ### ✅ FR-03 — Đào tạo, Tập huấn
@@ -509,28 +518,30 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 11 | `FR-V.II-11` | Trình phê duyệt hồ sơ thanh toán | UC78 | SCR-V | `HO_SO_CHI_TRA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 12 | `FR-V.II-12` | Phê duyệt hồ sơ thanh toán | UC79 | SCR-V | `HO_SO_CHI_TRA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 13 | `FR-V.II-13` | Cập nhật kết quả xử lý hồ sơ | UC80 | SCR-V | `HO_SO_CHI_TRA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 14 | `FR-V.II-14` `[NEW v3.5]` | DN bổ sung hồ sơ chi trả qua DVC/Cổng PLQG `[GAP-V.II-01]` (CB NV thủ công thay DN) | — | SCR-V.II-02 | `HO_SO_CHI_TRA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 
 ### ✅ FR-07 — Doanh nghiệp
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL | UC81 | SCR-V | `DOANH_NGHIEP` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL (v3.5: bỏ quyền Create — DN tạo qua FR-VIII-22 self-reg) | UC81 | SCR-V | `DOANH_NGHIEP`, `DOANH_NGHIEP_LINH_VUC` | `RUD*` | 📝 | ✓R*+U+D / ✗POST→403 |
 | 2 | `FR-V.III-02` | Tìm kiếm DN | UC82 | SCR-V | `DON_VI` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-V.III-NEW-01` | Import DN từ Excel | UCmới | SCR-V | `DOANH_NGHIEP` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 3 | ~~`FR-V.III-NEW-01`~~ | ~~Import DN từ Excel~~ **DEPRECATED v3.5 (BA chốt 2026-05-05 — BỎ Import Excel CMS)** | — | — | ~~`DOANH_NGHIEP`~~ | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 
-### ✅ FR-08 — Đánh giá Hiệu quả
+### ✅ FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 10 | `FR-VI-10` | Nhận kết quả đánh giá `[NEW v3.5]` | (chưa có UC, GAP-VI-04) | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (Tab Báo cáo, read-only) | `KE_HOACH_DANH_GIA` + `KET_QUA_DANH_GIA` + `BAO_CAO_DANH_GIA` | `R*` | 👁️ | ✓R*(khi co_quan_duoc_danh_gia_id=user.don_vi_id AND trang_thai=HOAN_THANH) / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-09 — Biểu mẫu
 
@@ -603,7 +614,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 
-### ✅ FR-12 — Tư vấn Chuyên sâu
+### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
@@ -695,11 +706,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-I-08` | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 | 9 | `FR-I-09` | Biểu đồ chất lượng đào tạo | UC9 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 
-### ✅ FR-02 — Hỏi đáp Pháp lý
+### ✅ FR-02 — Hỏi đáp Pháp luật
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp lý | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
+| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp luật | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 2 | `FR-II-02` | Tìm kiếm hỏi đáp tổng hợp | UC11 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 3 | `FR-II-03` | Tiếp nhận xử lý hỏi đáp | UC12 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 4 | `FR-II-04` | Quản lý thông tin tiếp nhận xử lý | UC13 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
@@ -709,7 +720,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-II-08` | Quản lý công khai phản hồi | UC17 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 9 | `FR-II-09` | Quản lý câu hỏi đã xử lý | UC18 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 10 | `FR-II-10` | Tìm kiếm câu hỏi đã xử lý | UC19 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
-| 11 | `FR-II-NEW-01` | Cấu hình lĩnh vực ↔ phân công xử lý | UCmới | — | `CAU_HINH_PHAN_CONG` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 11 | ~~`FR-II-NEW-01`~~ `[DEPRECATED 2026-05-06]` | ⚠️ User chốt bỏ feature — entity CAU_HINH_PHAN_CONG không còn dùng | ~~UCmới~~ | — | ~~`CAU_HINH_PHAN_CONG`~~ | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 12 | `FR-II-NEW-02` | Quản lý mẫu câu hỏi/phản hồi | UCmới | — | `MAU_PHAN_HOI` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 
 ### ✅ FR-03 — Đào tạo, Tập huấn
@@ -804,28 +815,30 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 11 | `FR-V.II-11` | Trình phê duyệt hồ sơ thanh toán | UC78 | SCR-V | `HO_SO_CHI_TRA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 12 | `FR-V.II-12` | Phê duyệt hồ sơ thanh toán | UC79 | SCR-V | `HO_SO_CHI_TRA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 13 | `FR-V.II-13` | Cập nhật kết quả xử lý hồ sơ | UC80 | SCR-V | `HO_SO_CHI_TRA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 14 | `FR-V.II-14` `[NEW v3.5]` | DN bổ sung hồ sơ chi trả qua DVC/Cổng PLQG `[GAP-V.II-01]` (CB NV thủ công thay DN) | — | SCR-V.II-02 | `HO_SO_CHI_TRA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 
 ### ✅ FR-07 — Doanh nghiệp
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL | UC81 | SCR-V | `DOANH_NGHIEP` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL (v3.5: bỏ quyền Create — DN tạo qua FR-VIII-22 self-reg) | UC81 | SCR-V | `DOANH_NGHIEP`, `DOANH_NGHIEP_LINH_VUC` | `RUD*` | 📝 | ✓R*+U+D / ✗POST→403 |
 | 2 | `FR-V.III-02` | Tìm kiếm DN | UC82 | SCR-V | `DON_VI` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-V.III-NEW-01` | Import DN từ Excel | UCmới | SCR-V | `DOANH_NGHIEP` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 3 | ~~`FR-V.III-NEW-01`~~ | ~~Import DN từ Excel~~ **DEPRECATED v3.5 (BA chốt 2026-05-05 — BỎ Import Excel CMS)** | — | — | ~~`DOANH_NGHIEP`~~ | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 
-### ✅ FR-08 — Đánh giá Hiệu quả
+### ✅ FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 10 | `FR-VI-10` | Nhận kết quả đánh giá `[NEW v3.5]` | (chưa có UC, GAP-VI-04) | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (Tab Báo cáo, read-only) | `KE_HOACH_DANH_GIA` + `KET_QUA_DANH_GIA` + `BAO_CAO_DANH_GIA` | `R*` | 👁️ | ✓R*(khi co_quan_duoc_danh_gia_id=user.don_vi_id AND trang_thai=HOAN_THANH) / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-09 — Biểu mẫu
 
@@ -898,7 +911,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 
-### ✅ FR-12 — Tư vấn Chuyên sâu
+### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
@@ -990,11 +1003,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-I-08` | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 | 9 | `FR-I-09` | Biểu đồ chất lượng đào tạo | UC9 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 
-### ✅ FR-02 — Hỏi đáp Pháp lý
+### ✅ FR-02 — Hỏi đáp Pháp luật
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp lý | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
+| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp luật | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 2 | `FR-II-02` | Tìm kiếm hỏi đáp tổng hợp | UC11 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 3 | `FR-II-03` | Tiếp nhận xử lý hỏi đáp | UC12 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 4 | `FR-II-04` | Quản lý thông tin tiếp nhận xử lý | UC13 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
@@ -1004,7 +1017,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-II-08` | Quản lý công khai phản hồi | UC17 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 9 | `FR-II-09` | Quản lý câu hỏi đã xử lý | UC18 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
 | 10 | `FR-II-10` | Tìm kiếm câu hỏi đã xử lý | UC19 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `CRU*D` | ✅ | ✓C+R*+U+D / ✗— |
-| 11 | `FR-II-NEW-01` | Cấu hình lĩnh vực ↔ phân công xử lý | UCmới | — | `CAU_HINH_PHAN_CONG` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 11 | ~~`FR-II-NEW-01`~~ `[DEPRECATED 2026-05-06]` | ⚠️ User chốt bỏ feature — entity CAU_HINH_PHAN_CONG không còn dùng | ~~UCmới~~ | — | ~~`CAU_HINH_PHAN_CONG`~~ | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 12 | `FR-II-NEW-02` | Quản lý mẫu câu hỏi/phản hồi | UCmới | — | `MAU_PHAN_HOI` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 
 ### ✅ FR-03 — Đào tạo, Tập huấn
@@ -1099,28 +1112,30 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 11 | `FR-V.II-11` | Trình phê duyệt hồ sơ thanh toán | UC78 | SCR-V | `HO_SO_CHI_TRA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 12 | `FR-V.II-12` | Phê duyệt hồ sơ thanh toán | UC79 | SCR-V | `HO_SO_CHI_TRA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 13 | `FR-V.II-13` | Cập nhật kết quả xử lý hồ sơ | UC80 | SCR-V | `HO_SO_CHI_TRA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 14 | `FR-V.II-14` `[NEW v3.5]` | DN bổ sung hồ sơ chi trả qua DVC/Cổng PLQG `[GAP-V.II-01]` (CB NV thủ công thay DN) | — | SCR-V.II-02 | `HO_SO_CHI_TRA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 
 ### ✅ FR-07 — Doanh nghiệp
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL | UC81 | SCR-V | `DOANH_NGHIEP` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL (v3.5: bỏ quyền Create — DN tạo qua FR-VIII-22 self-reg) | UC81 | SCR-V | `DOANH_NGHIEP`, `DOANH_NGHIEP_LINH_VUC` | `RUD*` | 📝 | ✓R*+U+D / ✗POST→403 |
 | 2 | `FR-V.III-02` | Tìm kiếm DN | UC82 | SCR-V | `DON_VI` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-V.III-NEW-01` | Import DN từ Excel | UCmới | SCR-V | `DOANH_NGHIEP` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 3 | ~~`FR-V.III-NEW-01`~~ | ~~Import DN từ Excel~~ **DEPRECATED v3.5 (BA chốt 2026-05-05 — BỎ Import Excel CMS)** | — | — | ~~`DOANH_NGHIEP`~~ | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 
-### ✅ FR-08 — Đánh giá Hiệu quả
+### ✅ FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
-| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
+| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 10 | `FR-VI-10` | Nhận kết quả đánh giá `[NEW v3.5]` | (chưa có UC, GAP-VI-04) | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (Tab Báo cáo, read-only) | `KE_HOACH_DANH_GIA` + `KET_QUA_DANH_GIA` + `BAO_CAO_DANH_GIA` | `R*` | 👁️ | ✓R*(khi co_quan_duoc_danh_gia_id=user.don_vi_id AND trang_thai=HOAN_THANH) / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-09 — Biểu mẫu
 
@@ -1193,7 +1208,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 
-### ✅ FR-12 — Tư vấn Chuyên sâu
+### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
@@ -1285,11 +1300,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-I-08` | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 | 9 | `FR-I-09` | Biểu đồ chất lượng đào tạo | UC9 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 
-### ✅ FR-02 — Hỏi đáp Pháp lý
+### ✅ FR-02 — Hỏi đáp Pháp luật
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp lý | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp luật | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 2 | `FR-II-02` | Tìm kiếm hỏi đáp tổng hợp | UC11 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 3 | `FR-II-03` | Tiếp nhận xử lý hỏi đáp | UC12 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 4 | `FR-II-04` | Quản lý thông tin tiếp nhận xử lý | UC13 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
@@ -1299,7 +1314,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-II-08` | Quản lý công khai phản hồi | UC17 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 9 | `FR-II-09` | Quản lý câu hỏi đã xử lý | UC18 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 10 | `FR-II-10` | Tìm kiếm câu hỏi đã xử lý | UC19 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 11 | `FR-II-NEW-01` | Cấu hình lĩnh vực ↔ phân công xử lý | UCmới | — | `CAU_HINH_PHAN_CONG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 11 | ~~`FR-II-NEW-01`~~ `[DEPRECATED 2026-05-06]` | ⚠️ User chốt bỏ feature — entity CAU_HINH_PHAN_CONG không còn dùng | ~~UCmới~~ | — | ~~`CAU_HINH_PHAN_CONG`~~ | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 12 | `FR-II-NEW-02` | Quản lý mẫu câu hỏi/phản hồi | UCmới | — | `MAU_PHAN_HOI` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-03 — Đào tạo, Tập huấn
@@ -1394,6 +1409,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 11 | `FR-V.II-11` | Trình phê duyệt hồ sơ thanh toán | UC78 | SCR-V | `HO_SO_CHI_TRA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 12 | `FR-V.II-12` | Phê duyệt hồ sơ thanh toán | UC79 | SCR-V | `HO_SO_CHI_TRA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 13 | `FR-V.II-13` | Cập nhật kết quả xử lý hồ sơ | UC80 | SCR-V | `HO_SO_CHI_TRA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 14 | `FR-V.II-14` `[NEW v3.5]` | DN bổ sung hồ sơ chi trả qua DVC/Cổng PLQG `[GAP-V.II-01]` (CB PD chỉ xem lịch sử bổ sung) | — | SCR-V.II-02 | `HO_SO_CHI_TRA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-07 — Doanh nghiệp
 
@@ -1401,21 +1417,22 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
 | 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL | UC81 | SCR-V | `DOANH_NGHIEP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 2 | `FR-V.III-02` | Tìm kiếm DN | UC82 | SCR-V | `DON_VI` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-V.III-NEW-01` | Import DN từ Excel | UCmới | SCR-V | `DOANH_NGHIEP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | ~~`FR-V.III-NEW-01`~~ | ~~Import DN từ Excel~~ **DEPRECATED v3.5 (BA chốt 2026-05-05 — BỎ Import Excel CMS)** | — | — | ~~`DOANH_NGHIEP`~~ | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
-### ✅ FR-08 — Đánh giá Hiệu quả
+### ✅ FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 10 | `FR-VI-10` | Nhận kết quả đánh giá `[NEW v3.5]` | (chưa có UC, GAP-VI-04) | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (Tab Báo cáo, read-only) | `KE_HOACH_DANH_GIA` + `KET_QUA_DANH_GIA` + `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-09 — Biểu mẫu
 
@@ -1488,7 +1505,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 
-### ✅ FR-12 — Tư vấn Chuyên sâu
+### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
@@ -1580,11 +1597,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-I-08` | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 | 9 | `FR-I-09` | Biểu đồ chất lượng đào tạo | UC9 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 
-### ✅ FR-02 — Hỏi đáp Pháp lý
+### ✅ FR-02 — Hỏi đáp Pháp luật
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp lý | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp luật | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 2 | `FR-II-02` | Tìm kiếm hỏi đáp tổng hợp | UC11 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 3 | `FR-II-03` | Tiếp nhận xử lý hỏi đáp | UC12 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 4 | `FR-II-04` | Quản lý thông tin tiếp nhận xử lý | UC13 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
@@ -1594,7 +1611,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-II-08` | Quản lý công khai phản hồi | UC17 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 9 | `FR-II-09` | Quản lý câu hỏi đã xử lý | UC18 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 10 | `FR-II-10` | Tìm kiếm câu hỏi đã xử lý | UC19 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 11 | `FR-II-NEW-01` | Cấu hình lĩnh vực ↔ phân công xử lý | UCmới | — | `CAU_HINH_PHAN_CONG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 11 | ~~`FR-II-NEW-01`~~ `[DEPRECATED 2026-05-06]` | ⚠️ User chốt bỏ feature — entity CAU_HINH_PHAN_CONG không còn dùng | ~~UCmới~~ | — | ~~`CAU_HINH_PHAN_CONG`~~ | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 12 | `FR-II-NEW-02` | Quản lý mẫu câu hỏi/phản hồi | UCmới | — | `MAU_PHAN_HOI` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-03 — Đào tạo, Tập huấn
@@ -1689,6 +1706,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 11 | `FR-V.II-11` | Trình phê duyệt hồ sơ thanh toán | UC78 | SCR-V | `HO_SO_CHI_TRA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 12 | `FR-V.II-12` | Phê duyệt hồ sơ thanh toán | UC79 | SCR-V | `HO_SO_CHI_TRA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 13 | `FR-V.II-13` | Cập nhật kết quả xử lý hồ sơ | UC80 | SCR-V | `HO_SO_CHI_TRA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 14 | `FR-V.II-14` `[NEW v3.5]` | DN bổ sung hồ sơ chi trả qua DVC/Cổng PLQG `[GAP-V.II-01]` (CB PD chỉ xem lịch sử bổ sung) | — | SCR-V.II-02 | `HO_SO_CHI_TRA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-07 — Doanh nghiệp
 
@@ -1696,21 +1714,22 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
 | 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL | UC81 | SCR-V | `DOANH_NGHIEP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 2 | `FR-V.III-02` | Tìm kiếm DN | UC82 | SCR-V | `DON_VI` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-V.III-NEW-01` | Import DN từ Excel | UCmới | SCR-V | `DOANH_NGHIEP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | ~~`FR-V.III-NEW-01`~~ | ~~Import DN từ Excel~~ **DEPRECATED v3.5 (BA chốt 2026-05-05 — BỎ Import Excel CMS)** | — | — | ~~`DOANH_NGHIEP`~~ | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
-### ✅ FR-08 — Đánh giá Hiệu quả
+### ✅ FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 10 | `FR-VI-10` | Nhận kết quả đánh giá `[NEW v3.5]` | (chưa có UC, GAP-VI-04) | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (Tab Báo cáo, read-only) | `KE_HOACH_DANH_GIA` + `KET_QUA_DANH_GIA` + `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-09 — Biểu mẫu
 
@@ -1783,7 +1802,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 
-### ✅ FR-12 — Tư vấn Chuyên sâu
+### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
@@ -1875,11 +1894,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-I-08` | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 | 9 | `FR-I-09` | Biểu đồ chất lượng đào tạo | UC9 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 
-### ✅ FR-02 — Hỏi đáp Pháp lý
+### ✅ FR-02 — Hỏi đáp Pháp luật
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp lý | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp luật | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 2 | `FR-II-02` | Tìm kiếm hỏi đáp tổng hợp | UC11 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 3 | `FR-II-03` | Tiếp nhận xử lý hỏi đáp | UC12 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 4 | `FR-II-04` | Quản lý thông tin tiếp nhận xử lý | UC13 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
@@ -1889,7 +1908,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-II-08` | Quản lý công khai phản hồi | UC17 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 9 | `FR-II-09` | Quản lý câu hỏi đã xử lý | UC18 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 10 | `FR-II-10` | Tìm kiếm câu hỏi đã xử lý | UC19 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 11 | `FR-II-NEW-01` | Cấu hình lĩnh vực ↔ phân công xử lý | UCmới | — | `CAU_HINH_PHAN_CONG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 11 | ~~`FR-II-NEW-01`~~ `[DEPRECATED 2026-05-06]` | ⚠️ User chốt bỏ feature — entity CAU_HINH_PHAN_CONG không còn dùng | ~~UCmới~~ | — | ~~`CAU_HINH_PHAN_CONG`~~ | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 12 | `FR-II-NEW-02` | Quản lý mẫu câu hỏi/phản hồi | UCmới | — | `MAU_PHAN_HOI` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-03 — Đào tạo, Tập huấn
@@ -1984,6 +2003,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 11 | `FR-V.II-11` | Trình phê duyệt hồ sơ thanh toán | UC78 | SCR-V | `HO_SO_CHI_TRA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 12 | `FR-V.II-12` | Phê duyệt hồ sơ thanh toán | UC79 | SCR-V | `HO_SO_CHI_TRA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 13 | `FR-V.II-13` | Cập nhật kết quả xử lý hồ sơ | UC80 | SCR-V | `HO_SO_CHI_TRA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 14 | `FR-V.II-14` `[NEW v3.5]` | DN bổ sung hồ sơ chi trả qua DVC/Cổng PLQG `[GAP-V.II-01]` (CB PD chỉ xem lịch sử bổ sung) | — | SCR-V.II-02 | `HO_SO_CHI_TRA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-07 — Doanh nghiệp
 
@@ -1991,21 +2011,22 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
 | 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL | UC81 | SCR-V | `DOANH_NGHIEP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 2 | `FR-V.III-02` | Tìm kiếm DN | UC82 | SCR-V | `DON_VI` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-V.III-NEW-01` | Import DN từ Excel | UCmới | SCR-V | `DOANH_NGHIEP` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | ~~`FR-V.III-NEW-01`~~ | ~~Import DN từ Excel~~ **DEPRECATED v3.5 (BA chốt 2026-05-05 — BỎ Import Excel CMS)** | — | — | ~~`DOANH_NGHIEP`~~ | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
-### ✅ FR-08 — Đánh giá Hiệu quả
+### ✅ FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 10 | `FR-VI-10` | Nhận kết quả đánh giá `[NEW v3.5]` | (chưa có UC, GAP-VI-04) | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (Tab Báo cáo, read-only) | `KE_HOACH_DANH_GIA` + `KET_QUA_DANH_GIA` + `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-09 — Biểu mẫu
 
@@ -2078,7 +2099,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 
-### ✅ FR-12 — Tư vấn Chuyên sâu
+### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
@@ -2170,11 +2191,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-I-08` | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 | 9 | `FR-I-09` | Biểu đồ chất lượng đào tạo | UC9 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 
-### ✅ FR-02 — Hỏi đáp Pháp lý
+### ✅ FR-02 — Hỏi đáp Pháp luật
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp lý | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `C†` | 🔌 | ✓C†API / ✗GET→403/PUT→403/DELETE→403 |
+| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp luật | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `C†` | 🔌 | ✓C†API / ✗GET→403/PUT→403/DELETE→403 |
 | 2 | `FR-II-02` | Tìm kiếm hỏi đáp tổng hợp | UC11 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `C†` | 🔌 | ✓C†API / ✗GET→403/PUT→403/DELETE→403 |
 | 3 | `FR-II-03` | Tiếp nhận xử lý hỏi đáp | UC12 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `C†` | 🔌 | ✓C†API / ✗GET→403/PUT→403/DELETE→403 |
 | 4 | `FR-II-04` | Quản lý thông tin tiếp nhận xử lý | UC13 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `C†` | 🔌 | ✓C†API / ✗GET→403/PUT→403/DELETE→403 |
@@ -2184,7 +2205,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-II-08` | Quản lý công khai phản hồi | UC17 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `C†` | 🔌 | ✓C†API / ✗GET→403/PUT→403/DELETE→403 |
 | 9 | `FR-II-09` | Quản lý câu hỏi đã xử lý | UC18 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `C†` | 🔌 | ✓C†API / ✗GET→403/PUT→403/DELETE→403 |
 | 10 | `FR-II-10` | Tìm kiếm câu hỏi đã xử lý | UC19 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `C†` | 🔌 | ✓C†API / ✗GET→403/PUT→403/DELETE→403 |
-| 11 | `FR-II-NEW-01` | Cấu hình lĩnh vực ↔ phân công xử lý | UCmới | — | `CAU_HINH_PHAN_CONG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 11 | ~~`FR-II-NEW-01`~~ `[DEPRECATED 2026-05-06]` | ⚠️ User chốt bỏ feature — entity CAU_HINH_PHAN_CONG không còn dùng | ~~UCmới~~ | — | ~~`CAU_HINH_PHAN_CONG`~~ | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 12 | `FR-II-NEW-02` | Quản lý mẫu câu hỏi/phản hồi | UCmới | — | `MAU_PHAN_HOI` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-03 — Đào tạo, Tập huấn
@@ -2279,6 +2300,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 11 | `FR-V.II-11` | Trình phê duyệt hồ sơ thanh toán | UC78 | SCR-V | `HO_SO_CHI_TRA` | `C†R*` | 🔌 | ✓C†API+R* / ✗PUT→403/DELETE→403 |
 | 12 | `FR-V.II-12` | Phê duyệt hồ sơ thanh toán | UC79 | SCR-V | `HO_SO_CHI_TRA` | `C†R*` | 🔌 | ✓C†API+R* / ✗PUT→403/DELETE→403 |
 | 13 | `FR-V.II-13` | Cập nhật kết quả xử lý hồ sơ | UC80 | SCR-V | `HO_SO_CHI_TRA` | `C†R*` | 🔌 | ✓C†API+R* / ✗PUT→403/DELETE→403 |
+| 14 | `FR-V.II-14` `[NEW v3.5]` | DN bổ sung hồ sơ chi trả qua DVC/Cổng PLQG `[GAP-V.II-01]` (DN gửi `file_bo_sung[]` qua DVC, ≤5 ngày LV, max 3 lần) | — | (qua DVC API) | `HO_SO_CHI_TRA` | `C†U*` | 🔌 | ✓C†API upload file+U own + bo_sung_count++ / ✗DELETE→403 |
 
 ### ✅ FR-07 — Doanh nghiệp
 
@@ -2286,21 +2308,22 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
 | 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL | UC81 | SCR-V | `DOANH_NGHIEP` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 2 | `FR-V.III-02` | Tìm kiếm DN | UC82 | SCR-V | `DON_VI` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-V.III-NEW-01` | Import DN từ Excel | UCmới | SCR-V | `DOANH_NGHIEP` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 3 | ~~`FR-V.III-NEW-01`~~ | ~~Import DN từ Excel~~ **DEPRECATED v3.5 (BA chốt 2026-05-05 — BỎ Import Excel CMS)** | — | — | ~~`DOANH_NGHIEP`~~ | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 
-### ✅ FR-08 — Đánh giá Hiệu quả
+### ✅ FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 10 | `FR-VI-10` | Nhận kết quả đánh giá `[NEW v3.5]` | (chưa có UC, GAP-VI-04) | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (Tab Báo cáo, read-only) | `KE_HOACH_DANH_GIA` + `KET_QUA_DANH_GIA` + `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-09 — Biểu mẫu
 
@@ -2373,7 +2396,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
-### ✅ FR-12 — Tư vấn Chuyên sâu
+### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
@@ -2465,11 +2488,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-I-08` | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 | 9 | `FR-I-09` | Biểu đồ chất lượng đào tạo | UC9 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 
-### ❌ FR-02 — Hỏi đáp Pháp lý
+### ❌ FR-02 — Hỏi đáp Pháp luật
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp lý | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp luật | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 2 | `FR-II-02` | Tìm kiếm hỏi đáp tổng hợp | UC11 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 3 | `FR-II-03` | Tiếp nhận xử lý hỏi đáp | UC12 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 4 | `FR-II-04` | Quản lý thông tin tiếp nhận xử lý | UC13 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
@@ -2479,7 +2502,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-II-08` | Quản lý công khai phản hồi | UC17 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 9 | `FR-II-09` | Quản lý câu hỏi đã xử lý | UC18 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 10 | `FR-II-10` | Tìm kiếm câu hỏi đã xử lý | UC19 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 11 | `FR-II-NEW-01` | Cấu hình lĩnh vực ↔ phân công xử lý | UCmới | — | `CAU_HINH_PHAN_CONG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 11 | ~~`FR-II-NEW-01`~~ `[DEPRECATED 2026-05-06]` | ⚠️ User chốt bỏ feature — entity CAU_HINH_PHAN_CONG không còn dùng | ~~UCmới~~ | — | ~~`CAU_HINH_PHAN_CONG`~~ | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 12 | `FR-II-NEW-02` | Quản lý mẫu câu hỏi/phản hồi | UCmới | — | `MAU_PHAN_HOI` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-03 — Đào tạo, Tập huấn
@@ -2574,6 +2597,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 11 | `FR-V.II-11` | Trình phê duyệt hồ sơ thanh toán | UC78 | SCR-V | `HO_SO_CHI_TRA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 12 | `FR-V.II-12` | Phê duyệt hồ sơ thanh toán | UC79 | SCR-V | `HO_SO_CHI_TRA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 13 | `FR-V.II-13` | Cập nhật kết quả xử lý hồ sơ | UC80 | SCR-V | `HO_SO_CHI_TRA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 14 | `FR-V.II-14` `[NEW v3.5]` | DN bổ sung hồ sơ chi trả qua DVC/Cổng PLQG `[GAP-V.II-01]` | — | — | `HO_SO_CHI_TRA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-07 — Doanh nghiệp
 
@@ -2581,21 +2605,22 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
 | 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL | UC81 | SCR-V | `DOANH_NGHIEP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 2 | `FR-V.III-02` | Tìm kiếm DN | UC82 | SCR-V | `DON_VI` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-V.III-NEW-01` | Import DN từ Excel | UCmới | SCR-V | `DOANH_NGHIEP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 3 | ~~`FR-V.III-NEW-01`~~ | ~~Import DN từ Excel~~ **DEPRECATED v3.5 (BA chốt 2026-05-05 — BỎ Import Excel CMS)** | — | — | ~~`DOANH_NGHIEP`~~ | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
-### ✅ FR-08 — Đánh giá Hiệu quả
+### ✅ FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 10 | `FR-VI-10` | Nhận kết quả đánh giá `[NEW v3.5]` | (chưa có UC, GAP-VI-04) | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (Tab Báo cáo, read-only) | `KE_HOACH_DANH_GIA` + `KET_QUA_DANH_GIA` + `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-09 — Biểu mẫu
 
@@ -2668,7 +2693,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
-### ✅ FR-12 — Tư vấn Chuyên sâu
+### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
@@ -2760,11 +2785,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-I-08` | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 | 9 | `FR-I-09` | Biểu đồ chất lượng đào tạo | UC9 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 
-### ❌ FR-02 — Hỏi đáp Pháp lý
+### ❌ FR-02 — Hỏi đáp Pháp luật
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp lý | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp luật | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 2 | `FR-II-02` | Tìm kiếm hỏi đáp tổng hợp | UC11 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 3 | `FR-II-03` | Tiếp nhận xử lý hỏi đáp | UC12 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 4 | `FR-II-04` | Quản lý thông tin tiếp nhận xử lý | UC13 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
@@ -2774,7 +2799,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-II-08` | Quản lý công khai phản hồi | UC17 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 9 | `FR-II-09` | Quản lý câu hỏi đã xử lý | UC18 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 10 | `FR-II-10` | Tìm kiếm câu hỏi đã xử lý | UC19 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 11 | `FR-II-NEW-01` | Cấu hình lĩnh vực ↔ phân công xử lý | UCmới | — | `CAU_HINH_PHAN_CONG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 11 | ~~`FR-II-NEW-01`~~ `[DEPRECATED 2026-05-06]` | ⚠️ User chốt bỏ feature — entity CAU_HINH_PHAN_CONG không còn dùng | ~~UCmới~~ | — | ~~`CAU_HINH_PHAN_CONG`~~ | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 12 | `FR-II-NEW-02` | Quản lý mẫu câu hỏi/phản hồi | UCmới | — | `MAU_PHAN_HOI` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ❌ FR-03 — Đào tạo, Tập huấn
@@ -2869,6 +2894,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 11 | `FR-V.II-11` | Trình phê duyệt hồ sơ thanh toán | UC78 | SCR-V | `HO_SO_CHI_TRA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 12 | `FR-V.II-12` | Phê duyệt hồ sơ thanh toán | UC79 | SCR-V | `HO_SO_CHI_TRA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 13 | `FR-V.II-13` | Cập nhật kết quả xử lý hồ sơ | UC80 | SCR-V | `HO_SO_CHI_TRA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 14 | `FR-V.II-14` `[NEW v3.5]` | DN bổ sung hồ sơ chi trả qua DVC/Cổng PLQG `[GAP-V.II-01]` (TVV xem HSCT liên quan) | — | SCR-V.II-02 | `HO_SO_CHI_TRA` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-07 — Doanh nghiệp
 
@@ -2876,21 +2902,22 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
 | 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL | UC81 | SCR-V | `DOANH_NGHIEP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 2 | `FR-V.III-02` | Tìm kiếm DN | UC82 | SCR-V | `DON_VI` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-V.III-NEW-01` | Import DN từ Excel | UCmới | SCR-V | `DOANH_NGHIEP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 3 | ~~`FR-V.III-NEW-01`~~ | ~~Import DN từ Excel~~ **DEPRECATED v3.5 (BA chốt 2026-05-05 — BỎ Import Excel CMS)** | — | — | ~~`DOANH_NGHIEP`~~ | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
-### ✅ FR-08 — Đánh giá Hiệu quả
+### ✅ FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 10 | `FR-VI-10` | Nhận kết quả đánh giá `[NEW v3.5]` | (chưa có UC, GAP-VI-04) | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (Tab Báo cáo, read-only) | `KE_HOACH_DANH_GIA` + `KET_QUA_DANH_GIA` + `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-09 — Biểu mẫu
 
@@ -2963,7 +2990,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
-### ✅ FR-12 — Tư vấn Chuyên sâu
+### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
@@ -3055,11 +3082,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-I-08` | Biểu đồ đánh giá hiệu quả hỗ trợ | UC8 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 | 9 | `FR-I-09` | Biểu đồ chất lượng đào tạo | UC9 | SCR-I-01: Tổng quan hệ thống (Dashboard) | — | `?` | ❓ | ✓(entity không xác định) / ✗— |
 
-### ❌ FR-02 — Hỏi đáp Pháp lý
+### ❌ FR-02 — Hỏi đáp Pháp luật
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp lý | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 1 | `FR-II-01` | Quản lý thông tin hỏi đáp, vướng mắc pháp luật | UC10 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 2 | `FR-II-02` | Tìm kiếm hỏi đáp tổng hợp | UC11 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 3 | `FR-II-03` | Tiếp nhận xử lý hỏi đáp | UC12 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 4 | `FR-II-04` | Quản lý thông tin tiếp nhận xử lý | UC13 | SCR-II-02: Chi tiet & Soan Phan hoi (toan bo workflow) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
@@ -3069,7 +3096,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 8 | `FR-II-08` | Quản lý công khai phản hồi | UC17 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 9 | `FR-II-09` | Quản lý câu hỏi đã xử lý | UC18 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 10 | `FR-II-10` | Tìm kiếm câu hỏi đã xử lý | UC19 | SCR-II-01: Danh sach Hoi dap (trang chinh) | `HOI_DAP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 11 | `FR-II-NEW-01` | Cấu hình lĩnh vực ↔ phân công xử lý | UCmới | — | `CAU_HINH_PHAN_CONG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 11 | ~~`FR-II-NEW-01`~~ `[DEPRECATED 2026-05-06]` | ⚠️ User chốt bỏ feature — entity CAU_HINH_PHAN_CONG không còn dùng | ~~UCmới~~ | — | ~~`CAU_HINH_PHAN_CONG`~~ | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 12 | `FR-II-NEW-02` | Quản lý mẫu câu hỏi/phản hồi | UCmới | — | `MAU_PHAN_HOI` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ❌ FR-03 — Đào tạo, Tập huấn
@@ -3164,6 +3191,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 11 | `FR-V.II-11` | Trình phê duyệt hồ sơ thanh toán | UC78 | SCR-V | `HO_SO_CHI_TRA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 12 | `FR-V.II-12` | Phê duyệt hồ sơ thanh toán | UC79 | SCR-V | `HO_SO_CHI_TRA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 13 | `FR-V.II-13` | Cập nhật kết quả xử lý hồ sơ | UC80 | SCR-V | `HO_SO_CHI_TRA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 14 | `FR-V.II-14` `[NEW v3.5]` | DN bổ sung hồ sơ chi trả qua DVC/Cổng PLQG `[GAP-V.II-01]` | — | — | `HO_SO_CHI_TRA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-07 — Doanh nghiệp
 
@@ -3171,21 +3199,22 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
 | 1 | `FR-V.III-01` | Quản lý Doanh nghiệp được HTPL | UC81 | SCR-V | `DOANH_NGHIEP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 2 | `FR-V.III-02` | Tìm kiếm DN | UC82 | SCR-V | `DON_VI` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 3 | `FR-V.III-NEW-01` | Import DN từ Excel | UCmới | SCR-V | `DOANH_NGHIEP` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 3 | ~~`FR-V.III-NEW-01`~~ | ~~Import DN từ Excel~~ **DEPRECATED v3.5 (BA chốt 2026-05-05 — BỎ Import Excel CMS)** | — | — | ~~`DOANH_NGHIEP`~~ | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
-### ✅ FR-08 — Đánh giá Hiệu quả
+### ✅ FR-08 — Theo dõi Đánh giá Hiệu quả Hỗ trợ Pháp lý
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|
-| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 1 | `FR-VI-01` | Lập kế hoạch đánh giá | UC83 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 2 | `FR-VI-02` | Thiết lập tiêu chí đánh giá | UC84 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `AUDIT_LOG` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 3 | `FR-VI-03` | Phân công người đánh giá | UC85 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 4 | `FR-VI-04` | Phê duyệt phân công | UC86 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 5 | `FR-VI-05` | Chọn vụ việc đánh giá | UC87 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 6 | `FR-VI-06` | Thực hiện đánh giá | UC88 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KET_QUA_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 7 | `FR-VI-07` | Lập báo cáo đánh giá | UC89 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 8 | `FR-VI-08` | Trình phê duyệt báo cáo | UC90 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 9 | `FR-VI-09` | Phê duyệt báo cáo đánh giá | UC91 | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (CONSOLIDATED v2.1) | `KE_HOACH_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 10 | `FR-VI-10` | Nhận kết quả đánh giá `[NEW v3.5]` | (chưa có UC, GAP-VI-04) | SCR-VI-01: Theo dõi Đánh giá Hiệu quả HTPL (Tab Báo cáo, read-only) | `KE_HOACH_DANH_GIA` + `KET_QUA_DANH_GIA` + `BAO_CAO_DANH_GIA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ❌ FR-09 — Biểu mẫu
 
@@ -3258,7 +3287,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 22 | `FR-IX-22` | BC CT theo lĩnh vực | UC141 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 23 | `FR-IX-23` | BC CT theo thời gian | UC142 | SCR-IX-01: Trang Báo cáo Thống kê | `BAO_CAO` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
-### ✅ FR-12 — Tư vấn Chuyên sâu
+### ✅ FR-12 — Tư vấn pháp luật chuyên sâu
 
 | # | Function code | Chức năng | UC | Submenu / Màn hình | Entity | Quyền | Icon | Positive / Negative |
 |---|---------------|-----------|-----|-------|--------|-------|------|---------------------|

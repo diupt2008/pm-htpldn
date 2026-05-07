@@ -4,6 +4,88 @@ File ghi lại vấn đề thực tế gặp khi chạy QA + bài học áp dụ
 
 ---
 
+## 2026-05-07 — FR-02 v3.5 typo SRS sao chép nhầm template state `DA_PHAN_CONG` từ FR-V.I-09 VU_VIEC sang HOI_DAP (KHÔNG phải mâu thuẫn nội bộ)
+
+**Vấn đề:**
+- Khi rà soát SRS [`srs-update-2026-5-5/srs-fr-02-hoi-dap.md`](../input/srs-update-2026-5-5/srs-fr-02-hoi-dap.md) v3.5, phát hiện state `DA_PHAN_CONG` xuất hiện 7 vị trí trong FR-II-04/05/06: filter cứng (line 317/385/400/404), Preconditions (line 448), Processing/Output/Postcondition/AC (line 474/498/502/509/511).
+- Nhưng **CHECK constraint** entity HOI_DAP (line 1341) + **SM-HOIDAP diagram** (line 1488-1500) + **transition table** (line 1521) đều canonical 9 state KHÔNG có DA_PHAN_CONG.
+- **Lỗi ban đầu của tôi (turn trước):** Tôi log như "mâu thuẫn nội bộ SRS v3.5 — chờ BA chốt giữ/bỏ" và đặt vào `srs-conflicts-need-ba.md` với 2 option (a) bổ sung DA_PHAN_CONG + (b) xóa khỏi 7 vị trí. Đặt làm gate block test plan FR-02.
+- **User push back:** "deep review kỹ tài liệu cũng không có câu trả lời hả, bạn review kỹ lại". Re-verify với 4 nguồn ngoài srs-fr-02 → phát hiện root cause thực.
+
+**Root cause (deep review 4 nguồn — verify kỹ thay vì 2):**
+- Master [`srs-v3.md`](../input/srs-update-2026-5-5/srs-v3.md) line **1367** CHECK constraint: `DA_PHAN_CONG` thuộc entity **VU_VIEC** (12 state) — KHÔNG phải HOI_DAP.
+- Master [`srs-v3.md:4985-5011`](../input/srs-update-2026-5-5/srs-v3.md) SM-VUVIEC: transition `DANG_KIEM_TRA → DA_PHAN_CONG → DANG_XU_LY/DA_TIEP_NHAN` cho FR-V.I-09/10 phân công NHT/TVV vụ việc.
+- [`02-thu-tu-module.md:421/426/427/487`](../input/quy-trinh-nghiep-vu/02-thu-tu-module.md): bảng SM-VUVIEC dùng DA_PHAN_CONG. Đặc biệt line 487 đã có cảnh báo từ trước: *"Master SRS §C.1 enum có 9 state nhưng KHÔNG có DA_PHAN_CONG; tuy nhiên srs-fr-02 UC15 (FR-II-06) lại set trang_thai='DA_PHAN_CONG'. Đây là conflict trong SRS — cần CĐT thống nhất. Bảng dưới bám Master."* → người viết 02-thu-tu-module.md đã spot từ trước và quyết định bám Master.
+- [`flow-module.md:184`](../input/quy-trinh-nghiep-vu/flow-module.md): SM-VUVIEC 12 state có DA_PHAN_CONG (cho VU_VIEC, không HOI_DAP).
+
+**→ Đây là TYPO cherry-pick template:** BA copy template Processing từ FR-V.I-09 (Phân công VU_VIEC) sang FR-II-06 (Phân công HOI_DAP) v3.5 nhưng quên đổi state name. Cùng pattern "Phân công" nên 2 FR có template gần giống nhau. Master truth canonical đã có (HOI_DAP 9 state, không có DA_PHAN_CONG). Không phải feature ambiguous chờ BA chốt.
+
+**Bài học (META — về cách verify SRS conflict trước khi log BA pending):**
+1. **Khi spot inconsistency state machine, BẮT BUỘC verify 4+ nguồn ngoài file FR đang đọc** — không dừng ở "FR section dùng X nhưng CHECK constraint trong cùng file không có X". Phải mở Master `srs-v3.md` + `02-thu-tu-module.md` + `flow-module.md` xem state đó có thuộc entity khác không. Memory rule cross-project [`feedback_test_plan_check_sm_table.md`](../../../.claude/projects/-Users-teamai-Downloads-antigravity-QA-skilkk/memory/feedback_test_plan_check_sm_table.md) đã yêu cầu mở `02-thu-tu-module.md` trước khi viết test plan — nhưng tôi đã không apply lúc deep review conflict.
+2. **Khi 02-thu-tu-module.md đã có cảnh báo từ trước** (vd line 487 "bám Master"), đó là đáp án của project — không cần tạo BA question mới, chỉ cần cite cảnh báo có sẵn + update test plan theo Master.
+3. **"Mâu thuẫn nội bộ trong file FR" có 2 loại:** (a) feature ambiguous thực sự cần BA chốt, (b) typo cherry-pick template từ FR khác. Phân biệt bằng cách grep state name xuyên dự án — nếu state đó là canonical của module khác → typo, không phải (a).
+4. **User push back là tín hiệu sớm.** Memory rule [`feedback_dev_pushback_critical_thinking`](../../../.claude/projects/-Users-teamai-Downloads-antigravity-QA-skilkk/memory/feedback_dev_pushback_critical_thinking.md) áp với dev push back. Logic tương tự với user push back trên review kết quả: phải verify lại 2 lần thay vì confirm rule cũ.
+
+**Áp dụng (UNIVERSAL — mọi SRS state machine inconsistency):**
+- **Step 1:** Spot state X dùng trong FR section nhưng không trong CHECK constraint cùng file → KHÔNG vội log BA pending.
+- **Step 2:** Grep state X trong Master `srs-v3.md` (file root cùng folder v3.5) — nếu thuộc entity khác → typo template, log dưới dạng "BA fix typo SRS, không block test".
+- **Step 3:** Grep state X trong `02-thu-tu-module.md` + `flow-module.md` — verify đó có phải canonical state của module khác không + có cảnh báo từ trước không.
+- **Step 4:** Nếu Master + 2 file canonical đều cho state X thuộc module khác → kết luận TYPO. Test plan bám Master truth. Báo BA fix typo cosmetic.
+- **Step 5:** Nếu Master + 2 file đều không có state X → đó là feature mới chưa chốt → log BA question với 2 option giữ/bỏ.
+
+**Anti-pattern phải tránh:**
+- ❌ Spot inconsistency trong 1 file → log BA pending → đặt làm gate block test mà không verify Master + 02-thu-tu-module.md trước.
+- ❌ Cho rằng "BA cherry-pick chưa hoàn thiện" → assume feature mới → tạo gate block. Đa số trường hợp là typo template.
+- ❌ Skip cảnh báo có sẵn trong 02-thu-tu-module.md (như line 487 đã spot từ trước "bám Master") → tự log lại như issue mới.
+
+**Cost:** ~15 phút verify SRS lần đầu (chỉ check srs-fr-02) → log sai gate → 30 phút deep review cross-check 4 nguồn sau user push back → 20 phút sửa lại srs-conflicts-need-ba.md + todo.md + plan.md + lessons-learned.md. **Tổng cost lỗi: ~50 phút** vs ~10 phút nếu deep review từ đầu. Lesson: verify Master trước khi log BA pending là ROI cao nhất.
+
+---
+
+## 2026-05-06 — FR-02 v3.5 spec internal contradiction `DA_PHAN_CONG` (LEGACY — đã refine ở entry 2026-05-07)
+
+> Entry này log lần đầu khi nhầm là "mâu thuẫn nội bộ chờ BA chốt". Sau push back của user, deep review xác định là typo template (xem entry 2026-05-07 trên). Giữ entry này làm reference về quá trình học.
+
+**Vấn đề (đã refine):** State `DA_PHAN_CONG` ở 7 vị trí FR-II-04/05/06 nhưng không trong CHECK constraint HOI_DAP + SM diagram. Tôi nhầm là "BA pending giữ/bỏ" — thực ra là typo cherry-pick từ FR-V.I-09 VU_VIEC sang FR-II-06 HOI_DAP. Master `srs-v3.md` line 1367 + 4985-5011 + 02-thu-tu-module.md line 487 + flow-module.md line 184 đều canonical = DA_PHAN_CONG thuộc VU_VIEC, HOI_DAP 9 state KHÔNG có.
+
+**Root cause refine:** Tôi không apply rule "mở 02-thu-tu-module.md + flow-module.md trước khi log conflict" — chỉ check 1 file srs-fr-02 nội bộ.
+
+---
+
+## 2026-05-06 — SRS v3.5 partial release: 12/16 file FR slice + master fallback cho 4 file thiếu
+
+**Vấn đề:**
+- BA phát hành SRS v3.5 ngày 2026-05-06 (CHANGELOG-v3-to-v3.5.md). Folder `input/srs-update-2026-5-5/` chỉ có **12/16 file FR slice**: fr-01 đến fr-10 + fr-12 + fr-13. Thiếu **fr-11 (Báo cáo) / fr-14 (HĐ TV) / fr-15 (CT HTPLDN) / fr-16 (API)**.
+- Đã verify qua NotebookLM (notebook `a4ae45bf-cea0-4325-8fee-b1e0be702cf2`) — kết quả khẳng định: "phần chi tiết FR của Nhóm IX, X.3, XI, XII thuộc các file `srs-fr-11/14/15/16` không xuất hiện trong phạm vi tài liệu hiện tại". Đây là **chủ ý của BA**, không phải drift bug — 4 file này còn đợi Pha 3 reconcile.
+- **Hệ quả:** mọi reference owner FR-14 / FR-16 trong các file v3.5 (vd FR-09 §4 stub redirect HOP_DONG_TU_VAN → `srs-fr-14-hop-dong-tv.md`) đang trỏ về file **không tồn tại** trong v3.5 folder.
+- Master `srs-v3.md` v3.5 (cùng folder) vẫn giữ entity HOP_DONG_TU_VAN block đầy đủ (line 1853) với `Tham chiếu FR: FR-X.3-01` — đây là **source-of-truth tạm** cho FR-14 đến khi có file riêng.
+- Tương tự, FR-16 changes (rename `la_cong_khai` → `cong_khai` trong API filter) chỉ ghi trong CHANGELOG, không có file slice riêng để verify.
+
+**Root cause:**
+1. **Cherry-pick không đồng đều.** BA cherry-pick từ v4 sang v3.5 nhưng dừng ở 12 file đã review xong. 4 file còn lại để Pha 3.
+2. **Naming convention mâu thuẫn.** File slice trong v3.5 ghi ngày apply 2026-05-06 ở header → tester nhầm tưởng "tất cả file đã apply". Thực tế chỉ 12 file.
+3. **Cross-reference broken.** Stub redirect trong fr-09 trỏ về fr-14 → tester click không thấy file → nghi vấn drift bug.
+
+**Bài học:**
+1. **Trước khi viết test plan/task cho 1 module, verify file slice TỒN TẠI trong v3.5 folder.** Nếu thiếu → đọc spec từ master `srs-v3.md` (search §3.4.3 cho entity, §3.2 cho FR, Phụ lục B cho BR, Phụ lục C cho SM).
+2. **Cross-reference NotebookLM khi nghi ngờ drift.** Notebook `a4ae45bf-cea0-4325-8fee-b1e0be702cf2` (project HTPLDN v3.5) có metadata 16 file FR — query để xác nhận file nào real, file nào pending.
+3. **Slice drift trong file reference (chỉ "referenced" không "owned") KHÔNG phải bug nghiệp vụ.** Vd `srs-fr-13-tv-nhanh.md` line 750 còn `la_cong_khai` cho HOI_DAP — owner FR-02 đã rename đúng `cong_khai`. Đây là drift slice, source-of-truth FR-02 đúng → flag minor không block.
+
+**Áp dụng (UNIVERSAL — mọi SRS update batch có file slice + master file):**
+- **Step 1:** Mở `ls input/srs-update-*/` đếm số file FR slice. Compare với mục lục §3.2.1 trong master.
+- **Step 2:** Với module có file slice → đọc slice. Với module thiếu file slice → đọc master section §3.2.<X> + §3.4.3.<Y> + Phụ lục B/C.
+- **Step 3:** Với entity owned bởi module thiếu file slice (vd HOP_DONG_TU_VAN owned bởi FR-14) → master là source-of-truth. Tag rõ trong test plan: `_(spec từ srs-v3.md line N — file slice fr-XX chưa release)_`.
+- **Step 4:** CHANGELOG-v3-to-v3.5.md có changes của FR-XX nhưng không có file slice → ghi rõ "Pha 3 pending" trong todo. Không tạo task QA chạy cho phần này cho đến khi file slice release.
+
+**Anti-pattern phải tránh:**
+- ❌ Cho rằng "v3.5 folder = tất cả module v3.5 ready" → tạo task R8 cho FR-14/16 dựa trên CHANGELOG → khi chạy thấy file slice không có → block phải hỏi BA.
+- ❌ Log bug "stub redirect trỏ file không tồn tại" → đây là pattern intentional của partial release.
+- ❌ Update test artifact 7.14 / 7.16 dựa trên CHANGELOG (high-level summary) thay vì master srs-v3.md (low-level spec).
+
+**Cost:** 30 phút deep verify 3 ambiguity (master HOP_DONG_TU_VAN refs / v3.5 thiếu file / fr-13 line 750 drift) — nếu bỏ qua sẽ tốn ~1 round QA chạy bằng spec sai.
+
+---
+
 ## 2026-05-06 R7.0.2 — False positive 2/8 bug deploy gap do verify bằng QTHT (sai role)
 
 **Vấn đề:**

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""PreToolUse hook: enforce todo.md Kết quả line ≤25 từ.
+"""PreToolUse hook: enforce todo.md Kết quả + Cần có sẵn lines ≤25 từ.
 
 Trigger: Edit/Write/MultiEdit on tasks/todo.md (any path ending with /todo.md).
-Logic: parse new content lines starting with '**Kết quả' or '- **Kết quả',
+Logic: parse new content lines starting with '**Kết quả' or '**Cần có sẵn',
        count words after the colon. Block if any line >25 từ.
 Exit 2 = block + show stderr to Claude (per Claude Code hook spec).
 """
@@ -12,6 +12,7 @@ import sys
 
 WORD_LIMIT = 25
 TARGET_FILES = ("todo.md",)
+CHECKED_LABELS = ("Kết quả", "Cần có sẵn")
 
 def extract_new_content(tool_name: str, tool_input: dict) -> str:
     if tool_name == "Write":
@@ -23,20 +24,22 @@ def extract_new_content(tool_name: str, tool_input: dict) -> str:
         return "\n".join(e.get("new_string", "") for e in edits)
     return ""
 
-def find_violations(text: str) -> list[tuple[str, int]]:
+def find_violations(text: str) -> list[tuple[str, str, int]]:
     violations = []
-    pattern = re.compile(r"\*\*Kết quả[^*]*\*\*\s*(.+)")
+    label_alt = "|".join(re.escape(lbl) for lbl in CHECKED_LABELS)
+    pattern = re.compile(rf"\*\*({label_alt})[^*]*\*\*\s*(.+)")
     for raw_line in text.splitlines():
         line = raw_line.strip()
         m = pattern.search(line)
         if not m:
             continue
-        body = m.group(1).strip()
+        label = m.group(1)
+        body = m.group(2).strip()
         body = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", body)
         body = re.sub(r"[`*_]", "", body)
         words = [w for w in re.split(r"\s+", body) if w]
         if len(words) > WORD_LIMIT:
-            violations.append((raw_line.rstrip(), len(words)))
+            violations.append((raw_line.rstrip(), label, len(words)))
     return violations
 
 def main() -> int:
@@ -61,16 +64,18 @@ def main() -> int:
     if not violations:
         return 0
 
-    lines = ["BLOCKED: todo.md Kết quả line vượt giới hạn 25 từ.", ""]
-    for line, count in violations:
-        lines.append(f"  [{count} từ] {line}")
+    lines = ["BLOCKED: todo.md sub-bullet line vượt giới hạn 25 từ.", ""]
+    for line, label, count in violations:
+        lines.append(f"  [{label} — {count} từ] {line}")
     lines += [
         "",
         "Template chuẩn (đọc CLAUDE.md §Quy tắc viết todo.md):",
         "  **Kết quả:** <PASS N/N | FAIL | ⚠️ N/M | 🚫 block do X> — <≤15 từ>. [report-link]",
+        "  **Cần có sẵn:** <ref task ✅/❌ + state cần thiết> — chỉ list dep, không method/verify/unblock.",
         "",
-        "Cấm trong todo.md: pool count, endpoint, enum, network, dev claim, 2-source verify.",
-        "Chi tiết → bug-report / workflow-report.",
+        "Cấm trong todo.md: pool count, endpoint, enum, network, dev claim, 2-source verify,",
+        "method narrative, verify query, unblock chain.",
+        "Chi tiết → bug-report / workflow-report / seed-checklist / session-handoff.",
     ]
     print("\n".join(lines), file=sys.stderr)
     return 2

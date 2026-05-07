@@ -40,7 +40,7 @@
 | 11 | 3 | TV Chuyên sâu | FR-12 | ~80 | 📝 chưa viết | 🚫 chờ A + #6 | BUG-TVCS-004 |
 | 12 | 3 | Đào tạo Khóa học | FR-03 | ~100 | 📝 chưa viết | 🚫 chờ A + B7 | bug-flow-KHOAHOC |
 | 13 | 4 | Hợp đồng TV | FR-14 | ~50 | 📝 chưa viết | 🚫 chờ A + E1 | E1 unblock pending |
-| 14 | 4 | Chi trả | FR-06 | ~70 | 📝 chưa viết | 🚫 chờ A + E3 + #9 | E3 + Vụ việc HT |
+| 14 | 4 | Chi trả ✏️ v3.5 | FR-06 | ~75 (+5 v3.5) | 📝 chưa viết — high-level [7.6 PREP DONE](../../output/funtion/7.6-chi-tra-chi-phi.md) | 🚫 chờ A + E3 + #9 + LGSP integration | E3 + Vụ việc HT + 2 BA Q chờ chốt ([ba-questions-fr06](../../output/qa-reports/round7-2026-05-06/bug-reports/ba-questions-fr06-2026-05-06.md)) |
 | 15 | 4 | TV Nhanh | FR-13 | ~60 | 📝 chưa viết | 🚫 chờ A + E4 | E4 + Kho QA |
 | 16 | 4 | Đánh giá HQ | FR-08 | ~80 | 📝 chưa viết | 🚫 chờ A + #9 | Vụ việc HT + D2 |
 | 17 | 5 | CT HTPLDN GĐ2 | FR-15 | ~50 | 📝 chưa viết | 🚫 cascade | #8 + #9 + #14 |

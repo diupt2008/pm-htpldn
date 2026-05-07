@@ -40,7 +40,7 @@
 | 2 | Hỏi đáp Pháp lý | srs-fr-02 | UC 10-19 | 13 | **DA TEST** | Đợt 1 |
 | 3 | Chuyên gia/TVV | srs-fr-04 | UC 39-50 | 13 | **DA TEST** | Đợt 1 |
 | 4 | Vụ việc HTPL | srs-fr-05 | UC 51-67 | 19 | **DA TEST** | Đợt 1 |
-| 5 | Chi trả Chi phí | srs-fr-06 | UC 68-80 | 13 | **DA TEST** | Đợt 1 |
+| 5 | Chi trả Chi phí ✏️ v3.5 | srs-fr-06 | UC 68-80 + GAP | 14 | **DA TEST + PREP v3.5 DONE** (35 TC, 11 paths SM, +2 entity owned, BLOCKED LGSP) | Đợt 1 |
 | 6 | Doanh nghiệp | srs-fr-07 | UC 81-82 | 3 | **DA TEST** | Đợt 1 |
 | 7 | Dashboard | srs-fr-01 | UC 1-9 | ~9 | Chờ triển khai | Đợt 2 |
 | 8 | Đào tạo, Tập huấn | srs-fr-03 | UC 20-38 | ~19 | Chờ triển khai | Đợt 2 |
