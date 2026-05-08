@@ -19,9 +19,9 @@
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P1** | 6 | 0 | 0 | 5 | 1 | 0 | 0 | 0 | ✅[R7.1.1](#r7-1-1) · ✅[R7.1.2](#r7-1-2) · ✅[R7.1.3](#r7-1-3) · ✅[R7.1.4](#r7-1-4) · ⚠️[R7.1.5](#r7-1-5) · ✅[R7.1.6](#r7-1-6) |
 | **P2** | 3 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 🚫[R7.2.1](#r7-2-1) · ⚠️[R7.2.9](#r7-2-9) · 🟢[R7.2.9b](#r7-2-9b) |
-| **P5** | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 🟢[R7.5.5](#r7-5-5) |
+| **P5** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.5.5](#r7-5-5) |
 | **P7** | 6 | 0 | 0 | 4 | 2 | 0 | 0 | 0 | ⚠️[R7.7.8](#r7-7-8) · ✅[R7.7.8a](#r7-7-8a) · ⚠️[R7.7.8b](#r7-7-8b) · ✅[R7.7.8c](#r7-7-8c) · ✅[R7.7.8d](#r7-7-8d) · ✅[R7.7.8e](#r7-7-8e) |
-| **Tổng** | **16** | **2** | **0** | **9** | **4** | **1** | **0** | **0** |  |
+| **Tổng** | **16** | **1** | **0** | **10** | **4** | **1** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -63,7 +63,8 @@
   - **Probe verified 2026-05-08:** ly_13 (CG-0001) login `Secret@123` + OTP 666666 → dashboard. Sidebar 2 menu (Đào tạo + Tư vấn). TVCS render 1 record CG mình tham gia (data scope ✅). URL force `/quan-tri/danh-muc` → redirect `/dashboard` ✅. [probe-c-cg-ly13-dashboard.png](../output/qa-reports/round7-2026-05-06/workflow/qtht-tai-khoan/probe-c-cg-ly13-dashboard.png)
   - **Acceptance:** TVV/CG/NHT mỗi role 1 record, login UI thành công, sidebar đếm đúng menu count theo SCR, URL force module ngoài quyền → block.
 
-- 🟢 **R7.5.5** 🔄 Audit log ≥100 entry qua Nhật ký HT (FR-VIII-28) `[~0% — ready, accumulate qua Phase 4]` <a id="r7-5-5"></a>
+- ✅ **R7.5.5** 🔄 Audit log ≥100 entry qua Nhật ký HT (FR-VIII-28) <a id="r7-5-5"></a>
+  - **Kết quả:** PASS total=1397 (API meta.total) · UI 735 mục/7 ngày · 20 hành động · 26 users · 11 vai trò. [workflow-test-report-r7-5-5-audit-log-100-entries.md](../output/qa-reports/round7-2026-05-06/workflow/qtht-nhat-ky/workflow-test-report-r7-5-5-audit-log-100-entries.md)
 
 - ⚠️ **R7.7.8** ✏️ QTHT 14 DM CRUD functional (DM-only scope; FR-VIII-01..09/11/12/13/18/19/29) `[~96% — 24/25 PASS, 1 BLOCK CREATE NGAY_LE]` <a id="r7-7-8"></a>
   - **Kết quả:** ⚠️ 24/25 TC PASS + 1 BLOCK CREATE NGAY_LE (BUG-NGAY-LE-001 Major Open). [functional-test-report-QTHT-14DM.md](../output/qa-reports/round7-2026-05-06/functional/qtht-danh-muc/functional-test-report-QTHT-14DM.md)

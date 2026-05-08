@@ -1,6 +1,6 @@
 # State snapshot — entity state count thực tế trên BE
 
-**Last updated:** 2026-05-08 20:50 (R7.3.10 R8 BG seed — 5 VIDEO → 8 (5 VIDEO + 1 SLIDE + 2 PDF) cover 7 LV; R7.2.7 R8 retry seed +5 NHT qua UI `/nguoi-ho-tro` — pool 4→11, CHO_KICH_HOAT:8 cover BTP-TW + BKH + BTC + STP-BG + STP-BNI, LV DN/Thuế/LĐ/SHTT) · **Account verify:** cb_nv_tw_01/02 + cb_nv_bn_01/02 + cb_nv_dp_02/03 + cb_pd_tw_02 + qtht_02 · **MCP:** chrome-devtools `list_network_requests` + `evaluate_script` + curl
+**Last updated:** 2026-05-08 23:35 (R7.5.5 ✅ Audit log verify — total=1397 entry qua `/api/v1/audit-logs` meta.total, UI 735 mục/7 ngày 01-08/05; trước đó 20:50 (R7.3.10 R8 BG seed — 5 VIDEO → 8 (5 VIDEO + 1 SLIDE + 2 PDF) cover 7 LV; R7.2.7 R8 retry seed +5 NHT qua UI `/nguoi-ho-tro` — pool 4→11, CHO_KICH_HOAT:8 cover BTP-TW + BKH + BTC + STP-BG + STP-BNI, LV DN/Thuế/LĐ/SHTT) · **Account verify:** cb_nv_tw_01/02 + cb_nv_bn_01/02 + cb_nv_dp_02/03 + cb_pd_tw_02 + qtht_02 · **MCP:** chrome-devtools `list_network_requests` + `evaluate_script` + curl
 
 **Audit 2026-05-08:** 6 seed task ✅ (R7.2.4/R7.3.1/R7.3.2/R7.3.7/R7.3.8/R7.4.D1) reviewed — claim historical đúng tại thời điểm done. State drift hiện tại do workflow advance/cleanup downstream → markers downstream đã reflect đúng (R7.4.B5b/R7.4.D2/R7.7.10). KHÔNG flip ✅ → ⚠️ (vi phạm historical truth principle).
 **Purpose:** Single source of truth state count → drive `(✓ N)` / `(✗ N)` markers trong [todo.md](todo.md) `[need: ...]` bracket.
@@ -43,6 +43,7 @@
 | Phiên TV nhanh | `/api/v1/tu-van-nhanhs` | **50** | MOI:8, DANG_TIM_KIEM:6+, DA_GOI_Y:5+ (sau R7.B2 -1), CB_TRA_LOI:1 (TVN-0019 ✅ R7.B2 T4) | `.../tu-van-nhanhs?size=100` |
 | CT HTPLDN | `/api/v1/chuong-trinh-htpls` | **3** | DA_DUYET:1, DU_THAO:1, HUY:1 | `.../chuong-trinh-htpls` |
 | Đợt Đánh giá | `/api/v1/ke-hoach-danh-gias` | **≥1** | CHO_DUYET_PC:1 (DG-20260506-0001 sau R7.4.D2 R7) — needs live re-verify | `.../ke-hoach-danh-gias` |
+| Audit log (AUDIT_LOG) | `/api/v1/audit-logs` | **1397** | 20 hành động (CREATE/UPDATE/DELETE/LOGIN/LOGOUT/SUBMIT/APPROVE/THAM_DINH/PHE_DUYET/...) · 26 distinct users · 11 vai trò · range 2026-05-06→05-08 active. UI default 7d filter = 735 mục. | `GET .../audit-logs?page=1&pageSize=1` đọc `meta.total` |
 | Học viên | (404) | N/A | endpoint chưa deploy | — |
 | Lịch học | (404/500) | N/A | endpoint chưa deploy | — |
 
