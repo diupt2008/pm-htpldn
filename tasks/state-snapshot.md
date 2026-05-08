@@ -1,6 +1,6 @@
 # State snapshot — entity state count thực tế trên BE
 
-**Last updated:** 2026-05-08 17:30 (TVV pool drift sau R7.4.A1 R8b walk — total 7→8, 4 transition advance) · **Account verify:** cb_nv_tw_01/02 + cb_pd_tw_02 + qtht_02 · **MCP:** chrome-devtools `list_network_requests`/curl
+**Last updated:** 2026-05-08 20:50 (R7.3.10 R8 BG seed — 5 VIDEO → 8 (5 VIDEO + 1 SLIDE + 2 PDF) cover 7 LV) · **Account verify:** cb_nv_tw_01/02 + cb_nv_bn_02 + cb_nv_dp_02 + cb_pd_tw_02 + qtht_02 · **MCP:** chrome-devtools `list_network_requests`/curl
 
 **Audit 2026-05-08:** 6 seed task ✅ (R7.2.4/R7.3.1/R7.3.2/R7.3.7/R7.3.8/R7.4.D1) reviewed — claim historical đúng tại thời điểm done. State drift hiện tại do workflow advance/cleanup downstream → markers downstream đã reflect đúng (R7.4.B5b/R7.4.D2/R7.7.10). KHÔNG flip ✅ → ⚠️ (vi phạm historical truth principle).
 **Purpose:** Single source of truth state count → drive `(✓ N)` / `(✗ N)` markers trong [todo.md](todo.md) `[need: ...]` bracket.
@@ -29,15 +29,15 @@
 | CG (loaiTvv=CG) | `/api/v1/tu-van-viens?loaiTvv=CG` | **8** | HOAT_DONG:8 | `.../tu-van-viens?loaiTvv=CG&size=100` |
 | TC TV | `/api/v1/to-chuc-tu-vans` | **5** | HOAT_DONG:5 | `.../to-chuc-tu-vans` |
 | DN | `/api/v1/doanh-nghieps` | **23** | (mixed) | `.../doanh-nghieps?size=100` |
-| KH năm | `/api/v1/ke-hoach-dao-taos` | **0** | rỗng (endpoint OK) | `.../ke-hoach-dao-taos` |
+| KH năm | `/api/v1/ke-hoach-dao-taos` | **4** | NHAP:3 (KH-0004 TW + KH-0005 BN + KH-0006 DP — R8 2026-05-08), CHO_DUYET:1 (KH-0001 TW — R7) | `.../ke-hoach-dao-taos` |
 | CTĐT | `/api/v1/chuong-trinh-dao-taos` | **0** | rỗng (endpoint OK) | `.../chuong-trinh-dao-taos` |
 | Khóa học | `/api/v1/khoa-hocs` | **0** | rỗng | `.../khoa-hocs` |
-| NHCH | `/api/v1/ngan-hang-cau-hois` | **5** | VO_HIEU_HOA:5 | `.../ngan-hang-cau-hois` |
-| ĐKT | `/api/v1/de-kiem-tras` | **0** | rỗng | `.../de-kiem-tras` |
+| NHCH | `/api/v1/ngan-hang-cau-hois` | **6** | KICH_HOAT:6 (cover 5 LV: Hành chính/Lao động/Đất đai/SHTT/Thuế · 3 mức độ · 3 loại — R8 2026-05-08 19:35) | `.../ngan-hang-cau-hois` |
+| ĐKT | `/api/v1/de-kiem-tras` | **4** | NHAP:4 (cover 4 LV: Hành chính/Lao động/Đất đai/Thuế — sau R7.4.B10 CRUD R8 xóa SHTT). Đất đai version=2 thoiGianLamBai=45 (edited). | `.../de-kiem-tras` |
 | HSCT (Chi trả) | `/api/v1/ho-so-chi-tras` | **78** | DANG_THAM_DINH:13, DA_DUYET:8, DA_THANH_TOAN:14, DANG_DANH_GIA:4, CHO_TIEP_NHAN:8, YEU_CAU_BO_SUNG:6, CHO_PHE_DUYET:9, TU_CHOI_THANH_TOAN:3, TU_CHOI:3, DANG_KIEM_TRA:8, HUY:2 | `.../ho-so-chi-tras?size=200` |
 | HĐ TV | `/api/v1/hop-dong-tu-vans` | **0** | rỗng | `.../hop-dong-tu-vans` |
 | Giảng viên | `/api/v1/giang-viens` | **8** | DANG_HOAT_DONG:8 | `.../giang-viens` |
-| Bài giảng | `/api/v1/bai-giangs` | **5** | (state field NULL) | `.../bai-giangs` |
+| Bài giảng | `/api/v1/bai-giangs` | **8** | active (BG không state machine — chỉ có `congKhai` boolean): VIDEO:5 + SLIDE:1 + PDF:2 cover 7 LV (Doanh nghiệp/Dân sự/Hành chính/Lao động/SHTT/Thuế/Đất đai). R8 2026-05-08 20:50. | `.../bai-giangs` |
 | NHT | `/api/v1/nguoi-ho-tro` | **4** | CHO_KICH_HOAT:1, HOAT_DONG:3 | `.../nguoi-ho-tro` |
 | Kho QA | `/api/v1/kho-cau-hois` | **14** | NHAP:2, CHO_DUYET:1 (QA-0508-0004 Đất đai), DA_DUYET:9 (+QA-0508-0005 **Hành chính** B1 ✅ 2026-05-08), HET_HIEU_LUC:2 | `.../kho-cau-hois?size=100` |
 | Phiên TV nhanh | `/api/v1/tu-van-nhanhs` | **50** | MOI:8, DANG_TIM_KIEM:6+, DA_GOI_Y:5+ (sau R7.B2 -1), CB_TRA_LOI:1 (TVN-0019 ✅ R7.B2 T4) | `.../tu-van-nhanhs?size=100` |
@@ -53,6 +53,7 @@
 | Filter group | Coverage | Note |
 |---|---|---|
 | Kho QA `state=DA_DUYET hieu_luc=1` per LV | **6/7** (DN/SHTT/Đất đai/Lao động/Thuế/**Hành chính** ✅ B1) | Thiếu KDTM (chưa seed bao giờ). Đủ proceed B2 R7.6.2 với 6 LV chính. |
+| NHCH `KICH_HOAT` per LV (R7.3.9 dep) | **5/5** (Hành chính + Lao động + Đất đai + SHTT + Thuế) | ✅ R8 2026-05-08 — Lao động ×2, các LV khác ×1. Đủ proceed R7.3.9 seed ĐKT. |
 | Kho QA `state=DA_DUYET` count | **9** | Đủ ≥1 cho 6/7 LV |
 | TVCS state distribution | 3 state (TIEP_NHAN/PHAN_CONG/HUY) | Đủ ≥10 record cho R7.7.5 functional 44 TC |
 | CT HTPLDN state distribution | 3 state (DA_DUYET/DU_THAO/HUY) | Đủ ≥3 cho R7.7.15 functional 42 TC |
