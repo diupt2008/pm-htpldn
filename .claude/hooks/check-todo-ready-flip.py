@@ -2,7 +2,7 @@
 """PostToolUse hook: flag todo.md task ⏳ có toàn bộ deps trong [need:...] là ✅
    → cần re-eval flip 🟢.
 
-Trigger: After Edit/Write/MultiEdit on tasks/todo.md.
+Trigger: After Edit/Write/MultiEdit on tasks/todo.md HOẶC tasks/todo-<module>.md.
 Logic:
   1. Read file, build status_map từ task header lines.
   2. Scan task lines `- ⏳ <a id="..."></a>**R{X}.{Y}**` có `[need: ...]`.
@@ -20,6 +20,7 @@ import sys
 
 ICONS_LIST = ["🟢", "🔵", "✅", "⚠️", "🚫", "⏳"]
 RESIDUAL_TOLERANCE = 12  # max non-ref char trong [need:...] sau khi strip task-refs
+TARGET_FILE_RE = re.compile(r"/tasks/todo(?:-[\w-]+)?\.md$")
 
 
 def main() -> int:
@@ -30,7 +31,7 @@ def main() -> int:
 
     tool_input = payload.get("tool_input", {}) or {}
     file_path = tool_input.get("file_path", "")
-    if "/tasks/todo.md" not in file_path and not file_path.endswith("/todo.md"):
+    if not TARGET_FILE_RE.search(file_path):
         return 0
 
     try:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PostToolUse hook: warn task ⚠️/🚫 có dòng `**Bug:**` đã N/N đóng → cân nhắc flip ✅.
 
-Trigger: After Edit/Write/MultiEdit on tasks/todo.md.
+Trigger: After Edit/Write/MultiEdit on tasks/todo.md HOẶC tasks/todo-<module>.md.
 
 Logic warn-only (KHÔNG auto-flip):
   1. Read file todo.md.
@@ -28,6 +28,7 @@ import sys
 ICONS_TO_CHECK = ("⚠️", "🚫")
 TASK_ID_RE = r"R\d+\.[0-9A-Za-z.\-]+"
 SCAN_MAX_LINES = 15  # scan max N lines after task header tìm **Bug:** line
+TARGET_FILE_RE = re.compile(r"/tasks/todo(?:-[\w-]+)?\.md$")
 
 
 def main() -> int:
@@ -42,7 +43,7 @@ def main() -> int:
 
     tool_input = payload.get("tool_input", {}) or {}
     file_path = tool_input.get("file_path", "")
-    if not (file_path.endswith("/todo.md") or "/tasks/todo.md" in file_path):
+    if not TARGET_FILE_RE.search(file_path):
         return 0
 
     try:

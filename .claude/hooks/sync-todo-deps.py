@@ -24,6 +24,7 @@ import re
 import sys
 
 ICONS_LIST = ["🟢", "🔵", "✅", "⚠️", "🚫", "⏳"]
+TARGET_FILE_RE = re.compile(r"/tasks/todo(?:-[\w-]+)?\.md$")
 
 def main() -> int:
     try:
@@ -35,7 +36,7 @@ def main() -> int:
     tool_input = payload.get("tool_input", {}) or {}
     file_path = tool_input.get("file_path", "")
 
-    if "/tasks/todo.md" not in file_path and not file_path.endswith("/todo.md"):
+    if not TARGET_FILE_RE.search(file_path):
         return 0
 
     try:

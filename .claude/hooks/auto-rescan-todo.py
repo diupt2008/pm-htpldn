@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """PostToolUse hook: auto re-scan todo.md sau Edit/Write — flip ⏳→🟢 khi dep PASS.
 
-Trigger: PostToolUse Edit/Write/MultiEdit on tasks/todo.md.
+Trigger: PostToolUse Edit/Write/MultiEdit on tasks/todo.md HOẶC tasks/todo-<module>.md.
+
+Lưu ý sau split (2026-05-08): hook scan single file → status_map chỉ gồm task TRONG
+cùng file. Dep cross-module (vd R7.4.A4 ở hoi-dap.md ref R7.2.3 ở tc-tv.md) sẽ KHÔNG
+auto-flip — cần update tay. Phase 2 có thể rewrite scan toàn bộ todo*.md để cover.
 
 Logic an toàn (CHỈ flip ⏳→🟢):
   1. Đọc file todo.md từ disk (sau khi Edit đã apply).
@@ -30,7 +34,6 @@ from __future__ import annotations
 import json
 import re
 import sys
-from pathlib import Path
 
 ICONS = ("✅", "🟢", "🔵", "⚠️", "🚫", "⏳")
 
@@ -67,8 +70,11 @@ SUMMARY_ROW = re.compile(
 )
 
 
+TARGET_FILE_RE = re.compile(r"/tasks/todo(?:-[\w-]+)?\.md$")
+
+
 def is_target_file(path: str) -> bool:
-    return path.endswith("/todo.md") or Path(path).name == "todo.md"
+    return bool(TARGET_FILE_RE.search(path))
 
 
 def get_active_section_bounds(content: str):

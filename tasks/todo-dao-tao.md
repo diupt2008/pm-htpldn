@@ -1,0 +1,72 @@
+# TODO — Đào tạo (KH năm / CTĐT / Khóa học / NHCH / ĐKT / Bài giảng / Giảng viên / Học viên / Lịch học)
+
+> File module của [`todo.md`](todo.md) master. Tổng **17 task**.
+>
+> **Tham chiếu shared:** [`state-snapshot.md`](state-snapshot.md) · [`dep-map.md`](dep-map.md) · [`lessons-learned.md`](lessons-learned.md)
+>
+> **Trạng thái icon:** 🟢 sẵn sàng · 🔵 đang làm · ✅ xong · ⚠️ partial · 🚫 block · ⏳ chờ upstream
+>
+> **Task IDs:** R7.3.5, R7.3.6, R7.3.8, R7.3.9, R7.3.10, R7.3.11, R7.3.12, R7.3.13, R7.3.15, R7.4.B0, R7.4.B1, R7.4.B5b, R7.4.B7, R7.4.B10, R7.4.B11, R7.4.B12, R7.7.6
+
+---
+
+## Tasks
+
+- ✅ **R7.3.5** 🆕 Seed Kế hoạch ĐT năm (KE_HOACH_DAO_TAO — Mô hình A 3 cấp) <a id="r7-3-5"></a>
+  - **Kết quả:** PASS 3/3 NHAP cover TW + BN + DP. Advance state thuộc R7.4.B0. [seed-checklist-r7-3-5-kh-nam.md](../output/qa-reports/round7-2026-05-06/seed/dao-tao/seed-checklist-r7-3-5-kh-nam.md)
+  - **Bug:** [bug-report-seed-r7-3-5-kh-nam.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-seed-r7-3-5-kh-nam.md) — 0/2 đóng (1 Critical leak + 1 Medium date)
+
+- ⏳ **R7.3.6** ✏️ Seed 6 CTĐT entry DU_THAO `[need: R7.3.5 advance DA_DUYET, R7.4.B0]` <a id="r7-3-6"></a>
+  - **Cần:** R7.3.5 ✅ (NHAP) · R7.4.B0 advance DA_DUYET · ≥1 KH năm DA_DUYET/DA_CONG_KHAI mỗi cấp TW/BN/DP (✗0)
+  - **Bug:** [bug-report-seed-r7-3-6-ctdt.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-seed-r7-3-6-ctdt.md) — 1/1 đóng (BUG-CTDT-FE-01 Closed-verified 2026-05-07 — form has keHoachId field)
+
+- ✅ **R7.3.8** 🔄 Seed 10 NHCH entry NHAP <a id="r7-3-8"></a>
+  - **Kết quả:** 7/7 cover full filter — 5 LV + 3 mức độ + 3 loại (TN-1/TN-nhiều/Tự luận). [r7-3-8-nhch-list-7-final.png](../output/qa-reports/round7-2026-05-06/seed/dao-tao/r7-3-8-nhch-list-7-final.png)
+
+- ⏳ **R7.3.9** 🔄 Seed 5 ĐKT entry NHAP cover 5 LV `[need: ≥5 NHCH KICH_HOAT]` <a id="r7-3-9"></a>
+  - **Cần:** ≥5 NHCH `KICH_HOAT` cover 5 LV (✗0 — 5 ALL VO_HIEU_HOA, cần re-seed R7.3.8 KICH_HOAT)
+  - **Spec:** FR-III-NEW-01 line 1324
+  - **Kết quả:** Bug FE đã closed 2026-05-07, ready re-seed.
+  - **Bug:** [bug-report-seed-r7-3-9-dkt-nhch.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-seed-r7-3-9-dkt-nhch.md) — 2/2 đóng FE (DKT-FE-01 + NHCH-STATE-01 Closed).
+
+- ⚠️ **R7.3.10** 🔄 Seed 8 bài giảng entry KICH_HOAT `[~62% — 5/8 PASS, Slide/PDF skip do file upload]` <a id="r7-3-10"></a>
+  - **Kết quả:** ⚠️ 5/8 PASS — Video type cover 5 LV (Lao động/Thuế/KDTM/SHTT/Đất đai). Slide/PDF skip do file upload. [r7-3-10-bai-giang-list.png](../output/qa-reports/round7-2026-05-06/seed/dao-tao/r7-3-10-bai-giang-list.png)
+
+- ✅ **R7.3.11** ✏️ Seed 8 giảng viên entry HOAT_DONG (verify FR-III-11 refactor) <a id="r7-3-11"></a>
+  - **Kết quả:** PASS 8/8 cover 6 LV (Dân sự/Lao động/Thuế/SHTT/KDTM/Đất đai/Hành chính/KDQT). [r7-3-11-giang-vien-list.png](../output/qa-reports/round7-2026-05-06/seed/dao-tao/r7-3-11-giang-vien-list.png)
+
+- 🚫 **R7.3.12** 🆕 Seed 8 Học viên (HOC_VIEN entity mới — Mô hình A) `[block: dev fix entity 404 /api/v1/hoc-viens]` <a id="r7-3-12"></a>
+
+- 🚫 **R7.3.13** 🆕 Seed Lịch học (LICH_HOC — FR-III-22) `[block: chưa rõ endpoint deploy]` <a id="r7-3-13"></a>
+
+- ⏳ **R7.3.15** 🆕 Seed 8 Khóa học entry DU_THAO direct (bypass workflow B7 nếu block) cover 6 LV + 2 hình thức `[need: R7.3.6]` <a id="r7-3-15"></a>
+  - **Cần:** R7.3.6 ⏳ CTĐT DU_THAO
+  - **Note:** unblock R7.7.6 functional 40 TC khi B7 block dev
+
+- ⚠️ **R7.4.B0** 🆕 Workflow KH năm (SM-KH-DAO-TAO refinement TU_CHOI→CHO_DUYET) `[~10% — 1/10 transitions, block env JWT revoke]` <a id="r7-4-b0"></a>
+  - **Cần:** R7.3.5 ✅
+  - **Kết quả:** ⚠️ 1/10 transitions — block env JWT revoke <1 phút. KH-0001 NHAP→? unverified.
+  - **Bug:** [bug-report-r7-4-b0-jwt-revoke.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-4-b0-jwt-revoke.md) — 0/2 đóng (1 Critical JWT + 1 Major OTP)
+
+- ⏳ **R7.4.B1** ✏️ Workflow CTĐT SM-CTDT mới (DU_THAO→CHO_DUYET→DA_DUYET) `[need: R7.3.6]` <a id="r7-4-b1"></a>
+  - **Cần:** R7.3.6 ⏳
+  - **Note:** UNBLOCKED — SRS update giải quyết spec contradiction R6.4.B2
+
+- ⏳ **R7.4.B5b** 🔄 Publish NHCH NHAP→CONG_KHAI `[need: ≥1 NHCH NHAP]` <a id="r7-4-b5b"></a>
+  - **Cần:** ≥1 NHCH `NHAP` (✗ 5 ALL VO_HIEU_HOA — verify MCP 2026-05-07; cần re-seed R7.3.8 KICH_HOAT)
+
+- ⏳ **R7.4.B7** ✏️ Workflow KH SM-KHOAHOC 11 state (thêm TU_CHOI + TU_CHOI_KQ) — 12 bước `[need: R7.4.B1]` <a id="r7-4-b7"></a>
+  - **Cần:** R7.4.B1 ⏳ DA_DUYET
+  - **Note:** UNBLOCKED
+
+- ⏳ **R7.4.B10** 🆕 Workflow Đề kiểm tra (FR-III-NEW-01/02/03) — tạo + phân phối + map bài giảng `[need: R7.3.9, R7.4.B5b]` <a id="r7-4-b10"></a>
+  - **Cần:** R7.3.9 ⏳ · R7.4.B5b ⏳
+
+- ⏳ **R7.4.B11** 🆕 Phê duyệt khóa học (FR-III-21) `[need: R7.4.B7]` <a id="r7-4-b11"></a>
+  - **Cần:** R7.4.B7 ≥1 KH `DA_KET_THUC`
+
+- ⏳ **R7.4.B12** 🆕 Quản lý lịch học (FR-III-22) `[need: R7.3.13]` <a id="r7-4-b12"></a>
+  - **Cần:** R7.3.13 🚫
+
+- ⏳ **R7.7.6** ✏️ Khóa học 40 TC + FR-III mới (B10/B11/B12 + Đề KT + Lịch học) `[need: KH DA_KET_THUC, ĐKT, Lịch học endpoint]` <a id="r7-7-6"></a>
+  - **Cần:** ≥1 KH `DA_KET_THUC` (✗0) · ≥1 ĐKT (✗0) · Lịch học endpoint deploy (✗404)
