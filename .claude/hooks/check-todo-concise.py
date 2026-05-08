@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PreToolUse hook: enforce todo.md Kết quả + Cần có sẵn lines ≤25 từ.
 
-Trigger: Edit/Write/MultiEdit on tasks/todo.md (any path ending with /todo.md).
+Trigger: Edit/Write/MultiEdit on tasks/todo.md HOẶC tasks/todo-<module>.md.
 Logic: parse new content lines starting with '**Kết quả' or '**Cần có sẵn',
        count words after the colon. Block if any line >25 từ.
 Exit 2 = block + show stderr to Claude (per Claude Code hook spec).
@@ -11,7 +11,7 @@ import re
 import sys
 
 WORD_LIMIT = 25
-TARGET_FILES = ("todo.md",)
+TARGET_FILE_RE = re.compile(r"/tasks/todo(?:-[\w-]+)?\.md$")
 CHECKED_LABELS = ("Kết quả", "Cần có sẵn")
 
 def extract_new_content(tool_name: str, tool_input: dict) -> str:
@@ -53,7 +53,7 @@ def main() -> int:
     tool_input = payload.get("tool_input", {}) or {}
     file_path = tool_input.get("file_path", "")
 
-    if "/tasks/todo.md" not in file_path and not file_path.endswith("/todo.md"):
+    if not TARGET_FILE_RE.search(file_path):
         return 0
 
     new_text = extract_new_content(tool_name, tool_input)

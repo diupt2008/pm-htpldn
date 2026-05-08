@@ -4,7 +4,7 @@
 > **Ngày tạo:** 2026-05-06 | **Tác giả:** QA + Claude
 > **Tham chiếu:** [`_DELTA-MAP-FR03/04/07/10/12.md`](../input/srs-update-2026-5-5/) + [`_DELTA-MAP-CROSS-CUTTING.md`](../input/srs-update-2026-5-5/_DELTA-MAP-CROSS-CUTTING.md) + [`_DELTA-MAP-PROFILE-PWD.md`](../input/srs-update-2026-5-5/_DELTA-MAP-PROFILE-PWD.md)
 
-> **Update 2026-05-06 sau verify role-correct:** Bảng §5 "8 bug deploy gap" đã re-verify với role đúng — **6 bug confirmed, 2 dropped (false positive)**. Sub-menu "Tổ chức tư vấn" + "Người hỗ trợ pháp lý" thực tế đã deploy, lần verify đầu dùng `qtht_01` không thấy vì SCR-IV-01 line 1474-1477 không cho QTHT permission. Đầy đủ 6 bug + evidence: [`output/qa-reports/round7-2026-05-06/bug-reports/bug-report-deploy-gap.md`](../output/qa-reports/round7-2026-05-06/bug-reports/bug-report-deploy-gap.md). Bài học: [`tasks/lessons-learned.md` 2026-05-06](lessons-learned.md).
+> **Update 2026-05-06 sau verify role-correct:** Bảng §5 "8 bug deploy gap" đã re-verify với role đúng — **6 bug confirmed, 2 dropped (false positive)**. Sub-menu "Tổ chức tư vấn" + "Người hỗ trợ pháp lý" thực tế đã deploy, lần verify đầu dùng `qtht_01` không thấy vì SCR-IV-01 line 1474-1477 không cho QTHT permission. Đầy đủ 6 bug + evidence: [`output/qa-reports/round7-2026-05-06/bug-reports/deploy-gap/bug-report-audit-deploy-gap.md`](../output/qa-reports/round7-2026-05-06/bug-reports/deploy-gap/bug-report-audit-deploy-gap.md). Bài học: [`tasks/lessons-learned.md` 2026-05-06](lessons-learned.md).
 
 ---
 
@@ -85,7 +85,7 @@
 - [x] **A1** Verify deploy status (DONE 2026-05-06): 10 deployed + 8 partial — báo cáo này
 - [ ] **A2** Frozen Round 6 — đổi header todo.md thành "Round 6 frozen + Round 7 active"
 - [ ] **A3** Backup + commit baseline trước khi seed
-- [ ] **A4** Log bug UI gap 8 item — file mới `output/qa-reports/round7-2026-05-06/bug-report-deploy-gap.md`
+- [ ] **A4** Log bug UI gap 8 item — file mới `output/qa-reports/round7-2026-05-06/bug-reports/deploy-gap/bug-report-audit-deploy-gap.md`
   - 8 bug Severity Major (UI gap) — gửi dev đồng thời chạy P1+P2
 
 ### Phase B — Run R7 song song dev fix UI gap (T0+1 đến T0+3 ngày)
@@ -132,7 +132,7 @@ R6.6.1 Chi trả + R6.6.2/3 TV nhanh + R6.6.5 CT GĐ2 + R6.7.5/6/7/9/11/13/14/16
 
 ## 5. Bug report deploy gap — template gửi dev
 
-> File output: `output/qa-reports/round7-2026-05-06/bug-report-deploy-gap.md`
+> File output: `output/qa-reports/round7-2026-05-06/bug-reports/deploy-gap/bug-report-audit-deploy-gap.md`
 
 | Bug ID | Severity | Module | Mô tả 1 dòng |
 |---|---|---|---|

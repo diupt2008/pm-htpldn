@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PreToolUse hook: enforce todo.md task icon ⏳/🟢/⚠️/🚫 phải có coverage tag.
 
-Trigger: Edit/Write/MultiEdit on tasks/todo.md (any path ending with /todo.md).
+Trigger: Edit/Write/MultiEdit on tasks/todo.md HOẶC tasks/todo-<module>.md.
 Logic: parse new content lines starting with '- <icon> **<ID>**'.
        Icon ⏳/🟢/⚠️/🚫 cần coverage tag dạng `[~X% — ...]` hoặc `[need: ...]`
        hoặc `[block: ...]` hoặc `[defer: ...]` hoặc `[full 100%]`.
@@ -14,6 +14,7 @@ import json
 import re
 import sys
 
+TARGET_FILE_RE = re.compile(r"/tasks/todo(?:-[\w-]+)?\.md$")
 TAG_PATTERN = re.compile(r"`\[(~\d+%|need:|block:|defer:|full 100%|full)")
 TASK_LINE_PATTERN = re.compile(r"^\s*-\s+(⏳|🟢|⚠️|🚫)\s+\*\*([A-Za-z0-9.\-]+)\*\*")
 # Gate = synchronization point, không phải task work — không có concept coverage %.
@@ -56,7 +57,7 @@ def main() -> int:
     tool_input = payload.get("tool_input", {}) or {}
     file_path = tool_input.get("file_path", "")
 
-    if "/tasks/todo.md" not in file_path and not file_path.endswith("/todo.md"):
+    if not TARGET_FILE_RE.search(file_path):
         return 0
 
     new_text = extract_new_content(tool_name, tool_input)

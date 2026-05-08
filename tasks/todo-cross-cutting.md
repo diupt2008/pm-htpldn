@@ -1,0 +1,39 @@
+# TODO — Cross-cutting (SLA / API / Edge BR / Permission / Profile)
+
+> File module của [`todo.md`](todo.md) master. Tổng **9 task**.
+>
+> **Tham chiếu shared:** [`state-snapshot.md`](state-snapshot.md) · [`dep-map.md`](dep-map.md) · [`lessons-learned.md`](lessons-learned.md)
+>
+> **Trạng thái icon:** 🟢 sẵn sàng · 🔵 đang làm · ✅ xong · ⚠️ partial · 🚫 block · ⏳ chờ upstream
+>
+> **Task IDs:** R7.5.3, R7.7.16, R7.7.17, R7.8.1, R7.8.2, R7.8.3, R7.8.4, R7.8.5, R7.8.6
+
+---
+
+## Tasks
+
+- ⏳ **R7.5.3** ✏️ SLA cảnh báo banner — verify trừ ngày lễ (BR-CALC-03) `[need: HD/VV deadline >70% SLA]` <a id="r7-5-3"></a>
+  - **Cần:** ≥5 ngày lễ 2026 KICH_HOAT (✓5 R7.1.5) · ≥1 HD/VV deadline >70% SLA (✗ HD ✓7 nhưng deadline >70% chưa verify; VV deadline chưa tính)
+
+- 🟢 **R7.7.16** ✏️ API 42 TC + 8 API inbound mock (v3.5 rename filter `cong_khai=1`) `[full 100%]` <a id="r7-7-16"></a>
+  - **Cần:** ≥1 VV (✓5) · ≥1 TVCS (✓12) · ≥1 Chi trả (✓78) · ≥1 CT (✓3) · ≥1 HD (✓7) · ≥1 TVN (✓50) · test full 6/6
+
+- ⏳ **R7.7.17** 🔄 Edge BR-EC-01..23 (4 BR scope) `[need: infra/wait/integration cho 19 BR còn lại]` <a id="r7-7-17"></a>
+  - **Cần:** infra/wait/integration cho 19 BR còn lại
+
+- ✅ **R7.8.1** 🆕 Verify hard delete (DELETE → record không còn trong GET list) <a id="r7-8-1"></a>
+  - **Kết quả:** PASS — DELETE 204 → GET list count -1 + GET by ID 404. Confirm BE hard-delete; SRS modal MD-XOA "xóa mềm" obsolete. [functional-test-report-r7-8-1-hard-delete.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-8-1-hard-delete.md)
+
+- ⚠️ **R7.8.2** 🆕 Verify bỏ ClamAV (upload `.exe` → BE behavior, security regression risk) `[~80% — extension whitelist OK, magic-byte SECURITY GAP]` <a id="r7-8-2"></a>
+  - **Kết quả:** PASS extension whitelist (.exe/.bat/.docm/.zip reject) + 🚨 SECURITY GAP magic-byte (mime spoof .pdf chứa PE bytes lọt). [functional-test-report-r7-8-2-clamav-removal.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-8-2-clamav-removal.md)
+
+- ⚠️ **R7.8.3** 🆕 Verify bỏ lưu nháp scope hẹp (button [Lưu nháp] bỏ, state DU_THAO/NHAP/MOI_DANG_KY giữ) `[~50% — state DRAFT giữ OK, button chưa bỏ FE]` <a id="r7-8-3"></a>
+  - **Kết quả:** PARTIAL — entry state DRAFT ✅ giữ, button [Lưu nháp] ❌ CHƯA bỏ trên form CT HTPLDN. SRS item 11 chưa implement FE. [functional-test-report-r7-8-3-luu-nhap-scope-hep.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-8-3-luu-nhap-scope-hep.md)
+
+- ⚠️ **R7.8.4** 🆕 Profile + đổi MK self-service (ho-so-doi-mat-khau.md) `[~80% — 5/5 PASS, 3 mâu thuẫn detected]` <a id="r7-8-4"></a>
+  - **Kết quả:** PASS 5/5 + 3/3 trường + 3 mâu thuẫn detected (MK strength rule diff, errCode mismatch BUG-FR26-001, "Phiên đăng nhập" extra). [functional-test-report-r7-8-4-profile-doi-mk.md](../output/qa-reports/round7-2026-05-06/functional/qtht-tai-khoan/functional-test-report-r7-8-4-profile-doi-mk.md)
+
+- 🟢 **R7.8.5** 🆕 Permission 55+ entity × 11 role sample 40 TC/module `[~0% — ready, was R5 scope; entity count update v3.5]` <a id="r7-8-5"></a>
+
+- 🟢 **R7.8.6** 🆕 Verify UC renumber +4 offset FR-11 (UC120-142 → UC124-146 do FR-VIII-22..25 chiếm UC120-123) `[~0% — ready, 23 UC × 11 role × 1 BC = 253 entries]` <a id="r7-8-6"></a>
+  - **Spec:** [permission-matrix-by-role.md](../output/permission-matrix-by-role.md) FR-IX block + 7.11-bao-cao-thong-ke.md UC ref khớp v3.5; CHANGELOG §srs-fr-11 Thay đổi 1

@@ -36,7 +36,7 @@
 
 **Root cause:** FE gửi `GET /api/v1/danh-muc/tree?loaiDanhMuc=LINH_VUC_PHAP_LY` (suffix khác). BE chỉ có DM seeded code `LINH_VUC_PL` (12 records). Response: `{success:true, data:[]}`.
 
-**Bug logged:** [bug-report-r7-2-2-ui-tctv-lv-dropdown-empty.md](../../bug-reports/to-chuc-tu-van/bug-report-r7-2-2-ui-tctv-lv-dropdown-empty.md) — BUG-TCTV-FE-001 Major Open
+**Bug logged:** [bug-report-seed-r7-2-2-tctv-lv-dropdown.md](../../bug-reports/to-chuc-tu-van/bug-report-seed-r7-2-2-tctv-lv-dropdown.md) — BUG-TCTV-FE-001 Major Open
 
 ## R7.2.6-UI — TVV form blocker
 
@@ -53,7 +53,7 @@
 
 **Root cause:** FE TVV form combobox query `/api/v1/danh-muc?loaiDanhMuc=TO_CHUC_TU_VAN` → trả 3 enum loại hình DM legacy (Trung tâm TGPL / Chi nhánh TGPL / Tổ chức tham gia TGPL). BE entity TVV.toChucChinhId yêu cầu UUID của entity TO_CHUC_TU_VAN (5 records HOAT_DONG: TC-BTP-TW-0001..0005). User pick combobox → FE gửi DM UUID → BE lookup entity table → 400 NOT_FOUND.
 
-**Bug logged:** [bug-report-r7-2-6-ui-tvv-tochuc-wrong-source.md](../../bug-reports/tu-van-vien-cg/bug-report-r7-2-6-ui-tvv-tochuc-wrong-source.md) — BUG-TVV-FE-002 Major Open
+**Bug logged:** [bug-report-seed-r7-2-6-tvv-tochuc.md](../../bug-reports/tu-van-vien-cg/bug-report-seed-r7-2-6-tvv-tochuc.md) — BUG-TVV-FE-002 Major Open
 
 ## R7.2.7-UI — NHT form ✅ E2E SUCCESS
 
@@ -106,6 +106,6 @@ Pool data từ session API trước (workaround unblock downstream):
 
 ## Files / Evidence
 
-- [bug-report-r7-2-2-ui-tctv-lv-dropdown-empty.md](../../bug-reports/to-chuc-tu-van/bug-report-r7-2-2-ui-tctv-lv-dropdown-empty.md) — BUG-TCTV-FE-001 + screenshot
-- [bug-report-r7-2-6-ui-tvv-tochuc-wrong-source.md](../../bug-reports/tu-van-vien-cg/bug-report-r7-2-6-ui-tvv-tochuc-wrong-source.md) — BUG-TVV-FE-002 + 2 screenshots
+- [bug-report-seed-r7-2-2-tctv-lv-dropdown.md](../../bug-reports/to-chuc-tu-van/bug-report-seed-r7-2-2-tctv-lv-dropdown.md) — BUG-TCTV-FE-001 + screenshot
+- [bug-report-seed-r7-2-6-tvv-tochuc.md](../../bug-reports/tu-van-vien-cg/bug-report-seed-r7-2-6-tvv-tochuc.md) — BUG-TVV-FE-002 + 2 screenshots
 - Screenshots in `seed/screenshots/r7-2-2-ui-*`, `r7-2-6-ui-*`, `r7-2-7-ui-*`

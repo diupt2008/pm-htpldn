@@ -1,0 +1,24 @@
+# TODO — Biểu mẫu
+
+> File module của [`todo.md`](todo.md) master. Tổng **3 task**.
+>
+> **Tham chiếu shared:** [`state-snapshot.md`](state-snapshot.md) · [`dep-map.md`](dep-map.md) · [`lessons-learned.md`](lessons-learned.md)
+>
+> **Trạng thái icon:** 🟢 sẵn sàng · 🔵 đang làm · ✅ xong · ⚠️ partial · 🚫 block · ⏳ chờ upstream
+>
+> **Task IDs:** R7.3.7, R7.4.C1, R7.7.10
+
+---
+
+## Tasks
+
+- ✅ **R7.3.7** ✏️ Seed 4 TM (v3.5 enum `NHAP/CONG_KHAI/AN`) + 7 BM entry NHAP <a id="r7-3-7"></a>
+  - **Kết quả:** TM 4/4 PASS — filter LV cover 4/4 (Lao động/KDTM/Thuế/SHTT). BM 0/7 defer (env limit thiếu file .docx). [r7-3-7-tm-list.png](../output/qa-reports/round7-2026-05-06/seed/dao-tao/r7-3-7-tm-list.png)
+
+- ⚠️ **R7.4.C1** ✏️ Workflow BM v3.5 — SM-BIEUMAU 3 transition + Switch công khai 4 trường + BR-PUBLIC-01/02/03 `[~62% — 5/8 PASS, BR-PUBLIC-02 FAIL]` <a id="r7-4-c1"></a>
+  - **Kết quả:** ⚠️ 5/8 PASS — SM 3/3 transition + BR-PUBLIC-01 BE + BR-PUBLIC-03 BE PASS. BR-PUBLIC-02 FAIL. [workflow-r7-4-c1](../output/qa-reports/round7-2026-05-06/workflow/bieu-mau/workflow-test-report-r7-4-c1-bm.md)
+  - **Bug:** [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) — 0/6 đóng (2 Critical + 2 Major + 2 Medium)
+
+- ⚠️ **R7.7.10** ✏️ Biểu mẫu v3.5 — 47 TC (7 cũ + 10 CR-01 + 30 CRUD/workflow) `[~47% — 22/47 PASS, 11 BLOCKED + 14 DEFER]` <a id="r7-7-10"></a>
+  - **Kết quả:** PASS 22/47 (47%) — 19 PASS + 1 PARTIAL + 3 FAIL + 11 BLOCKED + 14 DEFER. P0 9/14. [functional-r7-7-10](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10-bm.md)
+  - **Bug:** [bug-report-function-bm-r7-7-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-function-bm-r7-7-10.md) — 0/2 đóng (BUG-BM-007 Critical MinIO localhost broken preview+download · BUG-BM-008 Medium silent reject upload). Workflow bugs riêng tại [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) (6 bugs R7.4.C1).

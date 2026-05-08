@@ -58,11 +58,11 @@
 
 **Bước 1 + back-fill tiêu chí — DG-20260506-0001 state Lập kế hoạch + Tab Tiêu chí 4 records (Σ=100%)**
 
-![R7 D2 — Tab Tiêu chí có 4 tiêu chí TT17 import từ DM (40+30+20+10=100% sum), action-bar đầy đủ buttons](../../seed/screenshots/r7-4-d1-DG-20260506-0001-lap-ke-hoach.png)
+![R7 D2 — Tab Tiêu chí có 4 tiêu chí TT17 import từ DM (40+30+20+10=100% sum), action-bar đầy đủ buttons](../../seed/danh-gia/r7-4-d1-DG-20260506-0001-lap-ke-hoach.png)
 
 **Bước 2 — Add người ĐG: 3 dropdowns load đúng SRS (BUG-DG-003/004/005 Closed)**
 
-![R7 D2 B2 — Tab Phân công sau add 1 người ĐG (Tổng 1 người - 1 Trưởng nhóm), button Trình phê duyệt enabled](../../seed/screenshots/r7-4-d2-b2-phancong-1person-trinhduyet-enabled.png)
+![R7 D2 B2 — Tab Phân công sau add 1 người ĐG (Tổng 1 người - 1 Trưởng nhóm), button Trình phê duyệt enabled](../../seed/danh-gia/r7-4-d2-b2-phancong-1person-trinhduyet-enabled.png)
 
 **Bước 4 — cb_pd_tw_01 Phê duyệt PC + B6 block (state CHO_DUYET_PC + Tab Thực hiện 0 VV phù hợp)**
 

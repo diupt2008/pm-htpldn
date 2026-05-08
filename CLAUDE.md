@@ -61,6 +61,61 @@ Project này chứa tài liệu QA cho Phần mềm Hỗ trợ Pháp lý Doanh n
 
 **Reference đầy đủ:** [`tasks/lessons-learned.md`](tasks/lessons-learned.md) entry "2026-04-28 → 2026-04-29 — A5 TVCS FAIL".
 
+## State marker workflow — auto re-eval downstream task (enforced 2026-05-07)
+
+**Vấn đề cũ:** Dep `[need: R7.4.D3 ⚠️ ≥1 record]` gate downstream theo task icon thay vì state thực. Task ⚠️ partial → downstream ⏳ false-block dù data đủ. Task ✅ → downstream 🟢 dù data đã reset.
+
+**Format dep `[need: ...]` chuẩn:**
+```
+[need: <state predicate> (✓ N) | (✗ N|reason); <optional spec/account note>]
+```
+- `(✓ N)` = state thoả, count thực = N
+- `(✗ N|reason)` = state KHÔNG thoả
+- KHÔNG nhắc icon task upstream trong bracket — task icon đổi liên tục, marker phản ánh state thực
+
+**Single source state count:** [tasks/state-snapshot.md](tasks/state-snapshot.md) — entity × state distribution + verify command (MCP/curl).
+
+**Workflow sau MỌI task ✅ thay đổi state entity X (BẮT BUỘC, không hỏi user):**
+
+1. Re-run verify command (MCP `list_network_requests` / curl) cho entity X.
+2. Update [tasks/state-snapshot.md](tasks/state-snapshot.md) count + timestamp.
+3. Grep todo.md `[need: ... <X> ...]` → list task có dep entity X.
+4. Đổi marker từng task: `(✗ N)` ↔ `(✓ N)` theo state mới.
+5. Edit todo.md → hook `auto-rescan-todo.py` tự flip ⏳→🟢 nếu mọi marker `(✓ ...)`.
+
+**Hook contract** ([auto-rescan-todo.py](.claude/hooks/auto-rescan-todo.py)):
+- INPUT: todo.md sau Edit
+- OUTPUT: flip ⏳→🟢 cho task dep thoả; recount bảng Tiến độ
+- BLOCK: bracket có `(✗`, có icon ⚠️/🚫/⏳ trong bracket, có keyword phi-task ("BA confirm", "endpoint deploy", "VNeID Tier", "spec contradiction")
+- KHÔNG flip 🟢→✅/⚠️/🚫 — tester tự quyết
+
+**Workflow sau khi đóng bug ở bug-report-*.md (BẮT BUỘC, từ 2026-05-08):**
+
+1. Update Bug Summary Table trong file bug-report: Status `Open → Closed` + thêm dòng `> **Re-test:** YYYY-MM-DD R{N} — ✅ PASS ...` sau heading bug.
+2. Mở [tasks/todo.md](tasks/todo.md) tìm task gốc tham chiếu bug-report đó.
+3. Cập nhật dòng `**Bug:**` trong todo: tăng số đóng (`X/Y → (X+1)/Y`).
+4. Save todo.md → hook `check-todo-stale-bug-closure.py` warn nếu icon ⚠️/🚫 + bug đã N/N đóng.
+5. Tester verify Kết quả task (PASS/FAIL/Sai spec) → quyết flip icon:
+   - ⚠️ → ✅: Kết quả PASS clean (chỉ còn Minor defer OK).
+   - ⚠️ giữ nguyên: còn Open Major / Sai spec component khác / cần re-test.
+   - 🚫 → ⏳/🟢: nếu block chính đã giải, dep upstream ready.
+
+**Hook contract** ([check-todo-stale-bug-closure.py](.claude/hooks/check-todo-stale-bug-closure.py)):
+- INPUT: todo.md sau Edit/Write/MultiEdit
+- OUTPUT: stderr warn list task ⚠️/🚫 có `**Bug:** X/X đóng` (all closed) — gợi ý flip
+- KHÔNG auto-flip — quyết flip subjective (Minor defer = ✅ judgment), tester tự quyết
+- Skip khi: total=0, X<Y, task không có dòng Bug
+
+**Ví dụ:**
+```
+OLD: [need: R7.4.D3 ⚠️ ≥1 record DA_DUYET]
+NEW: [need: ≥1 Kho QA DA_DUYET mỗi LV (✗ 5/6 — thiếu KDTM + Hành chính)]
+```
+
+Chi tiết workflow + anti-pattern: memory `feedback_todo_update_after_run` §E.
+
+---
+
 ## Quy tắc viết todo.md (enforced bằng hook `.claude/hooks/check-todo-concise.py`)
 
 **Template cứng cho mỗi task:**

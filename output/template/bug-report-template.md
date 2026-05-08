@@ -5,7 +5,7 @@
 | **Dự án** | [TÊN DỰ ÁN] |
 | **Môi trường** | [URL test] |
 | **Người test** | [QA name / QA Automation] |
-| **Ngày** | [YYYY-MM-DD] |
+| **Ngày** | [YYYY-MM-DD HH:MM:SS] |
 | **Loại test** | [Smoke / Functional / Regression / Permission / Workflow / ...] |
 | **Round** | [Round N] |
 | **Tài liệu tham chiếu** | [link test-strategy / test cases / flow-module] |
@@ -144,4 +144,4 @@ Phát hiện **[N]** lỗi có SRS reference cụ thể trong quá trình test [
 
 ---
 
-*Bug report generated: [YYYY-MM-DD] | [QA name / QA Automation via Claude Code]*
+*Bug report generated: [YYYY-MM-DD HH:MM:SS] | [QA name / QA Automation via Claude Code]*

@@ -1,0 +1,33 @@
+# TODO — Đánh giá Hiệu quả HTPL
+
+> File module của [`todo.md`](todo.md) master. Tổng **5 task**.
+>
+> **Tham chiếu shared:** [`state-snapshot.md`](state-snapshot.md) · [`dep-map.md`](dep-map.md) · [`lessons-learned.md`](lessons-learned.md)
+>
+> **Trạng thái icon:** 🟢 sẵn sàng · 🔵 đang làm · ✅ xong · ⚠️ partial · 🚫 block · ⏳ chờ upstream
+>
+> **Task IDs:** R7.4.D1, R7.4.D2, R7.4.D2a, R7.4.D2b, R7.7.9
+
+---
+
+## Tasks
+
+- ✅ **R7.4.D1** ✏️ Tạo kỳ Đánh giá Hiệu quả HTPL `LAP_KE_HOACH` (v3.5: +2 field) <a id="r7-4-d1"></a>
+  - **Kết quả:** PASS 1/1 — DG-20260506-0001 LAP_KE_HOACH. R6 DG-001/002 ✅ FIXED. [seed-checklist](../output/qa-reports/round7-2026-05-06/seed/danh-gia/seed-checklist-r7-4-d1-danhgiahq.md)
+
+- ⚠️ **R7.4.D2** ✏️ Workflow 9 bước v3.5 (8 state + HUY) `[~45% — 5/11 R7, B6 FAIL cascade B7-B10]` <a id="r7-4-d2"></a>
+  - **Cần:** seed lại ≥3 VV `HOAN_THANH` match đợt scope để retest DG-006/007
+  - **Kết quả:** ⚠️ 5/11 R7. B6 FAIL cascade B7-B10. 2 bug mới (DG-006 Major + DG-007 Medium). [report](../output/qa-reports/round7-2026-05-06/workflow/danh-gia/workflow-test-report-DanhGiaHQ.md)
+  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — 5/7 đóng (5 R6 closed; DG-006 + DG-007 R8 2026-05-07 ⚠️ INCONCLUSIVE — pool VV reset 0 HOAN_THANH, không thể verify mismatch)
+
+- ⏳ **R7.4.D2a** 🆕 State HUY transition (4 state LAP_KE_HOACH/PHAN_CONG/THUC_HIEN/BAO_CAO → HUY + guard "chưa HOAN_THANH") `[need: R7.4.D2, đợt mỗi 4 state nguồn]` <a id="r7-4-d2a"></a>
+  - **Cần:** R7.4.D2 ⚠️ · ≥1 đợt mỗi 4 state nguồn (✗ 1/4 — chỉ DG-001 CHO_DUYET_PC) · verify 3 state CHO_DUYET_PC/CHO_PHE_DUYET/HOAN_THANH chặn HUY (negative test)
+  - **Spec:** srs-fr-08-danh-gia.md bảng transition canonical + Mermaid line 1133-1136 (verified NotebookLM 2026-05-08)
+
+- ⏳ **R7.4.D2b** 🆕 FR-VI-10 read-only cross-co-quan (CB NV `co_quan_duoc_danh_gia_id` xem KQ HOAN_THANH) `[need: R7.4.D2, đợt HOAN_THANH + 2 CB NV BN khác đơn vị]` <a id="r7-4-d2b"></a>
+  - **Cần:** R7.4.D2 ⚠️ · ≥1 đợt `HOAN_THANH` (✗0 — DG-001 stuck CHO_DUYET_PC by BUG-FUNC-DG-006) · ≥2 CB NV BN khác đơn vị (✓ cb_nv_bn_01 BKH + cb_nv_bn_02 BTC)
+  - **Spec:** FR-VI-10 line 741
+
+- ⏳ **R7.7.9** ✏️ Đánh giá Hiệu quả HTPL functional 46 TC v3.5 (10 FR) `[need: R7.4.D2, R7.4.D2a, R7.4.D2b]` <a id="r7-7-9"></a>
+  - **Cần:** R7.4.D2 ⚠️ · R7.4.D2a/D2b ⏳ · ≥1 đợt `HOAN_THANH` (✗0 — DG-001 stuck CHO_DUYET_PC)
+  - **Spec:** FR-VI-01..10 (46 TC v3.5)

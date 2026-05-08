@@ -83,6 +83,18 @@
           {
             "type": "command",
             "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/sync-todo-deps.py"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-ready-flip.py"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-stale-bug-closure.py"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/auto-regen-master-index.py"
           }
         ]
       }
