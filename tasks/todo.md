@@ -57,7 +57,7 @@
 | **Kho QA** | 🟢 [R7.3.16](#r7-3-16) seed · ⏳ [R7.4.D3](#r7-4-d3) workflow · ⏳ [R7.4.D3.AUTO](#r7-4-d3-auto) auto-feed |
 | **Chi trả** ✏️ v3.5 | 🚫 [R7.6.1](#r7-6-1) workflow · 🟢 [R7.7.12](#r7-7-12) functional 35 TC · ✅ [R7.7.12.1](#r7-7-12-1) smoke IMPACT 🆕 · 🚫 [R7.7.12.2](#r7-7-12-2) FR-V.II-14 🆕 · 🚫 [R7.7.12.3](#r7-7-12-3) CB PD trả về 🆕 · ✅ [R7.7.12.4](#r7-7-12-4) UI Việt 🆕 · ⚠️ [R7.E3](#r7-e3) monitor
 | **TV nhanh** | ⚠️ [R7.6.2](#r7-6-2) 4/5+B5 mTLS · ⏳ [R7.6.3](#r7-6-3) PUBLIC · ⚠️ [R7.7.11](#r7-7-11) 12/19 R8+R9 · ✅ [R7.E4](#r7-e4) 50 phiên cover 6 state |
-| **CT HTPLDN** | 🟢 [R7.6.4](#r7-6-4) GĐ1 · ⏳ [R7.6.5](#r7-6-5) GĐ2 · ⏳ [R7.7.15](#r7-7-15) functional · ✅ [R7.E2](#r7-e2) monitor |
+| **CT HTPLDN** | ⚠️ [R7.6.4](#r7-6-4) GĐ1 · 🚫 [R7.6.5](#r7-6-5) GĐ2 (UI Story 13.6 chưa build) · ✅ [R7.7.15](#r7-7-15) func 16/16 P0 · ⚠️ [R7.7.15.b](#r7-7-15-b) Đợt BC API 8/9 PASS + CT-038 PARTIAL (UI-001 + API-002 Major) · ✅ [R7.E2](#r7-e2) monitor |
 | **QTHT — Tier 0 seed** | ✅ [R7.0.5](#r7-0-5) button · ✅ [R7.1.1](#r7-1-1) LV partial-fix · ✅ [R7.1.2](#r7-1-2) Loại-DN · ✅ [R7.1.3](#r7-1-3) Đơn-vị · ✅ [R7.1.4](#r7-1-4) SLA · ⚠️ [R7.1.5](#r7-1-5) Ngày-lễ FE-silent · ✅ [R7.1.6](#r7-1-6) 9-DM 9/9 |
 | **QTHT — Tier 1 + Functional** | 🚫 [R7.2.1](#r7-2-1) MPH · ✅ [R7.2.9](#r7-2-9) mail-kích-hoạt · ⚠️ [R7.7.8](#r7-7-8) DM-CRUD 24/25 (1 BLOCK NGAY-LE) · ✅ [R7.7.8a](#r7-7-8a) TK-SM 5+1/6 · ⚠️ [R7.7.8b](#r7-7-8b) Self-reg-DN 7/8 · ⚠️ [R7.7.8c](#r7-7-8c) reset-MK 6/7 (FR26-001 Open) · ✅ [R7.7.8d](#r7-7-8d) Audit-log 7/7 · ⚠️ [R7.7.8e](#r7-7-8e) Vai-trò 11/11 (VT-008 Open) |
 | **Dashboard** | ⏳ [R7.5.1](#r7-5-1) KPI · ⏳ [R7.7.7](#r7-7-7) functional |
@@ -262,8 +262,12 @@
   - **Kết quả:** ⚠️ PASS 4/5 + 1 PARTIAL B5. R9 unblock dev seed: B1/B2/B3/B4 PASS UI+API, B5 mTLS DN-only (pool 12 HOAN_THANH có sẵn). [workflow-test-report-r7-6-2-tv-nhanh.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-nhanh/workflow-test-report-r7-6-2-tv-nhanh.md)
   - **Bug:** [bug-report-r7-6-2-tvn-create-block.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-nhanh/bug-report-r7-6-2-tvn-create-block.md) — 0/2 đóng. R9 re-classify: BUG-001 Critical→Major + P0→P1 (workaround dev seed); BUG-002 giữ Major P1 (vẫn chặn TVN-038 verify diem_danh_gia_tb).
 - ⏳ <a id="r7-6-3"></a>**R7.6.3** 🔄 Workflow TV nhanh PUBLIC (DN qua Cổng PLQG) `[need: R7.E4 ⏳ + R7.7.16 API ✅]`
-- 🟢 <a id="r7-6-4"></a>**R7.6.4** 🔄 Workflow CT HTPLDN GĐ1 11 bước `[~0% — ready, verify 3 CT data (CT-001/002/003) còn không]`
-- ⏳ <a id="r7-6-5"></a>**R7.6.5** 🔄 Workflow CT HTPLDN GĐ2 Đợt BC 7 bước `[need: R7.6.4 🟢 + R7.6.1 ≥6 Chi trả + R7.4.A3 ≥6 VV HOAN_THANH]`
+- ⚠️ <a id="r7-6-4"></a>**R7.6.4** 🔄 Workflow CT HTPLDN GĐ1 11 bước
+  - **Kết quả:** ⚠️ PASS 10/11 (R2 2026-05-08). B7 BUG-B7-001 R1 fixed. NEW BUG-B10-001 ERR-VAL-XI-06-10 chặn HOAN_THANH "0/0 dot BC". [workflow-test-report-r7-6-4-cthtpldn-gd1.md](../output/qa-reports/round7-2026-05-06/workflow/workflow-test-report-r7-6-4-cthtpldn-gd1.md)
+  - **Bug:** [bug-report-flow-cthtpldn.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md) — 1/2 đóng (B7-001 Closed-verified; B10-001 NEW Open Major)
+- 🚫 <a id="r7-6-5"></a>**R7.6.5** 🔄 Workflow CT HTPLDN GĐ2 Đợt BC 7 bước
+  - **Kết quả:** 🚫 5/7 API PASS · UI tab Đợt BC chưa build (Story 13.6) · TW CT deadlock DA_DUYET_KQ. [workflow-test-report-r7-6-5-cthtpldn-gd2.md](../output/qa-reports/round7-2026-05-06/workflow/workflow-test-report-r7-6-5-cthtpldn-gd2.md)
+  - **Bug:** [bug-report-flow-cthtpldn-gd2.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/bug-report-flow-cthtpldn-gd2.md) — 0/2 đóng (BUG-DOTBC-UI-001 Major UI miss · BUG-DOTBC-API-001 Major BE missing /tong-hop)
 
 ---
 
@@ -331,7 +335,12 @@
   - **Kết quả:** PASS 2/2 — 0 enum code, 0 English leak, 0 null/undefined, 7 status badge dịch tiếng Việt. [functional-test-report-r7-7-12-4-ui-vn-thuan.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-r7-7-12-4-ui-vn-thuan.md)
 - ⏳ <a id="r7-7-13"></a>**R7.7.13** 🔄 Báo cáo 38 TC `[need: ≥1 BC từ HD/VV/TVCS/CT/Đào tạo ready]`
 - ⏳ <a id="r7-7-14"></a>**R7.7.14** 🔄 HĐ tư vấn (UC163 sub-resource v2.1) `[need: R7.4.A3 + R7.4.A1 🟢]`
-- ⏳ <a id="r7-7-15"></a>**R7.7.15** 🔄 CT HTPLDN 42 TC `[need: R7.6.4 🟢]`
+- ✅ <a id="r7-7-15"></a>**R7.7.15** 🔄 CT HTPLDN 44 TC (Option A P0 only) — split R7.7.15.b cho Đợt BC
+  - **Kết quả:** PASS 16/16 P0 (100%). CRUD+Search+Validation+Workflow+Auth+Cross-cutting OK. [functional-test-report-r7-7-15-cthtpldn.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-r7-7-15-cthtpldn.md)
+  - **Bug:** 3 OBS Minor + B10-001 Open. [bug-report-flow-cthtpldn.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md)
+- ⚠️ <a id="r7-7-15-b"></a>**R7.7.15.b** 🆕 Functional Đợt BC 8+1 P0 TC API-only (R2 2026-05-08)
+  - **Kết quả:** PASS 8/9 + 1 PARTIAL CT-038 (88.9% PASS). BN+ĐP gửi TW workflow PASS (DOT-8-1 BN BKH + DOT-9-1 ĐP AG đều DA_GUI_TW). CT-038 PARTIAL — endpoint /tong-hop discover OK nhưng BE expect BC IDs ≠ DOT IDs trả từ GET. [functional-test-report-r7-7-15-b-dot-bc.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-r7-7-15-b-dot-bc.md)
+  - **Bug:** 2 NEW Major — DOTBC-UI-001 (UI Story 13.6 chưa build) + DOTBC-API-002 (POST/GET tong-hop ID mismatch). [bug-report-flow-cthtpldn.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md) — 4 Major Open (B10 + DOTBC-UI-001 + DOTBC-API-002 + B7 Closed) + 5 OBS Minor.
 - ⏳ <a id="r7-7-16"></a>**R7.7.16** ✏️ API 42 TC + 8 API inbound mock (v3.5 rename filter `cong_khai=1`) `[need: data upstream state cuối từ HD/VV/TVCS/Chi trả/CT/TVN]`
 - ⏳ <a id="r7-7-17"></a>**R7.7.17** 🔄 Edge BR-EC-01..23 (4 BR scope) `[need: infra/wait/integration cho 19 BR còn lại]`
 
