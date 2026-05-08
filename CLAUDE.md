@@ -204,12 +204,20 @@ evaluate_script(() => {
 
 ### MCP-Rule 3: `click` sidebar, KHÔNG dùng `navigate_page` sau login
 
-**App auth lưu trong `sessionStorage` key `auth-store`** (verified 2026-04-21, không cookie HttpOnly). `navigate_page` URL = full reload = app re-init check BE session → redirect `/login` nếu backend không chấp nhận.
+**App auth lưu trong `localStorage` key `auth-store`** (verified 2026-05-08 R7.4.A3-PUBLIC, app dùng cả `localStorage` cho user state lẫn HttpOnly refresh-token cookie). `navigate_page` URL = full reload = app re-init check BE session → redirect `/login` nếu backend không chấp nhận.
 
 - ❌ `navigate_page({url: "/quan-tri/danh-muc"})` sau login → kick về `/login`
 - ✅ `click({uid: sidebar_button_uid})` → React Router internal navigate, giữ app state
 
 **Chỉ dùng `navigate_page` cho:** lần đầu session (goto `/login`), hoặc khi cần force reload (logout test).
+
+**Logout đúng cách (verified 2026-05-08):** Chỉ `localStorage.clear()` thì navigate `/login` vẫn bounce về `/dashboard` vì BE còn refresh-token cookie HttpOnly. Phải gọi đủ:
+
+```js
+await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'include' });
+localStorage.clear(); sessionStorage.clear();
+// rồi navigate_page('/login')
+```
 
 ### MCP-Rule 4: Expand sidebar trước submenu lần đầu session
 

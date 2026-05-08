@@ -88,6 +88,37 @@ reqid=338 GET http://103.172.236.130:3000/api/v1/auth/me [401]
 | 3 | 10:11 | Login → click sidebar → click submenu | Redirect /login |
 | 4 | 10:15 | Login → click sidebar → click submenu | Redirect /login |
 
+### R8 reproduce update — 2026-05-08 19:14–19:21 (R7.3.6 path A1 attempt)
+
+Bug **vẫn 100% reproduce** ở R8 dù đã 6 lần re-login + thử cả UI button + 5 endpoint guess + monkey-patch sniff. Pattern không đổi — POST submit "Trình duyệt" KHÔNG kịp hoàn tất trước khi /auth/me 401 trigger redirect.
+
+| Lần | Thời gian | Action | API state KH-0004 sau action |
+|----|----------|--------|---------|
+| 5 | 19:14 | Login + click row KH-0004 (a tag) | Click ate by /login redirect |
+| 6 | 19:15 | Login + sidebar nav + detail + click Trình duyệt + Gửi phê duyệt | Redirect, KH-0004 vẫn `NHAP` |
+| 7 | 19:18 | Login + try direct API POST endpoint guesses (5 paths) | Tất cả 404 — chưa tìm ra real endpoint |
+| 8 | 19:19 | Login + sniff JS chunks `ke-hoach-dao-taos` pattern | 0 endpoint match (chunk lazy chưa load) |
+| 9 | 19:20 | Login + monkey-patch `window.fetch` + click Trình duyệt + confirm | "Execution context destroyed" do redirect /login trước khi đọc log |
+| 10 | 19:21 | Login + verify state qua API trực tiếp | KH-0004 vẫn `NHAP`, ngayGuiDuyet=null |
+
+**Block impact mở rộng:** Bug này không chỉ block R7.4.B0 walk 10 transitions mà **block toàn bộ chuỗi downstream R7.3.6 → R7.4.B1 → R7.4.B7 → R7.4.B11** vì Mô hình A đảo chiều yêu cầu KH năm `DA_DUYET` trước khi seed CTĐT.
+
+**Workaround discovered:** Không có. Mọi cách (UI button / API direct / monkey-patch / chunk sniff) đều bị JWT revoke chặn trong <1 phút.
+
+**Bằng chứng API verify post-attempt:**
+
+```json
+GET /api/v1/ke-hoach-dao-taos?page=1&pageSize=20  (post-attempt)
+[
+  { "ma": "KH-20260508-0006", "trangThai": "NHAP", "ngayGuiDuyet": null },
+  { "ma": "KH-20260508-0005", "trangThai": "NHAP", "ngayGuiDuyet": null },
+  { "ma": "KH-20260508-0004", "trangThai": "NHAP", "ngayGuiDuyet": null },  // ❌ submit không qua
+  { "ma": "KH-20260508-0001", "trangThai": "CHO_DUYET", "ngayGuiDuyet": "2026-05-08T03:09:14.502Z" }  // R7
+]
+```
+
+**Severity escalation đề nghị:** Critical → **Critical-Blocker (P0 emergency)** vì block 5+ task downstream của module Đào tạo.
+
 ### So sánh — *N/A* (không phải bug phân quyền)
 
 ---
