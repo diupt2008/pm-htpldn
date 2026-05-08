@@ -19,13 +19,13 @@
 | 1 | Re-seed Tier 0 (DM/đơn vị/SLA/MPH/ngày lễ) | 6 | - | - | 5 | 1 | - | - |
 | 2 | Re-seed Tier 1 (TC TV/DN/TVV/CG/NHT/account) | 8 | - | - | 7 | - | 1 | - |
 | 3 | Re-seed Tier 2 (transactional entry state) +**3 sub-task FR-02/X.2 v3.5** (R7.3.1.MoB + R7.3.1.TVN + R7.3.16 Kho QA) | 18 | 2 | - | 7 | 1 | 5 | 3 |
-| 4 | Workflow E2E (Trụ A/B/C/D) +**3 task v3.5** (R7.4.A3-PUBLIC + R7.4.A3-DN-BS + R7.4.D3.AUTO) | 23 | 3 | - | 1 | 2 | - | 17 |
+| 4 | Workflow E2E (Trụ A/B/C/D) +**3 task v3.5** (R7.4.A3-PUBLIC + R7.4.A3-DN-BS + R7.4.D3.AUTO) | 23 | 3 | - | 1 | 3 | 2 | 14 |
 | 5 | Verification (KPI/cross/SLA/audit) | 5 | 3 | - | - | - | - | 2 |
 | 6 | Workflow đầu ra hậu kỳ (Chi trả/TVN/CT) | 5 | 1 | - | - | - | 1 | 3 |
-| 7 | Functional 17 module + 2 NEW + **4 sub-task FR-06 v3.5** | 29 | 5 | - | 4 | 4 | 2 | 14 |
+| 7 | Functional 17 module + 2 NEW + **4 sub-task FR-06 v3.5** | 29 | 5 | - | 4 | 4 | 4 | 12 |
 | 8 | Cross-cutting + Profile + Permission +**R7.8.6 UC renumber FR-11 v3.5** | 6 | 2 | - | 1 | 3 | - | - |
 | Trụ E | Monitor unblock | 4 | - | - | 2 | 1 | - | 1 |
-| **Tổng** | | **111** | **16** | **0** | **32** | **14** | **9** | **40** |
+| **Tổng** | | **111** | **16** | **0** | **32** | **15** | **13** | **35** |
 
 ---
 
@@ -40,7 +40,7 @@
 | **TC TV** 🆕 | ✅ [R7.2.2](#r7-2-2) seed · ✅ [R7.2.3](#r7-2-3) phê-duyệt · 🟢 [R7.7.4.6](#r7-7-4-6) functional |
 | **DN** | ✅ [R7.2.4](#r7-2-4) seed · 🚫 [R7.3.4](#r7-3-4) HSPL · 🟢 [R7.5.2](#r7-5-2) cross-module · 🟢 [R7.7.4](#r7-7-4) functional v3.5 |
 | **Hỏi đáp** ✏️ v3.5 | ✅ [R7.3.1](#r7-3-1) seed · 🚫 [R7.4.A4](#r7-4-a4) workflow 2/11 (DA_PHAN_CONG transition missing) · ⏳ [R7.7.1](#r7-7-1) functional 60 TC v3.5 · ✅ [R7.3.1.MoB](#r7-3-1-mob) seed Mẫu Mô hình B (UI Tab Mẫu phản hồi) 🆕 · 🟢 [R7.3.1.TVN](#r7-3-1-tvn) seed TVN ESCALATE (UI FR-13) 🆕 |
-| **Vụ việc** ✏️ | ✅ [R7.3.2](#r7-3-2) seed · ⏳ [R7.4.A3](#r7-4-a3) workflow base · ⏳ [R7.4.A3-PUBLIC](#r7-4-a3-public) công khai 🆕 · ⏳ [R7.4.A3-DN-BS](#r7-4-a3-dn-bs) DN bổ sung HS 🆕 · ⏳ [R7.7.3](#r7-7-3) functional 72 TC · ⏳ [R7.7.3-PRIVACY](#r7-7-3-privacy) 2 TC P0 Critical 🆕 |
+| **Vụ việc** ✏️ | ✅ [R7.3.2](#r7-3-2) seed · ⚠️ [R7.4.A3](#r7-4-a3) workflow base 3/8 (R8 BUG-VV-AUTH-01/SCHEMA-01 P0) · 🚫 [R7.4.A3-PUBLIC](#r7-4-a3-public) công khai 🆕 · 🚫 [R7.4.A3-DN-BS](#r7-4-a3-dn-bs) DN bổ sung HS 🆕 · 🚫 [R7.7.3](#r7-7-3) functional 72 TC · 🚫 [R7.7.3-PRIVACY](#r7-7-3-privacy) 2 TC P0 Critical 🆕 |
 | **TVCS** | ✅ [R7.3.3](#r7-3-3) seed · ⚠️ [R7.4.A5](#r7-4-a5) workflow 3/11 · ⚠️ [R7.7.5](#r7-7-5) functional 31/61 |
 | **HĐ TV** ✏️ | ⏳ [R7.3.14](#r7-3-14) seed · ⏳ [R7.7.14](#r7-7-14) functional · ✅ [R7.E1](#r7-e1) monitor |
 | **KH năm** 🆕 | ⏳ [R7.3.5](#r7-3-5) seed · ⏳ [R7.4.B0](#r7-4-b0) workflow |
@@ -196,9 +196,17 @@
   - **Bug:** [bug-report-r7-4-a1-cg-state-deviation.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-r7-4-a1-cg-state-deviation.md) — 0/1 đóng (BUG-CG-A1-001 Major Open: state DANG_HOAT_DONG vs CHO_KICH_HOAT spec). **Re-test R8 2026-05-07: VẪN OPEN** (lần 2 verify, BE chưa rename + chưa chèn CHO_KICH_HOAT).
 - ⏳ <a id="r7-4-a1-5"></a>**R7.4.A1.5** ✏️ Đợt 2 PC TVV backfill — verify dropdown "Người xử lý" có TAI_KHOAN role NHT mới sau khi NHT tách entity `[need: R7.4.A1 🟢 + R7.4.A1-CG ⚠️; verify 2 BE bug Open R6 (CHPC-001/002) còn không sau dev deploy]`
 - 🟢 <a id="r7-4-a2"></a>**R7.4.A2** 🆕 Tiếp nhận TVV (FR-IV-13) — 3 transition mới (MOI_DANG_KY→CHO_THAM_DINH, YEU_CAU_BO_SUNG→DANG_THAM_DINH, TU_CHOI→CHO_THAM_DINH) `[need: ≥1 TVV MOI_DANG_KY (R7.2.5 ✅)]`
-- ⏳ <a id="r7-4-a3"></a>**R7.4.A3** ✏️ Workflow VV (FR-05 v3.5 refactor — bỏ `nguoi_ho_tro_id`, thay 3 cột phân công + 2 thẻ Cá nhân/Tổ chức + SLA 15 ngày + CB PD từ chối → DANG_XU_LY) `[need: R7.2.9 ✅ NHT active + R7.2.3 ✅ TC TV HOAT_DONG; spec mới: 7.5-vu-viec-htpl.md v3.0 + 6.5-sm-vuviec.md (sync 2026-05-06)]`
-- ⏳ <a id="r7-4-a3-public"></a>**R7.4.A3-PUBLIC** 🆕 Workflow Công khai VV lên Cổng PLQG (FR-V.I-NEW-05 — 2 self-loop SM trên DA_DUYET + HOAN_THANH) `[need: R7.4.A3 ≥1 VV DA_DUYET hoặc HOAN_THANH; account: cb_pd_<cap>_01 cùng cấp với CB NV xử lý VV (BR-AUTH-05)]`
-- ⏳ <a id="r7-4-a3-dn-bs"></a>**R7.4.A3-DN-BS** 🆕 Workflow DN bổ sung HS qua chuyên trang VNeID (FR-V.I-NEW-02 — formal hoá YEU_CAU_BO_SUNG → DANG_KIEM_TRA) `[need: R7.4.A3 ≥1 VV YEU_CAU_BO_SUNG + DN VNeID Tier 2 sandbox; account: dn_<X>_01 với VNeID]`
+- ⚠️ <a id="r7-4-a3"></a>**R7.4.A3** ✏️ Workflow VV (FR-05 v3.5 refactor — bỏ `nguoi_ho_tro_id`, thay 3 cột phân công + 2 thẻ Cá nhân/Tổ chức + SLA 15 ngày + CB PD từ chối → DANG_XU_LY)
+  - **Kết quả:** ⚠️ PARTIAL R8 2026-05-08 — 3/8 bước PASS (B1+B2+B3 advance VV-005 đến DA_PHAN_CONG); B4+ BLOCKED do TVV/CG/NHT cần VNeID Tier 2 sandbox. [workflow-test-report-r7-4-a3-vu-viec.md](../output/qa-reports/round8-2026-05-08/workflow/vu-viec/workflow-test-report-r7-4-a3-vu-viec.md)
+  - **Bug:** [bug-report-flow-vu-viec.md](../output/qa-reports/round8-2026-05-08/bug-reports/vu-viec/bug-report-flow-vu-viec.md) — 0/5 đóng (SCHEMA-01 Critical entity v3.5 chưa migrate · AUTH-01 Critical TVV không login Tier 1 · PC-MODAL-01 Major modal thiếu 2 thẻ · SLA-01 Major 10 LV vs 15 LV · PC-WRN-01 Minor WRN-PC-01 missing)
+  - **Cần có sẵn:** R7.2.9 ✅ + R7.2.3 ✅; **chặn dev/BA fix:** AUTH-01 + SCHEMA-01 (P0) trước khi retest
+- 🚫 <a id="r7-4-a3-public"></a>**R7.4.A3-PUBLIC** 🆕 Workflow Công khai VV lên Cổng PLQG (FR-V.I-NEW-05 — 2 self-loop SM trên DA_DUYET + HOAN_THANH)
+  - **Kết quả:** 🚫 0/7 transition. Chain block ở DA_PHAN_CONG→DANG_XU_LY do BUG-VV-PC-001/002. [workflow-test-report-r7-4-a3-public.md](../output/qa-reports/round7-2026-05-06/workflow/vu-viec/workflow-test-report-r7-4-a3-public.md)
+  - **Bug:** [bug-report-r7-4-a3-public-phancong-cascade.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/bug-report-r7-4-a3-public-phancong-cascade.md) — 0/2 đóng (VV-PC-001 Critical permission CG · VV-PC-002 Major BE filter sai pool)
+  - **Cần có sẵn:** R7.4.A3 ≥1 VV DA_DUYET/HOAN_THANH ❌ + dev fix VV-PC-001/002 ❌ + NHT-BTP-TW-0001 activate ❌
+- 🚫 <a id="r7-4-a3-dn-bs"></a>**R7.4.A3-DN-BS** 🆕 Workflow DN bổ sung HS qua chuyên trang VNeID (FR-V.I-NEW-02)
+  - **Kết quả:** 🚫 BLOCKED 0/8 bước. Chuyên trang DN + VNeID Tier 2 chưa deploy. [workflow-test-report-r7-4-a3-dn-bs.md](../output/qa-reports/round7-2026-05-06/workflow/vu-viec/workflow-test-report-r7-4-a3-dn-bs.md)
+  - **Cần có sẵn:** VNeID Tier 2 OIDC ❌ + chuyên trang DN ❌ + DN account ❌ + sandbox CCCD ❌
 - 🚫 <a id="r7-4-a4"></a>**R7.4.A4** ✏️ Workflow Hỏi đáp 11 paths v3.5
   - **Kết quả:** 🚫 2/11 PASS (TP-HD-03 + TP-HD-08 PARTIAL). 8 BLOCKED do BUG-HD-A4-001 state DA_PHAN_CONG missing transition + 1 SKIP TP-HD-09. [workflow-test-report-r7-4-a4-hoi-dap.md](../output/qa-reports/round7-2026-05-06/workflow/hoi-dap/workflow-test-report-r7-4-a4-hoi-dap.md)
   - **Bug:** [bug-report-r7-4-a4-hd-workflow-block.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/bug-report-r7-4-a4-hd-workflow-block.md) — 0/3 đóng (HD-A4-001 Critical state DA_PHAN_CONG transition · 002 Major CauHinhPhanCong DEPRECATED · 003 Major TC TV không persist)
@@ -276,9 +284,12 @@
 - ⏳ <a id="r7-7-1"></a>**R7.7.1** ✏️ Hỏi đáp 60 TC v3.5 (35 base updated + 25 mới HD-040..064) `[need: R7.3.1 ✅ + R7.3.1.MoB + R7.3.1.TVN + R7.4.A4; spec: 7.2-hoi-dap-phap-ly.md v3.5]`
   - **Cần có sẵn:** DEV schema v3.5 ❌ + R7.3.1/MoB/TVN re-seed ❌ + file test (ảnh 5MB, PDF 19/21MB)
 - 🟢 <a id="r7-7-2"></a>**R7.7.2** ✏️ CG/TVV 31 TC (enum loai_tvv đổi) `[need: R7.2.5/6 ✅]`
-- ⏳ <a id="r7-7-3"></a>**R7.7.3** ✏️ Vụ việc 72 TC v3.5 (33 base + 42 mới Cluster 1-8) `[need: R7.3.2 ✅ + R7.4.A3 ≥1 VV mỗi state; spec mới: 7.5-vu-viec-htpl.md v3.0 (sync 2026-05-06)]`
-  - **Cần có sẵn:** R7.3.2 ✅ + R7.4.A3 ⏳ + R7.4.A3-PUBLIC ⏳ + R7.4.A3-DN-BS ⏳ + DN VNeID Tier 2 + CB PD cùng cấp
-- ⏳ <a id="r7-7-3-privacy"></a>**R7.7.3-PRIVACY** 🆕 **2 TC P0 Critical privacy NĐ 13/2023** (verify riêng đầu tiên, escalate ngay nếu FAIL) `[need: R7.4.A3-PUBLIC ≥1 VV cong_khai=1 + R7.2.4 ≥1 DN test với VV + R7.4.A3 ≥1 VV scope đa DN]`
+- 🚫 <a id="r7-7-3"></a>**R7.7.3** ✏️ Vụ việc 72 TC v3.5 (33 base + 42 mới Cluster 1-8)
+  - **Kết quả:** 🚫 block — R7.4.A3 ⚠️ chỉ 3/12 state seed; thiếu 6 state critical (YEU_CAU_BO_SUNG/DANG_XU_LY/CHO_PHE_DUYET/DA_DUYET/HOAN_THANH/DA_DANH_GIA).
+  - **Cần có sẵn:** R7.3.2 ✅ + R7.4.A3 ⚠️ + R7.4.A3-PUBLIC 🚫 + R7.4.A3-DN-BS 🚫 + DN VNeID Tier 2 ❌ + CB PD cùng cấp ✅
+- 🚫 <a id="r7-7-3-privacy"></a>**R7.7.3-PRIVACY** 🆕 **2 TC P0 Critical privacy NĐ 13/2023** (verify riêng đầu tiên, escalate ngay nếu FAIL)
+  - **Kết quả:** 🚫 cascade R7.4.A3-PUBLIC 🚫 — chưa có VV `cong_khai=1` để test whitelist 9 fields + scope đa DN.
+  - **Cần có sẵn:** R7.4.A3-PUBLIC ≥1 VV cong_khai=1 ❌ + R7.2.4 ✅ + R7.4.A3 ≥1 VV đa DN ❌
 - 🟢 <a id="r7-7-4"></a>**R7.7.4** ✏️ DN 17 TC v3.5 (4 TC mới DN-021..024)
   - **Kết quả:** 🟢 ready, 15/17 test ngay; 2 defer (DN-004 Tier 2 + DN-020 Tier 3). [7.7-quan-ly-doanh-nghiep.md](../output/funtion/7.7-quan-ly-doanh-nghiep.md)
   - **Cần có sẵn:** R7.2.4 ✅ (36 DN cover 3 quy mô × 3 ngành) + DM TINH_THANH 63 tỉnh + DM LINH_VUC_KINH_DOANH

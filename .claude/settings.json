@@ -35,7 +35,9 @@
       "PowerShell(Stop-Process -Id 10540 -Force -ErrorAction SilentlyContinue)",
       "PowerShell(Stop-Process -Id 5712 -Force -ErrorAction SilentlyContinue)",
       "PowerShell(Stop-Process -Id 16868 -Force -ErrorAction SilentlyContinue)",
-      "PowerShell(Stop-Process -Id 28644 -Force -ErrorAction SilentlyContinue)"
+      "PowerShell(Stop-Process -Id 28644 -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-CimInstance Win32_Process -Filter \"Name='chrome.exe'\" | Select-Object ProcessId, @{N='Cmd';E={$_.CommandLine.Substring\\(0, [Math]::Min\\(300, $_.CommandLine.Length\\)\\)}} | Format-Table -AutoSize -Wrap)",
+      "PowerShell($mcpProc = Get-CimInstance Win32_Process -Filter \"Name='chrome.exe'\"; foreach \\($p in $mcpProc\\) { if \\($p.CommandLine -and $p.CommandLine.Contains\\('chrome-devtools-mcp'\\)\\) { Write-Host \"Found PID=$\\($p.ProcessId\\) parent=$\\($p.ParentProcessId\\)\" } })"
     ]
   },
   "hooks": {
