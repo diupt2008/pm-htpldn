@@ -39,9 +39,9 @@
 | **NHT** 🆕 | ✅ [R7.2.7](#r7-2-7) seed (auto-tạo TK qua FR-VIII-15) · 🟢 [R7.7.4.5](#r7-7-4-5) functional |
 | **TC TV** 🆕 | ✅ [R7.2.2](#r7-2-2) seed · ✅ [R7.2.3](#r7-2-3) phê-duyệt · 🟢 [R7.7.4.6](#r7-7-4-6) functional |
 | **DN** | ✅ [R7.2.4](#r7-2-4) seed · 🚫 [R7.3.4](#r7-3-4) HSPL · 🟢 [R7.5.2](#r7-5-2) cross-module · 🟢 [R7.7.4](#r7-7-4) functional v3.5 |
-| **Hỏi đáp** ✏️ v3.5 | ✅ [R7.3.1](#r7-3-1) seed · ⏳ [R7.4.A4](#r7-4-a4) workflow 11 paths · ⏳ [R7.7.1](#r7-7-1) functional 60 TC v3.5 · ✅ [R7.3.1.MoB](#r7-3-1-mob) seed Mẫu Mô hình B (UI Tab Mẫu phản hồi) 🆕 · 🟢 [R7.3.1.TVN](#r7-3-1-tvn) seed TVN ESCALATE (UI FR-13) 🆕 |
+| **Hỏi đáp** ✏️ v3.5 | ✅ [R7.3.1](#r7-3-1) seed · 🚫 [R7.4.A4](#r7-4-a4) workflow 2/11 (DA_PHAN_CONG transition missing) · ⏳ [R7.7.1](#r7-7-1) functional 60 TC v3.5 · ✅ [R7.3.1.MoB](#r7-3-1-mob) seed Mẫu Mô hình B (UI Tab Mẫu phản hồi) 🆕 · 🟢 [R7.3.1.TVN](#r7-3-1-tvn) seed TVN ESCALATE (UI FR-13) 🆕 |
 | **Vụ việc** ✏️ | ✅ [R7.3.2](#r7-3-2) seed · ⏳ [R7.4.A3](#r7-4-a3) workflow base · ⏳ [R7.4.A3-PUBLIC](#r7-4-a3-public) công khai 🆕 · ⏳ [R7.4.A3-DN-BS](#r7-4-a3-dn-bs) DN bổ sung HS 🆕 · ⏳ [R7.7.3](#r7-7-3) functional 72 TC · ⏳ [R7.7.3-PRIVACY](#r7-7-3-privacy) 2 TC P0 Critical 🆕 |
-| **TVCS** | ✅ [R7.3.3](#r7-3-3) seed · ⏳ [R7.4.A5](#r7-4-a5) workflow · ⏳ [R7.7.5](#r7-7-5) functional |
+| **TVCS** | ✅ [R7.3.3](#r7-3-3) seed · ⚠️ [R7.4.A5](#r7-4-a5) workflow 3/11 · ⚠️ [R7.7.5](#r7-7-5) functional 31/61 |
 | **HĐ TV** ✏️ | ⏳ [R7.3.14](#r7-3-14) seed · ⏳ [R7.7.14](#r7-7-14) functional · ✅ [R7.E1](#r7-e1) monitor |
 | **KH năm** 🆕 | ⏳ [R7.3.5](#r7-3-5) seed · ⏳ [R7.4.B0](#r7-4-b0) workflow |
 | **CTĐT** | 🚫 [R7.3.6](#r7-3-6) seed · ⏳ [R7.4.B1](#r7-4-b1) workflow |
@@ -56,12 +56,12 @@
 | **Đánh giá Hiệu quả HTPL** ✏️ | ✅ [R7.4.D1](#r7-4-d1) tạo · ⚠️ [R7.4.D2](#r7-4-d2) workflow · ⏳ [R7.4.D2a](#r7-4-d2a) HUY 🆕 · ⏳ [R7.4.D2b](#r7-4-d2b) FR-VI-10 🆕 · ⏳ [R7.7.9](#r7-7-9) functional 46 TC |
 | **Kho QA** | 🟢 [R7.3.16](#r7-3-16) seed · ⏳ [R7.4.D3](#r7-4-d3) workflow · ⏳ [R7.4.D3.AUTO](#r7-4-d3-auto) auto-feed |
 | **Chi trả** ✏️ v3.5 | 🚫 [R7.6.1](#r7-6-1) workflow · 🟢 [R7.7.12](#r7-7-12) functional 35 TC · ✅ [R7.7.12.1](#r7-7-12-1) smoke IMPACT 🆕 · 🚫 [R7.7.12.2](#r7-7-12-2) FR-V.II-14 🆕 · 🚫 [R7.7.12.3](#r7-7-12-3) CB PD trả về 🆕 · ✅ [R7.7.12.4](#r7-7-12-4) UI Việt 🆕 · ⚠️ [R7.E3](#r7-e3) monitor
-| **TV nhanh** | ⏳ [R7.6.2](#r7-6-2) tay · ⏳ [R7.6.3](#r7-6-3) PUBLIC · ⏳ [R7.7.11](#r7-7-11) functional · ⏳ [R7.E4](#r7-e4) monitor |
+| **TV nhanh** | ⚠️ [R7.6.2](#r7-6-2) 4/5+B5 mTLS · ⏳ [R7.6.3](#r7-6-3) PUBLIC · ⚠️ [R7.7.11](#r7-7-11) 12/19 R8+R9 · ✅ [R7.E4](#r7-e4) 50 phiên cover 6 state |
 | **CT HTPLDN** | 🟢 [R7.6.4](#r7-6-4) GĐ1 · ⏳ [R7.6.5](#r7-6-5) GĐ2 · ⏳ [R7.7.15](#r7-7-15) functional · ✅ [R7.E2](#r7-e2) monitor |
 | **QTHT — Tier 0 seed** | ✅ [R7.0.5](#r7-0-5) button · ✅ [R7.1.1](#r7-1-1) LV partial-fix · ✅ [R7.1.2](#r7-1-2) Loại-DN · ✅ [R7.1.3](#r7-1-3) Đơn-vị · ✅ [R7.1.4](#r7-1-4) SLA · ⚠️ [R7.1.5](#r7-1-5) Ngày-lễ FE-silent · ✅ [R7.1.6](#r7-1-6) 9-DM 9/9 |
 | **QTHT — Tier 1 + Functional** | 🚫 [R7.2.1](#r7-2-1) MPH · ✅ [R7.2.9](#r7-2-9) mail-kích-hoạt · ⚠️ [R7.7.8](#r7-7-8) DM-CRUD 24/25 (1 BLOCK NGAY-LE) · ✅ [R7.7.8a](#r7-7-8a) TK-SM 5+1/6 · ⚠️ [R7.7.8b](#r7-7-8b) Self-reg-DN 7/8 · ⚠️ [R7.7.8c](#r7-7-8c) reset-MK 6/7 (FR26-001 Open) · ✅ [R7.7.8d](#r7-7-8d) Audit-log 7/7 · ⚠️ [R7.7.8e](#r7-7-8e) Vai-trò 11/11 (VT-008 Open) |
 | **Dashboard** | ⏳ [R7.5.1](#r7-5-1) KPI · ⏳ [R7.7.7](#r7-7-7) functional |
-| **Báo cáo** | 🟢 [R7.5.4](#r7-5-4) BC04 · ⏳ [R7.7.13](#r7-7-13) functional |
+| **Báo cáo** | ❌ [R7.5.4](#r7-5-4) BC04 export FAIL · ⏳ [R7.7.13](#r7-7-13) functional |
 | **SLA cảnh báo** | ⏳ [R7.5.3](#r7-5-3) banner |
 | **Audit log** | 🟢 [R7.5.5](#r7-5-5) ≥100 entry |
 | **API** ✏️ | ⏳ [R7.7.16](#r7-7-16) 42 TC + 8 mock |
@@ -157,8 +157,10 @@
 - ✅ <a id="r7-3-3"></a>**R7.3.3** ✏️ Seed 10 TVCS entry TIEP_NHAN cover 6 LV (endpoint thực `/api/v1/noi-dung-tu-van-cs`)
   - **Kết quả:** PASS 10/10 TVCS-20260506-0001..0010. 5/10 fail VIDEO_CALL → retry HO_SO. [seed-checklist-r7-3-3-tvcs.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-3-3-tvcs.md)
   - **Bug:** [bug-report-r7-3-3-tvcs-video-call-500.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/bug-report-r7-3-3-tvcs-video-call-500.md) — 1/1 đóng FE (BUG-TVCS-VIDEO-CALL-001 Closed-verified R8 2026-05-07 — form bỏ field hinhThucTv, FE không gửi orphan)
-- 🚫 <a id="r7-3-4"></a>**R7.3.4** 🔄 Seed 10 HSPL DN cover 5 loại × 3 state × 5 DN
-  - **Kết quả:** 🚫 BLOCK — DN list rỗng env (R7.2.4 36 DN reset, BE total=0). Cần re-self-reg DN.
+- ✅ <a id="r7-3-4"></a>**R7.3.4** 🔄 Seed HSPL DN cover 5 loại × 3 state × multi-DN + STP-AG scope
+  - **Kết quả:** PASS 23 record (20 TW + 2 STP-AG seed R8 + 1 NHT-self-create). 5/5 loại + 3/3 state + 11 DN cover. Endpoint thực `/api/v1/ho-so-phap-ly-dns` (plural-s). [seed-checklist-r7-3-4-hspl.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-3-4-hspl.md)
+  - **Bug:** 6 bug đề xuất log (HSPL-001 NHT permission overgrant Major, HSPL-002 BR-AUTH-10 missing VV layer Major, HSPL-003 GET detail 500 Critical, HSPL-004 list filter inconsistent Minor, HSPL-005 keyword param ignored Minor, HSPL-006 unaccent Major).
+  - **Downstream unblock:** TV-017/018/019/020/056 ✅ ready · TV-053 ⚠️ partial (cần R7.4.A3 VV linkage) · TV-054 ⚠️ ready (verify negative bug) · TV-055 🚫 (BUG-HSPL-003 Critical).
 - ⏳ <a id="r7-3-5"></a>**R7.3.5** 🆕 Seed Kế hoạch ĐT năm (KE_HOACH_DAO_TAO — Mô hình A 3 cấp) `[need: dev confirm endpoint deploy]`
 - 🚫 <a id="r7-3-6"></a>**R7.3.6** ✏️ Seed 6 CTĐT entry DU_THAO
   - **Kết quả:** 🚫 BLOCK — verify 2026-05-07 FE form đã có field "Kế hoạch năm"; còn block do dropdown KH năm rỗng (R7.3.5 ⏳ chưa seed).
@@ -197,8 +199,12 @@
 - ⏳ <a id="r7-4-a3"></a>**R7.4.A3** ✏️ Workflow VV (FR-05 v3.5 refactor — bỏ `nguoi_ho_tro_id`, thay 3 cột phân công + 2 thẻ Cá nhân/Tổ chức + SLA 15 ngày + CB PD từ chối → DANG_XU_LY) `[need: R7.2.9 ✅ NHT active + R7.2.3 ✅ TC TV HOAT_DONG; spec mới: 7.5-vu-viec-htpl.md v3.0 + 6.5-sm-vuviec.md (sync 2026-05-06)]`
 - ⏳ <a id="r7-4-a3-public"></a>**R7.4.A3-PUBLIC** 🆕 Workflow Công khai VV lên Cổng PLQG (FR-V.I-NEW-05 — 2 self-loop SM trên DA_DUYET + HOAN_THANH) `[need: R7.4.A3 ≥1 VV DA_DUYET hoặc HOAN_THANH; account: cb_pd_<cap>_01 cùng cấp với CB NV xử lý VV (BR-AUTH-05)]`
 - ⏳ <a id="r7-4-a3-dn-bs"></a>**R7.4.A3-DN-BS** 🆕 Workflow DN bổ sung HS qua chuyên trang VNeID (FR-V.I-NEW-02 — formal hoá YEU_CAU_BO_SUNG → DANG_KIEM_TRA) `[need: R7.4.A3 ≥1 VV YEU_CAU_BO_SUNG + DN VNeID Tier 2 sandbox; account: dn_<X>_01 với VNeID]`
-- ⏳ <a id="r7-4-a4"></a>**R7.4.A4** ✏️ Workflow Hỏi đáp 11 paths v3.5 (dropdown TC TV + TVN_BRIDGE + Đóng HS thủ công) `[need: R7.2.9 ✅ + R7.3.1 ✅ + R7.3.1.MoB + R7.3.1.TVN; spec: 6.2-sm-hoidap.md v3.5]`
-- ⏳ <a id="r7-4-a5"></a>**R7.4.A5** ✏️ Workflow TVCS 11 bước (dropdown CG enum đổi) `[need: R7.2.6 ✅ + R7.3.3 ✅]`
+- 🚫 <a id="r7-4-a4"></a>**R7.4.A4** ✏️ Workflow Hỏi đáp 11 paths v3.5
+  - **Kết quả:** 🚫 2/11 PASS (TP-HD-03 + TP-HD-08 PARTIAL). 8 BLOCKED do BUG-HD-A4-001 state DA_PHAN_CONG missing transition + 1 SKIP TP-HD-09. [workflow-test-report-r7-4-a4-hoi-dap.md](../output/qa-reports/round7-2026-05-06/workflow/hoi-dap/workflow-test-report-r7-4-a4-hoi-dap.md)
+  - **Bug:** [bug-report-r7-4-a4-hd-workflow-block.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/bug-report-r7-4-a4-hd-workflow-block.md) — 0/3 đóng (HD-A4-001 Critical state DA_PHAN_CONG transition · 002 Major CauHinhPhanCong DEPRECATED · 003 Major TC TV không persist)
+- ⚠️ <a id="r7-4-a5"></a>**R7.4.A5** ✏️ Workflow TVCS 11 bước (dropdown CG enum đổi)
+  - **Kết quả:** ⚠️ 3/11 PASS (B1 re-seed + B2 6/6 LV + B10). 5 BLOCKED do BE bug `/xac-nhan` 403 (2-CG). [workflow-test-report-r7-4-a5-tvcs.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-chuyen-sau/workflow-test-report-r7-4-a5-tvcs.md)
+  - **Bug:** [bug-report-r7-4-a5-tvcs-cg-action-block.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/bug-report-r7-4-a5-tvcs-cg-action-block.md) — 0/2 đóng (TVCS-A5-001 Critical + TVCS-A5-002 Major Open). Pool R7.3.3 mất giữa R7→R8 — đã re-seed inline 10 record TVCS-20260507-*.
 
 ### 🟩 Trụ B — Đào tạo
 
@@ -239,7 +245,10 @@
 - ⏳ <a id="r7-5-1"></a>**R7.5.1** ✏️ Dashboard KPI counter HD/VV/TVCS/CT (KPI-07 count đổi do NHT tách entity) `[need: R7.4.A1/A3/A4/A5 ✅]`
 - 🟢 <a id="r7-5-2"></a>**R7.5.2** 🔄 Cross-module DN: Tab #2 HSPL + Tab #3 KPI + Tab #4 Chi trả ≥1 record/tab `[~0% — ready, need R7.3.4 🚫 + R7.4.A3 ⏳ + R7.6.1 🚫]`
 - ⏳ <a id="r7-5-3"></a>**R7.5.3** ✏️ SLA cảnh báo banner — verify trừ ngày lễ (BR-CALC-03) `[need: R7.1.5 ⚠️ + ≥1 HD/VV deadline >70%]`
-- 🟢 <a id="r7-5-4"></a>**R7.5.4** 🔄 BC04 export Excel có data `[~0% — ready, need R7.4.A3 + R7.4.A4 ⏳]`
+- ❌ <a id="r7-5-4"></a>**R7.5.4** 🔄 BC04 export Excel có data
+  - **Kết quả:** ❌ FAIL — header xlsx mime đã fix, body vẫn JSON wrap StreamableFile (1910 bytes xlsx kẹt trong JSON). [verification-test-report-r7-5-4-bc-export.md](../output/qa-reports/round7-2026-05-06/workflow/bao-cao/verification-test-report-r7-5-4-bc-export.md)
+  - **Bug:** [bug-report-r7-5-4-bc-export.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/bug-report-r7-5-4-bc-export.md) — 0/2 đóng (BUG-BC-EXPORT-001 Critical + BUG-BC-LEGEND-001 Minor still Open từ R6)
+  - **Cần có sẵn:** BC HD ✅ data có; BC04 VV BLOCKED chờ R7.4.A3 ⏳ seed VV HOAN_THANH
 - 🟢 <a id="r7-5-5"></a>**R7.5.5** 🔄 Audit log ≥100 entry qua Nhật ký HT (FR-VIII-28) `[~0% — ready, accumulate qua Phase 4]`
 
 ---
@@ -249,7 +258,9 @@
 - 🚫 <a id="r7-6-1"></a>**R7.6.1** ✏️ Workflow Chi trả v3.5 — 12 bước, SM 10 state `[block: thiếu LGSP integration — cần BE inject API hoặc seed CHO_TIEP_NHAN]`
   - **Cần có sẵn:** BE inject API + ≥1 VV HOAN_THANH (R7.4.A3 ⏳) + DN 3 quy mô (R7.2.4 ✅).
   - **Output:** workflow-test-report-ChiTra-v3.5.md
-- ⏳ <a id="r7-6-2"></a>**R7.6.2** 🔄 Workflow TV nhanh nhập tay (5 trạng thái) `[need: R7.4.D3 ⏳ ≥1 record DA_DUYET hieu_luc=1 per LV cho gợi ý FR-X.2-02]`
+- ⚠️ <a id="r7-6-2"></a>**R7.6.2** 🔄 Workflow TV nhanh (5 trạng thái) — sau dev seed 50 phiên
+  - **Kết quả:** ⚠️ PASS 4/5 + 1 PARTIAL B5. R9 unblock dev seed: B1/B2/B3/B4 PASS UI+API, B5 mTLS DN-only (pool 12 HOAN_THANH có sẵn). [workflow-test-report-r7-6-2-tv-nhanh.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-nhanh/workflow-test-report-r7-6-2-tv-nhanh.md)
+  - **Bug:** [bug-report-r7-6-2-tvn-create-block.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-nhanh/bug-report-r7-6-2-tvn-create-block.md) — 0/2 đóng. R9 re-classify: BUG-001 Critical→Major + P0→P1 (workaround dev seed); BUG-002 giữ Major P1 (vẫn chặn TVN-038 verify diem_danh_gia_tb).
 - ⏳ <a id="r7-6-3"></a>**R7.6.3** 🔄 Workflow TV nhanh PUBLIC (DN qua Cổng PLQG) `[need: R7.E4 ⏳ + R7.7.16 API ✅]`
 - 🟢 <a id="r7-6-4"></a>**R7.6.4** 🔄 Workflow CT HTPLDN GĐ1 11 bước `[~0% — ready, verify 3 CT data (CT-001/002/003) còn không]`
 - ⏳ <a id="r7-6-5"></a>**R7.6.5** 🔄 Workflow CT HTPLDN GĐ2 Đợt BC 7 bước `[need: R7.6.4 🟢 + R7.6.1 ≥6 Chi trả + R7.4.A3 ≥6 VV HOAN_THANH]`
@@ -269,7 +280,9 @@
   - **Cần có sẵn:** R7.2.4 ✅ (36 DN cover 3 quy mô × 3 ngành) + DM TINH_THANH 63 tỉnh + DM LINH_VUC_KINH_DOANH
 - 🟢 <a id="r7-7-4-5"></a>**R7.7.4.5** 🆕 NHT functional 10 TC (CRUD + permission + workflow kích hoạt) `[need: ≥1 NHT HOAT_DONG (R7.2.7 ✅ + R7.2.9 ✅)]`
 - 🟢 <a id="r7-7-4-6"></a>**R7.7.4.6** 🆕 TC TV functional 10 TC (CRUD + permission + phê duyệt edge) `[need: R7.2.3 ✅]`
-- ⏳ <a id="r7-7-5"></a>**R7.7.5** 🔄 TVCS 44 TC `[need: R7.4.A5 ⏳; UNBLOCKED]`
+- ⚠️ <a id="r7-7-5"></a>**R7.7.5** 🔄 TVCS functional 61 TC v3.5
+  - **Kết quả:** ⚠️ 31/61 PASS · 14 BLOCKED · 12 SKIP · 4 FAIL (sau seed R7.3.4 + sweep HSPL R8). +7 TC mới: TV-017/018/019/020/056 ✅ + TV-053 ⚠️ partial + TV-054 ❌ FAIL. [functional-test-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/functional/tu-van-chuyen-sau/functional-test-report-r7-7-5-tvcs.md)
+  - **Bug:** [bug-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs.md) — 0/10 đóng. 3 TVCS legacy (FN-001/002/003) + 7 HSPL mới (HSPL-001..007 cover NHT permission overgrant runtime DELETE 204, BR-AUTH-10 missing layer, Detail 500, list inconsistent, keyword ignored, unaccent, POST 500 regression).
 - ⏳ <a id="r7-7-6"></a>**R7.7.6** ✏️ Khóa học 40 TC + FR-III mới (B10/B11/B12 + Đề KT + Lịch học) `[need: R7.4.B7+B10+B11+B12 ✅]`
 - ⏳ <a id="r7-7-7"></a>**R7.7.7** ✏️ Dashboard 34 TC (KPI-07 count đổi) `[need: R7.4 trụ A ✅]`
 - ⚠️ <a id="r7-7-8"></a>**R7.7.8** ✏️ QTHT 14 DM CRUD functional (DM-only scope; FR-VIII-01..09/11/12/13/18/19/29)
@@ -296,7 +309,9 @@
 - ⚠️ <a id="r7-7-10"></a>**R7.7.10** ✏️ Biểu mẫu v3.5 — 47 TC (7 cũ + 10 CR-01 + 30 CRUD/workflow)
   - **Kết quả:** PASS 22/47 (47%) — 19 PASS + 1 PARTIAL + 3 FAIL + 11 BLOCKED + 14 DEFER. P0 9/14. [functional-r7-7-10](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-r7-7-10-bm.md)
   - **Bug:** [bug-report-functional-bm-r7-7-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-functional-bm-r7-7-10.md) — 0/2 đóng (BUG-BM-007 Critical MinIO localhost broken preview+download · BUG-BM-008 Medium silent reject upload). Workflow bugs riêng tại [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) (6 bugs R7.4.C1).
-- ⏳ <a id="r7-7-11"></a>**R7.7.11** 🔄 TV nhanh 39 TC `[need: R7.6.2 🟢 + R7.4.D3 ✅]`
+- ⚠️ <a id="r7-7-11"></a>**R7.7.11** 🔄 TV nhanh 44 TC v3.5 (R8 Kho Q&A + R9 phiên TV nhanh)
+  - **Kết quả:** PASS 12/19 đã test (63%) — 12 PASS + 5 PARTIAL + 6 BLOCKED + 25 chờ mTLS/multi-role/feature. R9 +5 TC (TVN-016/017/018/019/021/039) sau dev seed 50 phiên. [functional-r7-7-11](../output/qa-reports/round7-2026-05-06/functional/tu-van-nhanh/functional-test-report-r7-7-11-tvn.md)
+  - **Bug:** [bug-report-r7-7-11-tvn.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-nhanh/bug-report-r7-7-11-tvn.md) — 0/5 đóng (TVN-001 Critical authz · 002 Major FR-X.2-06 · 003 Minor filter · **TVN-004 Major gợi ý không render R9 · TVN-005 Minor audit naming R9**)
 - 🟢 <a id="r7-7-12"></a>**R7.7.12** ✏️ Chi trả v3.5 — 35 TC (30 base + 5 mới) `[~80% — 28 TC ready; CT-006 + CT-021 chờ BA Q1+Q2]`
   - **Cần có sẵn:** R7.7.12.1 ✅ + R7.E3 ⚠️ + R7.6.1 cho TC workflow.
   - **Output:** functional-test-report-ChiTra-v3.5.md
@@ -345,7 +360,8 @@
   - **Kết quả:** PASS 3/3 — CT-20260507-0001/0002/0003 cover 3 path R7.6.4 (DA_DUYET/DU_THAO/HUY). API total=3. [verify-checklist-r7-e2-ct-htpldn-gd1.md](../output/qa-reports/round7-2026-05-06/seed/verify-checklist-r7-e2-ct-htpldn-gd1.md)
 - ⚠️ <a id="r7-e3"></a>**R7.E3** 🔄 Chi trả (FR-06) — verify 100 record HSCT còn
   - **Kết quả:** ⚠️ PARTIAL 78/100 — REGRESSION thiếu 22 HSCT (079..100). 78 còn cover 11 trạng thái SM-CHI-TRA. [verify-checklist-r7-e3-chi-tra-100-hsct.md](../output/qa-reports/round7-2026-05-06/seed/verify-checklist-r7-e3-chi-tra-100-hsct.md)
-- ⏳ <a id="r7-e4"></a>**R7.E4** 🔄 TV nhanh (FR-13.A) — ≥1 phiên tồn tại `[need: R7.6.2 + R7.6.3]`
+- ✅ <a id="r7-e4"></a>**R7.E4** 🔄 TV nhanh (FR-13.A) — ≥1 phiên tồn tại
+  - **Kết quả:** PASS 50 phiên cover 6 state SM-TVNHANH (MOI 8 / DANG_TIM_KIEM 6 / DA_GOI_Y 10 / CB_TRA_LOI 10 / HOAN_THANH 12 / HET_HAN 4) + 2 enum kênh (TV_NHANH 40 / TV_THU_CONG 10). [verify-checklist-r7-e4-tv-nhanh.md](../output/qa-reports/round7-2026-05-06/seed/verify-checklist-r7-e4-tv-nhanh.md)
 
 ---
 
