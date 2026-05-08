@@ -1,5 +1,9 @@
 # Seed checklist — R7.2.2 Seed 6 Tổ chức tư vấn (MOI_DANG_KY)
 
+> ⚠️ **Method gap (note 2026-05-08):** Task chạy qua API thuần `POST /api/v1/to-chuc-tu-vans` — vi phạm rule UI-only ban hành 2026-05-07.
+>
+> 🚫 **UI re-test 2026-05-08 — BLOCKED bởi 2 bug FE.** Đã thực hiện đầy đủ flow UI MCP (login `cb_nv_tw_02` → nav `/chuyen-gia-tvv/to-chuc/tao-moi` → mở form Thêm mới). Phát hiện form thiếu field bắt buộc `Đơn vị quản lý` (`donViQuanLyId` UUID) → submit BE 500 `ERR-SYS-00-00-01` → FE auto-logout về `/login`. Không thể seed thêm record qua UI cho đến khi FE bổ sung field + sửa error handler. Pool 5 HOAT_DONG (TC-BTP-TW-0001..0005) từ API path R7.2.2/R7.2.3 vẫn ổn định — đủ cho R7.4.A6 + R7.7.4.6 downstream. Bug log: [bug-report-r7-2-2-tctv-ui-seed.md](../../bug-reports/to-chuc-tu-van/bug-report-r7-2-2-tctv-ui-seed.md).
+
 **Ngày chạy:** 2026-05-06 (R7)
 **Account:** `cb_nv_tw_02` (CB_NV_TW)
 **Endpoint:** `POST /api/v1/to-chuc-tu-vans`

@@ -1,5 +1,7 @@
 # Workflow Test Report — R7.4.A5 Workflow TVCS 11 bước (FR-12)
 
+> ⚠️ **Method gap (note 2026-05-08):** ~3/11 bước qua UI MCP, 7/11 bước + B1 re-seed qua API thuần — vi phạm rule UI-only ban hành 2026-05-07. Cần re-test UI MCP R8 SAU KHI BE fix các bug đã log. Xem [`tasks/lessons-learned.md` 2026-05-08](../../../../../tasks/lessons-learned.md).
+
 | Thông tin | Giá trị |
 |-----------|---------|
 | **Module** | Tư vấn chuyên sâu (FR-12 · Nhóm X.1) |

@@ -4,6 +4,50 @@ File ghi lại vấn đề thực tế gặp khi chạy QA + bài học áp dụ
 
 ---
 
+## 2026-05-08 — 7 task R7 vi phạm rule UI-only — flip ⚠️ retroactive defer R8 re-test
+
+**Vấn đề:**
+- Rule [`feedback_test_method_ui_only`](../../../.claude/projects/-Users-teamai-Downloads-antigravity-QA-skilkk/memory/feedback_test_method_ui_only.md) ban hành 2026-05-07: mọi seed/workflow/permission test phải UI MCP click chain. CẤM bulk POST API.
+- Audit batch R7 (2026-05-06 chạy, trước rule 1 ngày): 7 task dùng API thuần / dominant.
+- User chốt **retroactive enforce** + **flip ⚠️ truth in labeling** (KHÔNG grandfather), defer re-test R8.
+
+**Task vi phạm flip ⚠️:**
+
+| Task | File | Method observed |
+|---|---|---|
+| R7.2.2 | todo-tc-tv | API thuần `POST /api/v1/to-chuc-tu-vans` |
+| R7.2.3 | todo-tc-tv | API dominant (1/5 record qua UI, 4/5 API) |
+| R7.2.9 | todo-qtht | API thuần `/auth/first-login-password` + `/auth/reset-password` curl |
+| R7.3.1 | todo-hoi-dap | API thuần `POST /api/v1/hoi-daps` |
+| R7.3.2 | todo-vu-viec | API thuần `POST /api/v1/vu-viecs/manual` |
+| R7.3.3 | todo-tvcs | API thuần `POST /api/v1/noi-dung-tu-van-cs` |
+| R7.4.A5 | todo-tvcs | Đã ⚠️ + thêm UI gap note (3/11 step UI, 7 step API direct) |
+
+**Task đã 🚫 KHÔNG cần flip:**
+- R7.4.A4 (Hỏi đáp workflow) — đã 🚫 do BUG-HD-A4-001/002/003. Re-run buộc UI.
+
+**Defer có justification (KHÔNG flip):**
+- R7.1.5 ngày lễ — UI tab chưa deploy (DEPLOY-004 logged). Workaround API hợp lý đến khi UI deploy.
+
+**Re-classify từ heuristic count sang COMPLIANT (audit subagent confirm):**
+- R7.2.5 TVV TW, R7.2.6 CG TW, R7.2.7 NHT, R7.3.4 HSPL DN — UI dominant với screenshot evidence. Heuristic api/ui count nhầm.
+- R7.4.A1 + R7.4.A1-CG (TVV workflow) — UI compliant; KHÔNG cần re-run vì UI compliance (chỉ re-run nếu BE fix bug và muốn verify).
+
+**Phương án xử lý chốt:**
+1. Flip ✅ → ⚠️ với coverage tag chuẩn `[~X% UI — reason, re-test UI per rule 2026-05-07]`.
+2. Hook `auto-rescan-todo.py` cascade dep marker xuống downstream task.
+3. Pool seed cũ (records API) **giữ nguyên** — KHÔNG xóa. Re-test sẽ ADD records mới UI bên cạnh, tránh cascade FK orphan vào R7.4.A1/A1-CG.
+4. Acceptance R7.4.A6 (Workflow SM-TCTV mới) walk SM tạo 1 TC TV qua UI = 1 evidence record cho R7.2.2/2.3 partial UI cover.
+5. Re-test full batch ~3.5-5h theo dep order: R7.2.2 → R7.2.3 → R7.3.1 → R7.3.2 → R7.3.3 → R7.2.9 → R7.4.A4 (sau khi BE fix bug).
+
+**Bài học (META — về phản biện trước khi action):**
+1. **User pick option không đồng nghĩa option đúng** — phải phản biện trước khi action, đặc biệt khi quyết định cascade nhiều task. Tôi đã chiều theo user 2 lần (split task R7.4.A6 + flip ⚠️ retroactive) — user phải nhắc "ko phản biện chiều theo ý mình à". Sửa: 3 câu phản biện claim/scope/recommend rank trước MỌI action.
+2. **Heuristic count api/ui không chính xác** — `grep -c "POST"` đếm cả API verify (compliant) lẫn API direct (vi phạm). Phải read file content để classify thực sự. Audit subagent (general-purpose) làm việc này hiệu quả ~15p.
+3. **Khi flip ⚠️ batch, dùng coverage tag state-explicit** — `[~X% UI — reason]` thay vì `[need: <task-ID>]`. Hook enforce.
+4. **Cascade FK orphan risk** — pool cũ KHÔNG xóa khi re-test. ADD records mới UI bên cạnh. Workflow re-run dùng records mới hoặc records cũ tùy quyết định riêng.
+
+---
+
 ## 2026-05-07 — FR-02 v3.5 typo SRS sao chép nhầm template state `DA_PHAN_CONG` từ FR-V.I-09 VU_VIEC sang HOI_DAP (KHÔNG phải mâu thuẫn nội bộ)
 
 **Vấn đề:**

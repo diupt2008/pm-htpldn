@@ -1,5 +1,7 @@
 # Seed checklist — R7.2.3 Phê duyệt TC TV → HOAT_DONG
 
+> ⚠️ **Method gap (note 2026-05-08):** 1/5 record qua UI, 4/5 qua API thuần (`POST /trinh-phe-duyet` + `POST /phe-duyet`) — vi phạm rule UI-only ban hành 2026-05-07. Cần re-test 4 record còn lại bằng UI MCP R8. Xem [`tasks/lessons-learned.md` 2026-05-08](../../../../../tasks/lessons-learned.md).
+
 **Ngày chạy:** 2026-05-06 (R7)
 **Account workflow:** `cb_nv_tw_02` (trình duyệt) + `cb_pd_tw_02` (phê duyệt + công bố)
 **SRS ref:** FR-IV-NEW-04 (CB PD cùng cấp công bố)

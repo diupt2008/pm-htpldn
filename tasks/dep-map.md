@@ -39,18 +39,18 @@
 
 | Entity / State | Producer task | File |
 |---|---|---|
-| ≥1 NHT HOAT_DONG | R7.2.7 (seed) + R7.2.9 (mail kích hoạt) | nht / qtht |
-| ≥1 TC TV HOAT_DONG | R7.2.3 (phê duyệt) | tc-tv |
+| ≥1 NHT HOAT_DONG | R7.2.7 (seed) + R7.2.9 ⚠️ (mail kích hoạt — API thuần, defer R8 UI) | nht / qtht |
+| ≥1 TC TV HOAT_DONG | R7.2.3 ⚠️ (phê duyệt — 4/5 API, defer R8 UI) | tc-tv |
 | ≥1 DN | R7.2.4 | doanh-nghiep |
 | ≥1 TVV/CG MOI_DANG_KY | R7.2.5, R7.2.6 | tvv-cg |
 | ≥1 TVV CHO_KICH_HOAT | R7.4.A1 | tvv-cg |
-| ≥1 CG DANG_HOAT_DONG | R7.4.A1-CG | tvv-cg |
-| ≥1 HD MOI / DA_PHAN_CONG / DANG_XU_LY / DA_DUYET | R7.3.1 (seed) + R7.4.A4 (advance) | hoi-dap |
-| ≥1 VV DA_TIEP_NHAN | R7.3.2 | vu-viec |
+| ≥1 CG HOAT_DONG (BE rename từ DANG_HOAT_DONG verified R8b 2026-05-08) | R7.4.A1-CG | tvv-cg |
+| ≥1 HD MOI / DA_PHAN_CONG / DANG_XU_LY / DA_DUYET | R7.3.1 ⚠️ (seed — API thuần, defer R8 UI) + R7.4.A4 (advance) | hoi-dap |
+| ≥1 VV DA_TIEP_NHAN | R7.3.2 ⚠️ (API thuần, defer R8 UI) | vu-viec |
 | ≥1 VV DA_PHAN_CONG / DANG_XU_LY / HOAN_THANH | R7.4.A3 | vu-viec |
 | ≥1 VV cong_khai=1 | R7.4.A3-PUBLIC | vu-viec |
 | ≥1 VV YEU_CAU_BO_SUNG / DANG_KIEM_TRA | R7.4.A3-DN-BS | vu-viec |
-| ≥1 TVCS TIEP_NHAN | R7.3.3 (seed) + R7.4.A5 (advance) | tvcs |
+| ≥1 TVCS TIEP_NHAN | R7.3.3 ⚠️ (seed — API thuần, defer R8 UI) + R7.4.A5 ⚠️ (advance — 7/11 API, defer) | tvcs |
 | ≥1 HSPL DN | R7.3.4 | doanh-nghiep |
 | ≥1 KH năm DA_DUYET / DA_CONG_KHAI | R7.3.5 (seed NHAP) + R7.4.B0 (advance) | dao-tao |
 | ≥1 CTĐT DA_DUYET | R7.3.6 (seed) + R7.4.B1 (advance) | dao-tao |
@@ -121,8 +121,8 @@ R7.3.1 (seed) + R7.3.1.MoB (mẫu) + R7.3.1.TVN (escalate)
 |---|---|---|
 | R7.4.A3 (vu-viec.md) | R7.3.14 (hop-dong-tv.md), R7.7.13 (bao-cao.md), R7.7.14 (hop-dong-tv.md), R7.5.2 (doanh-nghiep.md), R7.5.4 (bao-cao.md) | VV HOAN_THANH cần cho HĐ TV, BC04, cross-module DN |
 | R7.4.A1 (tvv-cg.md) | R7.3.14 (hop-dong-tv.md) | TVV active để gắn HĐ TV |
-| R7.2.3 (tc-tv.md) | R7.4.A3 (vu-viec.md), R7.4.A4 (hoi-dap.md) | TC TV HOAT_DONG cần cho phân công VV/HD |
-| R7.2.7 + R7.2.9 (nht/qtht.md) | R7.4.A3 (vu-viec.md), R7.7.4.5 (nht.md) | NHT HOAT_DONG cần cho phân công VV |
+| R7.2.3 ⚠️ (tc-tv.md) | R7.4.A3 (vu-viec.md), R7.4.A4 (hoi-dap.md) | TC TV HOAT_DONG cần cho phân công VV/HD — pool đủ state nhưng method API; consumer đọc state OK, R8 re-test UI defer |
+| R7.2.7 + R7.2.9 ⚠️ (nht/qtht.md) | R7.4.A3 (vu-viec.md), R7.7.4.5 (nht.md) | NHT HOAT_DONG cần cho phân công VV — R7.2.9 API thuần, defer R8 UI |
 | R7.2.4 (doanh-nghiep.md) | R7.4.A3-DN-BS (vu-viec.md), R7.7.3-PRIVACY (vu-viec.md) | DN data cho DN bổ sung HS + privacy test |
 | R7.6.1 (chi-tra.md) | R7.5.2 (doanh-nghiep.md), R7.7.12.2/3 (chi-tra.md) | HSCT các state cho cross-module DN + sub-task |
 | R7.6.4 (ct-htpldn.md) | R7.5.1 (dashboard.md), R7.7.7 (dashboard.md), R7.7.16 (cross-cutting.md) | CT count cần cho KPI + Dashboard + API test |

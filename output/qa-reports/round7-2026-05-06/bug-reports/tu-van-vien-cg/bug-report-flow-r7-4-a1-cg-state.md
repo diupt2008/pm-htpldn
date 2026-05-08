@@ -32,6 +32,16 @@ Phát hiện **1 bug Major** trong test R7.4.A1-CG advance state happy path. BE 
 
 ## ~~BUG-CG-A1-001~~ [CLOSED] — State sau CB PD phê duyệt sai spec v3.5 (`DANG_HOAT_DONG` vs `CHO_KICH_HOAT`)
 
+> **Re-test:** 2026-05-08 R8b — ✅ **PASS (Closed-verified, gate 6/6)**. Account `qtht_02`. 6 verify gate qua API + UI:
+> - Gate 1 — `GET ?loaiTvv=CG&trangThai=DANG_HOAT_DONG` → count=0 ✅ enum legacy deprecated.
+> - Gate 2 — `GET ?loaiTvv=CG&trangThai=HOAT_DONG` → count=8 ✅ rename applied.
+> - Gate 3 — `GET ?trangThai=CHO_KICH_HOAT` → count=2 (TVV-0013 + TVV-0009) ✅ enum hợp lệ.
+> - Gate 4 — UI SCR-IV-01 tab "Chờ kích hoạt tài khoản" present (uid=47_40), click → 2 records hiển thị, badge `Chờ kích hoạt tài khoản` đúng spec.
+> - Gate 5 — Spot-check `GET /tu-van-viens/{TVV-0001}` → `trangThai: "HOAT_DONG"` ✅ rename applied legacy record.
+> - Gate 6 — Cross-confirm new workflow: TVV-0013 (R7.4.A1 R8b 2026-05-08) + TVV-0014 (R8 verify-2 2026-05-07) — cả 2 POST `/phe-duyet` → state CHO_KICH_HOAT đúng spec.
+> - Reconciling: R8 verify-1 "still open" trên TVV-0007 là evidence stale (record legacy approved trước dev fix, BE không migrate retroactively). R8 verify-2 + R8b dùng record fresh post-fix.
+> - Screenshot: [R8b-CG-tab-cho-kich-hoat-2records.png](../../workflow/tu-van-vien-cg/evidence-r7-4-a1/R8b-CG-tab-cho-kich-hoat-2records.png).
+
 > **Re-test:** 2026-05-07 R8 verify-2 (16:47) — ✅ **PASS (Closed-verified)**. End-to-end workflow trên TVV-BTP-TW-0014 (`e4aad026-d996-45b3-8ab0-fb766adb60a0`):
 > - **Step 1** (cb_nv_tw_02 lưu nháp thẩm định, version=1) → 200 OK, state `DANG_THAM_DINH` (version=2).
 > - **Step 2** (cb_nv_tw_02 trình duyệt, version=2) → 200 OK, state `CHO_PHE_DUYET` (version=3).

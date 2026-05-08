@@ -1,11 +1,50 @@
-# Workflow test report — R7.4.A1-CG Advance 6 CG → DANG_HOAT_DONG
+# Workflow test report — R7.4.A1-CG Advance 8 CG → HOAT_DONG (renamed)
 
-**Ngày chạy:** 2026-05-06 R7
-**Accounts:** `cb_nv_tw_02` (thẩm định + trình duyệt) · `cb_pd_tw_02` (phê duyệt) · `cb_nv_dp_02` + `cb_pd_dp_02` (BR-AUTH-08 deny test)
+**Latest round:** R8b 2026-05-08 · **Initial round:** R7 2026-05-06
+**Accounts:** `qtht_02` (verify list) · `cb_nv_tw_02` (thẩm định + trình duyệt) · `cb_pd_tw_02` (phê duyệt) · `cb_nv_dp_02` + `cb_pd_dp_02` (BR-AUTH-08 deny test)
 **SRS ref:** SM-TVV 10 state v3.5 ([6.4-sm-tvv.md](../../../../smoke/6.4-sm-tvv.md)) · FR-IV-08/09/10 functional ([7.4-chuyen-gia-tvv.md](../../../../funtion/7.4-chuyen-gia-tvv.md)) · FR-VIII-15 (auto TK) · BR-AUTH-05 + BR-AUTH-08 + BR-LEGAL-04 + BR-FLOW-04
 **Scope:** TP-TVV-01 (advance happy path) cho 6 CG — KHÔNG cover TP-02..09 (YEU_CAU_BO_SUNG/TU_CHOI/TAM_DUNG/VO_HIEU_HOA/khôi phục — thuộc R7.4.A1 gốc).
 
-## Verdict
+## Verdict (LATEST — R8b 2026-05-08)
+
+✅ **PASS — 14/14** sau dev rebuild. BUG-CG-A1-001 confirmed **Closed-verified**: rename `DANG_HOAT_DONG → HOAT_DONG` ✅, state `CHO_KICH_HOAT` enum + tab UI ✅, new workflow phê duyệt → `CHO_KICH_HOAT` ✅.
+
+## R8b Round (LATEST — 2026-05-08 verify post dev rebuild)
+
+### Re-verify gates (3/3 ✅)
+
+| Gate | Verify command | R8b result |
+|---|---|---|
+| BE rename `DANG_HOAT_DONG → HOAT_DONG` | `GET /api/v1/tu-van-viens?loaiTvv=CG&trangThai=DANG_HOAT_DONG` | 200 + count=0 ✅ enum legacy deprecated |
+| BE rename target | `GET /api/v1/tu-van-viens?loaiTvv=CG&trangThai=HOAT_DONG` | 200 + count=8 ✅ rename applied |
+| State `CHO_KICH_HOAT` enum valid | `GET /api/v1/tu-van-viens?trangThai=CHO_KICH_HOAT` | 200 + count=2 (TVV-0013 + TVV-0009) ✅ enum + populated |
+| UI tab "Chờ kích hoạt tài khoản" | SCR-IV-01 list page | uid=47_40 ✅ tab present, click filter → 2 records visible |
+| Spot-check legacy CG state | `GET /api/v1/tu-van-viens/{TVV-0001}` | `trangThai: "HOAT_DONG"` ✅ rename applied |
+| New workflow → CHO_KICH_HOAT | TVV-0013 (R7.4.A1 R8b) + TVV-0014 (R8 verify-2) | Both POST `/phe-duyet` → `trangThai: "CHO_KICH_HOAT"` ✅ |
+
+### Pool sau R8b
+
+| Filter | Count | Distribution |
+|---|:-:|---|
+| `?loaiTvv=CG&size=100` | 8 | HOAT_DONG:8 |
+| `?loaiTvv=TVV&size=100` | 8 | CHO_PHE_DUYET:1, TU_CHOI:3, HOAT_DONG:1, CHO_KICH_HOAT:2, YEU_CAU_BO_SUNG:1 |
+| `?trangThai=CHO_KICH_HOAT` | 2 | TVV-0013 Hoàng Văn Năm (R8b approved) + TVV-0009 Nguyễn Văn Tư Vấn (R7 stuck) |
+
+### Bug status update R8b
+
+| Bug ID | R7 status | R8 verify-1 | R8 verify-2 (16:47) | R8b verify | Final |
+|---|:-:|:-:|:-:|:-:|:-:|
+| BUG-CG-A1-001 (state name) | Open Major | 🔴 Open (TVV-0007 legacy) | ✅ Closed (TVV-0014 fresh) | ✅ Closed (rename + enum + tab + workflow) | **Closed-verified** |
+
+> **Reconciling conflicting retests:** R8 verify-1 (early R8) tested TVV-0007 — a legacy record approved BEFORE dev fix. BE doesn't migrate legacy enum retroactively in real-time. R8 verify-2 (16:47) tested TVV-0014 — fresh approval after fix → CHO_KICH_HOAT correct. R8b confirms via TVV-0013 (R7.4.A1) + 3 enum API gates + 1 UI tab gate. The R8 verify-1 "still open" claim was on stale evidence.
+
+### Evidence (R8b)
+- [`evidence-r7-4-a1/R8b-CG-tab-cho-kich-hoat-2records.png`](evidence-r7-4-a1/R8b-CG-tab-cho-kich-hoat-2records.png) — Tab "Chờ kích hoạt tài khoản" + 2 TVV records
+- API responses captured live (qtht_02 session) + cross-confirm via TVV-0013 R8b workflow report
+
+---
+
+## Verdict (R7 2026-05-06 — initial)
 
 ⚠️ **DONE_WITH_CONCERNS** — **13/14 PASS** (sau khi unblock TC-07 + TC-14 qua R7.7.8a + R7.7.8d ngày 2026-05-07), 1/14 ⚠️ DEVIATION (BUG-CG-A1-001 state name DANG_HOAT_DONG vs CHO_KICH_HOAT — chờ DEV BE migrate enum).
 

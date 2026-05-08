@@ -2,21 +2,30 @@
 # KHÔNG chứa data tài khoản — mọi account lấy từ input/users.csv (single source of truth).
 #
 # === NGUYÊN TẮC: 1 BỘ TÀI KHOẢN DUY NHẤT (users.csv) ===
-# users.csv có 3 replica mỗi role+cấp (_01, _02, _03). Convention để test không đụng nhau:
-#   _01 → Smoke / Functional / Cross-module (primary)
-#   _02 → Fallback khi _01 lock (CLAUDE.md Rule 7 account-lock)
-#   _03 → DEDICATED cho test ma trận phân quyền + isolation
-#   → Lý do _03: CUD trong test scoping (* rules) KHÔNG pollute data _01/_02 vốn dùng cho functional test.
+# users.csv có 4 replica mỗi role+cấp (_01..04). Convention để chạy song song không đụng nhau:
+#   _01 → Session 1 (parallel module 1) — KHÔNG mặc định nữa, dùng theo session pin
+#   _02 → Session 2 (parallel module 2)
+#   _03 → Session 3 (parallel module 3) + DEDICATED test ma trận phân quyền (CUD scoping)
+#   _04 → Session 4 buffer (khi 1 session bị kick + recovery) — added 2026-05-08, state CHO_KICH_HOAT
+#   → Lý do split: BE single-session per username → multi-task song song dùng cùng tk = kick. 4 slot cho 3 module song song max + 1 buffer.
+#   → _04 còn CHO_KICH_HOAT (chờ dev fix bug missing activation link rồi activate).
 #
 # === PAIR ISOLATION DI-04 (BN ngang cấp — khác Bộ, KHÔNG thấy nhau theo BR-AUTH-08) ===
-#   cb_nv_bn_01 (BKH) ↔ cb_nv_bn_02 (BTC) ↔ cb_nv_bn_03 (BCT)
-#   cb_pd_bn_01 (BKH) ↔ cb_pd_bn_02 (BTC) ↔ cb_pd_bn_03 (BCT)
+#   cb_nv_bn_01 (BKH) ↔ cb_nv_bn_02 (BTC) ↔ cb_nv_bn_03 (BCT) ↔ cb_nv_bn_04 (BKH — buffer)
+#   cb_pd_bn_01 (BKH) ↔ cb_pd_bn_02 (BTC) ↔ cb_pd_bn_03 (BCT) ↔ cb_pd_bn_04 (BKH — buffer)
 #   → Khuyến nghị cặp test: cb_nv_bn_03 (BCT) ↔ cb_nv_bn_02 (BTC) — primary _03 + cross-check _02
 #
 # === PAIR ISOLATION DI-05 (DP ngang cấp — khác Tỉnh, KHÔNG thấy nhau) ===
-#   cb_nv_dp_01 (AG) ↔ cb_nv_dp_02 (BG) ↔ cb_nv_dp_03 (BNI)
-#   cb_pd_dp_01 (AG) ↔ cb_pd_dp_02 (BG) ↔ cb_pd_dp_03 (BNI)
+#   cb_nv_dp_01 (AG) ↔ cb_nv_dp_02 (BG) ↔ cb_nv_dp_03 (BNI) ↔ cb_nv_dp_04 (AG — buffer)
+#   cb_pd_dp_01 (AG) ↔ cb_pd_dp_02 (BG) ↔ cb_pd_dp_03 (BNI) ↔ cb_pd_dp_04 (AG — buffer)
 #   → Khuyến nghị cặp test: cb_nv_dp_03 (BNI) ↔ cb_nv_dp_02 (BG)
+#
+# === SESSION PIN (parallel testing) — added 2026-05-08 ===
+# Khi user chạy >1 module song song, mỗi session dùng 1 slot suffix riêng để tránh BE kick (single-session per username):
+#   Session 1 → suffix _01 (vd qtht_01, cb_nv_tw_01, cb_pd_dp_01)
+#   Session 2 → suffix _02
+#   Session 3 → suffix _03 (note: _03 chia với permission test — nếu chạm xung đột, dùng _04)
+#   Session 4 → suffix _04 (buffer recovery — sau khi dev fix activation bug)
 #
 # === SYNC RULE ===
 # File này KHÔNG duplicate data. Khi users.csv đổi username / đơn vị / role → KHÔNG cần sync file này.
@@ -26,7 +35,7 @@
 # Password: Secret@123 cho mọi TK (trừ admin = Secret@123)
 # OTP login: 666666 (bypass tạm — dev confirm 2026-04-19)
 #
-# Tạo: 2026-04-20 | Rewrite: 2026-04-24 (sync với users.csv, single source of truth)
+# Tạo: 2026-04-20 | Rewrite: 2026-04-24 (sync với users.csv, single source of truth) | Update 2026-05-08 (+ slot _04 + session pin)
 
 role,username_for_permission_test,don_vi_ma,don_vi,ghi_chu
 QTHT,qtht_03,,,Root QTHT — test CRUD toàn bộ 9 entity quản trị (không có đơn vị scope)

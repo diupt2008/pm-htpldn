@@ -1,5 +1,7 @@
 # Seed Checklist — Tư vấn chuyên sâu (R7.3.3)
 
+> ⚠️ **Method gap (note 2026-05-08):** Task chạy qua API thuần `POST /api/v1/tu-van-chuyen-saus` — vi phạm rule UI-only ban hành 2026-05-07. Cần re-test UI MCP R8. Xem [`tasks/lessons-learned.md` 2026-05-08](../../../../../tasks/lessons-learned.md).
+
 **Ngày:** 2026-05-06 14:53 • **Tài khoản:** `cb_nv_tw_01` • **Trạng thái mong đợi:** `TIEP_NHAN` (entry)
 **Màn:** SCR-X1-02 — Tư vấn chuyên sâu • **Đường dẫn:** `/tv-chuyen-sau/danh-sach`
 **Dữ liệu mẫu:** [seed-fixture.yaml v2.7.1 > tv_cs_variants[1..10]](../../../../input/data/seed-fixture.yaml)

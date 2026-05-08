@@ -1,5 +1,7 @@
 # Seed Checklist — Vụ việc HTPL (R7.3.2)
 
+> ⚠️ **Method gap (note 2026-05-08):** Task chạy qua API thuần `POST /api/v1/vu-viec-htpls` — vi phạm rule UI-only ban hành 2026-05-07. Cần re-test UI MCP R8. Xem [`tasks/lessons-learned.md` 2026-05-08](../../../../../tasks/lessons-learned.md).
+
 **Ngày:** 2026-05-06 14:50 • **Tài khoản:** `cb_nv_tw_01` • **Trạng thái mong đợi:** `DA_TIEP_NHAN` (entry)
 **Màn:** SCR-IV-01 — Quản lý vụ việc HTPL • **Đường dẫn:** `/vu-viec/danh-sach`
 **Dữ liệu mẫu:** [seed-fixture.yaml v2.7.1 > vu_viec_variants[1..6]](../../../../input/data/seed-fixture.yaml)
