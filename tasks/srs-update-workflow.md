@@ -123,7 +123,7 @@ curl -s "/api/v1/{entity-cũ}?size=1" | jq .totalElements
 
 **10. Log bug deploy gap song song chạy test**
 - Task chạy được vẫn chạy
-- Gap chờ dev fix → log `bug-report-deploy-gap.md` gửi dev
+- Gap chờ dev fix → log `bug-report-audit-deploy-gap.md` gửi dev
 
 ### D. During-test (QA chạy)
 

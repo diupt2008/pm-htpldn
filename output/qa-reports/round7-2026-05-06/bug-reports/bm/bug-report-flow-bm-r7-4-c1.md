@@ -26,16 +26,18 @@ Phát hiện **6** lỗi vi phạm SRS v3.5 FR-VII (Thay đổi 1 + 3 BR mới) 
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-BM-001 | Critical | P0 | UI/UX | R7.4.C1 / R7.7.10 | `_DELTA-MAP-FR09.md §1 Áp CR-01` + `CHANGELOG-v3-to-v3.5.md line 1029-1032` (SCR-VII-02 + FR-VII-04 Inputs) | Form Thêm/Sửa Biểu mẫu thiếu 4 trường công khai (Switch + Ảnh + Mô tả CK + File CK) | Open |
-| BUG-BM-002 | Critical | P0 | Workflow | R7.4.C1 | `BR-PUBLIC-02` (`srs-fr-12-tv-chuyen-sau.md` line 1603-1607) | Khi BM chuyển sang `AN`, `ngayCongKhai` KHÔNG clear về NULL | Open |
-| BUG-BM-003 | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.1` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU bảng attributes rename) | BE BIEU_MAU entity chưa rename `laCongKhai → congKhai` + `ngayCongKhai → thoiGianDangTai` | Open |
-| BUG-BM-004 | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.4-1.6` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU + 4 row mới) | BE BIEU_MAU entity thiếu 3 fields công khai (`anhDaiDien`, `moTaCongKhai`, `fileDinhKemCongKhai`) | Open |
+| BUG-BM-001 | Critical | P0 | UI/UX | R7.4.C1 / R7.7.10 | `_DELTA-MAP-FR09.md §1 Áp CR-01` + `CHANGELOG-v3-to-v3.5.md line 1029-1032` (SCR-VII-02 + FR-VII-04 Inputs) | Form Thêm/Sửa Biểu mẫu thiếu 4 trường công khai (Switch + Ảnh + Mô tả CK + File CK) | Open (partial fix R8) |
+| ~~BUG-BM-002~~ | Critical | P0 | Workflow | R7.4.C1 | `BR-PUBLIC-02` (`srs-fr-12-tv-chuyen-sau.md` line 1603-1607) | Khi BM chuyển sang `AN`, `ngayCongKhai` KHÔNG clear về NULL | Closed (R8) |
+| ~~BUG-BM-003~~ | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.1` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU bảng attributes rename) | BE BIEU_MAU entity chưa rename `laCongKhai → congKhai` + `ngayCongKhai → thoiGianDangTai` | Closed (R8) |
+| ~~BUG-BM-004~~ | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.4-1.6` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU + 4 row mới) | BE BIEU_MAU entity thiếu 3 fields công khai (`anhDaiDien`, `moTaCongKhai`, `fileDinhKemCongKhai`) | Closed (R8) |
 | BUG-BM-005 | Medium | P2 | UI/UX | R7.4.C1 | `FR-VII-03 §Error Handling E1` (ERR-CK-01 "Thư mục chưa có biểu mẫu, không thể công khai") | UI silent fail — BE trả 409 ERR-CK-01 nhưng KHÔNG hiện toast/notification cho user | Open |
 | BUG-BM-006 | Medium | P2 | Data | R7.4.C1 | `FR-VII-01 §Outputs row 4` (`so_bieu_mau auto đếm`) + `SCR-VII-01 row 11` | Cột "Số biểu mẫu" trên list Thư mục không cập nhật sau khi thêm BM (vẫn 0 dù API đã có 1 BM) | Open |
 
 ---
 
 ## BUG-BM-001 — Form Thêm/Sửa Biểu mẫu thiếu 4 trường công khai theo SRS v3.5
+
+> **Re-test 2026-05-08 R8:** ⚠️ **PARTIAL FIX**. Account `cb_nv_tw_02`. Form `/bieu-mau/them-moi` đã thêm heading "Nội dung công khai trên Cổng PLQG" với 3/4 trường: Ảnh đại diện ✅, Mô tả công khai ✅, File đính kèm công khai ✅. **Vẫn thiếu Switch "Công khai trên Cổng PLQG"** (`evaluate_script` đếm `button[role="switch"]` + `.ant-switch` = 0). Bug giữ Open chờ FE add Switch. Evidence: `screenshots/r8-verify-2026-05-08-bm-001-form-them-bm.png`.
 
 ### Mô tả
 
@@ -69,7 +71,9 @@ Cả 2 form Thêm + Sửa đều dùng nguyên schema v3 (7 fields), không có 
 
 ---
 
-## BUG-BM-002 — BR-PUBLIC-02 vi phạm: ngayCongKhai không clear khi BM chuyển sang AN
+## ~~BUG-BM-002~~ — BR-PUBLIC-02 vi phạm: ngayCongKhai không clear khi BM chuyển sang AN [CLOSED]
+
+> **Re-test 2026-05-08 R8:** ✅ **CLOSED**. Account `cb_nv_tw_02`. Workflow: tạo BM `Test BM R8 verify` (id `d3143771-...`) trong TM "Biểu mẫu Thuế" → Công khai TM (BM `congKhai=true`, `thoiGianDangTai="2026-05-08T00:00:29.805Z"`) → Ẩn TM. API GET `/api/v1/bieu-maus/d3143771-...` trả: `trangThai="AN"`, `congKhai=false`, `thoiGianDangTai=null`. BR-PUBLIC-02 đã enforce.
 
 ### Mô tả
 
@@ -112,7 +116,9 @@ Response:
 
 ---
 
-## BUG-BM-003 — BE BIEU_MAU chưa rename `laCongKhai → congKhai` + `ngayCongKhai → thoiGianDangTai`
+## ~~BUG-BM-003~~ — BE BIEU_MAU chưa rename `laCongKhai → congKhai` + `ngayCongKhai → thoiGianDangTai` [CLOSED]
+
+> **Re-test 2026-05-08 R8:** ✅ **CLOSED**. Account `cb_nv_tw_02`. API GET `/api/v1/bieu-maus/{id}` keys: có `congKhai` + `thoiGianDangTai` (mới), KHÔNG còn `laCongKhai` + `ngayCongKhai` (cũ). BE đã rename xong.
 
 ### Mô tả
 
@@ -156,7 +162,9 @@ Response (keys liên quan):
 
 ---
 
-## BUG-BM-004 — BE BIEU_MAU entity thiếu 3 fields công khai mới
+## ~~BUG-BM-004~~ — BE BIEU_MAU entity thiếu 3 fields công khai mới [CLOSED]
+
+> **Re-test 2026-05-08 R8:** ✅ **CLOSED**. Account `cb_nv_tw_02`. API GET `/api/v1/bieu-maus/{id}` response có 3 field mới: `anhDaiDien=null`, `moTaCongKhai=null`, `fileDinhKemCongKhai=null`. BE đã add fields theo SRS v3.5.
 
 ### Mô tả
 
@@ -311,4 +319,4 @@ Response: meta.total = 1   ← BM thực tế = 1
 
 *Bug report generated: 2026-05-07 18:30 | QA Automation via Claude Code MCP*
 
-> **R7.7.10 functional bugs:** Xem file riêng [`bug-report-functional-bm-r7-7-10.md`](bug-report-functional-bm-r7-7-10.md) (BUG-BM-007 MinIO localhost broken preview+download · BUG-BM-008 silent reject upload).
+> **R7.7.10 functional bugs:** Xem file riêng [`bug-report-function-bm-r7-7-10.md`](bug-report-function-bm-r7-7-10.md) (BUG-BM-007 MinIO localhost broken preview+download · BUG-BM-008 silent reject upload).

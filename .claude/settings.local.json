@@ -302,7 +302,8 @@
       "mcp__notebooklm-mcp__notebook_query_status",
       "mcp__chrome-devtools__list_pages",
       "mcp__chrome-devtools",
-      "mcp__notebooklm-mcp"
+      "mcp__notebooklm-mcp",
+      "Edit(/.claude/skills/task-done/**)"
     ],
     "deny": [
       "Bash(rm -rf / *)",
@@ -342,7 +343,8 @@
       "/Users/teamai/.claude",
       "/Users/teamai/Library/Application Support/Code/User",
       "/Users/teamai/.claude/projects/-Users-teamai-Downloads-antigravity-QA-skilkk/memory",
-      "/Users/teamai"
+      "/Users/teamai",
+      "/Users/teamai/Downloads/antigravity/QA/skilkk/.claude/skills"
     ]
   }
 }

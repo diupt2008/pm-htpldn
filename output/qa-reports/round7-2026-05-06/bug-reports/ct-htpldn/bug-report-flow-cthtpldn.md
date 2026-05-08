@@ -8,7 +8,7 @@
 | **Ngày** | 2026-05-07 |
 | **Loại test** | Workflow E2E (SM-CHUONG_TRINH_HTPL) |
 | **Round** | R7.6.4 |
-| **Tài liệu tham chiếu** | [`02-thu-tu-module.md §⑤`](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · [`srs-fr-15-ct-htpldn.md`](../../../../input/srs-v3/srs-fr-15-ct-htpldn.md) · [`workflow-test-report-r7-6-4-cthtpldn-gd1.md`](../../workflow/workflow-test-report-r7-6-4-cthtpldn-gd1.md) |
+| **Tài liệu tham chiếu** | [`02-thu-tu-module.md §⑤`](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · [`srs-fr-15-ct-htpldn.md`](../../../../../input/srs-v3/srs-fr-15-ct-htpldn.md) · [`workflow-test-report-r7-6-4-cthtpldn-gd1.md`](../../workflow/ct-htpldn/workflow-test-report-r7-6-4-cthtpldn-gd1.md) |
 
 ---
 
@@ -28,11 +28,13 @@ Phát hiện **1** lỗi có SRS reference cụ thể trong quá trình test wor
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-CTHTPLDN-B7-001 | Major | P1 | Workflow | R7.6.4 B7 | `srs-fr-15-ct-htpldn.md` row 903 (action-bar Kích hoạt) + `srs-fr-15-ct-htpldn.md` rows 887-898 (form Tab Thông tin) | BE validation `ERR-VAL-XI-06-11` yêu cầu trường không có trong form/spec → block transition `DA_DUYET → DANG_THUC_HIEN` | Open |
+| ~~BUG-CTHTPLDN-B7-001~~ | Major | P1 | Workflow | R7.6.4 B7 | `srs-fr-15-ct-htpldn.md` row 903 (action-bar Kích hoạt) + `srs-fr-15-ct-htpldn.md` rows 887-898 (form Tab Thông tin) | BE validation `ERR-VAL-XI-06-11` yêu cầu trường không có trong form/spec → block transition `DA_DUYET → DANG_THUC_HIEN` | Closed (R8) |
 
 ---
 
-## BUG-CTHTPLDN-B7-001 — BE chặn activate CT do thiếu `kế hoạch chi tiết` + `đơn vị thực hiện` (trường không có trong spec/form)
+## ~~BUG-CTHTPLDN-B7-001~~ — BE chặn activate CT do thiếu `kế hoạch chi tiết` + `đơn vị thực hiện` (trường không có trong spec/form) [CLOSED]
+
+> **Re-test 2026-05-08 R8:** ✅ **CLOSED**. Account `cb_nv_tw_02`. CT-20260507-0001 (DA_DUYET) → click [Bắt đầu thực hiện] → modal confirm → [Đồng ý] → `POST /api/v1/chuong-trinh-htpls/95d2a599-.../activate` → **200 OK** (reqid=781). Trước R8 trả 409 ERR-VAL-XI-06-11; nay BE đã bỏ validation thừa, transition DA_DUYET → DANG_THUC_HIEN OK.
 
 ### Mô tả
 

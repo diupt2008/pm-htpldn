@@ -20,18 +20,22 @@
 
 | Tổng | Critical | Major | Medium | Minor | Trivial |
 |------|----------|-------|--------|-------|---------|
-| 2    | 1        | 1     | 0      | 0     | 0       |
+| 2    | 0 (1 closed obsolete) | 0 (1 closed obsolete) | 0 | 0 | 0 |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-FUNC-CHPC-001 | Major | P1 | Negative | R6.4.A1.5 | `§3.4.3.48 row 3 nguoi_xu_ly_id` | BE reject vai trò NHT khi POST `/cau-hinh-phan-congs` (ERR-CH-03) — SRS không quy định role constraint trên FK TAI_KHOAN | Open |
-| BUG-FUNC-CHPC-002 | Critical | P0 | Data | R6.4.A1.5 | `§3.4.3.48 row 4 loai_yeu_cau` | BE hardcode `loaiYeuCau=HOI_DAP`, ignore enum `VU_VIEC/TU_VAN_CS/TAT_CA` từ request body | Open |
+| ~~BUG-FUNC-CHPC-001~~ | ~~Major~~ | ~~P1~~ | ~~Negative~~ | R6.4.A1.5 | ~~§3.4.3.48~~ | BE reject vai trò NHT khi POST `/cau-hinh-phan-congs` | **Closed (Obsolete)** |
+| ~~BUG-FUNC-CHPC-002~~ | ~~Critical~~ | ~~P0~~ | ~~Data~~ | R6.4.A1.5 | ~~§3.4.3.48~~ | BE hardcode `loaiYeuCau=HOI_DAP` | **Closed (Obsolete)** |
+
+> **Re-test 2026-05-08 R7 — ✅ CLOSED (Obsolete):** Spec v3.5 line 3172 **bỏ entity `CAU_HINH_PHAN_CONG`** (BA chốt 2026-05-05 — Vấn đề 1 design-fixes). Lý do: bảng cấu hình thừa, data tự suy ra từ entity sẵn có (cân bằng tải qua đếm VV đang xử lý / loại trừ qua `trang_thai=TAM_DUNG`). Thay thế: phân công auto-derive trong FR-V (vụ việc) — `srs-fr-05-vu-viec.md`. Endpoint `/api/v1/cau-hinh-phan-congs` + 2 bug đều obsolete cùng entity. KHÔNG retest. Task R7.4.A1.5 (verify dropdown PC) cũng obsolete.
 
 ---
 
-## BUG-FUNC-CHPC-001 — BE reject vai trò NHT khi POST `/cau-hinh-phan-congs` (ERR-CH-03)
+## ~~BUG-FUNC-CHPC-001~~ [CLOSED — Obsolete] — BE reject vai trò NHT khi POST `/cau-hinh-phan-congs` (ERR-CH-03)
+
+> **Closed 2026-05-08 R7 (Obsolete):** Entity `CAU_HINH_PHAN_CONG` bị bỏ ở spec v3.5 line 3172 (BA chốt 2026-05-05). Endpoint `/cau-hinh-phan-congs` + role filter constraint cũng obsolete. Phân công auto-derive trong FR-V vụ việc.
 
 ### Mô tả
 
@@ -69,7 +73,9 @@ HTTP 400
 
 ---
 
-## BUG-FUNC-CHPC-002 — BE hardcode `loaiYeuCau=HOI_DAP`, ignore enum khác từ request body
+## ~~BUG-FUNC-CHPC-002~~ [CLOSED — Obsolete] — BE hardcode `loaiYeuCau=HOI_DAP`, ignore enum khác từ request body
+
+> **Closed 2026-05-08 R7 (Obsolete):** Entity `CAU_HINH_PHAN_CONG` bị bỏ ở spec v3.5 line 3172 (BA chốt 2026-05-05). Endpoint `/cau-hinh-phan-congs` + field `loai_yeu_cau` cũng obsolete cùng entity. Logic phân công đa loại yêu cầu di chuyển sang FR-V vụ việc auto-derive.
 
 ### Mô tả
 

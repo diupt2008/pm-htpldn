@@ -52,6 +52,12 @@ R7 retest workflow ĐG HQ phát hiện **2 bug mới** + **5 bug R6 Closed** ver
 > **Re-test:** 2026-05-07 R8 — ⚠️ **INCONCLUSIVE**. Pool VV reset giữa R7→R8: dashboard "Vụ việc hoàn thành: 0 vụ việc" + Tab Hoàn thành rỗng. Không có data state HOAN_THANH để verify mismatch endpoint `/vu-viec-eligible` vs `/vu-viec?trangThai=HOAN_THANH`. Bug giữ Open chờ seed lại VV HOAN_THANH (≥3 VV trong date range đợt) để retest đúng pattern. Screenshot: [r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png](../../screenshots/r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png).
 >
 > **Re-test 2026-05-07 R8 verify-2 (16:47):** ⚠️ **VẪN INCONCLUSIVE**. Account cb_nv_tw_02. API probe: `GET /api/v1/vu-viecs?trangThai=HOAN_THANH` → 200 count=0 (0 VV HOAN_THANH); `GET /api/v1/vu-viecs` → 6 VV all in DA_TIEP_NHAN/DA_PHAN_CONG; `GET /api/v1/ke-hoach-danh-gias` → 0 đợt ĐG tồn tại. Cannot reproduce filter-empty-despite-data scenario. Bug giữ Open — chờ seed Phase 2 (≥3 VV state HOAN_THANH trong date range + 1 đợt ĐG state CHO_DUYET_PC) trước khi retest dev fix.
+>
+> **Re-test 2026-05-07 R8 verify-3 (21:13):** ⚠️ **VẪN INCONCLUSIVE**. Account cb_nv_tw_02. UI verify: `/danh-gia/ke-hoach/danh-sach` → "Không có kế hoạch đánh giá nào phù hợp" (0 đợt ĐG); `/vu-viec/danh-sach?tab=HOAN_THANH` → "Không có dữ liệu" (0 VV HOAN_THANH); Dashboard KPI `VU_VIEC_HOAN_THANH.giaTri=0`. 3/3 data point đều 0 → không có scenario tái hiện mismatch endpoint `/vu-viec-eligible` vs `/vu-viec?trangThai=HOAN_THANH`. Bug giữ Open. Screenshot: [r8-verify3-2026-05-07-dg-list-empty.png](../../screenshots/r8-verify3-2026-05-07-dg-list-empty.png).
+>
+> **Re-test 2026-05-08 R8 verify-4:** ⏰ **PENDING DATA**. Account cb_nv_tw_02. UI `/danh-gia/ke-hoach/danh-sach` vẫn show 0 kế hoạch. Pool VV HOAN_THANH chưa seed lại. Cần round seed riêng (Phase 2: tạo VV → advance lifecycle qua DA_PHAN_CONG → DA_TIEP_NHAN → DA_TU_VAN → HOAN_THANH với date range 01/04-30/06 → tạo đợt ĐG → test "Chọn VV") để verify mismatch endpoint dev fix.
+>
+> **Re-test 2026-05-08 R8 verify-5 (final):** ⏰ **PENDING DATA — không seed được trong session retest**. API probe `GET /api/v1/vu-viecs?pageSize=50` → 0 record (pool VV reset hoàn toàn). `GET /api/v1/ke-hoach-danh-gias?pageSize=20` → 0 đợt ĐG. Verify mismatch endpoint `/vu-viec-eligible` cần round seed full lifecycle 9 bước (tạo DN + nhu cầu HT → VV CHO_PHAN_CONG → phân công TVV → TVV tiếp nhận → đóng VV HOAN_THANH ≥3 VV date 01/04-30/06 → tạo đợt ĐG LAP_KE_HOACH → cấu hình tiêu chí Σ100% → phân công người ĐG + role switch cb_pd_tw duyệt PC → state CHO_DUYET_PC). Round seed quá scope retest → giữ Open + đánh dấu cần task seed riêng (T-Phase2-VVHOANTHANH + T-Phase2-DotDG) trước khi gate retest.
 
 ### Mô tả
 
@@ -123,6 +129,8 @@ VV list (verify VV HOAN_THANH tồn tại):
 > **Re-test:** 2026-05-07 R8 — ⚠️ **INCONCLUSIVE**. Cùng evidence với DG-006: pool VV reset, Dashboard KPI "Vụ việc hoàn thành: 0" + Tab Hoàn thành cũng rỗng → KPI=0 hiện đã match thực tế. Không có cách verify mismatch giữa Dashboard KPI và Tab list khi cả hai cùng = 0. Bug giữ Open chờ seed lại VV HOAN_THANH để retest cross-module sync. Screenshot: [r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png](../../screenshots/r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png).
 >
 > **Re-test 2026-05-07 R8 verify-2 (16:47):** ⚠️ **VẪN INCONCLUSIVE**. Dashboard endpoint `/api/v1/dashboard?nam=2026` trả `VU_VIEC_HOAN_THANH.giaTri=0` — match với API `vu-viecs?trangThai=HOAN_THANH` count=0. Cross-module sync hiện đúng vì cả 2 cùng 0. Cần seed VV HOAN_THANH (≥1 VV) để re-verify mismatch giữa KPI counter và list count. Bug giữ Open.
+>
+> **Re-test 2026-05-07 R8 verify-3 (21:13):** ⚠️ **VẪN INCONCLUSIVE**. Account cb_nv_tw_02. Dashboard payload đầy đủ: `kpis[].kpiCode=VU_VIEC_HOAN_THANH.giaTri=0` + `appliedFilter={tuNgay:2026-01-01, denNgay:2026-05-07, donViId:null}`; UI dashboard render "Vụ việc hoàn thành: 0 vụ việc". `/vu-viec/danh-sach?tab=HOAN_THANH` empty (0 records). KPI và list đều = 0 → cross-module sync đúng tại thời điểm này. Cần ≥1 VV state HOAN_THANH mới có thể verify mismatch. Bug giữ Open. Screenshot: [r8-verify3-2026-05-07-dg-list-empty.png](../../screenshots/r8-verify3-2026-05-07-dg-list-empty.png).
 
 ### Mô tả
 

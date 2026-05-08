@@ -5,20 +5,24 @@ Trigger: PostToolUse Edit/Write/MultiEdit on tasks/todo.md.
 
 Logic an toàn (CHỈ flip ⏳→🟢):
   1. Đọc file todo.md từ disk (sau khi Edit đã apply).
-  2. Parse mọi task line `- <icon> **R6.X.Y** ...` trong section
-     `## Round 6 — Active task tracker` → state map task_id → icon.
+  2. Parse mọi task line `- <icon> **R{N}.X.Y** ...` toàn file → state map task_id → icon.
+     (Round-agnostic: regex R\d+\. — backward compat R6 + R7 + future rounds.)
   3. Với mỗi task ⏳:
-     - Extract `R6\\.[0-9A-Za-z.-]+` IDs trong bracket `[need: ...]` cùng dòng.
-     - Nếu KHÔNG có ID nào → skip (không auto-resolve được).
-     - Nếu bracket chứa ⚠️/🚫/⏳ icon → skip (dep partial/block).
-     - Nếu bracket chứa keyword constraint phi-task ("≥", "BA confirm",
-       "dev seed", "deadline", "thời gian", "external", "chưa trigger") → skip.
-     - Nếu TẤT CẢ R6 IDs trong bracket có state ✅ → flip ⏳→🟢.
-  4. Nếu có flip → recount bảng `**Tổng Round 6**` → ghi file.
+     - Extract `R\d+\\.[0-9A-Za-z.-]+` IDs trong bracket `[need: ...]` cùng dòng.
+     - Skip nếu bracket có marker `(✗ ...)` — dep state KHÔNG thoả (vd `(✗ HD=0)`).
+     - Skip nếu bracket chứa ⚠️/🚫/⏳ icon — dep partial/block.
+     - Skip nếu bracket có keyword phi-task ("BA confirm", "dev seed", "deadline",
+       "external", "chưa trigger", "spec contradiction") — không tự resolve được.
+     - PASS condition (chọn 1 trong 3):
+       (a) bracket có ≥1 ID + TẤT CẢ task IDs là ✅ + KHÔNG có `(✗`.
+       (b) bracket KHÔNG có ID nhưng có ≥1 marker `(✓ ...)` + KHÔNG có `(✗`.
+       (c) bracket vừa có ID + state markers — task IDs ✅ AND markers `(✓` only.
+  4. Nếu có flip → recount bảng tổng (auto-detect "Tổng Round N" hoặc "Tổng" row) → ghi file.
   5. Print summary stderr cho user thấy.
 
 KHÔNG flip: 🟢→✅, ⚠️→✅, 🚫→🟢 (tester tự quyết). Chỉ unblock ⏳ khi dep ready.
 
+Update 2026-05-07: round-agnostic + state marker (✓/✗) support.
 Áp dụng từ 2026-05-05 sau Strict Status Review.
 """
 from __future__ import annotations
@@ -30,24 +34,30 @@ from pathlib import Path
 
 ICONS = ("✅", "🟢", "🔵", "⚠️", "🚫", "⏳")
 
+# Round-agnostic task ID: R6.X.Y, R7.4.A1, R8.3.16-mob, ...
+TASK_ID_RE = r"R\d+\.[0-9A-Za-z.\-]+"
+
 TASK_LINE = re.compile(
-    r"^(\s*-\s+)(✅|🟢|🔵|⚠️|🚫|⏳)(\s+\*\*(R6\.[0-9A-Za-z.\-]+)\*\*[^\n]*)$",
+    rf"^(\s*-\s+)(✅|🟢|🔵|⚠️|🚫|⏳)(\s+(?:<a id=\"[^\"]+\"></a>)?\*\*({TASK_ID_RE})\*\*[^\n]*)$",
     re.MULTILINE,
 )
-BRACKET_NOTE = re.compile(r"`\[([^\]]+)\]`")
-DEP_ID = re.compile(r"R6\.[0-9A-Za-z.\-]+")
+# Hỗ trợ cả `[...]` và backtick `[...]` — bracket dep notation
+BRACKET_NOTE = re.compile(r"`?\[([^\]]+)\]`?")
+DEP_ID = re.compile(TASK_ID_RE)
+# State markers — verified true (✓) / false (✗) state count
+MARKER_OK = re.compile(r"\(\s*✓[^)]*\)")
+MARKER_FAIL = re.compile(r"\(\s*✗[^)]*\)")
 NON_TASK_CONSTRAINT = re.compile(
-    r"≥|BA confirm|dev seed|deadline|thời gian|external|chưa trigger|"
-    r"file dummy|API mock|Cổng PLQG|LGSP|DVC|spec contradiction",
+    r"BA confirm|dev seed|deadline|thời gian|external|chưa trigger|"
+    r"file dummy|API mock|Cổng PLQG|LGSP|DVC|spec contradiction|"
+    r"chờ BA|endpoint deploy|sandbox|VNeID Tier",
     re.IGNORECASE,
 )
 BLOCKING_ICONS_IN_BRACKET = ("⚠️", "🚫", "⏳")
 
-ACTIVE_SECTION_START = "## Round 6 — Active task tracker"
-ACTIVE_SECTION_END_PATTERNS = ("# 📚 Round 5", "## Tiến độ Round 5")
-
+# Round-agnostic summary row — match "Tổng Round N" hoặc "Tổng" (cuối bảng)
 SUMMARY_ROW = re.compile(
-    r"(\|\s*\*\*Tổng Round 6\*\*\s*\|[^|]*\|\s*\*\*)(\d+)(\*\*\s*"
+    r"(\|\s*\*\*Tổng(?:\s+Round\s+\d+)?\*\*\s*\|[^|]*\|\s*\*\*)(\d+)(\*\*\s*"
     r"\|\s*\*\*)(\d+)(\*\*\s*"
     r"\|\s*\*\*)(\d+)(\*\*\s*"
     r"\|\s*\*\*)(\d+)(\*\*\s*"
@@ -62,16 +72,12 @@ def is_target_file(path: str) -> bool:
 
 
 def get_active_section_bounds(content: str):
-    start = content.find(ACTIVE_SECTION_START)
-    if start == -1:
+    """Round-agnostic: scan toàn file. Skip header (trước task line đầu tiên)
+    để tránh parse Mục lục table."""
+    first_task = TASK_LINE.search(content)
+    if first_task is None:
         return None, None
-    section_end = len(content)
-    for marker in ACTIVE_SECTION_END_PATTERNS:
-        idx = content.find(marker, start)
-        if idx != -1:
-            section_end = idx
-            break
-    return start, section_end
+    return first_task.start(), len(content)
 
 
 def parse_state_map(content: str, start: int, end: int) -> dict:
@@ -86,11 +92,24 @@ def parse_state_map(content: str, start: int, end: int) -> dict:
 
 
 def can_auto_flip(line: str, state_map: dict) -> bool:
-    """Check if a ⏳ task line is eligible for ⏳→🟢 flip."""
+    """Check if a ⏳ task line is eligible for ⏳→🟢 flip.
+
+    Pass condition (cần CẢ 2):
+      1. KHÔNG có marker `(✗ ...)` trong bracket — state mismatch.
+      2. KHÔNG có blocking icon (⚠️/🚫/⏳) ngoài task header chính.
+      3. KHÔNG có non-task constraint phi-resolvable.
+      4. Có ≥1 dep evidence:
+         - Task IDs trong bracket: TẤT CẢ đều ✅, HOẶC
+         - Marker `(✓ ...)` xuất hiện: ≥1 marker ✓ + zero ✗.
+    """
     bracket_match = BRACKET_NOTE.search(line)
     if not bracket_match:
         return False
     bracket = bracket_match.group(1)
+
+    # HARD BLOCK: marker (✗ ...) — state KHÔNG thoả
+    if MARKER_FAIL.search(bracket):
+        return False
 
     # Block if bracket has any non-✅ icon
     for icon in BLOCKING_ICONS_IN_BRACKET:
@@ -101,15 +120,18 @@ def can_auto_flip(line: str, state_map: dict) -> bool:
     if NON_TASK_CONSTRAINT.search(bracket):
         return False
 
-    # Extract R6 IDs
     dep_ids = DEP_ID.findall(bracket)
-    if not dep_ids:
+    has_ok_marker = bool(MARKER_OK.search(bracket))
+
+    # Cần ≥1 evidence type
+    if not dep_ids and not has_ok_marker:
         return False
 
-    # All deps must be ✅
-    for dep in dep_ids:
-        if state_map.get(dep) != "✅":
-            return False
+    # Nếu có task IDs — tất cả phải ✅
+    if dep_ids:
+        for dep in dep_ids:
+            if state_map.get(dep) != "✅":
+                return False
 
     return True
 
@@ -155,14 +177,17 @@ def recount_summary(content: str) -> str:
     total = sum(counts[i] for i in ICONS)
 
     def replace_summary(m: re.Match) -> str:
+        # Column order in current todo.md (R7+): Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳
+        # (Legacy R6 order was: Tổng | ✅ | 🟢 | 🔵 | ...)
+        # Groups: 1=prefix, 2=total, 3=sep, 4=N1, 5=sep, 6=N2, ..., 14=N7, 15=trailing **
         return (
             m.group(1) + str(total) + m.group(3)
-            + str(counts["✅"]) + m.group(5)
-            + str(counts["🟢"]) + m.group(7)
-            + str(counts["🔵"]) + m.group(9)
+            + str(counts["🟢"]) + m.group(5)
+            + str(counts["🔵"]) + m.group(7)
+            + str(counts["✅"]) + m.group(9)
             + str(counts["⚠️"]) + m.group(11)
             + str(counts["🚫"]) + m.group(13)
-            + str(counts["⏳"]) + m.group(14)
+            + str(counts["⏳"]) + m.group(15)
         )
 
     return SUMMARY_ROW.sub(replace_summary, content, count=1)

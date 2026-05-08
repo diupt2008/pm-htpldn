@@ -1,0 +1,235 @@
+# Task effects mapping — task ID → entity bị ảnh hưởng
+# Khi task X chạy xong, slash command /task-done X cascade theo file này.
+#
+# Format:
+#   <task_id>:
+#     entities: [list entity name match state-snapshot.md cột "Entity"]
+#     state_change: <create|advance|consume|delete|none>  (optional, doc only)
+#     note: <ghi chú nếu cần>  (optional)
+#
+# Entity name dùng đúng key state-snapshot.md "Entity" column (vd: HD, VV, Kho_QA).
+# Task không có trong file này → /task-done sẽ hỏi user entity nào.
+#
+# Maintain rule: thêm entry mới khi tạo task mới có state change.
+
+tasks:
+  # ═══ R7.2.x — Seed Tier 1 ═══
+  R7.2.1:
+    entities: [MPH]
+    state_change: create
+    note: Seed Mẫu phản hồi (block do BUG-DM-LVPL-001)
+
+  R7.2.2:
+    entities: [TC_TV]
+    state_change: create
+
+  R7.2.3:
+    entities: [TC_TV]
+    state_change: advance
+    note: TC TV → HOAT_DONG
+
+  R7.2.4:
+    entities: [DN]
+    state_change: create
+
+  R7.2.5:
+    entities: [TVV]
+    state_change: create
+    note: 6 TVV TW MOI_DANG_KY
+
+  R7.2.6:
+    entities: [CG]
+    state_change: create
+
+  R7.2.7:
+    entities: [NHT]
+    state_change: create
+
+  R7.2.9:
+    entities: [TVV, CG, NHT]
+    state_change: advance
+    note: Click mail kích hoạt → HOAT_DONG
+
+  # ═══ R7.3.x — Seed Tier 2 ═══
+  R7.3.1:
+    entities: [HD]
+    state_change: create
+    note: 6 HD MOI cover 6 LV × 4 kênh
+
+  R7.3.1.MoB:
+    entities: [MPH]
+    state_change: create
+    note: Mẫu Mô hình B qua UI
+
+  R7.3.1.TVN:
+    entities: [Phien_TVN, HD]
+    state_change: create
+    note: TVN ESCALATE → tạo HD
+
+  R7.3.2:
+    entities: [VV]
+    state_change: create
+
+  R7.3.3:
+    entities: [TVCS]
+    state_change: create
+
+  R7.3.4:
+    entities: [HSPL_DN]
+    state_change: create
+
+  R7.3.5:
+    entities: [KH_nam]
+    state_change: create
+
+  R7.3.6:
+    entities: [CTDT]
+    state_change: create
+
+  R7.3.7:
+    entities: [Thu_muc_BM, BM]
+    state_change: create
+
+  R7.3.8:
+    entities: [NHCH]
+    state_change: create
+
+  R7.3.9:
+    entities: [DKT]
+    state_change: create
+
+  R7.3.10:
+    entities: [Bai_giang]
+    state_change: create
+
+  R7.3.11:
+    entities: [Giang_vien]
+    state_change: create
+
+  R7.3.14:
+    entities: [HD_TV]
+    state_change: create
+
+  R7.3.15:
+    entities: [Khoa_hoc]
+    state_change: create
+
+  R7.3.16:
+    entities: [Kho_QA]
+    state_change: create
+    note: Kho QA CHO_DUYET cover 5 LV × 2 nguồn
+
+  # ═══ R7.4.x — Workflow E2E ═══
+  R7.4.A1:
+    entities: [TVV]
+    state_change: advance
+    note: TVV state machine 10 state
+
+  R7.4.A1-CG:
+    entities: [CG]
+    state_change: advance
+    note: 8 CG → DANG_HOAT_DONG
+
+  R7.4.A2:
+    entities: [TVV]
+    state_change: advance
+
+  R7.4.A3:
+    entities: [VV]
+    state_change: advance
+
+  R7.4.A3-PUBLIC:
+    entities: [VV]
+    state_change: advance
+    note: VV công khai cong_khai=1
+
+  R7.4.A3-DN-BS:
+    entities: [VV]
+    state_change: advance
+
+  R7.4.A4:
+    entities: [HD]
+    state_change: advance
+    note: HD 11 paths workflow
+
+  R7.4.A5:
+    entities: [TVCS]
+    state_change: advance
+
+  R7.4.B0:
+    entities: [KH_nam]
+    state_change: advance
+
+  R7.4.B1:
+    entities: [CTDT]
+    state_change: advance
+
+  R7.4.B5b:
+    entities: [NHCH]
+    state_change: advance
+    note: NHAP → CONG_KHAI
+
+  R7.4.B7:
+    entities: [Khoa_hoc]
+    state_change: advance
+
+  R7.4.B10:
+    entities: [DKT]
+    state_change: advance
+
+  R7.4.B11:
+    entities: [Khoa_hoc]
+    state_change: advance
+
+  R7.4.C1:
+    entities: [BM]
+    state_change: advance
+
+  R7.4.D1:
+    entities: [Dot_DG]
+    state_change: create
+    note: Tạo kỳ LAP_KE_HOACH
+
+  R7.4.D2:
+    entities: [Dot_DG]
+    state_change: advance
+    note: Workflow 9 bước
+
+  R7.4.D2a:
+    entities: [Dot_DG]
+    state_change: advance
+
+  R7.4.D3:
+    entities: [Kho_QA]
+    state_change: advance
+    note: CHO_DUYET → DA_DUYET
+
+  R7.4.D3.AUTO:
+    entities: [Kho_QA, HD]
+    state_change: advance
+    note: HD DA_DUYET tự sinh Kho QA TU_DONG
+
+  # ═══ R7.6.x — Workflow đầu ra hậu kỳ ═══
+  R7.6.1:
+    entities: [HSCT]
+    state_change: advance
+
+  R7.6.2:
+    entities: [Phien_TVN]
+    state_change: advance
+
+  R7.6.3:
+    entities: [Phien_TVN]
+    state_change: advance
+
+  R7.6.4:
+    entities: [CT_HTPLDN]
+    state_change: advance
+
+  R7.6.5:
+    entities: [CT_HTPLDN, HSCT, VV]
+    state_change: advance
+
+  # ═══ R7.7.x — Functional (read-only, không state change) ═══
+  # Các task functional thường chỉ test, không thay đổi state-snapshot.
+  # Nếu task functional có CRUD test (create/delete trong test) — add ở đây.
